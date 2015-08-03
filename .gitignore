@@ -1,0 +1,13 @@
+.Rproj.user
+.Rbuildignore
+.Rhistory
+.RData
+.ipynb_checkpoints
+*~
+*.o
+*.so
+*.pdf
+*.tar.gz
+inst/doc
+vignettes/destiny.tex
+vignettes/destiny_files

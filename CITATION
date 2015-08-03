@@ -1,0 +1,18 @@
+authors      <- eval(parse(text = packageDescription('destiny', fields = 'Authors@R')))
+year         <- 2015L
+title        <- 'destiny \u2013 diffusion maps for large-scale single-cell data in R'
+organization <- 'Helmholtz-Zentrum München'
+address      <- 'Ingolstädter Landstraße 1, Neuherberg, Germany'
+url          <- 'http://www.helmholtz-muenchen.de/icb/destiny'
+
+bibentry('Unpublished', sprintf(
+		'%s %s et al. (%s): %s. %s. URL: <%s>.',
+		authors[[1]]$given, authors[[1]]$family, year,
+		title, organization, url),
+	note         = 'Preprint available at <http://biorxiv.org/content/early/2015/07/27/023309>',
+	title        = title,
+	author       = authors[[1]],
+	organization = organization,
+	address      = address,
+	year         = year,
+	url          = url)

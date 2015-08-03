@@ -3,25 +3,59 @@ Type: Package
 Title: Creates diffusion maps
 Version: 0.99.14
 Date: 2014-12-19
-Author: Philipp Angerer, Laleh Haghverdi
-Maintainer: Philipp Angerer <philipp.angerer@helmholtz-muenchen.de>
+Authors@R: c(
+	person('Philipp', 'Angerer', NULL, 'philipp.angerer@helmholtz-muenchen.de', c('cre', 'aut')),
+	person('Laleh', 'Haghverdi', NULL, 'laleh.haghverdi@helmholtz-muenchen.de', 'ctb'),
+	person('Maren', 'Büttner', NULL, 'maren.buettner@helmholtz-muenchen.de', 'ctb'),
+	person('Fabian', 'Theis', NULL, 'fabian.theis@helmholtz-muenchen.de', 'ctb'),
+	person('Carsten', 'Marr', NULL, 'carsten.marr@helmholtz-muenchen.de', 'ctb'),
+	person('Florian', 'Büttner', NULL, 'f.buettner@helmholtz-muenchen.de', 'ctb'))
 Description: Create and plot diffusion maps
 License: GPL
 Encoding: UTF-8
-Depends: R (>= 3.2.0), methods, Biobase
-Imports: graphics, Rcpp (>= 0.10.3), RcppEigen, BiocGenerics, Matrix,
-        FNN, VIM, proxy, igraph, scatterplot3d
+Depends:
+    R (>= 3.2.0),
+    methods,
+    Biobase
+Imports:
+    graphics,
+    Rcpp (>= 0.10.3),
+    RcppEigen,
+    BiocGenerics,
+    Matrix,
+    FNN,
+    VIM,
+    proxy,
+    igraph,
+    scatterplot3d
 LinkingTo: Rcpp, RcppEigen
 SystemRequirements: C++11
 NeedsCompilation: yes
 Enhances: rgl
-Suggests: RColorBrewer, ggplot2, nbconvertR
+Suggests:
+    RColorBrewer,
+    ggplot2,
+    nbconvertR
 VignetteBuilder: nbconvertR
-biocViews: CellBiology, CellBasedAssays, Clustering, Software,
-        Visualization
-Collate: 'RcppExports.R' 'censoring.r' 'destiny-package.r'
-        's4-null-unions.r' 'dist-matrix-coerce.r' 'sigmas.r'
-        'diffusionmap.r' 'diffusionmap-coercions.r'
-        'diffusionmap-methods.r' 'plothelpers.r'
-        'diffusionmap-plotting.r' 'utils.r' 'expressionset-helpers.r'
-        'guo-data.r' 'predict.r' 'sigmas-plotting.r'
+biocViews: CellBiology,
+    CellBasedAssays,
+    Clustering,
+    Software,
+    Visualization
+Collate:
+    'RcppExports.R'
+    'censoring.r'
+    'destiny-package.r'
+    's4-null-unions.r'
+    'dist-matrix-coerce.r'
+    'sigmas.r'
+    'diffusionmap.r'
+    'diffusionmap-coercions.r'
+    'diffusionmap-methods.r'
+    'plothelpers.r'
+    'diffusionmap-plotting.r'
+    'utils.r'
+    'expressionset-helpers.r'
+    'guo-data.r'
+    'predict.r'
+    'sigmas-plotting.r'
