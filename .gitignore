@@ -9,5 +9,8 @@
 *.pdf
 *.tar.gz
 inst/doc
-vignettes/destiny.tex
+vignettes/destiny.*
 vignettes/destiny_files
+!vignettes/destiny.tplx
+!vignettes/destiny.ipynb
+!vignettes/destiny.ipynbmeta
