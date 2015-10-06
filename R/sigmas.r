@@ -189,6 +189,7 @@ find.sigmas <- function(
 	
 	dim.norms[[1L]] <- step.diff(2L)
 	
+	if (verbose) pb <- txtProgressBar(2L, steps, 1L, style = 3)
 	for (step in seq(2L, steps)) {
 		a.i = do.step(dir * (step - 1L))
 		avrd.norms[[step]] <- a.i$avrd.norm
@@ -197,12 +198,18 @@ find.sigmas <- function(
 		dif.step <- step - 1
 		dim.norms[[dif.step]] <- step.diff(step)
 		
+		if (verbose) setTxtProgressBar(pb, step)
+		
 		if (early.exit && step > 2 && dim.norms[[dif.step]] < dim.norms[[dif.step - 1L]]) {
 			avrd.norms <- avrd.norms[seq_len(step)]
 			log.sigmas <- log.sigmas[seq_len(step)]
 			dim.norms  <- dim.norms[seq_len(dif.step)]
 			break
 		}
+	}
+	if (verbose) {
+		setTxtProgressBar(pb, steps)
+		close(pb)
 	}
 	
 	if (early.exit && step == steps) warning('All steps were exhausted without finding a maximum. Using last encountered sigma')
