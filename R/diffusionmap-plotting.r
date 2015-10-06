@@ -1,6 +1,7 @@
 #' @include diffusionmap.r
 #' @include plothelpers.r
 #' @importFrom graphics plot
+#' @importFrom Biobase varLabels phenoData exprs
 NULL
 
 #' 3D or 2D plot of diffusion map
@@ -75,10 +76,14 @@ setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(
 	#get col from data
 	if (!is.null(col.by)) {
 		annot.data <- dataset(x)
-		if (inherits(annot.data, 'ExpressionSet'))
-			col <- phenoData(annot.data)[[col.by]]
-		else
-			col <- annot.data[, col.by]
+		col <- if (inherits(annot.data, 'ExpressionSet')) {
+			if (col.by %in% varLabels(annot.data))
+				phenoData(annot.data)[[col.by]]
+			else
+				exprs(annot.data)[col.by, ]
+		} else {
+			 annot.data[, col.by]
+		}
 	}
 	
 	# extend margin for legend
