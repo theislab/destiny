@@ -116,8 +116,15 @@ setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(
 		col.plot <- as.integer(col.plot)
 	
 	#limit pal to number of existing colors to maybe attach col.new
-	pal.length <- min(length(pal), length(unique(col.plot)))
-	pal <- pal[seq_len(pal.length)]
+	if (is.function(pal)) {
+		# pal is a colorRampPalette-type function
+		pal.length <- length(unique(col.plot))
+		pal <- pal(pal.length)
+	} else {
+		# pal is a vector
+		pal.length <- min(length(pal), length(unique(col.plot)))
+		pal <- pal[seq_len(pal.length)]
+	}
 	
 	#set col.plot to color strings
 	if (is.integer(col.plot)) {
