@@ -7,48 +7,61 @@
 using namespace Rcpp;
 
 // censoring_impl
-Eigen::SparseMatrix<double> censoring_impl(NumericMatrix data, SEXP thr_or_null, SEXP uncertain_or_null, SEXP missing_or_null, double sigma, SEXP nns_or_null, Function callback);
+Eigen::SparseMatrix<double> censoring_impl(const NumericMatrix data, const SEXP thr_or_null, const SEXP uncertain_or_null, const SEXP missing_or_null, const double sigma, const SEXP nns_or_null, const Function callback);
 RcppExport SEXP destiny_censoring_impl(SEXP dataSEXP, SEXP thr_or_nullSEXP, SEXP uncertain_or_nullSEXP, SEXP missing_or_nullSEXP, SEXP sigmaSEXP, SEXP nns_or_nullSEXP, SEXP callbackSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type thr_or_null(thr_or_nullSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type uncertain_or_null(uncertain_or_nullSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type missing_or_null(missing_or_nullSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type nns_or_null(nns_or_nullSEXP);
-    Rcpp::traits::input_parameter< Function >::type callback(callbackSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< const SEXP >::type thr_or_null(thr_or_nullSEXP);
+    Rcpp::traits::input_parameter< const SEXP >::type uncertain_or_null(uncertain_or_nullSEXP);
+    Rcpp::traits::input_parameter< const SEXP >::type missing_or_null(missing_or_nullSEXP);
+    Rcpp::traits::input_parameter< const double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< const SEXP >::type nns_or_null(nns_or_nullSEXP);
+    Rcpp::traits::input_parameter< const Function >::type callback(callbackSEXP);
     __result = Rcpp::wrap(censoring_impl(data, thr_or_null, uncertain_or_null, missing_or_null, sigma, nns_or_null, callback));
     return __result;
 END_RCPP
 }
 // predict_censoring_impl
-NumericMatrix predict_censoring_impl(NumericMatrix data, NumericMatrix data2, double thr, NumericVector uncertain, NumericVector missing, double sigma);
+NumericMatrix predict_censoring_impl(const NumericMatrix data, const NumericMatrix data2, const double thr, const NumericVector uncertain, const NumericVector missing, const double sigma);
 RcppExport SEXP destiny_predict_censoring_impl(SEXP dataSEXP, SEXP data2SEXP, SEXP thrSEXP, SEXP uncertainSEXP, SEXP missingSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type data2(data2SEXP);
-    Rcpp::traits::input_parameter< double >::type thr(thrSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type uncertain(uncertainSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type missing(missingSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type data2(data2SEXP);
+    Rcpp::traits::input_parameter< const double >::type thr(thrSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type uncertain(uncertainSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type missing(missingSEXP);
+    Rcpp::traits::input_parameter< const double >::type sigma(sigmaSEXP);
     __result = Rcpp::wrap(predict_censoring_impl(data, data2, thr, uncertain, missing, sigma));
     return __result;
 END_RCPP
 }
 // d2_no_censor
-Eigen::SparseMatrix<double> d2_no_censor(IntegerMatrix nn_index, NumericMatrix nn_dist, Function callback);
+Eigen::SparseMatrix<double> d2_no_censor(const IntegerMatrix nn_index, const NumericMatrix nn_dist, const Function callback);
 RcppExport SEXP destiny_d2_no_censor(SEXP nn_indexSEXP, SEXP nn_distSEXP, SEXP callbackSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< IntegerMatrix >::type nn_index(nn_indexSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type nn_dist(nn_distSEXP);
-    Rcpp::traits::input_parameter< Function >::type callback(callbackSEXP);
+    Rcpp::traits::input_parameter< const IntegerMatrix >::type nn_index(nn_indexSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type nn_dist(nn_distSEXP);
+    Rcpp::traits::input_parameter< const Function >::type callback(callbackSEXP);
     __result = Rcpp::wrap(d2_no_censor(nn_index, nn_dist, callback));
+    return __result;
+END_RCPP
+}
+// icos2_no_censor
+Eigen::SparseMatrix<double> icos2_no_censor(const IntegerMatrix nn_index, NumericMatrix imputed_data, const Function callback);
+RcppExport SEXP destiny_icos2_no_censor(SEXP nn_indexSEXP, SEXP imputed_dataSEXP, SEXP callbackSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const IntegerMatrix >::type nn_index(nn_indexSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type imputed_data(imputed_dataSEXP);
+    Rcpp::traits::input_parameter< const Function >::type callback(callbackSEXP);
+    __result = Rcpp::wrap(icos2_no_censor(nn_index, imputed_data, callback));
     return __result;
 END_RCPP
 }

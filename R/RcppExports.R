@@ -13,3 +13,7 @@ d2_no_censor <- function(nn_index, nn_dist, callback) {
     .Call('destiny_d2_no_censor', PACKAGE = 'destiny', nn_index, nn_dist, callback)
 }
 
+icos2_no_censor <- function(nn_index, imputed_data, callback) {
+    .Call('destiny_icos2_no_censor', PACKAGE = 'destiny', nn_index, imputed_data, callback)
+}
+

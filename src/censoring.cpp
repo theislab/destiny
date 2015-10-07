@@ -8,16 +8,17 @@
 
 using namespace Rcpp;
 
-double censor_pair(
-	double c, double d,
-	double sigma, double kt,
-	double thr,
-	double uncertain0, double uncertain1,
-	double missing0, double missing1
+inline double censor_pair(
+	const double c, const double d,
+	const double sigma, const double kt,
+	const double thr,
+	const double uncertain0, const double uncertain1,
+	const double missing0, const double missing1
 ) {
-	bool use_d,
-		one_uncertain  = (c == thr) || (d == thr),
-		one_missing  = NumericVector::is_na(c) || NumericVector::is_na(d),
+	bool use_d;
+	const bool
+		one_uncertain = (c == thr) || (d == thr),
+		one_missing = NumericVector::is_na(c) || NumericVector::is_na(d),
 		one_of_each_invalid = one_uncertain && one_missing,
 		both_valid = !one_uncertain && !one_missing;
 	
@@ -48,7 +49,7 @@ double censor_pair(
 		return exp(-pow(c-d, 2) / (kt*2));
 	} else { //at least one invalid
 		if (one_of_each_invalid) { //3
-			double uncertain_range = uncertain1 - uncertain0 + 2*sigma;
+			const double uncertain_range = uncertain1 - uncertain0 + 2*sigma;
 			return uncertain_range / (sqrt(uncertain_range) * sqrt(missing1 - missing0));
 		} else if (one_uncertain || one_missing) { //2
 			double m0, m1;
@@ -62,7 +63,7 @@ double censor_pair(
 				use_d = NumericVector::is_na(c);
 			}
 			
-			double v = use_d ? d : c;
+			const double v = use_d ? d : c;
 			
 			return
 					pow(M_PI*kt/2, -1./4)
@@ -79,19 +80,19 @@ double censor_pair(
 
 // [[Rcpp::export]]
 Eigen::SparseMatrix<double> censoring_impl(
-		NumericMatrix data,
-		SEXP thr_or_null,
-		SEXP uncertain_or_null,
-		SEXP missing_or_null,
-		double sigma,
-		SEXP nns_or_null,
-		Function callback
+		const NumericMatrix data,
+		const SEXP thr_or_null,
+		const SEXP uncertain_or_null,
+		const SEXP missing_or_null,
+		const double sigma,
+		const SEXP nns_or_null,
+		const Function callback
 ) {
-	int
+	const int
 		n = data.nrow(),
 		G = data.ncol();
 	
-	Rboolean
+	const Rboolean
 		no_nns = Rf_isNull(nns_or_null),
 		no_threshold = Rf_isNull(thr_or_null),
 		no_uncertain = Rf_isNull(uncertain_or_null),
@@ -107,7 +108,7 @@ Eigen::SparseMatrix<double> censoring_impl(
 	std::vector<T> triplets;
 	triplets.reserve((no_nns) ? (n*n) : (nns.ncol() * (n+1)));
 	
-	double kt = pow(sigma, 2);
+	const double kt = pow(sigma, 2);
 	
 	for (int g_idx=0; g_idx<uncertain_m.nrow(); g_idx++) {
 		uncertain_m(g_idx, 0) -= sigma;
@@ -132,12 +133,12 @@ Eigen::SparseMatrix<double> censoring_impl(
 			double x = 1.;
 		
 			for (int g=0; g<G; g++) {
-				double
+				const double
 					c = data(row_idx, g),
 					d = data(nn_idx, g),
 					thr = (thr_v.size() == G) ? thr_v[g] : thr_v[0];
 				
-				double
+				const double
 					uncertain0 = (uncertain_m.nrow() == G) ? uncertain_m(g, 0) : uncertain_m(0, 0),
 					uncertain1 = (uncertain_m.nrow() == G) ? uncertain_m(g, 1) : uncertain_m(0, 1),
 					missing0 = (missing_m.nrow() == G) ? missing_m(g, 0) : missing_m(0, 0),
@@ -162,12 +163,12 @@ Eigen::SparseMatrix<double> censoring_impl(
 
 // [[Rcpp::export]]
 NumericMatrix predict_censoring_impl(
-		NumericMatrix data,
-		NumericMatrix data2,
-		double thr,
-		NumericVector uncertain,
-		NumericVector missing,
-		double sigma
+		const NumericMatrix data,
+		const NumericMatrix data2,
+		const double thr,
+		const NumericVector uncertain,
+		const NumericVector missing,
+		const double sigma
 ) {
 	int
 		n = data.nrow(),
@@ -181,12 +182,12 @@ NumericMatrix predict_censoring_impl(
 	//the sparse matrix has about k·n elements (or k·(n+1)?)
 	NumericMatrix trans_p(n2, n);
 	
-	double
+	const double
 		kt = pow(sigma, 2),
 		uncertain0 = uncertain[0] - sigma,
 		uncertain1 = uncertain[1] + sigma,
-		missing0 = missing[0] -= sigma,
-		missing1 = missing[1] += sigma;
+		missing0 = missing[0] - sigma,
+		missing1 = missing[1] + sigma;
 	
 	for (int i=0; i<n; i++) {
 		for (int j=0; j<n2; j++) {

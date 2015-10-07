@@ -9,8 +9,9 @@
 \usage{
 DiffusionMap(data, sigma = NULL, k = find.dm.k(nrow(data) - 1L),
   n.eigs = min(20L, nrow(data) - 2L), density.norm = TRUE, ...,
-  censor.val = NULL, censor.range = NULL, missing.range = NULL,
-  vars = NULL, verbose = !is.null(censor.range), .debug.env = NULL)
+  distance = c("euclidean", "cosine"), censor.val = NULL,
+  censor.range = NULL, missing.range = NULL, vars = NULL,
+  verbose = !is.null(censor.range), .debug.env = NULL)
 }
 \arguments{
 \item{data}{Expression data to be analyzed. Provide \code{vars} to select specific columns other than the default: all double value columns}
@@ -27,6 +28,8 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 \item{density.norm}{logical. If TRUE, use density normalisation}
 
 \item{...}{All parameter after this are optional and have to be specified by name}
+
+\item{distance}{Distance measurement method. Euclidean distance (default) or cosine distance (\eqn{1-\cor(c_1, c_2)}).}
 
 \item{censor.val}{Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: CENSOR.VAL)}
 
@@ -65,6 +68,8 @@ being treated as expression data features (and the others ignored), or an \link[
 \item{\code{k}}{The k parameter for kNN}
 
 \item{\code{density.norm}}{Was density normalization used?}
+
+\item{\code{distance}}{Distance measurement method used.}
 
 \item{\code{censor.val}}{Censoring value}
 

@@ -24,6 +24,7 @@ NULL
 #' @param n.eigs         Number of eigenvectors/values to return (default: 20)
 #' @param density.norm   logical. If TRUE, use density normalisation
 #' @param ...            All parameter after this are optional and have to be specified by name
+#' @param distance       Distance measurement method. Euclidean distance (default) or cosine distance (\eqn{1-\cor(c_1, c_2)}).
 #' @param censor.val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: CENSOR.VAL)
 #' @param censor.range   Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
 #' @param missing.range  Whole data range for missing value model. Has to be specified if NAs are in the data
@@ -41,6 +42,7 @@ NULL
 #' @slot d              Density vector of transition probability matrix
 #' @slot k              The k parameter for kNN
 #' @slot density.norm   Was density normalization used?
+#' @slot distance       Distance measurement method used.
 #' @slot censor.val     Censoring value
 #' @slot censor.range   Censoring range
 #' @slot missing.range  Whole data range for missing value model
@@ -67,6 +69,7 @@ setClass(
 		d             = 'numeric',
 		k             = 'numeric',
 		density.norm  = 'logical',
+		distance      = 'character',
 		censor.val    = 'numericOrNULL',
 		censor.range  = 'numericOrNULL',
 		missing.range = 'numericOrNULL',
@@ -88,6 +91,8 @@ setClass(
 			'k must be a number'
 		else if (length(object@density.norm) != 1)
 			'density.norm must be TRUE or FALSE'
+		else if (!(object@distance %in% c('euclidean', 'cosine')))
+			'distance must be "euclidean" or "cosine"'
 		else if (is.null(object@censor.val) != is.null(object@censor.range))
 			'Both censor.val and censor.range either need to be NULL or not'
 		else if (!is.null(object@censor.val) && length(object@censor.val) != 1)
@@ -109,12 +114,16 @@ DiffusionMap <- function(
 	n.eigs = min(20L, nrow(data) - 2L),
 	density.norm = TRUE,
 	...,
+	distance = c('euclidean', 'cosine'),
 	censor.val = NULL, censor.range = NULL,
 	missing.range = NULL,
 	vars = NULL,
 	verbose = !is.null(censor.range),
 	.debug.env = NULL
 ) {
+	distance <- match.arg(distance)
+	
+	# store away data and continue using imputed, unified version
 	data.env <- new.env(parent = .GlobalEnv)
 	data.env$data <- data
 	
@@ -128,6 +137,8 @@ DiffusionMap <- function(
 	
 	n <- nrow(imputed.data)
 	
+	# arg validation
+	
 	if (n <= n.eigs + 1L) stop(sprintf('Eigen decomposition not possible if n \u2264 n.eigs+1 (And %s \u2264 %s)', n, n.eigs + 1L))
 	
 	if (is.null(k) || is.na(k)) k <- n - 1L
@@ -135,6 +146,10 @@ DiffusionMap <- function(
 	#dense <- k == n - 1L
 	
 	if (k >= nrow(imputed.data)) stop(sprintf('k has to be < nrow(data) (And %s \u2265 nrow(data))', k))
+	
+	censor <- test.censoring(censor.val, censor.range, data, missing.range)
+	
+	if (identical(distance, 'cosine') && censor) stop('cosine distance only valid without censoring model') 
 	
 	sigmas <- sigma
 	if (is.null(sigmas)) {
@@ -168,10 +183,6 @@ DiffusionMap <- function(
 		print(proc.time() - tic)
 	}
 	
-	
-	censor <- test.censoring(censor.val, censor.range, data, missing.range)
-	
-	
 	# create markovian transition probability matrix (trans.p)
 	cb <- invisible
 	if (verbose) {
@@ -185,10 +196,14 @@ DiffusionMap <- function(
 	if (censor) {
 		trans.p <- censoring(data, censor.val, censor.range, missing.range, sigma, knn$nn.index, cb)
 	} else {
-		d2 <- d2_no_censor(knn$nn.index, knn$nn.dist, cb)
+		d2 <- switch(distance,
+			euclidean = d2_no_censor(knn$nn.index, knn$nn.dist, cb),
+			cosine = icos2_no_censor(knn$nn.index, imputed.data, cb))
+		
 		trans.p <- sparseMatrix(d2@i, p = d2@p, x = exp(-d2@x / (2 * sigma ^ 2)), dims = dim(d2), index1 = FALSE)
 		rm(d2)
 	}
+	
 	if (verbose) {
 		close(pb)
 		cat('...done. Time:\n')
@@ -256,6 +271,7 @@ DiffusionMap <- function(
 		d             = d,
 		k             = k,
 		density.norm  = density.norm,
+		distance      = distance,
 		censor.val    = censor.val,
 		censor.range  = censor.range,
 		missing.range = missing.range)
