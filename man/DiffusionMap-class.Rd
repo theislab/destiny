@@ -29,7 +29,7 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 
 \item{...}{All parameter after this are optional and have to be specified by name}
 
-\item{distance}{Distance measurement method. Euclidean distance (default) or cosine distance (\eqn{1-\cor(c_1, c_2)}).}
+\item{distance}{Distance measurement method. Euclidean distance (default) or cosine distance (\eqn{1-corr(c_1, c_2)}).}
 
 \item{censor.val}{Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: CENSOR.VAL)}
 
