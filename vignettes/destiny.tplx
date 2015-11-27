@@ -9,6 +9,10 @@
 	\usepackage[authoryear,round]{natbib}
 	\usepackage{parskip}
 	\usepackage[inline,shortlabels]{enumitem}
+	\usepackage{upquote}
+	\AtBeginDocument{%
+		\def\PYZsq{\textquotesingle}%
+	}
 	
 	\usepackage[default]{sourcesanspro}
 	\usepackage{sourcecodepro}
