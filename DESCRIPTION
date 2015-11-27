@@ -10,7 +10,7 @@ Authors@R: c(
 	person('Fabian', 'Theis', NULL, 'fabian.theis@helmholtz-muenchen.de', 'ctb'),
 	person('Carsten', 'Marr', NULL, 'carsten.marr@helmholtz-muenchen.de', 'ctb'),
 	person('Florian', 'Büttner', NULL, 'f.buettner@helmholtz-muenchen.de', 'ctb'))
-Description: Create and plot diffusion maps
+Description: Create and plot diffusion maps.
 License: GPL
 Encoding: UTF-8
 Depends:

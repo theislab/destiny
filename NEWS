@@ -1,6 +1,11 @@
-destiny v1.0 (Release date: 2015-07-27)
-==============
+Changes in version 1.1 (2015-11-27)
+===================================
 	
-	Changes:
+	* Implemented rank correlation distance and cosine distance
+	* Added updateObject method
+
+
+Changes in version 1.0 (2015-07-27)
+===================================
 	
 	* Initial release

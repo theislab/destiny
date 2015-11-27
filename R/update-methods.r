@@ -1,17 +1,14 @@
 #' @importFrom BiocGenerics updateObject
 NULL
 
-#' Update old DiffusionMaps to a newer version
+#' Update old \link{DiffusionMap}s to a newer version
 #' 
-#' @param object  A DiffusionMap/Sigmas object
+#' @param object  A \link{DiffusionMap} object created with an older destiny release
 #' @param ...     ignored
 #' @param verbose tells what is being updated
 #' 
-#' @aliases updateObject,Diffusionmap-method updateObject,sigmas-method
-#' @name destiny updateObject methods
-NULL
-
-#' @name destiny updateObject methods
+#' @return A \link{DiffusionMap} object that is valid when used with the current destiny release
+#' 
 #' @export
 setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE) {
 	if (verbose) 
