@@ -59,3 +59,4 @@ Collate:
     'guo-data.r'
     'predict.r'
     'sigmas-plotting.r'
+    'update-methods.r'

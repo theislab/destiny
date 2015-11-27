@@ -1,5 +1,6 @@
 #' @import Matrix
 #' @importFrom methods loadMethod
+#' @importFrom BiocGenerics updateObject
 #' @importFrom proxy dist
 #' @importFrom FNN get.knn
 #' @importFrom igraph arpack
@@ -24,7 +25,7 @@ NULL
 #' @param n.eigs         Number of eigenvectors/values to return (default: 20)
 #' @param density.norm   logical. If TRUE, use density normalisation
 #' @param ...            All parameter after this are optional and have to be specified by name
-#' @param distance       Distance measurement method. Euclidean distance (default) or cosine distance (\eqn{1-corr(c_1, c_2)}).
+#' @param distance       Distance measurement method. Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).
 #' @param censor.val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: CENSOR.VAL)
 #' @param censor.range   Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
 #' @param missing.range  Whole data range for missing value model. Has to be specified if NAs are in the data
@@ -91,8 +92,8 @@ setClass(
 			'k must be a number'
 		else if (length(object@density.norm) != 1)
 			'density.norm must be TRUE or FALSE'
-		else if (!(object@distance %in% c('euclidean', 'cosine')))
-			'distance must be "euclidean" or "cosine"'
+		else if (!(object@distance %in% c('euclidean', 'cosine', 'rankcor')))
+			'distance must be "euclidean", "cosine" or "rankcor"'
 		else if (is.null(object@censor.val) != is.null(object@censor.range))
 			'Both censor.val and censor.range either need to be NULL or not'
 		else if (!is.null(object@censor.val) && length(object@censor.val) != 1)
@@ -114,7 +115,7 @@ DiffusionMap <- function(
 	n.eigs = min(20L, nrow(data) - 2L),
 	density.norm = TRUE,
 	...,
-	distance = c('euclidean', 'cosine'),
+	distance = c('euclidean', 'cosine', 'rankcor'),
 	censor.val = NULL, censor.range = NULL,
 	missing.range = NULL,
 	vars = NULL,
@@ -149,24 +150,29 @@ DiffusionMap <- function(
 	
 	censor <- test.censoring(censor.val, censor.range, data, missing.range)
 	
-	if (identical(distance, 'cosine') && censor) stop('cosine distance only valid without censoring model') 
+	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance') 
 	
 	sigmas <- sigma
-	if (is.null(sigmas)) {
-		sigmas <- find.sigmas(
-			imputed.data,
-			censor.val = censor.val,
-			censor.range = censor.range,
-			missing.range = missing.range,
-			vars = vars,
-			verbose = verbose)
-	} else if (!is(sigmas, 'Sigmas')) {
+	if (is.numeric(sigmas)) {
 		sigmas <- new('Sigmas', 
 			log.sigmas    = NULL,
 			dim.norms     = NULL,
 			optimal.sigma = sigma,
 			optimal.idx   = NULL,
 			avrd.norms    = NULL)
+	} else if (!identical(distance, 'euclidean')) {
+		stop(sprintf('You have to use euclidean distances with sigma estimation, not %s.', sQuote(distance)))
+	} else if (is.null(sigmas)) {
+		sigmas <- find.sigmas(
+			imputed.data,
+			distance = distance,
+			censor.val = censor.val,
+			censor.range = censor.range,
+			missing.range = missing.range,
+			vars = vars,
+			verbose = verbose)
+	} else if (!is(sigmas, 'Sigmas')) {
+		stop(sprintf('The sigma parameter needs to be NULL, numeric or a %s object, not a %s.', sQuote('Sigmas'), sQuote(class(sigmas))))
 	}
 	sigma <- optimal.sigma(sigmas)
 	
@@ -197,8 +203,9 @@ DiffusionMap <- function(
 		trans.p <- censoring(data, censor.val, censor.range, missing.range, sigma, knn$nn.index, cb)
 	} else {
 		d2 <- switch(distance,
-			euclidean = d2_no_censor(knn$nn.index, knn$nn.dist, cb),
-			cosine = icos2_no_censor(knn$nn.index, imputed.data, cb))
+			euclidean  = d2_no_censor(knn$nn.index, knn$nn.dist,  cb),
+			cosine  = icor2_no_censor(knn$nn.index, imputed.data, cb),
+			rankcor = icor2_no_censor(knn$nn.index, imputed.data, cb, TRUE))
 		
 		trans.p <- sparseMatrix(d2@i, p = d2@p, x = exp(-d2@x / (2 * sigma ^ 2)), dims = dim(d2), index1 = FALSE)
 		rm(d2)

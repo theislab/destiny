@@ -9,7 +9,7 @@
 \usage{
 DiffusionMap(data, sigma = NULL, k = find.dm.k(nrow(data) - 1L),
   n.eigs = min(20L, nrow(data) - 2L), density.norm = TRUE, ...,
-  distance = c("euclidean", "cosine"), censor.val = NULL,
+  distance = c("euclidean", "cosine", "rankcor"), censor.val = NULL,
   censor.range = NULL, missing.range = NULL, vars = NULL,
   verbose = !is.null(censor.range), .debug.env = NULL)
 }
@@ -29,7 +29,7 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 
 \item{...}{All parameter after this are optional and have to be specified by name}
 
-\item{distance}{Distance measurement method. Euclidean distance (default) or cosine distance (\eqn{1-corr(c_1, c_2)}).}
+\item{distance}{Distance measurement method. Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).}
 
 \item{censor.val}{Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: CENSOR.VAL)}
 

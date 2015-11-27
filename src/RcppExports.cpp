@@ -52,16 +52,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// icos2_no_censor
-Eigen::SparseMatrix<double> icos2_no_censor(const IntegerMatrix nn_index, NumericMatrix imputed_data, const Function callback);
-RcppExport SEXP destiny_icos2_no_censor(SEXP nn_indexSEXP, SEXP imputed_dataSEXP, SEXP callbackSEXP) {
+// icor2_no_censor
+Eigen::SparseMatrix<double> icor2_no_censor(const IntegerMatrix nn_index, NumericMatrix imputed_data, const Function callback, bool use_rank);
+RcppExport SEXP destiny_icor2_no_censor(SEXP nn_indexSEXP, SEXP imputed_dataSEXP, SEXP callbackSEXP, SEXP use_rankSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const IntegerMatrix >::type nn_index(nn_indexSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type imputed_data(imputed_dataSEXP);
     Rcpp::traits::input_parameter< const Function >::type callback(callbackSEXP);
-    __result = Rcpp::wrap(icos2_no_censor(nn_index, imputed_data, callback));
+    Rcpp::traits::input_parameter< bool >::type use_rank(use_rankSEXP);
+    __result = Rcpp::wrap(icor2_no_censor(nn_index, imputed_data, callback, use_rank));
     return __result;
 END_RCPP
 }

@@ -9,9 +9,8 @@ using namespace Rcpp;
 double cor(const NumericVector v1,
            const NumericVector v2) {
 	
-	if (v1.size() != v2.size()) stop("v1 needs to be of same size as v2");
-	
 	const int n = v1.size();
+	if (n != v2.size()) stop("v1 needs to be of same size as v2");
 	
 	double v1sum, v2sum, v12sum, v1sqr_sum, v2sqr_sum;
 	v1sum = v2sum = v12sum = v1sqr_sum = v1sqr_sum = 0;
@@ -28,6 +27,10 @@ double cor(const NumericVector v1,
 	const double deno = (n*v1sqr_sum - v1sum*v1sum) * (n*v2sqr_sum - v2sum*v2sum);
 	
 	return num / sqrt(deno);
+}
+
+IntegerVector rank(NumericVector x) {
+	return match(x, clone(x).sort());
 }
 
 void validate_n_k(const NumericMatrix nn_dist, const int n, const int k) {
@@ -69,13 +72,25 @@ Eigen::SparseMatrix<double> d2_no_censor(
 }
 
 // [[Rcpp::export]]
-Eigen::SparseMatrix<double> icos2_no_censor(
+Eigen::SparseMatrix<double> icor2_no_censor(
 	const IntegerMatrix nn_index,
 	NumericMatrix imputed_data,
-	const Function callback
+	const Function callback,
+	bool use_rank = false
 ) {
 	const int n = nn_index.nrow();
 	const int k = nn_index.ncol();
+	
+	NumericMatrix data;
+	if (!use_rank) {
+		data = imputed_data;
+	} else {
+		data = NumericMatrix(imputed_data.nrow(), imputed_data.ncol());
+		for (int i=0; i<data.nrow(); i++) {
+			data(i, _) = rank(imputed_data(i, _));
+		}
+	}
+	
 	
 	typedef Eigen::Triplet<double> T;
 	std::vector<T> triplets;
@@ -84,7 +99,7 @@ Eigen::SparseMatrix<double> icos2_no_censor(
 	for (int i=0; i<n; i++) {
 		for (int j=0; j<k; j++) {
 			const int nn_i = nn_index(i, j) - 1;
-			const double d = 1 - cor(imputed_data(i, _), imputed_data(nn_i, _));
+			const double d = 1 - cor(data(i, _), data(nn_i, _));
 			triplets.push_back(T(i, nn_i, d*d));
 		}
 		if (i%1000 == 0)
