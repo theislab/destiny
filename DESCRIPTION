@@ -60,3 +60,4 @@ Collate:
     'predict.r'
     'sigmas-plotting.r'
     'update-methods.r'
+RoxygenNote: 5.0.1
