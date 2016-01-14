@@ -7,13 +7,13 @@
 \alias{guo}
 \alias{guo.norm}
 \title{Guo at al. mouse embryonic stem cell qPCR data}
-\format{A data frame with 492 rows and 49 variables, the first 48 of which are Ct values for gene expression data}
+\format{An \link[Biobase]{ExpressionSet} with 48 features, 428 samples and 2 \link[Biobase]{phenoData} annotations.}
 \usage{
 data(guo)
 data(guo.norm)
 }
 \value{
-a \eqn{429 \times 49} \code{data.frame} with the first 48 columns being qPCR Ct values and the last one the "divisions" annotation.
+an \link[Biobase]{ExpressionSet} with 48 features and 428 samples containing qPCR Ct values and a "num.cells" sample annotation.
 }
 \description{
 Gene expression data of 48 genes and an annotation column \code{$num.cells} containing the cell stage at which the embryos were harvested.

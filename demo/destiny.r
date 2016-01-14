@@ -23,7 +23,7 @@ plot(sigmas,
 diff.guo <- DiffusionMap(guo, 11, censor.val = 15, censor.range = c(15, 40),
                         verbose = FALSE)
 plot(diff.guo,
-     col = guo$divisions, pch = 20)
+     col = guo$num.cells, pch = 20)
 
 #library(rgl)
-#plot3d(eigenvectors(diff.guo)[, 1:3], col = guo$divisions)
+#plot3d(eigenvectors(diff.guo)[, 1:3], col = guo$num.cells)

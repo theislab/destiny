@@ -5,7 +5,7 @@
 #' The data is normalized using the mean of two housekeeping genes.
 #' The difference between \code{guo} and \code{guo.norm} is the LoD being set to 10 in the former, making it usable with the \code{censor.val} parameter of \link{DiffusionMap}.
 #' 
-#' @return a \eqn{429 \times 49} \code{data.frame} with the first 48 columns being qPCR Ct values and the last one the "divisions" annotation.
+#' @return an \link[Biobase]{ExpressionSet} with 48 features and 428 samples containing qPCR Ct values and a "num.cells" sample annotation.
 #' 
 #' @aliases data:guo data:guo.norm guo guo.norm
 #' @name guo
@@ -16,5 +16,5 @@
 #' @usage
 #' data(guo)
 #' data(guo.norm)
-#' @format A data frame with 492 rows and 49 variables, the first 48 of which are Ct values for gene expression data
+#' @format An \link[Biobase]{ExpressionSet} with 48 features, 428 samples and 2 \link[Biobase]{phenoData} annotations.
 NULL

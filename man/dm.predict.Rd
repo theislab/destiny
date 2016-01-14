@@ -19,8 +19,8 @@ Predict new data points using an existing DiffusionMap. The resulting matrix can
 }
 \examples{
 data(guo)
-g1 <- guo[guo$divisions != 5L, ]
-g2 <- guo[guo$divisions == 5L, ]
+g1 <- guo[guo$num.cells != 32L, ]
+g2 <- guo[guo$num.cells == 32L, ]
 dm <- DiffusionMap(g1)
 dc2 <- dm.predict(dm, g2)
 plot(dm, new.dcs = dc2)
