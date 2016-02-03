@@ -1,6 +1,14 @@
 #' @include diffusionmap.r
 NULL
 
+#' @importFrom Hmisc rcorr
+rankcor.dist <- function(x, y) {
+	if (length(x) != length(y))
+		stop('Error: The vectors have different length!')
+	
+	1 - rcorr(x, y, type = 'spearman')$r[1, 2]
+}
+
 #' Predict new data points using an existing DiffusionMap. The resulting matrix can be used in \link[=plot.DiffusionMap]{the plot method for the DiffusionMap}
 #' 
 #' @param dm        A \link{DiffusionMap} object
@@ -26,9 +34,12 @@ dm.predict <- function(dm, new.data) {
 	if (!ncol(data) == ncol(new.data)) stop('new data needs to have the same features as the one used to create the diffusion map')
 	
 	censor <- !is.null(dm@censor.val) || any(is.na(data)) || any(is.na(new.data))
+	#censor imples euclidean distance
+	
 	sigma <- optimal.sigma(dm)
 	if (!censor) {
-		d2 <- unclass(proxy::dist(new.data, data) ^ 2) # matrix (dense)
+		measure <- switch(dm@distance, euclidean = 'Euclidean', cosine = 'cosine', rankcor = rankcor.dist, stop('Unknown distance measure'))
+		d2 <- unclass(proxy::dist(new.data, data, measure) ^ 2) # matrix (dense)
 		
 		#TODO: zeros not on diag
 		trans.p <- exp(-d2 / (2 * sigma ^ 2))

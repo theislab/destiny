@@ -23,6 +23,7 @@ Imports:
     RcppEigen,
     BiocGenerics,
     Matrix,
+    Hmisc,
     FNN,
     VIM,
     proxy,
