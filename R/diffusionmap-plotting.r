@@ -175,7 +175,8 @@ setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(
 	} else stop(sprintf('dims is of wrong length (%s): Can only handle 2 or 3 dimensions', dims))
 	
 	if (draw.legend) {
-		args <- c(list(col, pal = pal, main = legend.main), legend.opts)
+		legend.col <- if (is.double(col) && !is.null(col.limits)) col.limits else col
+		args <- c(list(legend.col, pal = pal, main = legend.main), legend.opts)
 		if (interactive) {
 			rgl::bgplot3d({
 				plot.new()
