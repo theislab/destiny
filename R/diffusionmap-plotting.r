@@ -74,17 +74,8 @@ setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(
 	if (default.col) col <- par('col')
 	
 	#get col from data
-	if (!is.null(col.by)) {
-		annot.data <- dataset(x)
-		col <- if (inherits(annot.data, 'ExpressionSet')) {
-			if (col.by %in% varLabels(annot.data))
-				phenoData(annot.data)[[col.by]]
-			else
-				exprs(annot.data)[col.by, ]
-		} else {
-			 annot.data[, col.by]
-		}
-	}
+	if (!is.null(col.by))
+		col <- extract.col(dataset(x), col.by)
 	
 	# extend margin for legend
 	old.mar <- par('mar')
@@ -198,6 +189,17 @@ setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(
 	par(mar = old.mar)
 	invisible(p)
 })
+
+extract.col <- function(annot.data, col.by) tryCatch({
+	if (inherits(annot.data, 'ExpressionSet')) {
+		if (col.by %in% varLabels(annot.data))
+			annot.data[[col.by]]
+		else
+			exprs(annot.data)[col.by, ]
+	} else {
+		annot.data[, col.by]
+	}
+}, error = function(e) stop(sprintf('Invalid `col.by`: No column, annotation, or feature found with name %s', dQuote(col.by))))
 
 # test:
 # layout(matrix(1:8, 2))
