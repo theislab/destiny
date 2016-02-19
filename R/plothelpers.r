@@ -173,11 +173,20 @@ emptyplot <- function(xlim = c(0, 1), ylim = xlim, asp = 1, frame.plot = FALSE, 
 		rect(xlim[1], ylim[1], xlim[2], ylim[2], col = col)
 }
 
-continuous.colors <- function(vals, pal = palette(), limits = NULL) {
+continuous.colors <- function(vals, pal = palette(), limits = NULL, levels = 100) {
+	if (is.function(pal))
+		pal <- pal(levels)
+	
 	if (is.null(limits))
 		limits <- range(vals, na.rm = TRUE)
 	
-	ramp <- colorRamp(pal)
+	ramp <- colorRamp(pal, space = 'Lab')
 	scaled <- (vals - limits[[1]]) / diff(limits)
-	rgb(ramp(scaled), maxColorValue = 255)
+	
+	rgb.cols <- ramp(scaled)
+	within.limits <- !is.na(rgb.cols[, 1])
+	
+	colors <- rep(NA_character_, length(vals))
+	colors[within.limits] <- rgb(rgb.cols[within.limits, ], maxColorValue = 255)
+	colors
 }
