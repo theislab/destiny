@@ -40,6 +40,7 @@ NULL
 #' @slot sigmas         \link{Sigmas} object with either information about the \link{find.sigmas} heuristic run or just \link{optimal.sigma}.
 #' @slot data.env       Environment referencing the data used to create the diffusion map
 #' @slot eigenvec0      First (constant) eigenvector not included as diffusion component.
+#' @slot transitions    Transition probabilities
 #' @slot d              Density vector of transition probability matrix
 #' @slot k              The k parameter for kNN
 #' @slot density.norm   Was density normalization used?
@@ -67,6 +68,7 @@ setClass(
 		sigmas        = 'Sigmas',
 		data.env      = 'environment',
 		eigenvec0     = 'numeric',
+		transitions   = 'dMatrix',
 		d             = 'numeric',
 		k             = 'numeric',
 		density.norm  = 'logical',
@@ -119,8 +121,7 @@ DiffusionMap <- function(
 	censor.val = NULL, censor.range = NULL,
 	missing.range = NULL,
 	vars = NULL,
-	verbose = !is.null(censor.range),
-	.debug.env = NULL
+	verbose = !is.null(censor.range)
 ) {
 	distance <- match.arg(distance)
 	
@@ -248,11 +249,6 @@ DiffusionMap <- function(
 	M <- D.rot %*% H %*% D.rot
 	rm(H)  # free memory
 	
-	if (!is.null(.debug.env)) {
-		assign('M', M, .debug.env)
-		assign('D.rot', D.rot, .debug.env)
-	}
-	
 	if (verbose) {
 		cat('performing eigen decomposition...')
 		tic <- proc.time()
@@ -275,6 +271,7 @@ DiffusionMap <- function(
 		sigmas        = sigmas,
 		data.env      = data.env,
 		eigenvec0     = eig.vec[, 1],
+		transitions   = M,
 		d             = d,
 		k             = k,
 		density.norm  = density.norm,

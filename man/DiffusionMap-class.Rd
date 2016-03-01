@@ -11,7 +11,7 @@ DiffusionMap(data, sigma = NULL, k = find.dm.k(nrow(data) - 1L),
   n.eigs = min(20L, nrow(data) - 2L), density.norm = TRUE, ...,
   distance = c("euclidean", "cosine", "rankcor"), censor.val = NULL,
   censor.range = NULL, missing.range = NULL, vars = NULL,
-  verbose = !is.null(censor.range), .debug.env = NULL)
+  verbose = !is.null(censor.range))
 }
 \arguments{
 \item{data}{Expression data to be analyzed. Provide \code{vars} to select specific columns other than the default: all double value columns}
@@ -62,6 +62,8 @@ being treated as expression data features (and the others ignored), or an \link[
 \item{\code{data.env}}{Environment referencing the data used to create the diffusion map}
 
 \item{\code{eigenvec0}}{First (constant) eigenvector not included as diffusion component.}
+
+\item{\code{transitions}}{Transition probabilities}
 
 \item{\code{d}}{Density vector of transition probability matrix}
 

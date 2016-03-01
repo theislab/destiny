@@ -1,4 +1,5 @@
 #' @importFrom BiocGenerics updateObject
+#' @importFrom Matrix Matrix
 NULL
 
 #' Update old \link{DiffusionMap}s to a newer version
@@ -16,6 +17,9 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 	
 	if (!.hasSlot(object, 'distance'))
 		slot(object, 'distance', check = FALSE) <- 'euclidean'
+	
+	if (!.hasSlot(object, 'transitions'))
+		slot(object, 'transitions', check = FALSE) <- Matrix(0, length(object@d), length(object@d), sparse = TRUE)
 	
 	validObject(object)
 	object
