@@ -1,5 +1,4 @@
 #' @importFrom BiocGenerics updateObject
-#' @importFrom Matrix Matrix
 NULL
 
 #' Update old \link{DiffusionMap}s to a newer version
