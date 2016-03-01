@@ -31,7 +31,6 @@ NULL
 #' @param missing.range  Whole data range for missing value model. Has to be specified if NAs are in the data
 #' @param vars           Variables (columns) of the data to use. Specifying NULL will select all columns (default: All floating point value columns)
 #' @param verbose        Show a progressbar and other progress information (default: do it if censoring is enabled)
-#' @param .debug.env     If supplied, the rotated transition probaility matrix \code{M} and the scaling rotation \code{D.rot} is stored in it prior to eigen decomposition.
 #' 
 #' @return A DiffusionMap object:
 #' 

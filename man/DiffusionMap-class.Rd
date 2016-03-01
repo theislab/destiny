@@ -40,8 +40,6 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 \item{vars}{Variables (columns) of the data to use. Specifying NULL will select all columns (default: All floating point value columns)}
 
 \item{verbose}{Show a progressbar and other progress information (default: do it if censoring is enabled)}
-
-\item{.debug.env}{If supplied, the rotated transition probaility matrix \code{M} and the scaling rotation \code{D.rot} is stored in it prior to eigen decomposition.}
 }
 \value{
 A DiffusionMap object:
