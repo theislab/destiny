@@ -40,6 +40,7 @@ NULL
 #' @slot data.env       Environment referencing the data used to create the diffusion map
 #' @slot eigenvec0      First (constant) eigenvector not included as diffusion component.
 #' @slot transitions    Transition probabilities
+#' @slot phi0           Density vector of normalized transition probability matrix
 #' @slot d              Density vector of transition probability matrix
 #' @slot k              The k parameter for kNN
 #' @slot density.norm   Was density normalization used?
@@ -68,6 +69,7 @@ setClass(
 		data.env      = 'environment',
 		eigenvec0     = 'numeric',
 		transitions   = 'dMatrix',
+		phi0          = 'numeric',
 		d             = 'numeric',
 		k             = 'numeric',
 		density.norm  = 'logical',
@@ -241,10 +243,12 @@ DiffusionMap <- function(
 	}
 	rm(trans.p)  # free memory
 	
-	#Hp <- Diagonal(x = rowSums(H)^-1) %*% H
+	# only used for returning. could be used for (slower) eigen decomposition
+	d_ <- rowSums(H)
+	Hp <- Diagonal(x = d_ ^ -1) %*% H
 	
 	# calculate the inverse of a diagonal matrix by inverting the diagonal
-	D.rot <- Diagonal(x = rowSums(H) ^ -.5)
+	D.rot <- Diagonal(x = d_ ^ -.5)
 	M <- D.rot %*% H %*% D.rot
 	rm(H)  # free memory
 	
@@ -270,7 +274,8 @@ DiffusionMap <- function(
 		sigmas        = sigmas,
 		data.env      = data.env,
 		eigenvec0     = eig.vec[, 1],
-		transitions   = M,
+		transitions   = Hp,
+		phi0          = d_ / sum(d_),
 		d             = d,
 		k             = k,
 		density.norm  = density.norm,

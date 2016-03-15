@@ -20,6 +20,9 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 	if (!.hasSlot(object, 'transitions'))
 		slot(object, 'transitions', check = FALSE) <- Matrix(0, length(object@d), length(object@d), sparse = TRUE)
 	
+	if (!.hasSlot(object, 'phi0'))
+		slot(object, 'phi0', check = FALSE) <- rep(NA, length(object@d))
+	
 	validObject(object)
 	object
 })

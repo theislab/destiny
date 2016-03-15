@@ -1,7 +1,6 @@
 Roadmap
 =======
 
-* Rank instead of euclidian for distance matrix
 * Local sigma
 * Rotating images
 * high dimensional plotting (more than 2 DCs in 2D)
