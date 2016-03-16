@@ -41,6 +41,8 @@ colorlegend <- function(
 ...) {
 	if (is.double(col)) {
 		zval <- seq(min(col), max(col), length.out = steps)
+	} else if (is.factor(col)) {
+		zval <- factor(levels(col))
 	} else {
 		zval <- sort(unique(col))
 	}
@@ -49,7 +51,9 @@ colorlegend <- function(
 		zval.num <- seq_along(zval)
 	else if (is.numeric(zval))
 		zval.num <- zval
-	else 
+	else if (is.factor(zval))
+		zval.num <- seq_along(zval)
+	else
 		zval.num <- as.integer(zval)
 	
 	if (is.double(col)) {

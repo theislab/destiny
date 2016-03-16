@@ -107,13 +107,13 @@ plot.DiffusionMap <- function(
 		col.plot <- as.integer(col.plot)
 	
 	#limit pal to number of existing colors to maybe attach col.new
+	pal.length <- if (is.factor(col)) length(levels(col)) else length(unique(col.plot))
 	if (is.function(pal)) {
 		# pal is a colorRampPalette-type function
-		pal.length <- length(unique(col.plot))
 		pal <- pal(pal.length)
 	} else {
 		# pal is a vector
-		pal.length <- min(length(pal), length(unique(col.plot)))
+		pal.length <- min(length(pal), pal.length)
 		pal <- pal[seq_len(pal.length)]
 	}
 	
