@@ -39,7 +39,7 @@ NULL
 #' @aliases plot.DiffusionMap plot,DiffusionMap,missing-method plot,DiffusionMap,numeric-method
 #' @name plot.DiffusionMap
 #' @export
-setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(
+plot.DiffusionMap <- function(
 	x, y,
 	new.dcs = NULL,
 	col = NULL, col.by = NULL, col.limits = NULL,
@@ -189,7 +189,7 @@ setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(
 	
 	par(mar = old.mar)
 	invisible(p)
-})
+}
 
 extract.col <- function(annot.data, col.by) tryCatch({
 	if (inherits(annot.data, 'ExpressionSet')) {
@@ -206,6 +206,10 @@ extract.col <- function(annot.data, col.by) tryCatch({
 # layout(matrix(1:8, 2))
 # mapply(function(t, a, b) plot(dif, ticks = t, axes = a, box = b, main = sprintf('t=%s a=%s b=%s', t, a, b)),
 #        c(T,T,T,T,F,F,F,F), c(T,F,T,F,T,F,T,F), c(T,T,F,F,T,T,F,F))
+
+#' @name plot.DiffusionMap
+#' @export
+setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(x, y, ...) plot.DiffusionMap(x, y, ...))
 
 #' @name plot.DiffusionMap
 #' @export

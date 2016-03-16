@@ -7,12 +7,13 @@
 \alias{plot.DiffusionMap}
 \title{3D or 2D plot of diffusion map}
 \usage{
-\S4method{plot}{DiffusionMap,numeric}(x, y, new.dcs = NULL, col = NULL,
-  col.by = NULL, col.limits = NULL, col.new = "red", pal = palette(),
-  ..., mar = NULL, ticks = FALSE, axes = TRUE, box = FALSE,
-  legend.main = col.by, legend.opts = list(), interactive = FALSE,
-  draw.legend = !is.null(col) && length(col) > 1 && !is.character(col),
-  consec.col = TRUE)
+plot.DiffusionMap(x, y, new.dcs = NULL, col = NULL, col.by = NULL,
+  col.limits = NULL, col.new = "red", pal = palette(), ..., mar = NULL,
+  ticks = FALSE, axes = TRUE, box = FALSE, legend.main = col.by,
+  legend.opts = list(), interactive = FALSE, draw.legend = !is.null(col)
+  && length(col) > 1 && !is.character(col), consec.col = TRUE)
+
+\S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 
 \S4method{plot}{DiffusionMap,missing}(x, y, ...)
 }
