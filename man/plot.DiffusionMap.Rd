@@ -7,7 +7,7 @@
 \alias{plot.DiffusionMap}
 \title{3D or 2D plot of diffusion map}
 \usage{
-plot.DiffusionMap(x, y, new.dcs = NULL, col = NULL, col.by = NULL,
+plot.DiffusionMap(x, dims, new.dcs = NULL, col = NULL, col.by = NULL,
   col.limits = NULL, col.new = "red", pal = palette(), ..., mar = NULL,
   ticks = FALSE, axes = TRUE, box = FALSE, legend.main = col.by,
   legend.opts = list(), interactive = FALSE, draw.legend = !is.null(col)
@@ -20,7 +20,7 @@ plot.DiffusionMap(x, y, new.dcs = NULL, col = NULL, col.by = NULL,
 \arguments{
 \item{x}{A \link{DiffusionMap}}
 
-\item{y}{Diffusion components (eigenvectors) to plot (default: first three components; 1:3)}
+\item{dims, y}{Diffusion components (eigenvectors) to plot (default: first three components; 1:3)}
 
 \item{new.dcs}{An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)}
 

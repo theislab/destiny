@@ -11,7 +11,7 @@ NULL
 #' If you specify negative numbers as diffusion components (e.g. \code{plot(dm, c(-1,2))}), then the corresponding components will be flipped.
 #' 
 #' @param x            A \link{DiffusionMap}
-#' @param y            Diffusion components (eigenvectors) to plot (default: first three components; 1:3)
+#' @param dims,y       Diffusion components (eigenvectors) to plot (default: first three components; 1:3)
 #' @param new.dcs      An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)
 #' @param col          Single color string or vector of discrete or categoric values to be mapped to colors.
 #'                     E.g. a column of the data matrix used for creation of the diffusion map. (default: \link{par}\code{('fg')})
@@ -40,7 +40,7 @@ NULL
 #' @name plot.DiffusionMap
 #' @export
 plot.DiffusionMap <- function(
-	x, y,
+	x, dims,
 	new.dcs = NULL,
 	col = NULL, col.by = NULL, col.limits = NULL,
 	col.new = 'red',
@@ -56,7 +56,6 @@ plot.DiffusionMap <- function(
 	consec.col = TRUE
 ) {
 	dif <- x
-	dims <- y
 	
 	if (interactive) {
 		if (!requireNamespace('rgl', quietly = TRUE))
@@ -75,7 +74,7 @@ plot.DiffusionMap <- function(
 	
 	#get col from data
 	if (!is.null(col.by))
-		col <- extract.col(dataset(x), col.by)
+		col <- extract.col(dataset(dif), col.by)
 	
 	# extend margin for legend
 	old.mar <- par('mar')
