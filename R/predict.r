@@ -9,6 +9,8 @@ rankcor.dist <- function(x, y) {
 	1 - rcorr(x, y, type = 'spearman')$r[1, 2]
 }
 
+centered.cosine.dist <- function(x, y) 1 - cor(x, y)
+
 #' Predict new data points using an existing DiffusionMap. The resulting matrix can be used in \link[=plot.DiffusionMap]{the plot method for the DiffusionMap}
 #' 
 #' @param dm        A \link{DiffusionMap} object
@@ -38,7 +40,7 @@ dm.predict <- function(dm, new.data) {
 	
 	sigma <- optimal.sigma(dm)
 	if (!censor) {
-		measure <- switch(dm@distance, euclidean = 'Euclidean', cosine = 'cosine', rankcor = rankcor.dist, stop('Unknown distance measure'))
+		measure <- switch(dm@distance, euclidean = 'Euclidean', cosine = centered.cosine.dist, rankcor = rankcor.dist, stop('Unknown distance measure'))
 		d2 <- unclass(proxy::dist(new.data, data, measure) ^ 2) # matrix (dense)
 		
 		#TODO: zeros not on diag
