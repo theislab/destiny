@@ -1,6 +1,7 @@
 ((*- extends 'article.tplx' -*))
 
 ((* block packages *))
+	\usepackage[svgnames]{xcolor}
 	((( super() )))
 	\usepackage{authblk}
 	\usepackage{csquotes}
@@ -54,9 +55,9 @@
 	((( super() )))
 	
     \hypersetup{
-		urlcolor=darkorange,
-		linkcolor=darkorange,
-		citecolor=darkorange,
+		urlcolor=DarkOrange,
+		linkcolor=DarkOrange,
+		citecolor=DarkOrange,
 	}
 	
 	\setlist[enumerate,1]{label=\textcircled{\scriptsize\arabic*}, itemjoin=\quad}
