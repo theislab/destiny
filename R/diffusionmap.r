@@ -297,7 +297,9 @@ get.sigmas <- function(imputed.data, sigma, distance, censor.val, censor.range, 
 			missing.range = missing.range,
 			vars = vars,
 			verbose = verbose)
-	} else if (!is(sigmas, 'Sigmas')) {
+	} else if (is(sigmas, 'Sigmas')) {
+		sigmas
+	} else {
 		stop(sprintf('The sigma parameter needs to be NULL, numeric or a %s object, not a %s.', sQuote('Sigmas'), sQuote(class(sigmas))))
 	}
 }
