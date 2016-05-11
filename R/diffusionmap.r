@@ -210,6 +210,11 @@ extract.doublematrix <- function(data, vars = NULL) {
 	} else if (!is.matrix(data)) {
 		stop('Data needs to be matrix, data.frame or ExpressionSet')
 	}
+	dupes <- duplicated(data)
+	if (any(dupes)) {
+		data <- data[!dupes, ]
+		warning('Duplicate rows removed from data. Consider explicitly using `df[!duplicated(df), ]`')
+	}
 	
 	if (!is.null(vars))
 		data <- data[, vars]
