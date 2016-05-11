@@ -154,93 +154,19 @@ DiffusionMap <- function(
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance') 
 	
-	sigmas <- sigma
-	if (is.numeric(sigmas)) {
-		sigmas <- new('Sigmas', 
-			log.sigmas    = NULL,
-			dim.norms     = NULL,
-			optimal.sigma = sigma,
-			optimal.idx   = NULL,
-			avrd.norms    = NULL)
-	} else if (!identical(distance, 'euclidean')) {
-		stop(sprintf('You have to use euclidean distances with sigma estimation, not %s.', sQuote(distance)))
-	} else if (is.null(sigmas)) {
-		sigmas <- find.sigmas(
-			imputed.data,
-			distance = distance,
-			censor.val = censor.val,
-			censor.range = censor.range,
-			missing.range = missing.range,
-			vars = vars,
-			verbose = verbose)
-	} else if (!is(sigmas, 'Sigmas')) {
-		stop(sprintf('The sigma parameter needs to be NULL, numeric or a %s object, not a %s.', sQuote('Sigmas'), sQuote(class(sigmas))))
-	}
+	sigmas <- get.sigmas(imputed.data, sigma, distance, censor.val, censor.range, missing.range, vars, verbose)
 	sigma <- optimal.sigma(sigmas)
 	
-	# find KNNs
-	if (verbose) {
-		cat('finding knns...')
-		tic <- proc.time()
-	}
-	knn <- get.knn(imputed.data, k, algorithm = 'cover_tree')
-	# knn$nn.index : \eqn{n \times k} matrix for the nearest neighbor indices
-	# knn$nn.dist  : \eqn{n \times k} matrix for the nearest neighbor Euclidean distances.
-	if (verbose) {
-		cat('...done. Time:\n')
-		print(proc.time() - tic)
-	}
+	knn <- find.knn(imputed.data, k, verbose)
 	
-	# create markovian transition probability matrix (trans.p)
-	cb <- invisible
-	if (verbose) {
-		pb <- txtProgressBar(1, n, style = 3)
-	  cb <- function(i) setTxtProgressBar(pb, i)
-		cat('Calculating transition probabilities...\n')
-		tic <- proc.time()
-	}
-	
-	# initialize trans.p
-	if (censor) {
-		trans.p <- censoring(data, censor.val, censor.range, missing.range, sigma, knn$nn.index, cb)
-	} else {
-		d2 <- switch(distance,
-			euclidean  = d2_no_censor(knn$nn.index, knn$nn.dist,  cb),
-			cosine  = icor2_no_censor(knn$nn.index, imputed.data, cb),
-			rankcor = icor2_no_censor(knn$nn.index, imputed.data, cb, TRUE))
-		
-		trans.p <- sparseMatrix(d2@i, p = d2@p, x = exp(-d2@x / (2 * sigma ^ 2)), dims = dim(d2), index1 = FALSE)
-		rm(d2)
-	}
-	
-	if (verbose) {
-		close(pb)
-		cat('...done. Time:\n')
-		print(proc.time() - tic)
-	}
+	trans.p <- transition.probabilities(imputed.data, distance, sigma, knn, censor, censor.val, censor.range, missing.range, verbose)
 	rm(knn)  # free memory
-	
-	#nnzero
-	
-	# normalize trans.p and only retain intra-cell transitions
-	diag(trans.p) <- 0
-	trans.p <- drop0(trans.p)
-	trans.p <- symmpart(trans.p) # double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix
 	
 	d <- rowSums(trans.p, na.rm = TRUE)
 	
-	#ijk <- summary(trans.p)
+	stopifsmall(max(trans.p@x, na.rm = TRUE))
 	
-	max.dist <- max(trans.p@x, na.rm = TRUE)
-	stopifsmall(max.dist)
-	
-	if (density.norm) {
-	  trans.p <- as(trans.p, 'dgTMatrix') # use non-symmetric triples to operate on all values
-	  H <- sparseMatrix(trans.p@i, trans.p@j, x = trans.p@x / (d[trans.p@i + 1] * d[trans.p@j + 1]), dims = dim(trans.p), index1 = FALSE)
-	  #creates a dgCMatrix
-	} else {
-	  H <- trans.p
-	}
+	H <- get.H(trans.p, d, density.norm)
 	rm(trans.p)  # free memory
 	
 	# only used for returning. could be used for (slower) eigen decomposition
@@ -252,16 +178,7 @@ DiffusionMap <- function(
 	M <- D.rot %*% H %*% D.rot
 	rm(H)  # free memory
 	
-	if (verbose) {
-		cat('performing eigen decomposition...')
-		tic <- proc.time()
-	}
-	#eig.M <- eig.decomp(Hp, n, n.eigs, FALSE)
-	eig.M <- eig.decomp(M, n, n.eigs, TRUE)
-	if (verbose) {
-		cat('...done. Time:\n')
-		print(proc.time() - tic)
-	}
+	eig.M <- decomp.M(M, n.eigs, verbose)
 	
 	#eig.vec <- eig.M$vectors
 	eig.vec <- as.matrix(t(t(eig.M$vectors) %*% D.rot))
@@ -353,4 +270,113 @@ find.dm.k <- function(n, min.k = 100L, small = 1000L, big = 10000L) {
 	k[rest] <- as.integer(round(k.rest))
 	
 	k
+}
+
+get.sigmas <- function(imputed.data, sigma, distance, censor.val, censor.range, missing.range, vars, verbose) {
+	sigmas <- sigma
+	if (is.numeric(sigmas)) {
+		new('Sigmas', 
+			log.sigmas    = NULL,
+			dim.norms     = NULL,
+			optimal.sigma = sigma,
+			optimal.idx   = NULL,
+			avrd.norms    = NULL)
+	} else if (!identical(distance, 'euclidean')) {
+		stop(sprintf('You have to use euclidean distances with sigma estimation, not %s.', sQuote(distance)))
+	} else if (is.null(sigmas)) {
+		find.sigmas(
+			imputed.data,
+			distance = distance,
+			censor.val = censor.val,
+			censor.range = censor.range,
+			missing.range = missing.range,
+			vars = vars,
+			verbose = verbose)
+	} else if (!is(sigmas, 'Sigmas')) {
+		stop(sprintf('The sigma parameter needs to be NULL, numeric or a %s object, not a %s.', sQuote('Sigmas'), sQuote(class(sigmas))))
+	}
+}
+
+find.knn <- function(imputed.data, k, verbose) {
+	if (verbose) {
+		cat('finding knns...')
+		tic <- proc.time()
+	}
+	knn <- get.knn(imputed.data, k, algorithm = 'cover_tree')
+	# knn$nn.index : \eqn{n \times k} matrix for the nearest neighbor indices
+	# knn$nn.dist  : \eqn{n \times k} matrix for the nearest neighbor Euclidean distances.
+	if (verbose) {
+		cat('...done. Time:\n')
+		print(proc.time() - tic)
+	}
+	
+	knn
+}
+
+transition.probabilities <- function(imputed.data, distance, sigma, knn, censor, censor.val, censor.range, missing.range, verbose) {
+	n <- nrow(knn$nn.index)
+	
+	# create markovian transition probability matrix (trans.p)
+	cb <- invisible
+	if (verbose) {
+		pb <- txtProgressBar(1, n, style = 3)
+		cb <- function(i) setTxtProgressBar(pb, i)
+		cat('Calculating transition probabilities...\n')
+		tic <- proc.time()
+	}
+	
+	# initialize trans.p
+	if (censor) {
+		trans.p <- censoring(imputed.data, censor.val, censor.range, missing.range, sigma, knn$nn.index, cb)
+	} else {
+		d2 <- switch(distance,
+			euclidean  = d2_no_censor(knn$nn.index, knn$nn.dist,  cb),
+			cosine  = icor2_no_censor(knn$nn.index, imputed.data, cb),
+			rankcor = icor2_no_censor(knn$nn.index, imputed.data, cb, TRUE))
+		
+		trans.p <- sparseMatrix(d2@i, p = d2@p, x = exp(-d2@x / (2 * sigma ^ 2)), dims = dim(d2), index1 = FALSE)
+		rm(d2)
+	}
+	
+	if (verbose) {
+		close(pb)
+		cat('...done. Time:\n')
+		print(proc.time() - tic)
+	}
+	
+	#nnzero
+	
+	# normalize trans.p and only retain intra-cell transitions
+	diag(trans.p) <- 0
+	trans.p <- drop0(trans.p)
+	trans.p <- symmpart(trans.p) # double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix
+	
+	trans.p
+}
+
+get.H <- function(trans.p, d, density.norm) {
+	if (density.norm) {
+		trans.p <- as(trans.p, 'dgTMatrix') # use non-symmetric triples to operate on all values
+		
+		#creates a dgCMatrix
+		sparseMatrix(trans.p@i, trans.p@j, x = trans.p@x / (d[trans.p@i + 1] * d[trans.p@j + 1]), dims = dim(trans.p), index1 = FALSE)
+	} else {
+		trans.p
+	}
+}
+
+decomp.M <- function(M, n.eigs, verbose) {
+	n <- nrow(M)
+	if (verbose) {
+		cat('performing eigen decomposition...')
+		tic <- proc.time()
+	}
+	#eig.M <- eig.decomp(Hp, n, n.eigs, FALSE)
+	eig.M <- eig.decomp(M, n, n.eigs, TRUE)
+	if (verbose) {
+		cat('...done. Time:\n')
+		print(proc.time() - tic)
+	}
+	
+	eig.M
 }
