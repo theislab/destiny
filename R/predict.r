@@ -50,32 +50,26 @@ dm.predict <- function(dm, new.data) {
 		trans.p <- predict.censoring(data, new.data, dm@censor.val, dm@censor.range, dm@missing.range, sigma)
 	}
 	
-	#columns: old data, rows: new data
-	
-	trans.p <- as(trans.p, 'dgTMatrix')
-	
-	max.dist <- max(trans.p@x, na.rm = TRUE)
-	stopifsmall(max.dist)
-	
-	d.new <- rowSums(trans.p, na.rm = TRUE)
-	
-	if (dm@density.norm) {
-		# faster version of norm_p <- trans.p / outer(d.new, dm@d)
-		norm_p <- sparseMatrix(trans.p@i, trans.p@j, x = trans.p@x / (d.new[trans.p@i + 1] * dm@d[trans.p@j + 1]), dims = dim(trans.p), index1 = FALSE)
-		#creates a dgCMatrix
-	} else {
-		norm_p <- trans.p
-	}
+	#trans.p:  columns: old data, rows: new data
+	d_new <- rowSums(trans.p, na.rm = TRUE)
+	norm_p <- get_norm_p(trans.p, dm@d, d_new, dm@density.norm)
 	rm(trans.p)  # free memory
 	
-	# calculate the inverse of a diagonal matrix by inverting the diagonal
-	D <- Diagonal(x = rowSums(norm_p) ^ -1)
+	d_norm_new <- rowSums(norm_p)
 	
-	Hp <- D %*% norm_p
+	#
+	Hp_new <- rotate_norm_p(norm_p, d_norm_new)
 	rm(norm_p)  # free memory
 	
 	phi <- cbind(dm@eigenvec0, eigenvectors(dm))
 	
-	eig.vec.norm <- Hp %*% phi %*% Diagonal(x = c(1, 1 / eigenvalues(dm)))
+	eig.vec.norm <- Hp_new %*% phi %*% Diagonal(x = c(1, 1 / eigenvalues(dm)))
 	eig.vec.norm[, -1]
+	
+	#new version doesn’t quite work yet
+	# d_rot     <- Diagonal(x = dm@d_norm  ^ -.5)
+	# d_rot_new <- Diagonal(x = d_norm_new ^ -.5)
+	# M_new <- d_rot_new %*% norm_p %*% d_rot
+	# 
+	# t(t(M_new %*% eigenvectors(dm)) / eigenvalues(dm))
 }

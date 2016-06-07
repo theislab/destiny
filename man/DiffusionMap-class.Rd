@@ -63,9 +63,9 @@ being treated as expression data features (and the others ignored), or an \link[
 
 \item{\code{transitions}}{Transition probabilities}
 
-\item{\code{phi0}}{Density vector of normalized transition probability matrix}
-
 \item{\code{d}}{Density vector of transition probability matrix}
+
+\item{\code{d_norm}}{Density vector of normalized transition probability matrix}
 
 \item{\code{k}}{The k parameter for kNN}
 

@@ -40,8 +40,8 @@ NULL
 #' @slot data.env       Environment referencing the data used to create the diffusion map
 #' @slot eigenvec0      First (constant) eigenvector not included as diffusion component.
 #' @slot transitions    Transition probabilities
-#' @slot phi0           Density vector of normalized transition probability matrix
 #' @slot d              Density vector of transition probability matrix
+#' @slot d_norm         Density vector of normalized transition probability matrix
 #' @slot k              The k parameter for kNN
 #' @slot density.norm   Was density normalization used?
 #' @slot distance       Distance measurement method used.
@@ -69,8 +69,8 @@ setClass(
 		data.env      = 'environment',
 		eigenvec0     = 'numeric',
 		transitions   = 'dMatrix',
-		phi0          = 'numeric',
 		d             = 'numeric',
+		d_norm        = 'numeric',
 		k             = 'numeric',
 		density.norm  = 'logical',
 		distance      = 'character',
@@ -164,18 +164,16 @@ DiffusionMap <- function(
 	
 	d <- rowSums(trans.p, na.rm = TRUE)
 	
-	stopifsmall(max(trans.p@x, na.rm = TRUE))
-	
 	# normalize by density if requested
-	norm_p <- get_norm_p(trans.p, d, density.norm)
+	norm_p <- get_norm_p(trans.p, d, d, density.norm)
 	rm(trans.p)  # free memory
 	
+	d_norm <- rowSums(norm_p)
 	# only used for returning. could be used for (slower) eigen decomposition
-	d_ <- rowSums(norm_p)
-	Hp <- Diagonal(x = d_ ^ -1) %*% norm_p
+	Hp <- rotate_norm_p(norm_p, d_norm)
 	
 	# calculate the inverse of a diagonal matrix by inverting the diagonal
-	D.rot <- Diagonal(x = d_ ^ -.5)
+	D.rot <- Diagonal(x = d_norm ^ -.5)
 	M <- D.rot %*% norm_p %*% D.rot
 	rm(norm_p)  # free memory
 	
@@ -193,8 +191,8 @@ DiffusionMap <- function(
 		data.env      = data.env,
 		eigenvec0     = eig.vec[, 1],
 		transitions   = Hp,
-		phi0          = d_ / sum(d_),
 		d             = d,
+		d_norm        = d_norm,
 		k             = k,
 		density.norm  = density.norm,
 		distance      = distance,
@@ -365,15 +363,21 @@ transition.probabilities <- function(imputed.data, distance, sigma, knn, censor,
 	trans.p
 }
 
-get_norm_p <- function(trans.p, d, density.norm) {
+get_norm_p <- function(trans.p, d, d_new, density.norm) {
 	if (density.norm) {
 		trans.p <- as(trans.p, 'dgTMatrix') # use non-symmetric triples to operate on all values
+		stopifsmall(max(trans.p@x, na.rm = TRUE))
 		
 		#creates a dgCMatrix
-		sparseMatrix(trans.p@i, trans.p@j, x = trans.p@x / (d[trans.p@i + 1] * d[trans.p@j + 1]), dims = dim(trans.p), index1 = FALSE)
+		sparseMatrix(trans.p@i, trans.p@j, x = trans.p@x / (d_new[trans.p@i + 1] * d[trans.p@j + 1]), dims = dim(trans.p), index1 = FALSE)
 	} else {
 		trans.p
 	}
+}
+
+rotate_norm_p <- function(norm_p, d_norm) {
+	# calculate the inverse of a diagonal matrix by inverting the diagonal
+	Diagonal(x = d_norm ^ -1) %*% norm_p
 }
 
 decomp.M <- function(M, n.eigs, verbose) {
