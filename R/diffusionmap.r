@@ -356,7 +356,10 @@ transition.probabilities <- function(imputed.data, distance, sigma, knn, censor,
 	# normalize trans.p and only retain intra-cell transitions
 	diag(trans.p) <- 0
 	trans.p <- drop0(trans.p)
-	trans.p <- symmpart(trans.p) # double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix
+	
+	# (double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix)
+	# retain all differences fully. symmpart halves them in the case of trans.p[i,j] == 0 && trans.p[j,i] > 0
+	trans.p <- symmpart(trans.p) + abs(forceSymmetric(skewpart(trans.p))) # TODO: more efficient
 	
 	trans.p
 }
