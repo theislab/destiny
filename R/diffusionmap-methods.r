@@ -7,7 +7,7 @@
 #' 
 #' @return The assigned or retrieved value
 #' 
-#' @seealso \code{\link{DiffusionMap}}
+#' @seealso \code{\link{DiffusionMap}}, \code{\link{DiffusionMap extraction}}
 #' 
 #' @examples
 #' data(guo)

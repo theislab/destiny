@@ -52,6 +52,7 @@ Collate:
     'sigmas.r'
     'diffusionmap.r'
     'diffusionmap-coercions.r'
+    'diffusionmap-methods-extraction.r'
     'diffusionmap-methods.r'
     'plothelpers.r'
     'diffusionmap-plotting.r'

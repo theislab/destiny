@@ -65,6 +65,6 @@ optimal.sigma(dm)
 
 }
 \seealso{
-\code{\link{DiffusionMap}}
+\code{\link{DiffusionMap}}, \code{\link{DiffusionMap extraction}}
 }
 
