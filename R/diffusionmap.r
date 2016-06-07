@@ -166,17 +166,18 @@ DiffusionMap <- function(
 	
 	stopifsmall(max(trans.p@x, na.rm = TRUE))
 	
-	H <- get.H(trans.p, d, density.norm)
+	# normalize by density if requested
+	norm_p <- get_norm_p(trans.p, d, density.norm)
 	rm(trans.p)  # free memory
 	
 	# only used for returning. could be used for (slower) eigen decomposition
-	d_ <- rowSums(H)
-	Hp <- Diagonal(x = d_ ^ -1) %*% H
+	d_ <- rowSums(norm_p)
+	Hp <- Diagonal(x = d_ ^ -1) %*% norm_p
 	
 	# calculate the inverse of a diagonal matrix by inverting the diagonal
 	D.rot <- Diagonal(x = d_ ^ -.5)
-	M <- D.rot %*% H %*% D.rot
-	rm(H)  # free memory
+	M <- D.rot %*% norm_p %*% D.rot
+	rm(norm_p)  # free memory
 	
 	eig.M <- decomp.M(M, n.eigs, verbose)
 	
@@ -364,7 +365,7 @@ transition.probabilities <- function(imputed.data, distance, sigma, knn, censor,
 	trans.p
 }
 
-get.H <- function(trans.p, d, density.norm) {
+get_norm_p <- function(trans.p, d, density.norm) {
 	if (density.norm) {
 		trans.p <- as(trans.p, 'dgTMatrix') # use non-symmetric triples to operate on all values
 		

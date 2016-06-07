@@ -60,19 +60,19 @@ dm.predict <- function(dm, new.data) {
 	d.new <- rowSums(trans.p, na.rm = TRUE)
 	
 	if (dm@density.norm) {
-		# faster version of H <- trans.p / outer(d.new, dm@d)
-		H <- sparseMatrix(trans.p@i, trans.p@j, x = trans.p@x / (d.new[trans.p@i + 1] * dm@d[trans.p@j + 1]), dims = dim(trans.p), index1 = FALSE)
+		# faster version of norm_p <- trans.p / outer(d.new, dm@d)
+		norm_p <- sparseMatrix(trans.p@i, trans.p@j, x = trans.p@x / (d.new[trans.p@i + 1] * dm@d[trans.p@j + 1]), dims = dim(trans.p), index1 = FALSE)
 		#creates a dgCMatrix
 	} else {
-		H <- trans.p
+		norm_p <- trans.p
 	}
 	rm(trans.p)  # free memory
 	
 	# calculate the inverse of a diagonal matrix by inverting the diagonal
-	D <- Diagonal(x = rowSums(H) ^ -1)
+	D <- Diagonal(x = rowSums(norm_p) ^ -1)
 	
-	Hp <- D %*% H
-	rm(H)  # free memory
+	Hp <- D %*% norm_p
+	rm(norm_p)  # free memory
 	
 	phi <- cbind(dm@eigenvec0, eigenvectors(dm))
 	
