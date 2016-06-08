@@ -57,19 +57,9 @@ dm.predict <- function(dm, new.data) {
 	
 	d_norm_new <- rowSums(norm_p)
 	
-	#
-	Hp_new <- rotate_norm_p(norm_p, d_norm_new)
-	rm(norm_p)  # free memory
+	d_rot     <- Diagonal(x = dm@d_norm  ^ -.5)
+	d_rot_new <- Diagonal(x = d_norm_new ^ -.5)
+	M_new <- d_rot_new %*% norm_p %*% d_rot
 	
-	phi <- cbind(dm@eigenvec0, eigenvectors(dm))
-	
-	eig.vec.norm <- Hp_new %*% phi %*% Diagonal(x = c(1, 1 / eigenvalues(dm)))
-	eig.vec.norm[, -1]
-	
-	#new version doesn’t quite work yet
-	# d_rot     <- Diagonal(x = dm@d_norm  ^ -.5)
-	# d_rot_new <- Diagonal(x = d_norm_new ^ -.5)
-	# M_new <- d_rot_new %*% norm_p %*% d_rot
-	# 
-	# t(t(M_new %*% eigenvectors(dm)) / eigenvalues(dm))
+	t(t(M_new %*% eigenvectors(dm)) / eigenvalues(dm))
 }
