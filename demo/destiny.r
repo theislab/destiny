@@ -8,8 +8,8 @@ palette(brewer.pal(8L, 'Dark2'))
 
 
 
-sigmas <- find.sigmas(guo, censor.val = 15, censor.range = c(15, 40),
-                     verbose = FALSE)
+sigmas <- find.sigmas(guo, censor.val = 10, censor.range = c(10, 40),
+                      verbose = FALSE)
 par(lwd = 3)
 plot(sigmas,
 		 col           = palette()[[1]],
@@ -20,8 +20,8 @@ plot(sigmas,
 
 
 
-diff.guo <- DiffusionMap(guo, 11, censor.val = 15, censor.range = c(15, 40),
-                        verbose = FALSE)
+diff.guo <- DiffusionMap(guo, sigmas, censor.val = 10, censor.range = c(10, 40),
+                         verbose = FALSE)
 plot(diff.guo,
      col = guo$num.cells, pch = 20)
 
