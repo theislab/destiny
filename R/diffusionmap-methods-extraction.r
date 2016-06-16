@@ -31,7 +31,7 @@ setMethod('names', 'DiffusionMap', function(x) {
 #' @export
 setMethod('[[', c('DiffusionMap', 'character', 'missing'), function(x, i, j, ...) {
 	dta <- if (grepl('^DC\\d+$', i)) eigenvectors(x) else dataset(x)
-	if(is.matrix(dta)) {
+	if (is.matrix(dta)) {
 		dta[, i]
 	} else if (is(dta, 'ExpressionSet') && i %in% featureNames(dta)) {
 		exprs(dta)[i, ]
