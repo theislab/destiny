@@ -15,6 +15,7 @@ centered.cosine.dist <- function(x, y) 1 - cor(x, y)
 #' 
 #' @param dm        A \link{DiffusionMap} object
 #' @param new.data  New data points to project into the diffusion map. Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.
+#' @param verbose   Show progress messages?
 #' 
 #' @return A \eqn{nrow(new.data) \times ncol(eigenvectors(dif))} matrix of projected diffusion components for the new data.
 #' 
@@ -28,7 +29,7 @@ centered.cosine.dist <- function(x, y) 1 - cor(x, y)
 #' 
 #' @importFrom proxy dist
 #' @export
-dm.predict <- function(dm, new.data) {
+dm.predict <- function(dm, new.data, verbose = FALSE) {
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be a DiffusionMap')
 	
 	data <- extract.doublematrix(dataset(dm), dm@vars)
@@ -40,6 +41,7 @@ dm.predict <- function(dm, new.data) {
 	
 	sigma <- optimal.sigma(dm)
 	if (!censor) {
+		if (verbose) cat('Creating distance matrix without censoring\n')
 		measure <- switch(dm@distance, euclidean = 'Euclidean', cosine = centered.cosine.dist, rankcor = rankcor.dist, stop('Unknown distance measure'))
 		d2 <- unclass(proxy::dist(new.data, data, measure) ^ 2) # matrix (dense)
 		
@@ -47,6 +49,7 @@ dm.predict <- function(dm, new.data) {
 		trans.p <- exp(-d2 / (2 * sigma ^ 2))
 		trans.p[d2 == 0] <- 0
 	} else {
+		if (verbose) cat('Creating distance matrix with censoring\n')
 		trans.p <- predict.censoring(data, new.data, dm@censor.val, dm@censor.range, dm@missing.range, sigma)
 	}
 	
@@ -61,5 +64,6 @@ dm.predict <- function(dm, new.data) {
 	d_rot_new <- Diagonal(x = d_norm_new ^ -.5)
 	M_new <- d_rot_new %*% norm_p %*% d_rot
 	
+	if (verbose) cat('Transforming data\n')
 	t(t(M_new %*% eigenvectors(dm)) / eigenvalues(dm))
 }
