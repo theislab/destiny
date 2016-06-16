@@ -28,6 +28,6 @@
 DiffusionMap extraction methods
 }
 \seealso{
-\link[base]{Extract}, \link[base]{\code{names}}, \code{\link{DiffusionMap}}, \link{DiffusionMap methods}
+\link[base]{Extract}, \code{\link[base]{names}}, \code{\link{DiffusionMap}}, \link{DiffusionMap methods}
 }
 

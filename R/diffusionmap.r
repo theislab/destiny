@@ -1,4 +1,9 @@
 #' @import Matrix
+#' @importFrom grDevices colorRamp colorRampPalette palette rgb
+#' @importFrom graphics axis dotchart layout plot.new
+#' @importFrom methods .hasSlot slot<-
+#' @importFrom stats cor
+#' @importFrom utils read.table setTxtProgressBar str txtProgressBar
 #' @importFrom methods loadMethod
 #' @importFrom BiocGenerics updateObject
 #' @importFrom proxy dist
