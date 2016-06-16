@@ -169,28 +169,25 @@ DiffusionMap <- function(
 	rm(trans.p)  # free memory
 	
 	d_norm <- rowSums(norm_p)
-	# only used for returning. could be used for (slower) eigen decomposition
-	Hp <- rotate_norm_p(norm_p, d_norm)
 	
 	# calculate the inverse of a diagonal matrix by inverting the diagonal
 	D.rot <- Diagonal(x = d_norm ^ -.5)
-	M <- D.rot %*% norm_p %*% D.rot
+	transitions <- as(D.rot %*% norm_p %*% D.rot, 'symmetricMatrix')
 	rm(norm_p)  # free memory
 	
-	eig.M <- decomp.M(M, n.eigs, verbose)
+	eig_transitions <- decomp_transitions(transitions, n.eigs, verbose)
 	
-	#eig.vec <- eig.M$vectors
-	eig.vec <- as.matrix(t(t(eig.M$vectors) %*% D.rot))
-	colnames(eig.vec) <- paste0('DC', seq(0, n.eigs))
+	eig_vec <- as.matrix(t(t(eig_transitions$vectors) %*% D.rot))
+	colnames(eig_vec) <- paste0('DC', seq(0, n.eigs))
 	
 	new(
 		'DiffusionMap',
-		eigenvalues   = eig.M$values[-1],
-		eigenvectors  = eig.vec[, -1],
+		eigenvalues   = eig_transitions$values[-1],
+		eigenvectors  = eig_vec[, -1],
 		sigmas        = sigmas,
 		data.env      = data.env,
-		eigenvec0     = eig.vec[, 1],
-		transitions   = Hp,
+		eigenvec0     = eig_vec[, 1],
+		transitions   = transitions,
 		d             = d,
 		d_norm        = d_norm,
 		k             = k,
@@ -228,12 +225,22 @@ stopifsmall <- function(max.dist) {
 			max.dist))
 }
 
-eig.decomp <- function(M, n, n.eigs, sym) {
+
+#' Fast eigen decomposition using ARPACK
+#'
+#' @param M       A matrix (e.g. from the Matrix package)
+#' @param n_eigs  Number of eigenvectors to return
+#' @param sym     TRUE if M is symmetric
+#' 
+#' @return n eigenvectors of the transition matrix
+#' @export
+eig_decomp <- function(M, n_eigs, sym = isSymmetric(M)) {
+	n <- nrow(M)
 	f <- function(x, A = NULL) as.matrix(A %*% x)
 	wh <- if (sym) 'LA' else 'LM'
 	#constraints: n >= ncv > nev
 	ar <- arpack(f, extra = M, sym = sym, options = list(
-		which = wh, n = n, ncv = min(n, 4*n.eigs), nev = n.eigs + 1))
+		which = wh, n = n, ncv = min(n, 4*n_eigs), nev = n_eigs + 1))
 	if (!sym) {
 		ar$vectors <- Re(ar$vectors)
 		ar$values  <- Re(ar$values)
@@ -375,23 +382,16 @@ get_norm_p <- function(trans.p, d, d_new, density.norm) {
 	}
 }
 
-rotate_norm_p <- function(norm_p, d_norm) {
-	# calculate the inverse of a diagonal matrix by inverting the diagonal
-	Diagonal(x = d_norm ^ -1) %*% norm_p
-}
-
-decomp.M <- function(M, n.eigs, verbose) {
-	n <- nrow(M)
+decomp_transitions <- function(transitions, n_eigs, verbose) {
 	if (verbose) {
 		cat('performing eigen decomposition...')
 		tic <- proc.time()
 	}
-	#eig.M <- eig.decomp(Hp, n, n.eigs, FALSE)
-	eig.M <- eig.decomp(M, n, n.eigs, TRUE)
+	eig_transitions <- eig_decomp(transitions, n_eigs)
 	if (verbose) {
 		cat('...done. Time:\n')
 		print(proc.time() - tic)
 	}
 	
-	eig.M
+	eig_transitions
 }
