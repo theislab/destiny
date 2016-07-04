@@ -167,7 +167,7 @@ DiffusionMap <- function(
 	trans.p <- transition.probabilities(imputed.data, distance, sigma, knn, censor, censor.val, censor.range, missing.range, verbose)
 	rm(knn)  # free memory
 	
-	d <- rowSums(trans.p, na.rm = TRUE)
+	d <- rowSums(trans.p, na.rm = TRUE) + 1 # diagonal set to 1
 	
 	# normalize by density if requested
 	norm_p <- get_norm_p(trans.p, d, d, density.norm)
