@@ -2,5 +2,12 @@ Roadmap
 =======
 
 * Local sigma
+* CV-based gene preselection
+* DPT
+
+	* Autotree
+	* Density-over-DPT plots
+	* Heat Map
+
 * Rotating images
 * high dimensional plotting (more than 2 DCs in 2D)
