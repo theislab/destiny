@@ -13,16 +13,16 @@ Authors@R: c(
 Description: Create and plot diffusion maps.
 License: GPL
 Encoding: UTF-8
-Depends:
-    R (>= 3.2.0),
-    methods,
-    Biobase
+Depends: R (>= 3.2.0)
 Imports:
+    methods,
     graphics,
+    grDevices,
+    Matrix,
     Rcpp (>= 0.10.3),
     RcppEigen,
+    Biobase,
     BiocGenerics,
-    Matrix,
     Hmisc,
     FNN,
     VIM,

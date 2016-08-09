@@ -1,5 +1,7 @@
+#'@importFrom methods setOldClass
 setOldClass('dist')
 
+#' @importFrom Matrix sparseMatrix
 as.Matrix.dist <- function(from) {
 	s <- attr(from, 'Size')
 	i <- rev(abs(sequence(seq.int(s - 1L)) - s) + 1L)
@@ -7,6 +9,7 @@ as.Matrix.dist <- function(from) {
 	sparseMatrix(i, j, x = unclass(from), dims = c(s, s), symmetric = TRUE)
 }
 
+#'@importFrom methods setAs
 setAs('dist', 'Matrix',        as.Matrix.dist)
 setAs('dist', 'sparseMatrix',  as.Matrix.dist)
 setAs('dist', 'CsparseMatrix', as.Matrix.dist)

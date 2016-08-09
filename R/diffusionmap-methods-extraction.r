@@ -12,6 +12,7 @@
 NULL
 
 
+#' @importFrom methods is
 #' @importFrom Biobase featureNames varLabels
 #' @name DiffusionMap extraction
 #' @export
@@ -26,6 +27,7 @@ setMethod('names', 'DiffusionMap', function(x) {
 })
 
 
+#' @importFrom methods is
 #' @importFrom Biobase exprs featureNames
 #' @name DiffusionMap extraction
 #' @export

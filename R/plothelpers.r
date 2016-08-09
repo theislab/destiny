@@ -1,6 +1,3 @@
-#' @importFrom graphics par rect segments text
-NULL
-
 #' Color legend
 #' 
 #' Creates a color legend for a vector used to color a plot. It will use the current \code{\link[grDevices]{palette}()} or the specified \code{pal} as reference.
@@ -30,6 +27,8 @@ NULL
 #' plot(sample(6), col = color.data)
 #' colorlegend(color.data)
 #' 
+#' @importFrom graphics par rect segments text
+#' @importFrom grDevices colorRamp colorRampPalette palette
 #' @export
 colorlegend <- function(
 	col, pal = palette(), log = FALSE,
@@ -154,6 +153,7 @@ colorlegend <- function(
 #' r <- runif(100)
 #' plot(1:100, r, col = rgb(cr(r), max = 255), type = 'b', pch = 20)
 #' 
+#' @importFrom grDevices rgb
 #' @export
 cube.helix <- function(n = 6, start = 0, r = .4, hue = .8, gamma = 1, light = .85, dark = .15, reverse = FALSE) {
 	M <- matrix(c(-0.14861, -0.29227, 1.97294,
@@ -177,6 +177,7 @@ emptyplot <- function(xlim = c(0, 1), ylim = xlim, asp = 1, frame.plot = FALSE, 
 		rect(xlim[1], ylim[1], xlim[2], ylim[2], col = col)
 }
 
+#' @importFrom grDevices rgb palette
 continuous.colors <- function(vals, pal = palette(), limits = NULL, levels = 100) {
 	if (is.function(pal))
 		pal <- pal(levels)

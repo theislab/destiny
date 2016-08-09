@@ -1,4 +1,3 @@
-#' @import Matrix
 #' @include s4-null-unions.r dist-matrix-coerce.r
 NULL
 
@@ -35,6 +34,8 @@ NULL
 #' @seealso \code{\link{find.sigmas}}, the function to determine a locally optimal sigma and returning this class
 #' 
 #' @aliases Sigmas Sigmas-class Sigmas-methods print,Sigmas-method show,Sigmas-method optimal.sigma optimal.sigma,Sigmas-method
+#' 
+#' @importFrom methods setClass
 #' @name Sigmas class
 #' @export Sigmas
 #' @exportClass Sigmas
@@ -47,6 +48,7 @@ Sigmas <- setClass('Sigmas', slots = c(
 
 #' @return \code{optimal.sigma} retrieves the numeric value of the optimal sigma
 #' 
+#' @importFrom methods setGeneric
 #' @name Sigmas class
 #' @export
 setGeneric('optimal.sigma', function(object) standardGeneric('optimal.sigma'))
@@ -65,6 +67,7 @@ optimal.sigma: %s',
 	invisible(x)
 })
 
+#' @importFrom graphics plot
 #' @name Sigmas class
 #' @export
 setMethod('show', 'Sigmas', function(object) {
@@ -100,6 +103,11 @@ setMethod('show', 'Sigmas', function(object) {
 #' sigs <- find.sigmas(guo, verbose = TRUE)
 #' DiffusionMap(guo, sigs)
 #' 
+#' @importFrom methods as
+#' @importFrom graphics plot
+#' @importFrom utils txtProgressBar setTxtProgressBar
+#' @importFrom Matrix colSums rowSums
+#' @importFrom proxy dist
 #' @export
 find.sigmas <- function(
 	data,

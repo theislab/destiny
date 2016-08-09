@@ -60,6 +60,7 @@ test.censoring <- function(censor.val, censor.range, data, missing.range) {
 		!(missing(missing.range) || is.null(missing.range))
 }
 
+#' @importFrom Matrix sparseMatrix
 no_censoring_slow <- function(sigma, nn.index, nn.dist, cb) {
 	k <- ncol(nn.index)
 	n <- nrow(nn.index)

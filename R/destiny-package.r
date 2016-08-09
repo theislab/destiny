@@ -11,8 +11,7 @@
 #' @aliases destiny-package
 #' @name destiny
 #' 
-## Make sure Rcpp and RcppEigen are loaded, and the checks don't complain about methods
+## Make sure Rcpp and RcppEigen are loaded
 #' @importFrom Rcpp evalCpp
 #' @importFrom RcppEigen RcppEigen.package.skeleton
-#' @importFrom methods .valueClassTest validObject new is as
 NULL

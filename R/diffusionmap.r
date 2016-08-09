@@ -1,19 +1,6 @@
-#' @import Matrix
-#' @importFrom grDevices colorRamp colorRampPalette palette rgb
-#' @importFrom graphics axis dotchart layout plot.new
-#' @importFrom methods .hasSlot slot<-
-#' @importFrom stats cor
-#' @importFrom utils read.table setTxtProgressBar str txtProgressBar
-#' @importFrom methods loadMethod
-#' @importFrom BiocGenerics updateObject
-#' @importFrom proxy dist
-#' @importFrom FNN get.knn
-#' @importFrom igraph arpack
-#' @importFrom scatterplot3d scatterplot3d
-#' @importFrom VIM hotdeck
-#' @useDynLib destiny
 #' @include sigmas.r
 #' @include s4-null-unions.r
+#' @useDynLib destiny
 NULL
 
 #' Create a diffusion map of cells
@@ -63,6 +50,8 @@ NULL
 #' DiffusionMap(guo, 13, censor.val = 15, censor.range = c(15, 40), verbose = TRUE)
 #' 
 #' @aliases DiffusionMap DiffusionMap-class
+#' 
+#' @importFrom methods setClass validObject
 #' @name DiffusionMap class
 #' @export
 setClass(
@@ -114,6 +103,10 @@ setClass(
 		else TRUE
 	})
 
+#' @importFrom methods new as
+#' @importFrom Matrix Diagonal colSums rowSums t
+#' @importFrom VIM hotdeck
+#' 
 #' @name DiffusionMap class
 #' @export
 DiffusionMap <- function(
@@ -203,6 +196,7 @@ DiffusionMap <- function(
 		missing.range = missing.range)
 }
 
+#' @importFrom Biobase exprs
 extract.doublematrix <- function(data, vars = NULL) {
 	if (is.data.frame(data)) {
 		data <- as.matrix(data[sapply(data, is.double)])
@@ -238,6 +232,9 @@ stopifsmall <- function(max.dist) {
 #' @param sym     TRUE if M is symmetric
 #' 
 #' @return n eigenvectors of the transition matrix
+#' 
+#' @importFrom Matrix isSymmetric
+#' @importFrom igraph arpack
 #' @export
 eig_decomp <- function(M, n_eigs, sym = isSymmetric(M)) {
 	n <- nrow(M)
@@ -288,6 +285,7 @@ find.dm.k <- function(n, min.k = 100L, small = 1000L, big = 10000L) {
 	k
 }
 
+#' @importFrom methods new is
 get.sigmas <- function(imputed.data, sigma, distance, censor.val, censor.range, missing.range, vars, verbose) {
 	sigmas <- sigma
 	if (is.numeric(sigmas)) {
@@ -315,6 +313,7 @@ get.sigmas <- function(imputed.data, sigma, distance, censor.val, censor.range, 
 	}
 }
 
+#' @importFrom FNN get.knn
 find.knn <- function(imputed.data, k, verbose) {
 	if (verbose) {
 		cat('finding knns...')
@@ -331,6 +330,8 @@ find.knn <- function(imputed.data, k, verbose) {
 	knn
 }
 
+#' @importFrom Matrix sparseMatrix drop0 forceSymmetric skewpart symmpart
+#' @importFrom utils txtProgressBar setTxtProgressBar
 transition.probabilities <- function(imputed.data, distance, sigma, knn, censor, censor.val, censor.range, missing.range, verbose) {
 	n <- nrow(knn$nn.index)
 	
@@ -375,6 +376,8 @@ transition.probabilities <- function(imputed.data, distance, sigma, knn, censor,
 	trans.p
 }
 
+#' @importFrom methods as
+#' @importFrom Matrix sparseMatrix
 get_norm_p <- function(trans.p, d, d_new, density.norm) {
 	if (density.norm) {
 		trans.p <- as(trans.p, 'dgTMatrix') # use non-symmetric triples to operate on all values

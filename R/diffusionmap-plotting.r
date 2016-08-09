@@ -1,7 +1,5 @@
 #' @include diffusionmap.r
 #' @include plothelpers.r
-#' @importFrom graphics plot
-#' @importFrom Biobase varLabels phenoData exprs
 NULL
 
 #' 3D or 2D plot of diffusion map
@@ -37,6 +35,11 @@ NULL
 #' plot(DiffusionMap(guo))
 #' 
 #' @aliases plot.DiffusionMap plot,DiffusionMap,missing-method plot,DiffusionMap,numeric-method
+#' 
+#' @importFrom graphics par axis plot plot.new
+#' @importFrom grDevices palette
+#' @importFrom scatterplot3d scatterplot3d
+#' 
 #' @name plot.DiffusionMap
 #' @export
 plot.DiffusionMap <- function(
@@ -190,6 +193,7 @@ plot.DiffusionMap <- function(
 	invisible(p)
 }
 
+#' @importFrom Biobase varLabels exprs
 extract.col <- function(annot.data, col.by) tryCatch({
 	if (inherits(annot.data, 'ExpressionSet')) {
 		if (col.by %in% varLabels(annot.data))

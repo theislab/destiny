@@ -36,9 +36,8 @@ Convert a diffusionmap to other classes
 \examples{
 data(guo)
 dm <- DiffusionMap(guo)
-df <- as.data.frame(dm)
-df$DC1   # A diffusion component
-df$Actb  # A gene expression
+dm$DC1   # A diffusion component
+dm$Actb  # A gene expression
 
 }
 \seealso{

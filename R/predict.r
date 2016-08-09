@@ -9,6 +9,7 @@ rankcor.dist <- function(x, y) {
 	1 - rcorr(x, y, type = 'spearman')$r[1, 2]
 }
 
+#' @importFrom stats cor
 centered.cosine.dist <- function(x, y) 1 - cor(x, y)
 
 #' Predict new data points using an existing DiffusionMap. The resulting matrix can be used in \link[=plot.DiffusionMap]{the plot method for the DiffusionMap}
@@ -27,6 +28,8 @@ centered.cosine.dist <- function(x, y) 1 - cor(x, y)
 #' dc2 <- dm.predict(dm, g2)
 #' plot(dm, new.dcs = dc2)
 #' 
+#' @importFrom methods is
+#' @importFrom Matrix Diagonal colSums rowSums
 #' @importFrom proxy dist
 #' @export
 dm.predict <- function(dm, new.data, verbose = FALSE) {

@@ -1,6 +1,3 @@
-#' @importFrom BiocGenerics updateObject
-NULL
-
 #' Update old \link{DiffusionMap}s to a newer version
 #' 
 #' @param object  A \link{DiffusionMap} object created with an older destiny release
@@ -9,6 +6,9 @@ NULL
 #' 
 #' @return A \link{DiffusionMap} object that is valid when used with the current destiny release
 #' 
+#' @importFrom methods setMethod validObject .hasSlot slot<- 
+#' @importFrom Matrix Matrix
+#' @importFrom BiocGenerics updateObject
 #' @export
 setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE) {
 	if (verbose) 

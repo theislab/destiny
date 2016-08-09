@@ -19,6 +19,8 @@
 #' optimal.sigma(dm)
 #' 
 #' @aliases DiffusionMap-methods values values<- vectors vectors<- sigmas sigmas<- optimal.sigma,DiffusionMap-method print,DiffusionMap-method show,DiffusionMap-method
+#' 
+#' @importFrom methods is
 #' @name DiffusionMap methods
 #' @include sigmas.r
 #' @include diffusionmap.r
@@ -98,6 +100,8 @@ dataset <- function(dm) {
 setMethod('optimal.sigma', 'DiffusionMap', function(object) sigmas(object)@optimal.sigma)
 
 
+#' @importFrom utils str
+#' 
 #' @name DiffusionMap methods
 #' @export
 setMethod('print', 'DiffusionMap', function(x) {
