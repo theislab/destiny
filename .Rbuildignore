@@ -1,0 +1,5 @@
+\.ipynb_checkpoints/.*$
+^.*\.Rproj$
+^\.Rproj\.user$
+^ROADMAP$
+^update_remotes\.sh$

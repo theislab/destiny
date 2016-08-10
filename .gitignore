@@ -1,7 +1,7 @@
-.Rproj.user
-.Rbuildignore
-.Rhistory
-.RData
+/.Rproj.user
+/.Rhistory
+/.RData
+/update_remotes.sh
 .ipynb_checkpoints
 *~
 *.o
