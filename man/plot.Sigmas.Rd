@@ -7,8 +7,8 @@
 \title{Plot \link{Sigmas} object}
 \usage{
 \S4method{plot}{Sigmas,missing}(x, col = par("fg"),
-  highlight.col = "#E41A1C", line.col = "#999999", type = c("b", "b"),
-  pch = c(par("pch"), 4L), only.dim = FALSE, ..., xlab = NULL,
+  col_highlight = "#E41A1C", col_line = "#999999", type = c("b", "b"),
+  pch = c(par("pch"), 4L), only_dim = FALSE, ..., xlab = NULL,
   ylab = NULL, main = "")
 }
 \arguments{
@@ -16,15 +16,15 @@
 
 \item{col}{Vector of bar colors or single color for all bars}
 
-\item{highlight.col}{Color for highest bar. Overrides col}
+\item{col_highlight}{Color for highest bar. Overrides col}
 
-\item{line.col}{Color for the line and its axis}
+\item{col_line}{Color for the line and its axis}
 
 \item{type}{Plot type of both lines. Can be a vector of length 2 to specify both separately (default: 'b' aka \dQuote{both lines and points})}
 
 \item{pch}{Point identifier for both lines. Can be a vector of length 2 to specify both separately (default: \code{par(pch)} and 4 (a \sQuote{\eqn{\times}}))}
 
-\item{only.dim}{logical. If TRUE, only plot the derivative line}
+\item{only_dim}{logical. If TRUE, only plot the derivative line}
 
 \item{...}{Options passed to the call to plot}
 
@@ -42,7 +42,7 @@ Plot \link{Sigmas} object
 }
 \examples{
 data(guo)
-sigs <- find.sigmas(guo)
+sigs <- find_sigmas(guo)
 plot(sigs)
 
 }

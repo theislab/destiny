@@ -11,7 +11,7 @@
 \usage{
 as.ExpressionSet(x, ...)
 
-\S4method{as.ExpressionSet}{data.frame}(x, annotation.cols = !sapply(x,
+\S4method{as.ExpressionSet}{data.frame}(x, annotation_cols = !sapply(x,
   is.double))
 
 read.ExpressionSet(file, header = TRUE, ...)
@@ -21,7 +21,7 @@ read.ExpressionSet(file, header = TRUE, ...)
 
 \item{...}{Additional parameters to \link[utils]{read.table}}
 
-\item{annotation.cols}{The data.frame columns used as annotations. All others are used as expressions. (Logical, character or numerical index array)}
+\item{annotation_cols}{The data.frame columns used as annotations. All others are used as expressions. (Logical, character or numerical index array)}
 
 \item{file}{File path to read ASCII data from}
 

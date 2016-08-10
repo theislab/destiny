@@ -2,8 +2,6 @@
 #' 
 #' The main function is \code{\link{DiffusionMap}}, which returns an object you can \code{\link{plot}} (\code{\link{plot.DiffusionMap}} is then called).
 #' 
-#' The \code{sigma} parameter for \code{\link{DiffusionMap}} can be determined using \code{\link{find.sigmas}} if your dataset is small enough.
-#' 
 #' @examples
 #' demo(destiny, ask = FALSE)
 #' 

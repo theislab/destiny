@@ -10,7 +10,7 @@
 \alias{eigenvalues<-}
 \alias{eigenvectors}
 \alias{eigenvectors<-}
-\alias{optimal.sigma,DiffusionMap-method}
+\alias{optimal_sigma,DiffusionMap-method}
 \alias{print,DiffusionMap-method}
 \alias{show,DiffusionMap-method}
 \alias{sigmas}
@@ -37,7 +37,7 @@ dataset(dm)
 
 dataset(dm) <- value
 
-\S4method{optimal.sigma}{DiffusionMap}(object)
+\S4method{optimal_sigma}{DiffusionMap}(object)
 
 \S4method{print}{DiffusionMap}(x)
 
@@ -61,7 +61,7 @@ eigenvalues(dm)
 eigenvectors(dm)
 sigmas(dm)
 dataset(dm)
-optimal.sigma(dm)
+optimal_sigma(dm)
 
 }
 \seealso{

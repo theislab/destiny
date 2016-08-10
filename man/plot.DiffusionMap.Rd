@@ -7,11 +7,11 @@
 \alias{plot.DiffusionMap}
 \title{3D or 2D plot of diffusion map}
 \usage{
-plot.DiffusionMap(x, dims, new.dcs = NULL, col = NULL, col.by = NULL,
-  col.limits = NULL, col.new = "red", pal = palette(), ..., mar = NULL,
-  ticks = FALSE, axes = TRUE, box = FALSE, legend.main = col.by,
-  legend.opts = list(), interactive = FALSE, draw.legend = !is.null(col)
-  && length(col) > 1 && !is.character(col), consec.col = TRUE)
+plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
+  col_limits = NULL, col_new = "red", pal = palette(), ..., mar = NULL,
+  ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
+  legend_opts = list(), interactive = FALSE, draw_legend = !is.null(col)
+  && length(col) > 1 && !is.character(col), consec_col = TRUE)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 
@@ -22,16 +22,16 @@ plot.DiffusionMap(x, dims, new.dcs = NULL, col = NULL, col.by = NULL,
 
 \item{dims, y}{Diffusion components (eigenvectors) to plot (default: first three components; 1:3)}
 
-\item{new.dcs}{An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)}
+\item{new_dcs}{An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)}
 
 \item{col}{Single color string or vector of discrete or categoric values to be mapped to colors.
 E.g. a column of the data matrix used for creation of the diffusion map. (default: \link{par}\code{('fg')})}
 
-\item{col.by}{Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color}
+\item{col_by}{Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color}
 
-\item{col.limits}{If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})}
+\item{col_limits}{If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})}
 
-\item{col.new}{If \code{new.dcs} is given, it will take on this color. (default: red)}
+\item{col_new}{If \code{new_dcs} is given, it will take on this color. (default: red)}
 
 \item{pal}{Palette used to map the \code{col} vector to colors (default: \link{palette}\code{()})}
 
@@ -41,19 +41,19 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{ticks}{logical. If TRUE, show axis ticks (default: FALSE)}
 
-\item{axes}{logical. If TRUE, draw plot axes (default: Only if \code{tick.marks} is TRUE)}
+\item{axes}{logical. If TRUE, draw plot axes (default: Only if \code{ticks} is TRUE)}
 
 \item{box}{logical. If TRUE, draw plot frame (default: TRUE or the same as \code{axes} if specified)}
 
-\item{legend.main}{Title of legend. (default: nothing unless col.by is given)}
+\item{legend_main}{Title of legend. (default: nothing unless col_by is given)}
 
-\item{legend.opts}{Other \link{colorlegend} options (default: empty list)}
+\item{legend_opts}{Other \link{colorlegend} options (default: empty list)}
 
 \item{interactive}{Use \link[rgl]{plot3d} to plot instead of \link[scatterplot3d]{scatterplot3d}?}
 
-\item{draw.legend}{logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)}
+\item{draw_legend}{logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)}
 
-\item{consec.col}{If \code{col} or \code{col.by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})}
+\item{consec_col}{If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})}
 }
 \value{
 The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.

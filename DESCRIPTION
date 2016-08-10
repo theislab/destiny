@@ -13,7 +13,8 @@ Authors@R: c(
 Description: Create and plot diffusion maps.
 License: GPL
 Encoding: UTF-8
-Depends: R (>= 3.2.0)
+Depends:
+    R (>= 3.2.0)
 Imports:
     methods,
     graphics,
@@ -46,6 +47,7 @@ biocViews: CellBiology,
 Collate:
     'RcppExports.R'
     'censoring.r'
+    'compat.r'
     'destiny-package.r'
     's4-null-unions.r'
     'dist-matrix-coerce.r'
@@ -56,9 +58,12 @@ Collate:
     'diffusionmap-methods.r'
     'plothelpers.r'
     'diffusionmap-plotting.r'
+    'eig_decomp.r'
     'utils.r'
     'expressionset-helpers.r'
+    'find_dm_k.r'
     'guo-data.r'
+    'l_which.r'
     'predict.r'
     'sigmas-plotting.r'
     'update-methods.r'

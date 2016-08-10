@@ -16,9 +16,9 @@
 #' eigenvectors(dm)
 #' sigmas(dm)
 #' dataset(dm)
-#' optimal.sigma(dm)
+#' optimal_sigma(dm)
 #' 
-#' @aliases DiffusionMap-methods values values<- vectors vectors<- sigmas sigmas<- optimal.sigma,DiffusionMap-method print,DiffusionMap-method show,DiffusionMap-method
+#' @aliases DiffusionMap-methods values values<- vectors vectors<- sigmas sigmas<- optimal_sigma,DiffusionMap-method print,DiffusionMap-method show,DiffusionMap-method
 #' 
 #' @importFrom methods is
 #' @name DiffusionMap methods
@@ -82,14 +82,14 @@ sigmas <- function(dm) {
 #' @export
 dataset <- function(dm) {
 	stopifnot(is(dm, 'DiffusionMap'))
-	dm@data.env$data
+	dm@data_env$data
 }
 
 #' @name DiffusionMap methods
 #' @export
 `dataset<-` <- function(dm, value) {
 	stopifnot(is(dm, 'DiffusionMap'))
-	dm@data.env$data <- value
+	dm@data_env$data <- value
 	validObject(dm)
 	dm
 }
@@ -97,7 +97,7 @@ dataset <- function(dm) {
 
 #' @name DiffusionMap methods
 #' @export
-setMethod('optimal.sigma', 'DiffusionMap', function(object) sigmas(object)@optimal.sigma)
+setMethod('optimal_sigma', 'DiffusionMap', function(object) sigmas(object)@optimal_sigma)
 
 
 #' @importFrom utils str
@@ -109,7 +109,7 @@ setMethod('print', 'DiffusionMap', function(x) {
 	cat('eigenvalues:  '); str(eigenvalues(x))
 	cat('eigenvectors: '); str(structure(eigenvectors(x), dimnames = NULL))
 	cat('  ..colnames: '); str(colnames(eigenvectors(x)), vec.len = 4)
-	cat(sprintf('optimal.sigma: %s\n', optimal.sigma(x)))
+	cat(sprintf('optimal_sigma: %s\n', optimal_sigma(x)))
 	cat(sprintf('@distance:     %s', x@distance));
 	invisible(x)
 })

@@ -1,50 +1,50 @@
-censoring <- function(data, censor.val = NULL, censor.range = NULL, missing.range = NULL, sigma, nns = NULL, callback = function(i) {}) {
-	if (!is.null(censor.range))
-		censor.range <- matrix(censor.range, ncol = 2)
+censoring <- function(data, censor_val = NULL, censor_range = NULL, missing_range = NULL, sigma, nns = NULL, callback = function(i) {}) {
+	if (!is.null(censor_range))
+		censor_range <- matrix(censor_range, ncol = 2)
 	
-	if (!is.null(missing.range))
-		missing.range <- matrix(missing.range, ncol = 2)
+	if (!is.null(missing_range))
+		missing_range <- matrix(missing_range, ncol = 2)
 	
-	validate.censoring(censor.val, censor.range, missing.range, data, sigma, nns)
+	validate_censoring(censor_val, censor_range, missing_range, data, sigma, nns)
 	
 	data <- as.matrix(data)
 	
-	censoring_impl(data, censor.val, censor.range, missing.range, sigma, nns, callback)
+	censoring_impl(data, censor_val, censor_range, missing_range, sigma, nns, callback)
 }
 
-predict.censoring <- function(data, data2, censor.val = NULL, censor.range = NULL, missing.range = NULL, sigma) {
-	if (is.null(censor.val   )) censor.val    <- NA  # this works since this will be NaN in C++ and comparison with NaN is always false
-	if (is.null(censor.range )) censor.range  <- c(NA, NA)
-	if (is.null(missing.range)) missing.range <- c(NA, NA)
+predict_censoring <- function(data, data2, censor_val = NULL, censor_range = NULL, missing_range = NULL, sigma) {
+	if (is.null(censor_val   )) censor_val    <- NA  # this works since this will be NaN in C++ and comparison with NaN is always false
+	if (is.null(censor_range )) censor_range  <- c(NA, NA)
+	if (is.null(missing_range)) missing_range <- c(NA, NA)
 	
-	predict_censoring_impl(data, data2, censor.val, censor.range, missing.range, sigma)
+	predict_censoring_impl(data, data2, censor_val, censor_range, missing_range, sigma)
 }
 
-validate.censoring <- function(censor.val, censor.range, missing.range, data, sigma, nns) {
+validate_censoring <- function(censor_val, censor_range, missing_range, data, sigma, nns) {
 	G <- ncol(data)
-	no.censor.val     <- missing(censor.val)    || is.null(censor.val)
-	no.censor.range   <- missing(censor.range)  || is.null(censor.range)
-	no.missing.range  <- missing(missing.range) || is.null(missing.range)
+	no_censor_val     <- missing(censor_val)    || is.null(censor_val)
+	no_censor_range   <- missing(censor_range)  || is.null(censor_range)
+	no_missing_range  <- missing(missing_range) || is.null(missing_range)
 	
-	if (any(is.na(data)) && no.missing.range)
-		stop('Your data contains missing values (NA). You have to provide a the `missing.range` parameter.')
+	if (any(is.na(data)) && no_missing_range)
+		stop('Your data contains missing values (NA). You have to provide a the `missing_range` parameter.')
 	
-	if (no.censor.val != no.censor.range)
-		stop('You have to provide both a censoring value and a censor.range or none')
+	if (no_censor_val != no_censor_range)
+		stop('You have to provide both a censoring value and a censor_range or none')
 	
-	if (!no.censor.range) {
-		if (!is.numeric(censor.val) || (length(censor.val) != 1 && length(censor.val) != G))
-		stop('censor.val has to be a single numeric value, or length(censor.val) == ncol(data) must be TRUE')
+	if (!no_censor_range) {
+		if (!is.numeric(censor_val) || (length(censor_val) != 1 && length(censor_val) != G))
+		stop('censor_val has to be a single numeric value, or length(censor_val) == ncol(data) must be TRUE')
 		
-		if (!is.numeric(censor.range) || !(nrow(censor.range) %in% c(G, 1)) || ncol(censor.range) != 2 || any(diff(t(censor.range)) <= 0))
-		stop('censor.range has to be a numeric vector of length 2, the second of which being larger,
-				 or a matrix with nrow(censor.range) == ncol(data) where each row is such a vector')
+		if (!is.numeric(censor_range) || !(nrow(censor_range) %in% c(G, 1)) || ncol(censor_range) != 2 || any(diff(t(censor_range)) <= 0))
+		stop('censor_range has to be a numeric vector of length 2, the second of which being larger,
+				 or a matrix with nrow(censor_range) == ncol(data) where each row is such a vector')
 	}
 	
-	if (!no.missing.range) {
-		if (!is.numeric(missing.range) || !(nrow(missing.range) %in% c(G, 1)) || ncol(missing.range) != 2 || any(diff(t(missing.range)) <= 0))
-		stop('missing.range has to be a numeric vector of length 2, the second of which being larger,
-				 or a matrix with nrow(missing.range) == ncol(data) where each row is such a vector')
+	if (!no_missing_range) {
+		if (!is.numeric(missing_range) || !(nrow(missing_range) %in% c(G, 1)) || ncol(missing_range) != 2 || any(diff(t(missing_range)) <= 0))
+		stop('missing_range has to be a numeric vector of length 2, the second of which being larger,
+				 or a matrix with nrow(missing_range) == ncol(data) where each row is such a vector')
 	}
 	
 	if (!is.numeric(sigma) || length(sigma) != 1)
@@ -54,26 +54,26 @@ validate.censoring <- function(censor.val, censor.range, missing.range, data, si
 		stop('nns has to be a integer matrix or NULL')
 }
 
-test.censoring <- function(censor.val, censor.range, data, missing.range) {
-	!(missing(censor.range) || is.null(censor.range)) ||
-		any(is.na(data)) || any(data == censor.val) ||
-		!(missing(missing.range) || is.null(missing.range))
+test_censoring <- function(censor_val, censor_range, data, missing_range) {
+	!(missing(censor_range) || is.null(censor_range)) ||
+		any(is.na(data)) || any(data == censor_val) ||
+		!(missing(missing_range) || is.null(missing_range))
 }
 
 #' @importFrom Matrix sparseMatrix
-no_censoring_slow <- function(sigma, nn.index, nn.dist, cb) {
-	k <- ncol(nn.index)
-	n <- nrow(nn.index)
-	stopifnot(k == ncol(nn.dist))
-	stopifnot(n == nrow(nn.dist))
+no_censoring_slow <- function(sigma, nn_index, nn_dist, cb) {
+	k <- ncol(nn_index)
+	n <- nrow(nn_index)
+	stopifnot(k == ncol(nn_dist))
+	stopifnot(n == nrow(nn_dist))
 	
-	trans.p <- sparseMatrix(NULL, NULL, x = numeric(0), dims = c(n, n))
+	trans_p <- sparseMatrix(NULL, NULL, x = numeric(0), dims = c(n, n))
 	
 	for (i in seq_len(k)) {
-		pairs.i <- cbind(seq_len(n), nn.index[, i])
-		trans.p[pairs.i] <- exp(-nn.dist[, i] ^ 2 / (2 * sigma ^ 2))
+		pairs_i <- cbind(seq_len(n), nn_index[, i])
+		trans_p[pairs_i] <- exp(-nn_dist[, i] ^ 2 / (2 * sigma ^ 2))
 		cb(i)
 	}
 	
-	trans.p
+	trans_p
 }

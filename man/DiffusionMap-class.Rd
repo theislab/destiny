@@ -7,35 +7,35 @@
 \alias{DiffusionMap-class}
 \title{Create a diffusion map of cells}
 \usage{
-DiffusionMap(data, sigma = NULL, k = find.dm.k(nrow(data) - 1L),
-  n.eigs = min(20L, nrow(data) - 2L), density.norm = TRUE, ...,
-  distance = c("euclidean", "cosine", "rankcor"), censor.val = NULL,
-  censor.range = NULL, missing.range = NULL, vars = NULL,
-  verbose = !is.null(censor.range))
+DiffusionMap(data, k = find_dm_k(nrow(data) - 1L), n_eigs = min(20L,
+  nrow(data) - 2L), density_norm = TRUE, ..., sigma = c("local", "global"),
+  distance = c("euclidean", "cosine", "rankcor"), censor_val = NULL,
+  censor_range = NULL, missing_range = NULL, vars = NULL,
+  verbose = !is.null(censor_range))
 }
 \arguments{
 \item{data}{Expression data to be analyzed. Provide \code{vars} to select specific columns other than the default: all double value columns}
 
-\item{sigma}{Diffusion scale parameter of the Gaussian kernel. Either a number or a \link{Sigmas} object.
-(Optional. default: will be calculated using \link{find.sigmas})
-A larger sigma might be necessary if the eigenvalues can not be found because of a singularity in the matrix}
-
 \item{k}{Number of nearest neighbors to consider (default: a guess betweeen 100 and \eqn{n - 1})
 \code{NULL} or \code{NA} are also interpreted as \code{n - 1L}.}
 
-\item{n.eigs}{Number of eigenvectors/values to return (default: 20)}
+\item{n_eigs}{Number of eigenvectors/values to return (default: 20)}
 
-\item{density.norm}{logical. If TRUE, use density normalisation}
+\item{density_norm}{logical. If TRUE, use density normalisation}
 
 \item{...}{All parameter after this are optional and have to be specified by name}
 
+\item{sigma}{Diffusion scale parameter of the Gaussian kernel. One of 'local', 'global', a (numeric) global sigma or a \link{Sigmas} object.
+When choosing 'global', a global sigma will be calculated using \link{find_sigmas}. (Optional. default: local)
+A larger sigma might be necessary if the eigenvalues can not be found because of a singularity in the matrix}
+
 \item{distance}{Distance measurement method. Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).}
 
-\item{censor.val}{Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: CENSOR.VAL)}
+\item{censor_val}{Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)}
 
-\item{censor.range}{Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix}
+\item{censor_range}{Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix}
 
-\item{missing.range}{Whole data range for missing value model. Has to be specified if NAs are in the data}
+\item{missing_range}{Whole data range for missing value model. Has to be specified if NAs are in the data}
 
 \item{vars}{Variables (columns) of the data to use. Specifying NULL will select all columns (default: All floating point value columns)}
 
@@ -53,11 +53,11 @@ being treated as expression data features (and the others ignored), or an \link[
 \describe{
 \item{\code{eigenvalues}}{Eigenvalues ranking the eigenvectors}
 
-\item{\code{eigenvectors}}{Eigenvectors mapping the datapoints to \code{n.eigs} dimensions}
+\item{\code{eigenvectors}}{Eigenvectors mapping the datapoints to \code{n_eigs} dimensions}
 
-\item{\code{sigmas}}{\link{Sigmas} object with either information about the \link{find.sigmas} heuristic run or just \link{optimal.sigma}.}
+\item{\code{sigmas}}{\link{Sigmas} object with either information about the \link{find_sigmas} heuristic run or just local or \link{optimal_sigma}.}
 
-\item{\code{data.env}}{Environment referencing the data used to create the diffusion map}
+\item{\code{data_env}}{Environment referencing the data used to create the diffusion map}
 
 \item{\code{eigenvec0}}{First (constant) eigenvector not included as diffusion component.}
 
@@ -69,25 +69,25 @@ being treated as expression data features (and the others ignored), or an \link[
 
 \item{\code{k}}{The k parameter for kNN}
 
-\item{\code{density.norm}}{Was density normalization used?}
+\item{\code{density_norm}}{Was density normalization used?}
 
 \item{\code{distance}}{Distance measurement method used.}
 
-\item{\code{censor.val}}{Censoring value}
+\item{\code{censor_val}}{Censoring value}
 
-\item{\code{censor.range}}{Censoring range}
+\item{\code{censor_range}}{Censoring range}
 
-\item{\code{missing.range}}{Whole data range for missing value model}
+\item{\code{missing_range}}{Whole data range for missing value model}
 
 \item{\code{vars}}{Vars parameter used to extract the part of the data used for diffusion map creation}
 }}
 \examples{
 data(guo)
 DiffusionMap(guo)
-DiffusionMap(guo, 13, censor.val = 15, censor.range = c(15, 40), verbose = TRUE)
+DiffusionMap(guo, 13, censor_val = 15, censor_range = c(15, 40), verbose = TRUE)
 
 }
 \seealso{
-\link{DiffusionMap-methods} to get and set the slots. \code{\link{find.sigmas}} to pre-calculate a fitting \code{sigma} parameter
+\link{DiffusionMap-methods} to get and set the slots. \code{\link{find_sigmas}} to pre-calculate a fitting global \code{sigma} parameter
 }
 

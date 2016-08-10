@@ -5,8 +5,8 @@
 \title{Color legend}
 \usage{
 colorlegend(col, pal = palette(), log = FALSE, posx = c(0.9, 0.93),
-  posy = c(0.05, 0.9), main = NULL, main.cex = 1, main.col = par("fg"),
-  lab.col = par("fg"), steps = 5, color.steps = 100, digit = 2,
+  posy = c(0.05, 0.9), main = NULL, cex_main = 1, col_main = par("fg"),
+  col_lab = par("fg"), steps = 5, steps_color = 100, digit = 2,
   left = FALSE, ...)
 }
 \arguments{
@@ -22,15 +22,15 @@ colorlegend(col, pal = palette(), log = FALSE, posx = c(0.9, 0.93),
 
 \item{main}{Legend title}
 
-\item{main.cex}{Size of legend title font}
+\item{cex_main}{Size of legend title font}
 
-\item{main.col}{Color of legend title}
+\item{col_main}{Color of legend title}
 
-\item{lab.col}{Color of tick or category labels}
+\item{col_lab}{Color of tick or category labels}
 
 \item{steps}{Number of labels in case of a continuous axis}
 
-\item{color.steps}{Number of gradient samples in case of continuous axis}
+\item{steps_color}{Number of gradient samples in case of continuous axis}
 
 \item{digit}{Number of digits for continuous axis labels}
 
@@ -48,10 +48,10 @@ Creates a color legend for a vector used to color a plot. It will use the curren
 When passed a factor or integer vector, it will create a discrete legend, whereas a double vector will result in a continuous bar.
 }
 \examples{
-color.data <- 1:6
+color_data <- 1:6
 par(mar = par('mar') + c(0, 0, 0, 3))
-plot(sample(6), col = color.data)
-colorlegend(color.data)
+plot(sample(6), col = color_data)
+colorlegend(color_data)
 
 }
 

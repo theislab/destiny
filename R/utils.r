@@ -1,33 +1,40 @@
-#' Logical which
-#' 
-#' Inverse of \link[base]{which}. Converts an array of numeric or character indices to a logical index array.
-#' This function is useful if you need to perform logical operation on an index array but are only given numeric indices.
-#' 
-#' Either \code{nms} or \code{len} has to be specified.
-#' 
-#' @param idx       Numeric or character indices.
-#' @param nms       Array of names or a sequence. Required if \code{idx} is a character array
-#' @param len       Length of output array. Alternative to \code{nms} if \code{idx} is numeric
-#' @param useNames  Use the names of nms or idx
-#' 
-#' @return Logical vector of length \code{len} or the same length as \code{nms}
-#' 
-#' @examples
-#' all(lWhich(2, len = 3) == c(FALSE, TRUE, FALSE))
-#' all(lWhich(c('a', 'c'), letters[1:3]) == c(TRUE, FALSE, TRUE))
-#' 
-#' @export
-lWhich <- function(idx, nms = seq_len(len), len = length(nms), useNames = TRUE) {
-	rv <- logical(len)
-	if (is.character(nms)) # we need names here so that rv[idx] works
-		names(rv) <- nms
+#' @importFrom Biobase exprs
+extract_doublematrix <- function(data, vars = NULL) {
+	if (is.data.frame(data)) {
+		data <- as.matrix(data[sapply(data, is.double)])
+	} else if (inherits(data, 'ExpressionSet')) {
+		data <- t(exprs(data))
+	} else if (!is.matrix(data)) {
+		stop('Data needs to be matrix, data.frame or ExpressionSet')
+	}
+	dupes <- duplicated(data)
+	if (any(dupes)) {
+		data <- data[!dupes, ]
+		warning('Duplicate rows removed from data. Consider explicitly using `df[!duplicated(df), ]`')
+	}
 	
-	if (useNames && !is.null(names(idx)))
-		names(rv)[idx] <- names(idx)
-	
-	rv[idx] <- TRUE
-	
-	if (!useNames) # if we don't want names, we'll remove them if we added them before
-		names(rv) <- NULL
-	rv
+	if (!is.null(vars))
+		data <- data[, vars]
+	data
+}
+
+
+stopifsmall <- function(max_dist) {
+	if (max_dist < .Machine$double.eps)
+		stop(sprintf(
+			'The supplied sigma is not large enough. Please select a larger one.
+			find_sigmas(data) should return one with the right order of magnitude. (max dist. is %.3e)',
+			max_dist))
+}
+
+
+verbose_timing <- function(verbose, msg, expr) {
+	if (verbose) {
+		cat(sprintf('%s...', msg))
+		dif <- system.time({
+			r <- force(expr)
+		})
+		cat(sprintf('...done. Time: %s\n', dif))
+		r
+	} else expr
 }

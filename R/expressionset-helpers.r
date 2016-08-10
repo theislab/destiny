@@ -29,17 +29,17 @@ NULL
 #' @export
 setGeneric('as.ExpressionSet', function(x, ...) standardGeneric('as.ExpressionSet'), valueClass = 'ExpressionSet')
 
-#' @param annotation.cols  The data.frame columns used as annotations. All others are used as expressions. (Logical, character or numerical index array)
+#' @param annotation_cols  The data.frame columns used as annotations. All others are used as expressions. (Logical, character or numerical index array)
 #' 
 #' @importFrom Biobase ExpressionSet AnnotatedDataFrame phenoData
 #' @name ExpressionSet helpers
 #' @export
-setMethod('as.ExpressionSet', 'data.frame', function(x, annotation.cols = !sapply(x, is.double)) {
-	if (!is.logical(annotation.cols))
-		annotation.cols <- lWhich(annotation.cols, names(x))
+setMethod('as.ExpressionSet', 'data.frame', function(x, annotation_cols = !sapply(x, is.double)) {
+	if (!is.logical(annotation_cols))
+		annotation_cols <- lWhich(annotation_cols, names(x))
 	
-	assayData <- t(as.matrix(x[!annotation.cols]))
-	phenoData <- AnnotatedDataFrame(x[annotation.cols])
+	assayData <- t(as.matrix(x[!annotation_cols]))
+	phenoData <- AnnotatedDataFrame(x[annotation_cols])
 	
 	ExpressionSet(assayData, phenoData)
 })

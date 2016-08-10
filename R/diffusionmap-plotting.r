@@ -10,23 +10,23 @@ NULL
 #' 
 #' @param x            A \link{DiffusionMap}
 #' @param dims,y       Diffusion components (eigenvectors) to plot (default: first three components; 1:3)
-#' @param new.dcs      An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)
+#' @param new_dcs      An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)
 #' @param col          Single color string or vector of discrete or categoric values to be mapped to colors.
 #'                     E.g. a column of the data matrix used for creation of the diffusion map. (default: \link{par}\code{('fg')})
-#' @param col.by       Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color
-#' @param col.limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
-#' @param col.new      If \code{new.dcs} is given, it will take on this color. (default: red)
+#' @param col_by       Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color
+#' @param col_limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
+#' @param col_new      If \code{new_dcs} is given, it will take on this color. (default: red)
 #' @param pal          Palette used to map the \code{col} vector to colors (default: \link{palette}\code{()})
 #' @param ...          Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})
 #' @param mar          Bottom, left, top, and right margins (default: \code{par(mar)})
 #' @param ticks        logical. If TRUE, show axis ticks (default: FALSE)
-#' @param axes         logical. If TRUE, draw plot axes (default: Only if \code{tick.marks} is TRUE)
+#' @param axes         logical. If TRUE, draw plot axes (default: Only if \code{ticks} is TRUE)
 #' @param box          logical. If TRUE, draw plot frame (default: TRUE or the same as \code{axes} if specified)
-#' @param legend.main  Title of legend. (default: nothing unless col.by is given)
-#' @param legend.opts  Other \link{colorlegend} options (default: empty list)
+#' @param legend_main  Title of legend. (default: nothing unless col_by is given)
+#' @param legend_opts  Other \link{colorlegend} options (default: empty list)
 #' @param interactive  Use \link[rgl]{plot3d} to plot instead of \link[scatterplot3d]{scatterplot3d}?
-#' @param draw.legend  logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)
-#' @param consec.col   If \code{col} or \code{col.by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})
+#' @param draw_legend  logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)
+#' @param consec_col   If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})
 #' 
 #' @return The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.
 #' 
@@ -44,19 +44,19 @@ NULL
 #' @export
 plot.DiffusionMap <- function(
 	x, dims,
-	new.dcs = NULL,
-	col = NULL, col.by = NULL, col.limits = NULL,
-	col.new = 'red',
+	new_dcs = NULL,
+	col = NULL, col_by = NULL, col_limits = NULL,
+	col_new = 'red',
 	pal = palette(),
 	...,
 	mar = NULL,
 	ticks = FALSE,
 	axes = TRUE,
 	box = FALSE,
-	legend.main = col.by, legend.opts = list(),
+	legend_main = col_by, legend_opts = list(),
 	interactive = FALSE,
-	draw.legend = !is.null(col) && length(col) > 1 && !is.character(col),
-	consec.col = TRUE
+	draw_legend = !is.null(col) && length(col) > 1 && !is.character(col),
+	consec_col = TRUE
 ) {
 	dif <- x
 	
@@ -70,20 +70,20 @@ plot.DiffusionMap <- function(
 	flip <- dims < 0
 	dims[flip] <- -dims[flip]
 	
-	if (!is.null(col) && !is.null(col.by)) stop('Only specify one of col or col.by')
+	if (!is.null(col) && !is.null(col_by)) stop('Only specify one of col or col_by')
 	
-	default.col <- is.null(col) && is.null(col.by)
-	if (default.col) col <- par('col')
+	col_default <- is.null(col) && is.null(col_by)
+	if (col_default) col <- par('col')
 	
 	#get col from data
-	if (!is.null(col.by))
-		col <- extract.col(dataset(dif), col.by)
+	if (!is.null(col_by))
+		col <- extract_col(dataset(dif), col_by)
 	
 	# extend margin for legend
-	old.mar <- par('mar')
+	mar_old <- par('mar')
 	if (is.null(mar)) {
-		mar <- old.mar
-		if (draw.legend) {
+		mar <- mar_old
+		if (draw_legend) {
 			mar[[4]] <- mar[[4]] + 5
 		}
 	}
@@ -96,64 +96,64 @@ plot.DiffusionMap <- function(
 	}
 	
 	#make consecutive the colors for the color legend
-	if (is.integer(col) && consec.col) {
+	if (is.integer(col) && consec_col) {
 		# c(5,0,0,3) -> c(3,1,1,2)
 		col <- factor(col)
 	}
 	
 	#colors to assign to plot rows
-	col.plot <- col
+	col_plot <- col
 	if (is.double(col))
-		col.plot <- continuous.colors(col, pal, col.limits)
-	else if (is.factor(col.plot))
-		col.plot <- as.integer(col.plot)
+		col_plot <- continuous_colors(col, pal, col_limits)
+	else if (is.factor(col_plot))
+		col_plot <- as.integer(col_plot)
 	
-	#limit pal to number of existing colors to maybe attach col.new
-	pal.length <- if (is.factor(col)) length(levels(col)) else length(unique(col.plot))
+	#limit pal to number of existing colors to maybe attach col_new
+	length_pal <- if (is.factor(col)) length(levels(col)) else length(unique(col_plot))
 	if (is.function(pal)) {
 		# pal is a colorRampPalette-type function
-		pal <- pal(pal.length)
+		pal <- pal(length_pal)
 	} else {
 		# pal is a vector
-		pal.length <- min(length(pal), pal.length)
-		pal <- pal[seq_len(pal.length)]
+		length_pal <- min(length(pal), length_pal)
+		pal <- pal[seq_len(length_pal)]
 	}
 	
-	#set col.plot to color strings
-	if (is.integer(col.plot)) {
-		wrapped.idx <- ((col.plot - 1L) %% pal.length) + 1L
-		col.plot <- pal[wrapped.idx]
+	#set col_plot to color strings
+	if (is.integer(col_plot)) {
+		idx_wrapped <- ((col_plot - 1L) %% length_pal) + 1L
+		col_plot <- pal[idx_wrapped]
 	}
 	
-	#attach the new.dcs and col.new parameters to data and colors
-	point.data <- eigenvectors(dif)[, dims]
-	point.data[, flip] <- -point.data[, flip]
-	if (!is.null(new.dcs)) {
-		point.data <- rbind(point.data, as.matrix(new.dcs[, dims]))
-		if (!is.character(col.new)) {
-			wrapped.idx <- ((col.plot - 1L) %% pal.length) + 1L
-			col.new <- pal[wrapped.idx]
+	#attach the new_dcs and col_new parameters to data and colors
+	point_data <- eigenvectors(dif)[, dims]
+	point_data[, flip] <- -point_data[, flip]
+	if (!is.null(new_dcs)) {
+		point_data <- rbind(point_data, as.matrix(new_dcs[, dims]))
+		if (!is.character(col_new)) {
+			idx_wrapped <- ((col_plot - 1L) %% length_pal) + 1L
+			col_new <- pal[idx_wrapped]
 		}
-		col.plot <- c(rep_len(col.plot, nrow(point.data) - nrow(new.dcs)),
-									rep_len(col.new, nrow(new.dcs)))
+		col_plot <- c(rep_len(col_plot, nrow(point_data) - nrow(new_dcs)),
+									rep_len(col_new, nrow(new_dcs)))
 		#colorlegend
 		if (!is.double(col)) {
 			col <- factor(c(as.character(col), 'proj'))
 		}
-		pal <- c(pal, col.new)
+		pal <- c(pal, col_new)
 	}
 	
 	if (length(dims) == 2) {
 		p <- NULL
 		
-		plot(point.data, ..., col = col.plot, axes = FALSE, frame.plot = box)
+		plot(point_data, ..., col = col_plot, axes = FALSE, frame.plot = box)
 		if (ticks) {
 			r1 <- NULL
 			r2 <- NULL
 			tl <- 1
 		} else {
-			r1 <- range(point.data[, 1L])
-			r2 <- range(point.data[, 2L])
+			r1 <- range(point_data[, 1L])
+			r2 <- range(point_data[, 2L])
 			tl <- 0
 		}
 		al <- if (axes && !box) 1 else 0
@@ -161,7 +161,7 @@ plot.DiffusionMap <- function(
 		axis(2, r2, labels = ticks, lwd = al, lwd.ticks = tl)
 	} else if (length(dims) == 3L) {
 		if (interactive) {
-			p <- rgl::plot3d(point.data, ..., col = col.plot, axes = FALSE, box = FALSE)
+			p <- rgl::plot3d(point_data, ..., col = col_plot, axes = FALSE, box = FALSE)
 			if (axes || ticks) {
 				axtype = if (axes) 'lines' else 'cull'
 				nticks = if (ticks) 5 else 0
@@ -170,15 +170,15 @@ plot.DiffusionMap <- function(
 			if (box) rgl::box3d()
 		} else {
 			p <- scatterplot3d(
-				point.data, ..., color = col.plot, mar = mar,
+				point_data, ..., color = col_plot, mar = mar,
 				axis = axes || box || ticks, lty.axis = if (axes || box) 'solid' else 'blank',
 				box = box, tick.marks = ticks)
 		}
 	} else stop(sprintf('dims is of wrong length (%s): Can only handle 2 or 3 dimensions', dims))
 	
-	if (draw.legend) {
-		legend.col <- if (is.double(col) && !is.null(col.limits)) col.limits else col
-		args <- c(list(legend.col, pal = pal, main = legend.main), legend.opts)
+	if (draw_legend) {
+		col_legend <- if (is.double(col) && !is.null(col_limits)) col_limits else col
+		args <- c(list(col_legend, pal = pal, main = legend_main), legend_opts)
 		if (interactive) {
 			rgl::bgplot3d({
 				plot.new()
@@ -189,21 +189,21 @@ plot.DiffusionMap <- function(
 		}
 	}
 	
-	par(mar = old.mar)
+	par(mar = mar_old)
 	invisible(p)
 }
 
 #' @importFrom Biobase varLabels exprs
-extract.col <- function(annot.data, col.by) tryCatch({
-	if (inherits(annot.data, 'ExpressionSet')) {
-		if (col.by %in% varLabels(annot.data))
-			annot.data[[col.by]]
+extract_col <- function(annot_data, col_by) tryCatch({
+	if (inherits(annot_data, 'ExpressionSet')) {
+		if (col_by %in% varLabels(annot_data))
+			annot_data[[col_by]]
 		else
-			exprs(annot.data)[col.by, ]
+			exprs(annot_data)[col_by, ]
 	} else {
-		annot.data[, col.by]
+		annot_data[, col_by]
 	}
-}, error = function(e) stop(sprintf('Invalid `col.by`: No column, annotation, or feature found with name %s', dQuote(col.by))))
+}, error = function(e) stop(sprintf('Invalid `col_by`: No column, annotation, or feature found with name %s', dQuote(col_by))))
 
 # test:
 # layout(matrix(1:8, 2))
