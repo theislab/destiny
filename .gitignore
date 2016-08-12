@@ -1,4 +1,4 @@
-/.Rproj.user
+.Rproj.user
 /.Rhistory
 /.RData
 /update_remotes.sh
@@ -14,4 +14,3 @@ vignettes/destiny_files
 !vignettes/destiny.tplx
 !vignettes/destiny.ipynb
 !vignettes/destiny.ipynbmeta
-.Rproj.user
