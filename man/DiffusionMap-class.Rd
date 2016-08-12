@@ -7,17 +7,20 @@
 \alias{DiffusionMap-class}
 \title{Create a diffusion map of cells}
 \usage{
-DiffusionMap(data, k = find_dm_k(nrow(data) - 1L), n_eigs = min(20L,
-  nrow(data) - 2L), density_norm = TRUE, ..., sigma = c("local", "global"),
-  distance = c("euclidean", "cosine", "rankcor"), censor_val = NULL,
-  censor_range = NULL, missing_range = NULL, vars = NULL,
-  verbose = !is.null(censor_range))
+DiffusionMap(data, sigma = "local", k = find_dm_k(nrow(data) - 1L),
+  n_eigs = min(20L, nrow(data) - 2L), density_norm = TRUE, ...,
+  distance = c("euclidean", "cosine", "rankcor"), n_local = 5L,
+  censor_val = NULL, censor_range = NULL, missing_range = NULL,
+  vars = NULL, verbose = !is.null(censor_range))
 }
 \arguments{
 \item{data}{Expression data to be analyzed. Provide \code{vars} to select specific columns other than the default: all double value columns}
 
-\item{k}{Number of nearest neighbors to consider (default: a guess betweeen 100 and \eqn{n - 1})
-\code{NULL} or \code{NA} are also interpreted as \code{n - 1L}.}
+\item{sigma}{Diffusion scale parameter of the Gaussian kernel. One of \code{'local'}, \code{'global'}, a (\link[base]{numeric}) global sigma or a \link{Sigmas} object.
+When choosing \code{'global'}, a global sigma will be calculated using \code{\link{find_sigmas}}. (Optional. default: \code{'local'})
+A larger sigma might be necessary if the eigenvalues can not be found because of a singularity in the matrix}
+
+\item{k}{Number of nearest neighbors to consider (default: a guess betweeen 100 and \eqn{n - 1}. See \code{\link{find_dm_k}}).}
 
 \item{n_eigs}{Number of eigenvectors/values to return (default: 20)}
 
@@ -25,11 +28,9 @@ DiffusionMap(data, k = find_dm_k(nrow(data) - 1L), n_eigs = min(20L,
 
 \item{...}{All parameter after this are optional and have to be specified by name}
 
-\item{sigma}{Diffusion scale parameter of the Gaussian kernel. One of 'local', 'global', a (numeric) global sigma or a \link{Sigmas} object.
-When choosing 'global', a global sigma will be calculated using \link{find_sigmas}. (Optional. default: local)
-A larger sigma might be necessary if the eigenvalues can not be found because of a singularity in the matrix}
-
 \item{distance}{Distance measurement method. Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).}
+
+\item{n_local}{If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor determines the local sigma.}
 
 \item{censor_val}{Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)}
 

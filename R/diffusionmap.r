@@ -3,21 +3,25 @@
 #' @useDynLib destiny
 NULL
 
+sigma_msg <- function(sigma) sprintf(
+	"The sigma parameter needs to be NULL, 'local', 'global', numeric or a %s object, not a %s.",
+	sQuote('Sigmas'), sQuote(class(sigma)))
+
 #' Create a diffusion map of cells
 #' 
 #' The provided data can be a double \link[base]{matrix} of expression data or a \link[base]{data.frame} with all non-integer (double) columns
 #' being treated as expression data features (and the others ignored), or an \link[Biobase]{ExpressionSet}.
 #' 
 #' @param data           Expression data to be analyzed. Provide \code{vars} to select specific columns other than the default: all double value columns
-#' @param k              Number of nearest neighbors to consider (default: a guess betweeen 100 and \eqn{n - 1})
-#'                       \code{NULL} or \code{NA} are also interpreted as \code{n - 1L}.
+#' @param sigma          Diffusion scale parameter of the Gaussian kernel. One of \code{'local'}, \code{'global'}, a (\link[base]{numeric}) global sigma or a \link{Sigmas} object.
+#'                       When choosing \code{'global'}, a global sigma will be calculated using \code{\link{find_sigmas}}. (Optional. default: \code{'local'})
+#'                       A larger sigma might be necessary if the eigenvalues can not be found because of a singularity in the matrix
+#' @param k              Number of nearest neighbors to consider (default: a guess betweeen 100 and \eqn{n - 1}. See \code{\link{find_dm_k}}).
 #' @param n_eigs         Number of eigenvectors/values to return (default: 20)
 #' @param density_norm   logical. If TRUE, use density normalisation
 #' @param ...            All parameter after this are optional and have to be specified by name
-#' @param sigma          Diffusion scale parameter of the Gaussian kernel. One of 'local', 'global', a (numeric) global sigma or a \link{Sigmas} object.
-#'                       When choosing 'global', a global sigma will be calculated using \link{find_sigmas}. (Optional. default: local)
-#'                       A larger sigma might be necessary if the eigenvalues can not be found because of a singularity in the matrix
 #' @param distance       Distance measurement method. Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).
+#' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor determines the local sigma.
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)
 #' @param censor_range   Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
 #' @param missing_range  Whole data range for missing value model. Has to be specified if NAs are in the data
@@ -66,6 +70,7 @@ setClass(
 		d             = 'numeric',
 		d_norm        = 'numeric',
 		k             = 'numeric',
+		n_local       = 'numeric',
 		density_norm  = 'logical',
 		distance      = 'character',
 		censor_val    = 'numericOrNULL',
@@ -110,19 +115,22 @@ setClass(
 #' @export
 DiffusionMap <- function(
 	data,
+	sigma = 'local',
 	k = find_dm_k(nrow(data) - 1L),
 	n_eigs = min(20L, nrow(data) - 2L),
 	density_norm = TRUE,
 	...,
-	sigma = c('local', 'global'),
 	distance = c('euclidean', 'cosine', 'rankcor'),
+	n_local = 5L,
 	censor_val = NULL, censor_range = NULL,
 	missing_range = NULL,
 	vars = NULL,
 	verbose = !is.null(censor_range)
 ) {
-	if (!is.numeric(sigma) && !is(sigma, 'Sigmas'))
-		sigma <- match.arg(sigma)
+	if (is.null(sigma) || isTRUE(is.na(sigma)))
+		sigma <- 'local'
+	if (!(length(sigma) == 1L && sigma %in% c('local', 'global')) && !is.numeric(sigma) && !is(sigma, 'Sigmas'))
+		stop(sigma_msg(sigma))
 	
 	distance <- match.arg(distance)
 	
@@ -152,14 +160,14 @@ DiffusionMap <- function(
 	
 	censor <- test_censoring(censor_val, censor_range, data, missing_range)
 	
-	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance') 
-	
-	sigmas <- get_sigmas(imputed_data, sigma, distance, censor_val, censor_range, missing_range, vars, verbose)
-	sigma <- optimal_sigma(sigmas)
+	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
 	knn <- find_knn(imputed_data, k, verbose)
 	
-	trans_p <- transition_probabilities(imputed_data, distance, sigma, knn, censor, censor_val, censor_range, missing_range, verbose)
+	sigmas <- get_sigmas(imputed_data, sigma, distance, knn, n_local, censor_val, censor_range, missing_range, vars, verbose)
+	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
+	
+	trans_p <- transition_probabilities(imputed_data, sigma, distance, knn, censor, censor_val, censor_range, missing_range, verbose)
 	rm(knn)  # free memory
 	
 	d <- rowSums(trans_p, na.rm = TRUE) + 1 # diagonal set to 1
@@ -191,6 +199,7 @@ DiffusionMap <- function(
 		d             = d,
 		d_norm        = d_norm,
 		k             = k,
+		n_local       = n_local,
 		density_norm  = density_norm,
 		distance      = distance,
 		censor_val    = censor_val,
@@ -200,12 +209,11 @@ DiffusionMap <- function(
 
 
 #' @importFrom methods new is
-get_sigmas <- function(imputed_data, sigma, distance, censor_val, censor_range, missing_range, vars, verbose) {
-	if (identical(sigma, 'local'))
-		sigma <- NULL
-	
-	# local or numerically specified global
-	if (is.numeric(sigma) || is.null(sigma)) {
+get_sigmas <- function(imputed_data, sigma, distance, knn, n_local, censor_val, censor_range, missing_range, vars, verbose) {
+	unspecified_local <- identical(sigma, 'local')
+	if (unspecified_local || is.numeric(sigma)) {
+		if (unspecified_local)
+			sigma <- knn$nn.dist[, n_local] / 2
 		new('Sigmas', 
 			log_sigmas    = NULL,
 			dim_norms     = NULL,
@@ -227,7 +235,7 @@ get_sigmas <- function(imputed_data, sigma, distance, censor_val, censor_range, 
 	} else if (is(sigma, 'Sigmas')) {
 		sigma
 	} else {
-		stop(sprintf("The sigma parameter needs to be NULL, 'local', 'global', numeric or a %s object, not a %s.", sQuote('Sigmas'), sQuote(class(sigmas))))
+		stop(sigma_msg(sigma))
 	}
 }
 
@@ -239,14 +247,10 @@ find_knn <- function(imputed_data, k, verbose)
 	verbose_timing(verbose, 'finding knns', get.knn(imputed_data, k, algorithm = 'cover_tree'))
 
 
-#' @importFrom Matrix sparseMatrix drop0 forceSymmetric skewpart symmpart
+#' @importFrom Matrix sparseMatrix diag<- drop0 forceSymmetric skewpart symmpart
 #' @importFrom utils txtProgressBar setTxtProgressBar
-transition_probabilities <- function(imputed_data, distance, sigma, knn, censor, censor_val, censor_range, missing_range, verbose) {
+transition_probabilities <- function(imputed_data, sigma, distance, knn, censor, censor_val, censor_range, missing_range, verbose) {
 	n <- nrow(knn$nn.index)
-	
-	if (is.null(sigma)) {
-		stop('local sigma not yet supported')
-	}
 	
 	# create markovian transition probability matrix (trans_p)
 	
@@ -256,18 +260,11 @@ transition_probabilities <- function(imputed_data, distance, sigma, knn, censor,
 	} else invisible
 	
 	# initialize trans_p
-	verbose_timing(verbose, 'Calculating transition probabilities', {
-		if (censor) {
-			trans_p <- censoring(imputed_data, censor_val, censor_range, missing_range, sigma, knn$nn.index, cb)
-		} else {
-			d2 <- switch(distance,
-				euclidean  = d2_no_censor(knn$nn.index, knn$nn.dist,  cb),
-				cosine  = icor2_no_censor(knn$nn.index, imputed_data, cb),
-				rankcor = icor2_no_censor(knn$nn.index, imputed_data, cb, TRUE))
-			
-			trans_p <- sparseMatrix(d2@i, p = d2@p, x = exp(-d2@x / (2 * sigma ^ 2)), dims = dim(d2), index1 = FALSE)
-			rm(d2)
-		}
+	trans_p <- verbose_timing(verbose, 'Calculating transition probabilities', {
+		if (censor)
+			censoring(imputed_data, censor_val, censor_range, missing_range, sigma, knn$nn.index, cb)
+		else
+			no_censoring(imputed_data, sigma, distance, knn, cb)
 	})
 	
 	if (verbose) close(pb)
@@ -283,6 +280,26 @@ transition_probabilities <- function(imputed_data, distance, sigma, knn, censor,
 	trans_p <- symmpart(trans_p) + abs(forceSymmetric(skewpart(trans_p))) # TODO: more efficient
 	
 	trans_p
+}
+
+#' @importFrom Matrix sparseMatrix which
+no_censoring <- function(imputed_data, sigma, distance, knn, cb) {
+	d2 <- switch(distance,
+		euclidean  = d2_no_censor(knn$nn.index, knn$nn.dist,  cb),
+		cosine  = icor2_no_censor(knn$nn.index, imputed_data, cb),
+		rankcor = icor2_no_censor(knn$nn.index, imputed_data, cb, TRUE))
+	
+	t_p <- if (length(sigma) == 1L) {
+		exp(-d2@x / (2 * sigma ^ 2))
+	} else {
+		# TODO: optimize
+		mask <- which(d2 == 0)
+		S1 <- (sigma %*% t(sigma))[mask]
+		S2 <- outer(sigma ^ 2, sigma ^ 2, '+')[mask]
+		sqrt(2 * S1 / S2) * exp(-d2@x / S2)
+	}
+	
+	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), index1 = FALSE)
 }
 
 #' @importFrom methods as

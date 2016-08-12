@@ -54,7 +54,7 @@ Eigen::SparseMatrix<double> d2_no_censor(
 	typedef Eigen::Triplet<double> T;
 	std::vector<T> triplets;
 	triplets.reserve(k * n);
-		
+	
 	for (int i=0; i<n; i++) {
 		for (int j=0; j<k; j++) {
 			const int    nn_i = nn_index(i, j) - 1;

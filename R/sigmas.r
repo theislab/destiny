@@ -21,7 +21,7 @@ NULL
 #' 
 #' @slot log_sigmas     Vector of length \eqn{m} containing the \eqn{\log_{10}} of the \eqn{\sigma}s
 #' @slot dim_norms      Vector of length \eqn{m-1} containing the average dimensionality \eqn{\langle p \rangle} for the respective kernel widths
-#' @slot optimal_sigma  NULL (=local) or mean of the two global \eqn{\sigma}s around the highest \eqn{\langle p \rangle} (\code{c(optimal_idx, optimal_idx+1L)})
+#' @slot optimal_sigma  Multiple local sigmas or the mean of the two global \eqn{\sigma}s around the highest \eqn{\langle p \rangle} (\code{c(optimal_idx, optimal_idx+1L)})
 #' @slot optimal_idx    The index of the highest \eqn{\langle p \rangle}.
 #' @slot avrd_norms     Vector of length \eqn{m} containing the average dimensionality for the corresponding sigma.
 #' 
@@ -46,7 +46,7 @@ Sigmas <- setClass('Sigmas', slots = c(
 	optimal_idx   = 'integerOrNULL',
 	avrd_norms    = 'numericOrNULL'))
 
-#' @return \code{optimal_sigma} retrieves the numeric value of the optimal sigma or NULL (= local sigma)
+#' @return \code{optimal_sigma} retrieves the numeric value of the optimal sigma or local sigmas
 #' 
 #' @importFrom methods setGeneric
 #' @name Sigmas class
@@ -60,10 +60,8 @@ setMethod('optimal_sigma', 'Sigmas', function(object) object@optimal_sigma)
 #' @name Sigmas class
 #' @export
 setMethod('print', 'Sigmas', function(x) {
-	cat(sprintf('Sigmas (%s Steps performed)
-optimal_sigma: %s',
-		length(x@log_sigmas),
-		optimal_sigma(x)))
+	cat(sprintf('Sigmas (%s Steps performed)\noptimal_sigma: ', length(x@log_sigmas)))
+	str(optimal_sigma(x))
 	invisible(x)
 })
 

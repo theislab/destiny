@@ -29,11 +29,11 @@ DiffusionMapCompat <- function(
 	verbose = !is.null(censor.range)
 ) DiffusionMap(
 	data = data,
+	sigma = sigma,
 	k = k,
 	n_eigs = n.eigs,
 	density_norm = density.norm,
 	...,
-	sigma = sigma,
 	distance = distance,
 	censor_val = censor.val, censor_range = censor.range,
 	missing_range = missing.range,

@@ -30,7 +30,7 @@ optimal_sigma(object)
 \value{
 \code{Sigmas} creates an object of the same class
 
-\code{optimal_sigma} retrieves the numeric value of the optimal sigma or NULL (= local sigma)
+\code{optimal_sigma} retrieves the numeric value of the optimal sigma or local sigmas
 }
 \description{
 Holds the information about how the \code{sigma} parameter for a \link{DiffusionMap} was obtained,
@@ -50,7 +50,7 @@ the resulting \code{Sigmas} object has all slots except of \code{optimal_sigma} 
 
 \item{\code{dim_norms}}{Vector of length \eqn{m-1} containing the average dimensionality \eqn{\langle p \rangle} for the respective kernel widths}
 
-\item{\code{optimal_sigma}}{NULL (=local) or mean of the two global \eqn{\sigma}s around the highest \eqn{\langle p \rangle} (\code{c(optimal_idx, optimal_idx+1L)})}
+\item{\code{optimal_sigma}}{Multiple local sigmas or the mean of the two global \eqn{\sigma}s around the highest \eqn{\langle p \rangle} (\code{c(optimal_idx, optimal_idx+1L)})}
 
 \item{\code{optimal_idx}}{The index of the highest \eqn{\langle p \rangle}.}
 

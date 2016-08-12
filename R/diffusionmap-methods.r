@@ -109,8 +109,8 @@ setMethod('print', 'DiffusionMap', function(x) {
 	cat('eigenvalues:  '); str(eigenvalues(x))
 	cat('eigenvectors: '); str(structure(eigenvectors(x), dimnames = NULL))
 	cat('  ..colnames: '); str(colnames(eigenvectors(x)), vec.len = 4)
-	cat(sprintf('optimal_sigma: %s\n', optimal_sigma(x)))
-	cat(sprintf('@distance:     %s', x@distance));
+	cat('optimal_sigma: '); str(optimal_sigma(x))
+	cat(sprintf('@distance:     %s', x@distance))
 	invisible(x)
 })
 

@@ -23,8 +23,11 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 	if (!.hasSlot(object, 'transitions'))
 		slot(object, 'transitions', check = FALSE) <- Matrix(0, length(object@d), length(object@d), sparse = TRUE)
 	
-	if (!.hasSlot(object, 'd.norm'))
+	if (!.hasSlot(object, 'd.norm'))  # upgrade name and nonexistence
 		slot(object, 'd_norm', check = FALSE) <- rep(NA, length(object@d))
+	
+	if (!.hasSlot(object, 'n_local'))
+		slot(object, 'n_local', check = FALSE) <- 5L
 	
 	object <- update_slot_names(object, c('data.env', 'd.norm', 'density.norm', 'censor.val', 'censor.range', 'missing.range'))
 	

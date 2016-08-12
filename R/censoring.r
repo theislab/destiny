@@ -48,7 +48,7 @@ validate_censoring <- function(censor_val, censor_range, missing_range, data, si
 	}
 	
 	if (!is.numeric(sigma) || length(sigma) != 1)
-		stop('sigma has to be a single numeric value')
+		stop('sigma has to be a single numeric value (local sigma with censoring not yet supported)')
 	
 	if (!missing(nns) && !is.null(nns) && !is.integer(nns))
 		stop('nns has to be a integer matrix or NULL')
@@ -58,22 +58,4 @@ test_censoring <- function(censor_val, censor_range, data, missing_range) {
 	!(missing(censor_range) || is.null(censor_range)) ||
 		any(is.na(data)) || any(data == censor_val) ||
 		!(missing(missing_range) || is.null(missing_range))
-}
-
-#' @importFrom Matrix sparseMatrix
-no_censoring_slow <- function(sigma, nn_index, nn_dist, cb) {
-	k <- ncol(nn_index)
-	n <- nrow(nn_index)
-	stopifnot(k == ncol(nn_dist))
-	stopifnot(n == nrow(nn_dist))
-	
-	trans_p <- sparseMatrix(NULL, NULL, x = numeric(0), dims = c(n, n))
-	
-	for (i in seq_len(k)) {
-		pairs_i <- cbind(seq_len(n), nn_index[, i])
-		trans_p[pairs_i] <- exp(-nn_dist[, i] ^ 2 / (2 * sigma ^ 2))
-		cb(i)
-	}
-	
-	trans_p
 }
