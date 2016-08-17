@@ -37,5 +37,7 @@ setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optiona
 
 #' @name DiffusionMap coercions
 #' @usage fortify.DiffusionMap(model, data, ...)
+#' @importFrom BiocGenerics as.data.frame
+#' @importFrom Biobase as.data.frame.ExpressionSet
 #' @export fortify.DiffusionMap
-fortify.DiffusionMap <- function(model, data, ...) BiocGenerics::as.data.frame(model)
+fortify.DiffusionMap <- function(model, data, ...) as.data.frame(model)
