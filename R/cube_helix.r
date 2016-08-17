@@ -10,6 +10,8 @@
 #' @param light    Lightest lightness (default: 0.85)
 #' @param dark     Darkest lightness (default: 0.15)
 #' @param reverse  logical. If TRUE, reverse lightness (default: FALSE)
+#' @param ...      parameters passed to \code{\link[ggplot2]{scale_discrete}} or \code{\link[ggplot2]{scale_continuous}}
+#' @param discrete If TRUE, return a discrete scale, if FALSE a continuous one (default: TRUE)
 #' 
 #' @return A \code{character} vector of hex colors with length \code{n}
 #' 
@@ -35,4 +37,38 @@ cube_helix <- function(n = 6, start = 0, r = .4, hue = .8, gamma = 1, light = .8
 	out <- pmin(pmax(out, 0), 1)
 	out <- apply(out, 2, function(x) rgb(x[[1]], x[[2]], x[[3]]))
 	out
+}
+
+scale_cube_helix <- function(aesthetics, start, r, hue, gamma, light, dark, reverse, discrete, guide, ...) {
+	if (!requireNamespace('ggplot2', quietly = TRUE))
+		stop('scale_', aesthetics, '_cube_helix needs (and is only useful for) the ggplot2 package')
+	
+	f <- function(n) cube_helix(n, start, r, hue, gamma, light, dark, reverse)
+	
+	if (discrete) {
+		ggplot2::discrete_scale('colour', 'cube_helix', f, ..., guide = guide)
+	} else {
+		ggplot2::continuous_scale('colour', 'cube_helix', scales::gradient_n_pal(f(100)), guide = guide, ...)
+	}
+}
+
+#' @name cube_helix
+#' @export
+scale_colour_cube_helix <- function(...,
+	start = 0, r = .4, hue = .8, gamma = 1, light = .85, dark = .15, reverse = FALSE,
+	discrete = TRUE, guide = if (discrete) 'legend' else 'colourbar'
+) {
+	scale_cube_helix('colour', start, r, hue, gamma, light, dark, reverse, discrete, guide, ...)
+}
+#' @name cube_helix
+#' @export
+scale_color_cube_helix <- scale_colour_cube_helix
+
+#' @name cube_helix
+#' @export
+scale_fill_cube_helix <- function(...,
+	start = 0, r = .4, hue = .8, gamma = 1, light = .85, dark = .15, reverse = FALSE,
+	discrete = TRUE, guide = if (discrete) 'legend' else 'colourbar'
+) {
+	scale_cube_helix('fill', start, r, hue, gamma, light, dark, reverse, discrete, guide, ...)
 }

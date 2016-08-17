@@ -2,10 +2,25 @@
 % Please edit documentation in R/cube_helix.r
 \name{cube_helix}
 \alias{cube_helix}
+\alias{scale_color_cube_helix}
+\alias{scale_colour_cube_helix}
+\alias{scale_fill_cube_helix}
 \title{Sequential color palette using the cube helix system}
 \usage{
 cube_helix(n = 6, start = 0, r = 0.4, hue = 0.8, gamma = 1,
   light = 0.85, dark = 0.15, reverse = FALSE)
+
+scale_colour_cube_helix(..., start = 0, r = 0.4, hue = 0.8, gamma = 1,
+  light = 0.85, dark = 0.15, reverse = FALSE, discrete = TRUE,
+  guide = if (discrete) "legend" else "colourbar")
+
+scale_color_cube_helix(..., start = 0, r = 0.4, hue = 0.8, gamma = 1,
+  light = 0.85, dark = 0.15, reverse = FALSE, discrete = TRUE,
+  guide = if (discrete) "legend" else "colourbar")
+
+scale_fill_cube_helix(..., start = 0, r = 0.4, hue = 0.8, gamma = 1,
+  light = 0.85, dark = 0.15, reverse = FALSE, discrete = TRUE,
+  guide = if (discrete) "legend" else "colourbar")
 }
 \arguments{
 \item{n}{Number of colors to return (default: 6)}
@@ -23,6 +38,10 @@ cube_helix(n = 6, start = 0, r = 0.4, hue = 0.8, gamma = 1,
 \item{dark}{Darkest lightness (default: 0.15)}
 
 \item{reverse}{logical. If TRUE, reverse lightness (default: FALSE)}
+
+\item{...}{parameters passed to \code{\link[ggplot2]{scale_discrete}} or \code{\link[ggplot2]{scale_continuous}}}
+
+\item{discrete}{If TRUE, return a discrete scale, if FALSE a continuous one (default: TRUE)}
 }
 \value{
 A \code{character} vector of hex colors with length \code{n}
