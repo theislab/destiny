@@ -11,7 +11,7 @@ DiffusionMap(data, sigma = "local", k = find_dm_k(nrow(data) - 1L),
   n_eigs = min(20L, nrow(data) - 2L), density_norm = TRUE, ...,
   distance = c("euclidean", "cosine", "rankcor"), n_local = 5L,
   censor_val = NULL, censor_range = NULL, missing_range = NULL,
-  vars = NULL, verbose = !is.null(censor_range))
+  vars = NULL, verbose = !is.null(censor_range), suppress_dpt = FALSE)
 }
 \arguments{
 \item{data}{Expression data to be analyzed. Provide \code{vars} to select specific columns other than the default: all double value columns}
@@ -41,6 +41,8 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 \item{vars}{Variables (columns) of the data to use. Specifying NULL will select all columns (default: All floating point value columns)}
 
 \item{verbose}{Show a progressbar and other progress information (default: do it if censoring is enabled)}
+
+\item{suppress_dpt}{Specify TRUE to skip calculation of necessary (but spacious) information for \code{\link{dpt}} in the returned object (default: FALSE)}
 }
 \value{
 A DiffusionMap object:
@@ -62,7 +64,9 @@ being treated as expression data features (and the others ignored), or an \link[
 
 \item{\code{eigenvec0}}{First (constant) eigenvector not included as diffusion component.}
 
-\item{\code{transitions}}{Transition probabilities}
+\item{\code{transitions}}{Transition probabilities. Can be NULL}
+
+\item{\code{propagations}}{Propagation matrix derived from transition probabilites. Can be NULL}
 
 \item{\code{d}}{Density vector of transition probability matrix}
 

@@ -27,6 +27,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @param missing_range  Whole data range for missing value model. Has to be specified if NAs are in the data
 #' @param vars           Variables (columns) of the data to use. Specifying NULL will select all columns (default: All floating point value columns)
 #' @param verbose        Show a progressbar and other progress information (default: do it if censoring is enabled)
+#' @param suppress_dpt   Specify TRUE to skip calculation of necessary (but spacious) information for \code{\link{dpt}} in the returned object (default: FALSE)
 #' 
 #' @return A DiffusionMap object:
 #' 
@@ -35,7 +36,8 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot sigmas         \link{Sigmas} object with either information about the \link{find_sigmas} heuristic run or just local or \link{optimal_sigma}.
 #' @slot data_env       Environment referencing the data used to create the diffusion map
 #' @slot eigenvec0      First (constant) eigenvector not included as diffusion component.
-#' @slot transitions    Transition probabilities
+#' @slot transitions    Transition probabilities. Can be NULL
+#' @slot propagations   Propagation matrix derived from transition probabilites. Can be NULL
 #' @slot d              Density vector of transition probability matrix
 #' @slot d_norm         Density vector of normalized transition probability matrix
 #' @slot k              The k parameter for kNN
@@ -66,7 +68,8 @@ setClass(
 		sigmas        = 'Sigmas',
 		data_env      = 'environment',
 		eigenvec0     = 'numeric',
-		transitions   = 'dMatrix',
+		transitions   = 'dMatrixOrNULL',
+		propagations  = 'dMatrixOrNULL',
 		d             = 'numeric',
 		d_norm        = 'numeric',
 		k             = 'numeric',
@@ -125,7 +128,8 @@ DiffusionMap <- function(
 	censor_val = NULL, censor_range = NULL,
 	missing_range = NULL,
 	vars = NULL,
-	verbose = !is.null(censor_range)
+	verbose = !is.null(censor_range),
+	suppress_dpt = FALSE
 ) {
 	if (is.null(sigma) || isTRUE(is.na(sigma)))
 		sigma <- 'local'
@@ -188,6 +192,9 @@ DiffusionMap <- function(
 	eig_vec <- as.matrix(t(t(eig_transitions$vectors) %*% d_rot))
 	colnames(eig_vec) <- paste0('DC', seq(0, n_eigs))
 	
+	if (suppress_dpt) transitions <- NULL
+	propagations <- get_propagation_matrix(transitions, d_norm)
+	
 	new(
 		'DiffusionMap',
 		eigenvalues   = eig_transitions$values[-1],
@@ -196,6 +203,7 @@ DiffusionMap <- function(
 		data_env      = data_env,
 		eigenvec0     = eig_vec[, 1],
 		transitions   = transitions,
+		propagations  = propagations,
 		d             = d,
 		d_norm        = d_norm,
 		k             = k,
@@ -319,3 +327,15 @@ get_norm_p <- function(trans_p, d, d_new, density_norm) {
 
 decomp_transitions <- function(transitions, n_eigs, verbose)
 	verbose_timing(verbose, 'performing eigen decomposition', eig_decomp(transitions, n_eigs))
+
+
+#' @importFrom Matrix Diagonal
+#' @importMethodsFrom Matrix solve
+get_propagation_matrix <- function(transitions, d_norm) {
+	if (is.null(transitions)) return(NULL)
+	
+	phi0 <- d_norm / sqrt(sum(d_norm ^ 2))
+	d_rot <- Diagonal(x = d_norm ^ -.5)
+	inv <- solve(Diagonal(n) - transitions + phi0 %*% t(phi0))
+	inv - Diagonal(n)
+}

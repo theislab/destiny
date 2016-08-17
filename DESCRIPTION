@@ -62,6 +62,7 @@ Collate:
     'diffusionmap-methods.r'
     'plothelpers.r'
     'diffusionmap-plotting.r'
+    'dpt.r'
     'eig_decomp.r'
     'utils.r'
     'expressionset-helpers.r'
