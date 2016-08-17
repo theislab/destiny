@@ -14,6 +14,7 @@
 #' 
 #' @name destiny 1 compatibility
 #' @importFrom BiocGenerics updateObject
+#' @keywords internal
 #' @export
 DiffusionMapCompat <- function(
 	data,

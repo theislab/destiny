@@ -4,9 +4,9 @@
 \name{DiffusionMap extraction}
 \alias{$,DiffusionMap-method}
 \alias{DiffusionMap extraction}
-\alias{DiffusionMap-extraction}
 \alias{[[,DiffusionMap,character,missing-method}
 \alias{names,DiffusionMap-method}
+\alias{names.DiffusionMap}
 \title{DiffusionMap extraction methods}
 \usage{
 \S4method{names}{DiffusionMap}(x)
@@ -28,6 +28,6 @@
 DiffusionMap extraction methods
 }
 \seealso{
-\link[base]{Extract}, \code{\link[base]{names}}, \code{\link{DiffusionMap}}, \link{DiffusionMap methods}
+\link[base]{Extract}, \code{\link[base]{names}} for the generics. \link{DiffusionMap accessors}, \link{DiffusionMap methods}, \link{DiffusionMap coercions} for more methods
 }
 

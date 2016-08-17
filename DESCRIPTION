@@ -46,6 +46,7 @@ biocViews: CellBiology,
     Visualization
 Collate:
     'RcppExports.R'
+    'accessor-generics.r'
     'censoring.r'
     'compat.r'
     'destiny-package.r'
@@ -53,7 +54,8 @@ Collate:
     'dist-matrix-coerce.r'
     'sigmas.r'
     'diffusionmap.r'
-    'diffusionmap-coercions.r'
+    'diffusionmap-methods-accession.r'
+    'diffusionmap-methods-coercion.r'
     'diffusionmap-methods-extraction.r'
     'diffusionmap-methods.r'
     'plothelpers.r'

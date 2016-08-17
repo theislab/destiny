@@ -14,8 +14,6 @@
 \usage{
 Sigmas(...)
 
-optimal_sigma(object)
-
 \S4method{optimal_sigma}{Sigmas}(object)
 
 \S4method{print}{Sigmas}(x)

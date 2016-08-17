@@ -1,10 +1,10 @@
-#' DiffusionMap coercions
+#' DiffusionMap coercion methods
 #' 
-#' Convert a diffusionmap to other classes
+#' Convert a \code{\link{DiffusionMap}} to other classes
 #' 
 #' \link[ggplot2]{fortify} is a ggplot2 generic allowing a diffusion map to be used as \code{data} parameter in \link[ggplot2]{ggplot} or \link[ggplot2]{qplot}. 
 #' 
-#' @param x,model  A DiffusionMap
+#' @param x,model  A \code{\link{DiffusionMap}}
 #' @param data  ignored
 #' @param row.names  NULL or a character vector giving the row names for the data frame. Missing values are not allowed.
 #' @param optional  logical. If TRUE, setting row names and converting column names (to syntactic names: see make.names) is optional.
@@ -12,7 +12,7 @@
 #' 
 #' @return An object of the desired class
 #' 
-#' @seealso \code{\link{DiffusionMap}}
+#' @seealso \link{DiffusionMap accessors}, \link{DiffusionMap extraction}, \link{DiffusionMap methods} for more methods
 #' 
 #' @examples
 #' data(guo)
@@ -20,7 +20,7 @@
 #' dm$DC1   # A diffusion component
 #' dm$Actb  # A gene expression
 #' 
-#' @aliases DiffusionMap-coercions as.data.frame,DiffusionMap-method fortify.DiffusionMap
+#' @aliases as.data.frame.DiffusionMap as.data.frame,DiffusionMap-method fortify.DiffusionMap
 #' @importFrom BiocGenerics as.data.frame
 #' @name DiffusionMap coercions
 #' @include diffusionmap.r

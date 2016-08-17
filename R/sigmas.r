@@ -1,4 +1,4 @@
-#' @include s4-null-unions.r dist-matrix-coerce.r
+#' @include s4-null-unions.r dist-matrix-coerce.r accessor-generics.r
 NULL
 
 #' Sigmas Object
@@ -47,12 +47,6 @@ Sigmas <- setClass('Sigmas', slots = c(
 	avrd_norms    = 'numericOrNULL'))
 
 #' @return \code{optimal_sigma} retrieves the numeric value of the optimal sigma or local sigmas
-#' 
-#' @importFrom methods setGeneric
-#' @name Sigmas class
-#' @export
-setGeneric('optimal_sigma', function(object) standardGeneric('optimal_sigma'))
-
 #' @name Sigmas class
 #' @export
 setMethod('optimal_sigma', 'Sigmas', function(object) object@optimal_sigma)

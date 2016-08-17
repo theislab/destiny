@@ -11,7 +11,7 @@
 #' @importFrom methods setMethod validObject .hasSlot slot slot<- 
 #' @importFrom Matrix Matrix
 #' @importFrom BiocGenerics updateObject
-#' @name updateObject-methods
+#' @name updateObject-method
 #' @export
 setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE) {
 	if (verbose) 
@@ -38,7 +38,7 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 })
 
 
-#' @name updateObject-methods
+#' @name updateObject-method
 #' @export
 setMethod('updateObject', 'Sigmas', function(object, ..., verbose = FALSE) {
 	if (verbose) 

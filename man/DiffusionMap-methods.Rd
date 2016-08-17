@@ -4,67 +4,20 @@
 \name{DiffusionMap methods}
 \alias{DiffusionMap methods}
 \alias{DiffusionMap-methods}
-\alias{dataset}
-\alias{dataset<-}
-\alias{eigenvalues}
-\alias{eigenvalues<-}
-\alias{eigenvectors}
-\alias{eigenvectors<-}
-\alias{optimal_sigma,DiffusionMap-method}
 \alias{print,DiffusionMap-method}
+\alias{print.DiffusionMap}
 \alias{show,DiffusionMap-method}
-\alias{sigmas}
-\alias{sigmas<-}
-\alias{values}
-\alias{values<-}
-\alias{vectors}
-\alias{vectors<-}
+\alias{show.DiffusionMap}
 \title{DiffusionMap methods}
 \usage{
-eigenvalues(dm)
-
-eigenvalues(dm) <- value
-
-eigenvectors(dm)
-
-eigenvectors(dm) <- value
-
-sigmas(dm)
-
-sigmas(dm) <- value
-
-dataset(dm)
-
-dataset(dm) <- value
-
-\S4method{optimal_sigma}{DiffusionMap}(object)
-
 \S4method{print}{DiffusionMap}(x)
 
 \S4method{show}{DiffusionMap}(object)
 }
-\arguments{
-\item{dm, x, object}{A DiffusionMap}
-
-\item{value}{Vector of eigenvalues or matrix of eigenvectors to get/set}
-}
-\value{
-The assigned or retrieved value
-}
 \description{
-Get and set eigenvalues, eigenvectors, and sigma(s) of a \link{DiffusionMap} object or print information about a DiffusionMap
-}
-\examples{
-data(guo)
-dm <- DiffusionMap(guo)
-eigenvalues(dm)
-eigenvectors(dm)
-sigmas(dm)
-dataset(dm)
-optimal_sigma(dm)
-
+Methods for external operations on diffusion maps
 }
 \seealso{
-\code{\link{DiffusionMap}}, \code{\link{DiffusionMap extraction}}
+\link{DiffusionMap accessors}, \link{DiffusionMap extraction}, \link{DiffusionMap coercions} for more methods
 }
 
