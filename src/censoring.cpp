@@ -84,7 +84,7 @@ Eigen::SparseMatrix<double> censoring_impl(
 		const SEXP thr_or_null,
 		const SEXP uncertain_or_null,
 		const SEXP missing_or_null,
-		const double sigma,
+		const NumericVector sigmas,
 		const SEXP nns_or_null,
 		const Function callback
 ) {
@@ -108,19 +108,15 @@ Eigen::SparseMatrix<double> censoring_impl(
 	std::vector<T> triplets;
 	triplets.reserve((no_nns) ? (n*n) : (nns.ncol() * (n+1)));
 	
-	const double kt = pow(sigma, 2);
-	
-	for (int g_idx=0; g_idx<uncertain_m.nrow(); g_idx++) {
-		uncertain_m(g_idx, 0) -= sigma;
-		uncertain_m(g_idx, 1) += sigma;
-	}
-	
-	for (int g_idx=0; g_idx<missing_m.nrow(); g_idx++) {
-		missing_m(g_idx, 0) -= sigma;
-		missing_m(g_idx, 1) += sigma;
-	}
+	//either length 1 or n
+	const NumericVector kts = pow(sigmas, 2);
+	const bool local_sigma = sigmas.length() != 1;
 	
 	for (int row_idx=0; row_idx<n; row_idx++) {
+		const double
+			sigma = (local_sigma) ? sigmas[row_idx] : sigmas[0],
+			kt    = (local_sigma) ?    kts[row_idx] :    kts[0];
+		
 		for (int j=0; j<nns.ncol(); j++) {
 			int nn_idx;
 			if (no_nns)
@@ -131,7 +127,7 @@ Eigen::SparseMatrix<double> censoring_impl(
 			//Rcout << "i=" << row_idx << ", j=" << nn_idx << '\n';
 			 
 			double x = 1.;
-		
+			
 			for (int g=0; g<G; g++) {
 				const double
 					c = data(row_idx, g),
@@ -139,10 +135,10 @@ Eigen::SparseMatrix<double> censoring_impl(
 					thr = (thr_v.size() == G) ? thr_v[g] : thr_v[0];
 				
 				const double
-					uncertain0 = (uncertain_m.nrow() == G) ? uncertain_m(g, 0) : uncertain_m(0, 0),
-					uncertain1 = (uncertain_m.nrow() == G) ? uncertain_m(g, 1) : uncertain_m(0, 1),
-					missing0 = (missing_m.nrow() == G) ? missing_m(g, 0) : missing_m(0, 0),
-					missing1 = (missing_m.nrow() == G) ? missing_m(g, 1) : missing_m(0, 1);
+					uncertain0 = ((uncertain_m.nrow() == G) ? uncertain_m(g, 0) : uncertain_m(0, 0)) - sigma,
+					uncertain1 = ((uncertain_m.nrow() == G) ? uncertain_m(g, 1) : uncertain_m(0, 1)) + sigma,
+					missing0 = ((missing_m.nrow() == G) ? missing_m(g, 0) : missing_m(0, 0)) - sigma,
+					missing1 = ((missing_m.nrow() == G) ? missing_m(g, 1) : missing_m(0, 1)) + sigma;
 					
 				x *= censor_pair(c, d, sigma, kt, thr, uncertain0, uncertain1, missing0, missing1);
 				

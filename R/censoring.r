@@ -22,6 +22,7 @@ predict_censoring <- function(data, data2, censor_val = NULL, censor_range = NUL
 
 validate_censoring <- function(censor_val, censor_range, missing_range, data, sigma, nns) {
 	G <- ncol(data)
+	n <- nrow(data)
 	no_censor_val     <- missing(censor_val)    || is.null(censor_val)
 	no_censor_range   <- missing(censor_range)  || is.null(censor_range)
 	no_missing_range  <- missing(missing_range) || is.null(missing_range)
@@ -33,22 +34,22 @@ validate_censoring <- function(censor_val, censor_range, missing_range, data, si
 		stop('You have to provide both a censoring value and a censor_range or none')
 	
 	if (!no_censor_range) {
-		if (!is.numeric(censor_val) || (length(censor_val) != 1 && length(censor_val) != G))
+		if (!is.numeric(censor_val) || (length(censor_val) != 1L && length(censor_val) != G))
 		stop('censor_val has to be a single numeric value, or length(censor_val) == ncol(data) must be TRUE')
 		
-		if (!is.numeric(censor_range) || !(nrow(censor_range) %in% c(G, 1)) || ncol(censor_range) != 2 || any(diff(t(censor_range)) <= 0))
+		if (!is.numeric(censor_range) || !(nrow(censor_range) %in% c(G, 1L)) || ncol(censor_range) != 2L || any(diff(t(censor_range)) <= 0L))
 		stop('censor_range has to be a numeric vector of length 2, the second of which being larger,
 				 or a matrix with nrow(censor_range) == ncol(data) where each row is such a vector')
 	}
 	
 	if (!no_missing_range) {
-		if (!is.numeric(missing_range) || !(nrow(missing_range) %in% c(G, 1)) || ncol(missing_range) != 2 || any(diff(t(missing_range)) <= 0))
+		if (!is.numeric(missing_range) || !(nrow(missing_range) %in% c(G, 1L)) || ncol(missing_range) != 2L || any(diff(t(missing_range)) <= 0L))
 		stop('missing_range has to be a numeric vector of length 2, the second of which being larger,
 				 or a matrix with nrow(missing_range) == ncol(data) where each row is such a vector')
 	}
 	
-	if (!is.numeric(sigma) || length(sigma) != 1)
-		stop('sigma has to be a single numeric value (local sigma with censoring not yet supported)')
+	if (!is.numeric(sigma) || !length(sigma) %in% c(n, 1L))
+		stop('sigma has to be a single numeric value or of length nrow(data)')
 	
 	if (!missing(nns) && !is.null(nns) && !is.integer(nns))
 		stop('nns has to be a integer matrix or NULL')
