@@ -106,11 +106,11 @@ setMethod('optimal_sigma', 'DiffusionMap', function(object) sigmas(object)@optim
 #' @export
 setMethod('print', 'DiffusionMap', function(x) {
 	cat(sprintf('DiffusionMap (%s Diffusion components and %s samples)\n', length(eigenvalues(x)), nrow(eigenvectors(x))))
-	cat('eigenvalues:  '); str(eigenvalues(x))
-	cat('eigenvectors: '); str(structure(eigenvectors(x), dimnames = NULL))
-	cat('  ..colnames: '); str(colnames(eigenvectors(x)), vec.len = 4)
+	cat('eigenvalues:   '); str(eigenvalues(x))
+	cat('eigenvectors:  '); str(structure(eigenvectors(x), dimnames = NULL))
+	cat('  ..colnames:  '); str(colnames(eigenvectors(x)), vec.len = 4)
 	cat('optimal_sigma: '); str(optimal_sigma(x))
-	cat(sprintf('@distance:     %s', x@distance))
+	cat(sprintf('@distance:      %s', x@distance))
 	invisible(x)
 })
 
