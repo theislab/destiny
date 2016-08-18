@@ -29,9 +29,6 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 	if (!.hasSlot(object, 'n_local'))
 		slot(object, 'n_local', check = FALSE) <- 5L
 	
-	if (!.hasSlot(object, 'propagations'))
-		slot(object, 'propagations', check = FALSE) <- get_propagation_matrix(object@transitions, object@d_norm)
-	
 	object <- update_slot_names(object, c('data.env', 'd.norm', 'density.norm', 'censor.val', 'censor.range', 'missing.range'))
 	
 	object@sigmas <- updateObject(object@sigmas)

@@ -37,7 +37,6 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot data_env       Environment referencing the data used to create the diffusion map
 #' @slot eigenvec0      First (constant) eigenvector not included as diffusion component.
 #' @slot transitions    Transition probabilities. Can be NULL
-#' @slot propagations   Propagation matrix derived from transition probabilites. Can be NULL
 #' @slot d              Density vector of transition probability matrix
 #' @slot d_norm         Density vector of normalized transition probability matrix
 #' @slot k              The k parameter for kNN
@@ -69,7 +68,6 @@ setClass(
 		data_env      = 'environment',
 		eigenvec0     = 'numeric',
 		transitions   = 'dMatrixOrNULL',
-		propagations  = 'dMatrixOrNULL',
 		d             = 'numeric',
 		d_norm        = 'numeric',
 		k             = 'numeric',
@@ -90,7 +88,7 @@ setClass(
 			'There must be exactly one eigenvalue per eigenvector: length(eigenvalues(dm)) == ncol(eigenvectors(dm))'
 		else if (!isTRUE(validObject(object@sigmas, test = TRUE)))
 			paste('sigmas invalid:', validObject(object@sigmas, test = TRUE))
-		#TODO: validate data_env and eigenvec0
+		#TODO: validate data_env (data, propagations) and eigenvec0
 		else if (length(object@d) != nrow(object@eigenvectors))
 			'd must be as long as each eigenvector'
 		else if (length(object@k) != 1)
@@ -192,9 +190,6 @@ DiffusionMap <- function(
 	eig_vec <- as.matrix(t(t(eig_transitions$vectors) %*% d_rot))
 	colnames(eig_vec) <- paste0('DC', seq(0, n_eigs))
 	
-	if (suppress_dpt) transitions <- NULL
-	propagations <- get_propagation_matrix(transitions, d_norm)
-	
 	new(
 		'DiffusionMap',
 		eigenvalues   = eig_transitions$values[-1],
@@ -202,8 +197,7 @@ DiffusionMap <- function(
 		sigmas        = sigmas,
 		data_env      = data_env,
 		eigenvec0     = eig_vec[, 1],
-		transitions   = transitions,
-		propagations  = propagations,
+		transitions   = if (suppress_dpt) NULL else transitions,
 		d             = d,
 		d_norm        = d_norm,
 		k             = k,
@@ -327,15 +321,3 @@ get_norm_p <- function(trans_p, d, d_new, density_norm) {
 
 decomp_transitions <- function(transitions, n_eigs, verbose)
 	verbose_timing(verbose, 'performing eigen decomposition', eig_decomp(transitions, n_eigs))
-
-
-#' @importFrom Matrix Diagonal
-#' @importMethodsFrom Matrix solve
-get_propagation_matrix <- function(transitions, d_norm) {
-	if (is.null(transitions)) return(NULL)
-	
-	phi0 <- d_norm / sqrt(sum(d_norm ^ 2))
-	d_rot <- Diagonal(x = d_norm ^ -.5)
-	inv <- solve(Diagonal(n) - transitions + phi0 %*% t(phi0))
-	inv - Diagonal(n)
-}

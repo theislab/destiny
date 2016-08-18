@@ -38,3 +38,21 @@ verbose_timing <- function(verbose, msg, expr) {
 		r
 	} else expr
 }
+
+
+#' @importFrom Matrix Diagonal
+#' @importMethodsFrom Matrix solve
+propagation_matrix <- function(dm) {
+	if (is.null(dm@data_env$propagations)) {
+		if (is.null(dm@transitions))
+			stop('DiffusionMap was created with suppress_dpt = TRUE')
+		
+		n <- length(dm@d_norm)
+		
+		phi0 <- dm@d_norm / sqrt(sum(dm@d_norm ^ 2))
+		inv <- solve(Diagonal(n) - dm@transitions + phi0 %*% t(phi0))
+		dm@data_env$propagations <- inv - Diagonal(n)
+	}
+	
+	dm@data_env$propagations
+}

@@ -66,8 +66,6 @@ being treated as expression data features (and the others ignored), or an \link[
 
 \item{\code{transitions}}{Transition probabilities. Can be NULL}
 
-\item{\code{propagations}}{Propagation matrix derived from transition probabilites. Can be NULL}
-
 \item{\code{d}}{Density vector of transition probability matrix}
 
 \item{\code{d_norm}}{Density vector of normalized transition probability matrix}

@@ -42,6 +42,7 @@ dm_predict <- function(dm, new_data, verbose = FALSE) {
 	censor <- !is.null(dm@censor_val) || any(is.na(data)) || any(is.na(new_data))
 	#censor imples euclidean distance
 	
+	#TODO: local sigma
 	sigma <- optimal_sigma(dm)
 	if (!censor) {
 		if (verbose) cat('Creating distance matrix without censoring\n')

@@ -8,9 +8,9 @@
 dpt_to_cell(dm, cell)
 }
 \arguments{
-\item{cell}{Index of a cell for which all DPTs should be calculated}
+\item{dm}{A \code{\link{DiffusionMap}} object}
 
-\item{ts}{A \code{\link{DiffusionMap}} object}
+\item{cell}{Index of a cell for which all DPTs should be calculated}
 }
 \description{
 Given a cell index, returns the DPT of this cell to all cells
