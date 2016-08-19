@@ -37,6 +37,7 @@ These functions present quick waya to create \link[Biobase]{ExpressionSet} objec
 They work by using all continuous (double) columns as expression data, and all others as sample annotations.
 }
 \examples{
+library(Biobase)
 df <- data.frame(Time  = seq_len(3), #integer column
                  Actb  = c(0.05, 0.3, 0.8),
                  Gapdh = c(0.2, 0.03, 0.1))

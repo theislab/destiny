@@ -28,6 +28,6 @@
 DiffusionMap extraction methods
 }
 \seealso{
-\link[base]{Extract}, \code{\link[base]{names}} for the generics. \link{DiffusionMap accessors}, \link{DiffusionMap methods}, \link{DiffusionMap coercions} for more methods
+\link[base]{Extract}, \code{\link[base]{names}} for the generics. \link{DiffusionMap accessors}, \link{DiffusionMap methods}, \link{coercions} for more methods
 }
 

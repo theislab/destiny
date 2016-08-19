@@ -9,6 +9,8 @@
 \alias{distance<-,DiffusionMap-method}
 \alias{eigenvalues,DiffusionMap-method}
 \alias{eigenvalues<-,DiffusionMap-method}
+\alias{eigenvectors,DiffusionMap-method}
+\alias{eigenvectors<-,DiffusionMap-method}
 \alias{optimal_sigma,DiffusionMap-method}
 \alias{sigmas,DiffusionMap-method}
 \alias{sigmas<-,DiffusionMap-method}
@@ -37,9 +39,9 @@
 \S4method{optimal_sigma}{DiffusionMap}(object)
 }
 \arguments{
-\item{value}{Vector of eigenvalues or matrix of eigenvectors to get/set}
+\item{object}{A DiffusionMap}
 
-\item{dm, x, object}{A DiffusionMap}
+\item{value}{Vector of eigenvalues or matrix of eigenvectors to get/set}
 }
 \value{
 The assigned or retrieved value
@@ -58,6 +60,6 @@ optimal_sigma(dm)
 
 }
 \seealso{
-\link{DiffusionMap extraction}, \link{DiffusionMap methods}, \link{DiffusionMap coercions} for more methods
+\link{DiffusionMap extraction}, \link{DiffusionMap methods}, \link{coercions} for more methods
 }
 

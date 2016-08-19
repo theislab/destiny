@@ -5,7 +5,7 @@
 #' @param j       N/A
 #' @param ...     ignored
 #' 
-#' @seealso \link[base]{Extract}, \code{\link[base]{names}} for the generics. \link{DiffusionMap accessors}, \link{DiffusionMap methods}, \link{DiffusionMap coercions} for more methods
+#' @seealso \link[base]{Extract}, \code{\link[base]{names}} for the generics. \link{DiffusionMap accessors}, \link{DiffusionMap methods}, \link{coercions} for more methods
 #' 
 #' @name DiffusionMap extraction
 #' @aliases names.DiffusionMap names,DiffusionMap-method $,DiffusionMap-method [[,DiffusionMap,character,missing-method

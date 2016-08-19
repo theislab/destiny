@@ -2,6 +2,9 @@
 #' 
 #' destiny provides several generic methods and implements them for the \code{\link{DiffusionMap}} and \code{\link{Sigmas}} classes.
 #' 
+#' @param object  Object from which to extract or to which to assign a value
+#' @param value   Value to assign within an object
+#' 
 #' @seealso \link{DiffusionMap methods} and \link{Sigmas class} for implementations
 #' @aliases eigenvalues   eigenvectors   sigmas   dataset   distance   optimal_sigma
 #'          eigenvalues<- eigenvectors<- sigmas<- dataset<- distance<-

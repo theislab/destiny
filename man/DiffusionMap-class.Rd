@@ -42,7 +42,7 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 
 \item{verbose}{Show a progressbar and other progress information (default: do it if censoring is enabled)}
 
-\item{suppress_dpt}{Specify TRUE to skip calculation of necessary (but spacious) information for \code{\link{dpt}} in the returned object (default: FALSE)}
+\item{suppress_dpt}{Specify TRUE to skip calculation of necessary (but spacious) information for \code{\link{DPT}} in the returned object (default: FALSE)}
 }
 \value{
 A DiffusionMap object:
@@ -71,6 +71,8 @@ being treated as expression data features (and the others ignored), or an \link[
 \item{\code{d_norm}}{Density vector of normalized transition probability matrix}
 
 \item{\code{k}}{The k parameter for kNN}
+
+\item{\code{n_local}}{The \code{n_local}th nearest neighbor is used to determine local kernel density}
 
 \item{\code{density_norm}}{Was density normalization used?}
 

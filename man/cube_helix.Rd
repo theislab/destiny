@@ -39,9 +39,11 @@ scale_fill_cube_helix(..., start = 0, r = 0.4, hue = 0.8, gamma = 1,
 
 \item{reverse}{logical. If TRUE, reverse lightness (default: FALSE)}
 
-\item{...}{parameters passed to \code{\link[ggplot2]{scale_discrete}} or \code{\link[ggplot2]{scale_continuous}}}
+\item{...}{parameters passed to \code{\link[ggplot2]{discrete_scale}} or \code{\link[ggplot2]{continuous_scale}}}
 
 \item{discrete}{If TRUE, return a discrete scale, if FALSE a continuous one (default: TRUE)}
+
+\item{guide}{Type of scale guide to use. See \code{\link[ggplot2]{guides}}}
 }
 \value{
 A \code{character} vector of hex colors with length \code{n}
@@ -53,9 +55,9 @@ Creates a perceptually monotonously decreasing (or increasing) lightness color p
 palette(cube_helix())
 image(matrix(1:6), col = 1:6, pch = 19, axes = FALSE)
 
-cr <- colorRamp(cube_helix(12, r = 3))
+cr <- scales::colour_ramp(cube_helix(12, r = 3))
 r <- runif(100)
-plot(1:100, r, col = rgb(cr(r), max = 255), type = 'b', pch = 20)
+plot(1:100, r, col = cr(r), type = 'b', pch = 20)
 
 }
 

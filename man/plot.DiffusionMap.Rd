@@ -11,7 +11,8 @@ plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
   col_limits = NULL, col_new = "red", pal = palette(), ..., mar = NULL,
   ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
   legend_opts = list(), interactive = FALSE, draw_legend = !is.null(col)
-  && length(col) > 1 && !is.character(col), consec_col = TRUE)
+  && length(col) > 1 && !is.character(col), consec_col = TRUE,
+  plot_more = function() NULL)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 
@@ -54,6 +55,8 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 \item{draw_legend}{logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)}
 
 \item{consec_col}{If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})}
+
+\item{plot_more}{Function without arguments that will be called while the plot margins are temporarily changed}
 }
 \value{
 The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.

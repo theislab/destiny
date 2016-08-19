@@ -2,7 +2,7 @@
 #'
 #' Create pseudotime ordering and assigns cell to one of three branches
 #' 
-#' @param dm           A \code{\link{DiffusionMap}} object
+#' @param dm           A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT
 #' @param branching    Detect a branching? (\code{TRUE} or \code{FALSE})
 #' @param tips         Tip cell indices for each branch (integer vector of length 1 or 3)
 #' @param root         The root index from which to calculate the DPTs (integer of length 1)
@@ -15,11 +15,11 @@
 #'  \item{\code{tips}}{will be \code{root} and (\code{if (branching)}) the most distant cells from it}
 #' }
 #' 
-#' @return A \code{\link[base]{data.frame}} with the rows: \describe{
-#' 	\item{\code{Branch}}{Branch labels for each cell, 1,2,3 or NA for undeceided}
-#'  \item{\code{DPT}}{Diffusion pseudotime in respect to the root cell}
-#'  \item{(\code{if (branching)}) \code{DPT.1}, \code{DPT.2}}{Diffusion pseudotime in respect to the other tips}
-#' }
+#' @slot branch  Branch labels for each cell; \code{1:3} or \code{NA} for undeceided
+#' @slot parent  \code{\link{matrix}} of parent branches (may be of \code{ncol(...) == 0})
+#' @slot tips    Indices of tips
+#' @slot dpt     Diffusion pseudotime in respect to the root cell (and other tips if \code{branching == TRUE})
+#' @slot dm      \code{\link{DiffusionMap}} used to create this DPT object
 #' 
 #' @aliases DPT-class
 #' 
@@ -30,9 +30,10 @@ setClass(
 	'DPT',
 	slots = c(
 		branch = 'integer',
-		parent = 'integer',
+		parent = 'matrix', # 'integer'
 		tips   = 'integer',
-		dpt    = 'matrix'),
+		dpt    = 'matrix', # 'double'
+		dm     = 'DiffusionMap'),
 	validity = function(object) {
 		TRUE
 	})
@@ -45,6 +46,7 @@ DPT <- function(
 	tips = if (branching) find_tips(dm, root) else root,
 	root = random_root(dm)
 ) {
+	if (!is(dm, 'DiffusionMap')) stop('dm needs to be of class DiffusionMap, not ', class(dm))
 	if (missing(branching) && missing(tips))
 		stop('you need to specify at least `branching` or `tips`')
 	
@@ -59,19 +61,24 @@ DPT <- function(
 		# cut it into three branches
 		branch <- lapply(seq_len(3), function(b) branchcut(dpt, bid, b))
 		
+		unassigned <- setdiff(seq_len(3L), Reduce(union, branch, integer()))
+		print(unassigned)
+		
 		new(
 			'DPT',
 			branch = organize_branches(branch),
-			parent = rep(NA_integer_, nrow(dpt)),
+			parent = matrix(NA_integer_, n, 0L),
 			tips = tips,
-			dpt = dpt)
+			dpt = dpt,
+			dm = dm)
 	} else {
 		new(
 			'DPT',
 			branch = rep(1L, n),
-			parent = rep(NA_integer_, n),
+			parent = matrix(NA_integer_, n, 0L),
 			tips = tips,
-			dpt = dpt_to_cell(dm, tips[[1]]))
+			dpt = dpt_to_cell(dm, tips[[1]]),
+			dm = dm)
 	}
 }
 

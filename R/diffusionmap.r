@@ -27,7 +27,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @param missing_range  Whole data range for missing value model. Has to be specified if NAs are in the data
 #' @param vars           Variables (columns) of the data to use. Specifying NULL will select all columns (default: All floating point value columns)
 #' @param verbose        Show a progressbar and other progress information (default: do it if censoring is enabled)
-#' @param suppress_dpt   Specify TRUE to skip calculation of necessary (but spacious) information for \code{\link{dpt}} in the returned object (default: FALSE)
+#' @param suppress_dpt   Specify TRUE to skip calculation of necessary (but spacious) information for \code{\link{DPT}} in the returned object (default: FALSE)
 #' 
 #' @return A DiffusionMap object:
 #' 
@@ -40,6 +40,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot d              Density vector of transition probability matrix
 #' @slot d_norm         Density vector of normalized transition probability matrix
 #' @slot k              The k parameter for kNN
+#' @slot n_local        The \code{n_local}th nearest neighbor is used to determine local kernel density
 #' @slot density_norm   Was density normalization used?
 #' @slot distance       Distance measurement method used.
 #' @slot censor_val     Censoring value
@@ -129,9 +130,9 @@ DiffusionMap <- function(
 	verbose = !is.null(censor_range),
 	suppress_dpt = FALSE
 ) {
-	if (is.null(sigma) || isTRUE(is.na(sigma)))
+	if (is.null(sigma) || !is(sigma, 'Sigmas') && isTRUE(is.na(sigma)))
 		sigma <- 'local'
-	if (!(length(sigma) == 1L && sigma %in% c('local', 'global')) && !is.numeric(sigma) && !is(sigma, 'Sigmas'))
+	if (!is(sigma, 'Sigmas') && !(length(sigma) == 1L && sigma %in% c('local', 'global')) && !is.numeric(sigma))
 		stop(sigma_msg(sigma))
 	
 	distance <- match.arg(distance)

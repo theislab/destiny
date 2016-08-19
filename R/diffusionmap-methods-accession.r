@@ -5,12 +5,12 @@ NULL
 #' 
 #' Get and set eigenvalues, eigenvectors, and sigma(s) of a \link{DiffusionMap} object or print information about a DiffusionMap
 #' 
-#' @param dm,x,object  A DiffusionMap
-#' @param value  Vector of eigenvalues or matrix of eigenvectors to get/set
+#' @param object  A DiffusionMap
+#' @param value   Vector of eigenvalues or matrix of eigenvectors to get/set
 #' 
 #' @return The assigned or retrieved value
 #' 
-#' @seealso \link{DiffusionMap extraction}, \link{DiffusionMap methods}, \link{DiffusionMap coercions} for more methods
+#' @seealso \link{DiffusionMap extraction}, \link{DiffusionMap methods}, \link{coercions} for more methods
 #' 
 #' @examples
 #' data(guo)
@@ -22,8 +22,8 @@ NULL
 #' optimal_sigma(dm)
 #' 
 #' @aliases
-#'   eigenvalues,DiffusionMap-method   eigenvalues,DiffusionMap-method   sigmas,DiffusionMap-method
-#' eigenvalues<-,DiffusionMap-method eigenvalues<-,DiffusionMap-method sigmas<-,DiffusionMap-method
+#'   eigenvalues,DiffusionMap-method   eigenvectors,DiffusionMap-method   sigmas,DiffusionMap-method
+#' eigenvalues<-,DiffusionMap-method eigenvectors<-,DiffusionMap-method sigmas<-,DiffusionMap-method
 #'   dataset,DiffusionMap-method   distance,DiffusionMap-method   optimal_sigma,DiffusionMap-method
 #' dataset<-,DiffusionMap-method distance<-,DiffusionMap-method
 #' 

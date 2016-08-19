@@ -33,7 +33,7 @@ NULL
 #' 
 #' @seealso \code{\link{find_sigmas}}, the function to determine a locally optimal sigma and returning this class
 #' 
-#' @aliases Sigmas Sigmas-class Sigmas-methods print,Sigmas-method show,Sigmas-method optimal_sigma optimal_sigma,Sigmas-method
+#' @aliases Sigmas Sigmas-class Sigmas-methods print,Sigmas-method show,Sigmas-method optimal_sigma,Sigmas-method
 #' 
 #' @importFrom methods setClass
 #' @name Sigmas class

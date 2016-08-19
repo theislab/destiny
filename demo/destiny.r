@@ -8,28 +8,27 @@ palette(brewer.pal(8L, 'Dark2'))
 
 
 
-dm_guo <- DiffusionMap(guo, censor_val = 10, censor_range = c(10, 40),
-											 verbose = FALSE)
+dm_guo <- DiffusionMap(guo, verbose = FALSE,
+                       censor_val = 10, censor_range = c(10, 40))
 plot(dm_guo,
-		 col = guo$num_cells, pch = 20)
+     col = guo$num_cells, pch = 20)
 
 
 
 
-sigmas <- find_sigmas(guo, censor_val = 10, censor_range = c(10, 40),
-                      verbose = FALSE)
+sigmas <- find_sigmas(guo, verbose = FALSE,
+                      censor_val = 10, censor_range = c(10, 40))
 par(lwd = 3)
 plot(sigmas,
-		 col           = palette()[[1]],
-		 highlight_col = palette()[[4]],
-		 line_col      = palette()[[6]],
-     rect_options = list(border = 'white'))
+    col           = palette()[[1]],
+    col_highlight = palette()[[4]],
+    col_line      = palette()[[6]])
 
 
 
 
-dm_guo_global <- DiffusionMap(guo, sigmas, censor_val = 10, censor_range = c(10, 40),
-                       verbose = FALSE)
+dm_guo_global <- DiffusionMap(guo, sigmas, verbose = FALSE,
+                              censor_val = 10, censor_range = c(10, 40))
 plot(dm_guo_global,
      col = guo$num_cells, pch = 20)
 

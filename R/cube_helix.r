@@ -10,8 +10,9 @@
 #' @param light    Lightest lightness (default: 0.85)
 #' @param dark     Darkest lightness (default: 0.15)
 #' @param reverse  logical. If TRUE, reverse lightness (default: FALSE)
-#' @param ...      parameters passed to \code{\link[ggplot2]{scale_discrete}} or \code{\link[ggplot2]{scale_continuous}}
 #' @param discrete If TRUE, return a discrete scale, if FALSE a continuous one (default: TRUE)
+#' @param guide    Type of scale guide to use. See \code{\link[ggplot2]{guides}}
+#' @param ...      parameters passed to \code{\link[ggplot2]{discrete_scale}} or \code{\link[ggplot2]{continuous_scale}}
 #' 
 #' @return A \code{character} vector of hex colors with length \code{n}
 #' 
@@ -19,9 +20,9 @@
 #' palette(cube_helix())
 #' image(matrix(1:6), col = 1:6, pch = 19, axes = FALSE)
 #' 
-#' cr <- colorRamp(cube_helix(12, r = 3))
+#' cr <- scales::colour_ramp(cube_helix(12, r = 3))
 #' r <- runif(100)
-#' plot(1:100, r, col = rgb(cr(r), max = 255), type = 'b', pch = 20)
+#' plot(1:100, r, col = cr(r), type = 'b', pch = 20)
 #' 
 #' @importFrom grDevices rgb
 #' @export

@@ -28,7 +28,7 @@
 #' colorlegend(color_data)
 #' 
 #' @importFrom graphics par rect segments text
-#' @importFrom grDevices colorRamp colorRampPalette palette
+#' @importFrom grDevices colorRampPalette palette
 #' @export
 colorlegend <- function(
 	col, pal = palette(), log = FALSE,
@@ -38,28 +38,20 @@ colorlegend <- function(
 	steps = 5, steps_color = 100,
 	digit = 2, left = FALSE,
 	...) {
-	if (is.double(col)) {
-		zval <- seq(min(col), max(col), length.out = steps)
-	} else if (is.factor(col)) {
-		zval <- factor(levels(col))
-	} else {
-		zval <- sort(unique(col))
-	}
+	zval <-
+		if      (is.double(col)) seq(min(col, na.rm = TRUE), max(col, na.rm = TRUE), length.out = steps)
+		else if (is.factor(col)) factor(levels(col))
+		else                     sort(unique(col))
 	
-	if (is.integer(zval))
-		zval_num <- seq_along(zval)
-	else if (is.numeric(zval))
-		zval_num <- zval
-	else if (is.factor(zval))
-		zval_num <- seq_along(zval)
-	else
-		zval_num <- as.integer(zval)
+	zval_num <-
+		if      (is.integer(zval)) seq_along(zval)
+		else if (is.numeric(zval)) zval
+		else if (is.factor(zval) || is.character(zval)) seq_along(zval)
+		else                       as.integer(zval)
 	
-	if (is.double(col)) {
-		zlim <- range(zval_num)
-	} else {
-		zlim <- c(min(zval_num) - .5, max(zval_num) + .5)
-	}
+	zlim <-
+		if (is.double(col)) range(zval_num)
+		else c(min(zval_num) - .5, max(zval_num) + .5)
 	
 	par(new = TRUE)
 	omar <- nmar <- par('mar')

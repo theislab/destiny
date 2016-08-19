@@ -37,6 +37,11 @@ distance(object) <- value
 
 optimal_sigma(object)
 }
+\arguments{
+\item{object}{Object from which to extract or to which to assign a value}
+
+\item{value}{Value to assign within an object}
+}
 \value{
 \code{eigenvalues} retrieves the numeric eigenvalues
 

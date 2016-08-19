@@ -6,7 +6,6 @@
 \alias{Sigmas class}
 \alias{Sigmas-class}
 \alias{Sigmas-methods}
-\alias{optimal_sigma}
 \alias{optimal_sigma,Sigmas-method}
 \alias{print,Sigmas-method}
 \alias{show,Sigmas-method}

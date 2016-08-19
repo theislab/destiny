@@ -29,6 +29,8 @@ Imports:
     VIM,
     proxy,
     igraph,
+    smoother,
+    scales,
     scatterplot3d
 LinkingTo: Rcpp, RcppEigen
 SystemRequirements: C++11
@@ -48,24 +50,24 @@ Collate:
     'RcppExports.R'
     'accessor-generics.r'
     'censoring.r'
-    'colorlegend.r'
-    'compat.r'
-    'cube_helix.r'
-    'destiny-package.r'
     's4-null-unions.r'
     'dist-matrix-coerce.r'
     'sigmas.r'
     'diffusionmap.r'
+    'dpt.r'
+    'coercion-methods.r'
+    'colorlegend.r'
+    'compat.r'
+    'cube_helix.r'
+    'destiny-package.r'
     'diffusionmap-methods-accession.r'
-    'diffusionmap-methods-coercion.r'
     'diffusionmap-methods-extraction.r'
     'diffusionmap-methods.r'
     'plothelpers.r'
     'diffusionmap-plotting.r'
-    'dpt.r'
     'dpt_branching.r'
     'dpt_helpers.r'
-    'dpt_methods.r'
+    'dpt_plotting.r'
     'eig_decomp.r'
     'utils.r'
     'expressionset-helpers.r'

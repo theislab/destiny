@@ -12,6 +12,7 @@ NULL
 #' @return an \link[Biobase]{ExpressionSet} object
 #' 
 #' @examples
+#' library(Biobase)
 #' df <- data.frame(Time  = seq_len(3), #integer column
 #'                  Actb  = c(0.05, 0.3, 0.8),
 #'                  Gapdh = c(0.2, 0.03, 0.1))
@@ -24,7 +25,6 @@ NULL
 #' @aliases as.ExpressionSet as.ExpressionSet-method as.ExpressionSet,data.frame-method read.ExpressionSet
 #' 
 #' @importFrom methods setGeneric .valueClassTest
-#' @importFrom Biobase exprs
 #' @name ExpressionSet helpers
 #' @export
 setGeneric('as.ExpressionSet', function(x, ...) standardGeneric('as.ExpressionSet'), valueClass = 'ExpressionSet')

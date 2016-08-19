@@ -2,7 +2,9 @@
 #' 
 #' Methods for external operations on diffusion maps
 #' 
-#' @seealso \link{DiffusionMap accessors}, \link{DiffusionMap extraction}, \link{DiffusionMap coercions} for more methods
+#' @param x,object  A \code{\link{DiffusionMap}}
+#' 
+#' @seealso \link{DiffusionMap accessors}, \link{DiffusionMap extraction}, \link{coercions} for more methods
 #' 
 #' @aliases DiffusionMap-methods
 #' print.DiffusionMap        show.DiffusionMap       

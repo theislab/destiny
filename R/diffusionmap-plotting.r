@@ -27,6 +27,7 @@ NULL
 #' @param interactive  Use \link[rgl]{plot3d} to plot instead of \link[scatterplot3d]{scatterplot3d}?
 #' @param draw_legend  logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)
 #' @param consec_col   If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})
+#' @param plot_more    Function without arguments that will be called while the plot margins are temporarily changed
 #' 
 #' @return The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.
 #' 
@@ -56,7 +57,8 @@ plot.DiffusionMap <- function(
 	legend_main = col_by, legend_opts = list(),
 	interactive = FALSE,
 	draw_legend = !is.null(col) && length(col) > 1 && !is.character(col),
-	consec_col = TRUE
+	consec_col = TRUE,
+	plot_more = function() NULL
 ) {
 	dif <- x
 	
@@ -156,6 +158,7 @@ plot.DiffusionMap <- function(
 			r2 <- range(point_data[, 2L])
 			tl <- 0
 		}
+		plot_more()
 		al <- if (axes && !box) 1 else 0
 		axis(1, r1, labels = ticks, lwd = al, lwd.ticks = tl)
 		axis(2, r2, labels = ticks, lwd = al, lwd.ticks = tl)
@@ -168,11 +171,13 @@ plot.DiffusionMap <- function(
 				rgl::bbox3d(xlen = nticks, ylen = nticks, zlen = nticks, front = axtype, back = axtype)
 			}
 			if (box) rgl::box3d()
+			rgl::bgplot3d(plot_more())
 		} else {
 			p <- scatterplot3d(
 				point_data, ..., color = col_plot, mar = mar,
 				axis = axes || box || ticks, lty.axis = if (axes || box) 'solid' else 'blank',
 				box = box, tick.marks = ticks)
+			plot_more()
 		}
 	} else stop(sprintf('dims is of wrong length (%s): Can only handle 2 or 3 dimensions', dims))
 	

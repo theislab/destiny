@@ -7,6 +7,7 @@ emptyplot <- function(xlim = c(0, 1), ylim = xlim, asp = 1, frame.plot = FALSE, 
 }
 
 #' @importFrom grDevices rgb palette
+#' @importFrom scales colour_ramp rescale
 continuous_colors <- function(vals, pal = palette(), limits = NULL, levels = 100) {
 	if (is.function(pal))
 		pal <- pal(levels)
@@ -14,13 +15,7 @@ continuous_colors <- function(vals, pal = palette(), limits = NULL, levels = 100
 	if (is.null(limits))
 		limits <- range(vals, na.rm = TRUE)
 	
-	ramp <- colorRamp(pal, space = 'Lab')
-	scaled <- (vals - limits[[1]]) / diff(limits)
+	ramp <- colour_ramp(pal)
 	
-	col_rgb <- ramp(scaled)
-	within_limits <- !is.na(col_rgb[, 1])
-	
-	colors <- rep(NA_character_, length(vals))
-	colors[within_limits] <- rgb(col_rgb[within_limits, ], maxColorValue = 255)
-	colors
+	ramp(rescale(vals, from = limits))
 }
