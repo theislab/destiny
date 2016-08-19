@@ -41,10 +41,13 @@ Convert a \code{\link{DiffusionMap}} or \code{\link{DPT}} object to other classe
 \link[ggplot2]{fortify} is a ggplot2 generic allowing a diffusion map to be used as \code{data} parameter in \link[ggplot2]{ggplot} or \link[ggplot2]{qplot}.
 }
 \examples{
+library(Biobase)
 data(guo)
 dm <- DiffusionMap(guo)
-dm$DC1   # A diffusion component
-dm$Actb  # A gene expression
+classes <- vapply(as.data.frame(dm), class, character(1L))
+stopifnot(all(classes[paste0('DC', 1:20)] == 'numeric'))
+stopifnot(all(classes[featureNames(guo) ] == 'numeric'))
+stopifnot(all(classes[   varLabels(guo) ] == c('factor', 'integer')))
 
 }
 \seealso{

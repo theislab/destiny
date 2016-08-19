@@ -30,11 +30,20 @@ plot.DPT(x, branches = 1L, dcx = 1L, dcy = 2L, w_width = 0.1,
 
 \item{col_tip}{Color for branch tips}
 
-\item{...}{Graphical parameters supplied to the plotting calls}
+\item{...}{Graphical parameters supplied to \code{\link{plot.DiffusionMap}}}
 
 \item{y, branches}{Numeric Branch IDs. The first one will be used as the start of the DPT, subsequent ones for the path(s).}
 }
 \description{
 Plots diffusion components from a Diffusion Map and the accompanying Diffusion Pseudo Time (\code{\link{DPT}})
+}
+\examples{
+data(guo_norm)
+dm <- DiffusionMap(guo_norm)
+dpt <- DPT(dm, branching = TRUE)
+plot(dpt)
+plot(dpt, 2L,  col_by = 'branch')
+plot(dpt, 1:3, col_by = 'num_cells')
+
 }
 

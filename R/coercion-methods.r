@@ -19,10 +19,13 @@ NULL
 #' @seealso \link{DiffusionMap accessors}, \link{DiffusionMap extraction}, \link{DiffusionMap methods} for more methods
 #' 
 #' @examples
+#' library(Biobase)
 #' data(guo)
 #' dm <- DiffusionMap(guo)
-#' dm$DC1   # A diffusion component
-#' dm$Actb  # A gene expression
+#' classes <- vapply(as.data.frame(dm), class, character(1L))
+#' stopifnot(all(classes[paste0('DC', 1:20)] == 'numeric'))
+#' stopifnot(all(classes[featureNames(guo) ] == 'numeric'))
+#' stopifnot(all(classes[   varLabels(guo) ] == c('factor', 'integer')))
 #' 
 #' @aliases
 #' as.data.frame.DiffusionMap as.data.frame,DiffusionMap-method fortify.DiffusionMap
@@ -57,7 +60,7 @@ setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE
 	data.frame(
 		Branch = x@branch,
 		Parent = x@parent,
-		Tip    = lWhich(x@tips, len = length(x@branch)),
+		Tip    = l_which(x@tips, len = length(x@branch)),
 		row.names = row.names),
 	as.data.frame(x@dpt, row.names = row.names, optional = optional, ...),
 	as.data.frame(x@dm,  row.names = row.names, optional = optional, ...)))

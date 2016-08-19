@@ -13,9 +13,17 @@ NULL
 #' @param col_map     Color Map for DPT coloring. Sequence of colors or a function accepting the number of colors to create
 #' @param col_path    Colors for the path or a function creating n colors
 #' @param col_tip     Color for branch tips
-#' @param ...         Graphical parameters supplied to the plotting calls
+#' @param ...         Graphical parameters supplied to \code{\link{plot.DiffusionMap}}
 #' 
 #' @aliases plot,DPT,numeric-method plot,DPT,missing-method
+#' 
+#' @examples
+#' data(guo_norm)
+#' dm <- DiffusionMap(guo_norm)
+#' dpt <- DPT(dm, branching = TRUE)
+#' plot(dpt)
+#' plot(dpt, 2L,  col_by = 'branch')
+#' plot(dpt, 1:3, col_by = 'num_cells')
 #' 
 #' @importFrom graphics plot points
 #' @importFrom methods is setMethod

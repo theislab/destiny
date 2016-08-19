@@ -12,7 +12,7 @@
 #' @param step.size,steps,sample.rows,early.exit                                     Corresponding \code{\link{find_sigmas}} parameters
 #' @param object                                                                     Corresponding \code{\link{optimal_sigma}} parameters
 #' 
-#' @name destiny 1 compatibility
+#' @name destiny-deprecated
 #' @importFrom BiocGenerics updateObject
 #' @keywords internal
 #' @export
@@ -42,35 +42,35 @@ DiffusionMapCompat <- function(
 	verbose = verbose
 )
 
-#' @name destiny 1 compatibility
+#' @name destiny-deprecated
 #' @export
 cube.helix <- function(n = 6, start = 0, r = .4, hue = .8, gamma = 1, light = .85, dark = .15, reverse = FALSE) {
 	.Deprecated('cube_helix')
 	cube_helix(n, start, r, hue, gamma, light, dark, reverse)
 }
 
-#' @name destiny 1 compatibility
+#' @name destiny-deprecated
 #' @export
 dm.predict <- function(dm, new.data, verbose = FALSE) {
 	.Deprecated('dm_predict')
 	dm_predict(updateObject(dm), new.data, verbose)
 }
 
-#' @name destiny 1 compatibility
+#' @name destiny-deprecated
 #' @export
 eig.decomp <- function(M, n.eigs, sym = isSymmetric(M)) {
 	.Deprecated('eig_decomp')
 	eig_decomp(M, n.eigs, sym)
 }
 
-#' @name destiny 1 compatibility
+#' @name destiny-deprecated
 #' @export
 find.dm.k <- function(n, min.k = 100L, small = 1000L, big = 10000L) {
 	.Deprecated('find_dm_k')
 	find_dm_k(n, min.k, small, big)
 }
 
-#' @name destiny 1 compatibility
+#' @name destiny-deprecated
 #' @export
 find.sigmas <- function(
 	data,
@@ -100,9 +100,16 @@ find.sigmas <- function(
 	)
 }
 
-#' @name destiny 1 compatibility
+#' @name destiny-deprecated
 #' @export
 optimal.sigma <- function(object) {
 	.Deprecated('optimal_sigma')
 	optimal_sigma(updateObject(object))
+}
+
+#' @name destiny-deprecated
+#' @export 
+lWhich <- function(idx, nms = seq_len(len), len = length(nms), useNames = TRUE) {
+	.Deprecated('l_which')
+	l_which(idx, nms, len, useNames)
 }

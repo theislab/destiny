@@ -7,6 +7,13 @@
 #' 
 #' @seealso \link[base]{Extract}, \code{\link[base]{names}} for the generics. \link{DiffusionMap accessors}, \link{DiffusionMap methods}, \link{coercions} for more methods
 #' 
+#' @examples
+#' data(guo)
+#' dm <- DiffusionMap(guo)
+#' dm$DC1        # A diffusion component
+#' dm$Actb       # A gene expression vector
+#' dm$num_cells  # Phenotype metadata
+#' 
 #' @name DiffusionMap extraction
 #' @aliases names.DiffusionMap names,DiffusionMap-method $,DiffusionMap-method [[,DiffusionMap,character,missing-method
 NULL

@@ -36,7 +36,7 @@ setGeneric('as.ExpressionSet', function(x, ...) standardGeneric('as.ExpressionSe
 #' @export
 setMethod('as.ExpressionSet', 'data.frame', function(x, annotation_cols = !sapply(x, is.double)) {
 	if (!is.logical(annotation_cols))
-		annotation_cols <- lWhich(annotation_cols, names(x))
+		annotation_cols <- l_which(annotation_cols, names(x))
 	
 	assayData <- t(as.matrix(x[!annotation_cols]))
 	phenoData <- AnnotatedDataFrame(x[annotation_cols])

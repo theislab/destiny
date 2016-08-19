@@ -42,4 +42,11 @@ If unspecified: \describe{
 
 \item{\code{dm}}{\code{\link{DiffusionMap}} used to create this DPT object}
 }}
+\examples{
+data(guo_norm)
+dm <- DiffusionMap(guo_norm)
+dpt <- DPT(dm, branching = TRUE)
+str(dpt)
+
+}
 

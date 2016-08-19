@@ -23,6 +23,12 @@
 #' 
 #' @aliases DPT-class
 #' 
+#' @examples
+#' data(guo_norm)
+#' dm <- DiffusionMap(guo_norm)
+#' dpt <- DPT(dm, branching = TRUE)
+#' str(dpt)
+#' 
 #' @importFrom methods setClass
 #' @name DPT
 #' @export

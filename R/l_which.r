@@ -13,11 +13,11 @@
 #' @return Logical vector of length \code{len} or the same length as \code{nms}
 #' 
 #' @examples
-#' all(lWhich(2, len = 3) == c(FALSE, TRUE, FALSE))
-#' all(lWhich(c('a', 'c'), letters[1:3]) == c(TRUE, FALSE, TRUE))
+#' all(l_which(2, len = 3L) == c(FALSE, TRUE, FALSE))
+#' all(l_which(c('a', 'c'), letters[1:3]) == c(TRUE, FALSE, TRUE))
 #' 
 #' @export
-lWhich <- function(idx, nms = seq_len(len), len = length(nms), useNames = TRUE) {
+l_which <- function(idx, nms = seq_len(len), len = length(nms), useNames = TRUE) {
 	rv <- logical(len)
 	if (is.character(nms)) # we need names here so that rv[idx] works
 		names(rv) <- nms
