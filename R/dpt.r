@@ -61,9 +61,6 @@ DPT <- function(
 		# cut it into three branches
 		branch <- lapply(seq_len(3), function(b) branchcut(dpt, bid, b))
 		
-		unassigned <- setdiff(seq_len(3L), Reduce(union, branch, integer()))
-		print(unassigned)
-		
 		new(
 			'DPT',
 			branch = organize_branches(branch),
