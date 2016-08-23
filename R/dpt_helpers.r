@@ -5,7 +5,11 @@
 #' @param dm  A \code{\link{DiffusionMap}} object
 #' 
 #' @export
-random_root <- function(dm) which.max(dpt_to_cell(dm, sample.int(length(dm@d_norm), 1)))
+random_root <- function(dm) {
+	propagations <- propagation_matrix(dm)
+	random_idx <- sample.int(length(dm@d_norm), 1L)
+	which.max(dpt_to_cell(propagations, random_idx))
+}
 
 
 #' Find tips in a DiffusionMap object
@@ -16,12 +20,18 @@ random_root <- function(dm) which.max(dpt_to_cell(dm, sample.int(length(dm@d_nor
 #' @return An integer vector of length 3
 #' 
 #' @export
-find_tips <- function(dm, root = random_root(dm)) {
+find_tips <- function(dm, root = random_root(dm))
+	tipstats(propagation_matrix(dm), root)$tips
+
+tipstats <- function(propagations, root) {
 	x <- root
-	dx <- dpt_to_cell(dm, x)
+	dx <- dpt_to_cell(propagations, x)
 	y <- which.max(dx)
-	dy <- dpt_to_cell(dm, y)
+	dy <- dpt_to_cell(propagations, y)
 	z <- which.max(dx + dy)
 	
-	c(x, y, z)
+	list(
+		tips = c(x, y, z),
+		dx = dx, dy = dy,
+		g = max(dx + dy) / min(dx + dy))
 }

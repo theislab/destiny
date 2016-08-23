@@ -52,17 +52,17 @@ plot.DPT <- function(
 	
 	plot_more <- function() {
 		for (b in seq_along(branches[-1])) {
-			idx <- dpt@branch %in% c(branches[[1]], branches[[b + 1L]])
+			idx <- dpt@branch[, 1] %in% c(branches[[1]], branches[[b + 1L]])
 			path <- average_path(pt_vec[idx], evs[idx, c(dcx, dcy)], w_width)
 			points(path[, 1L], path[, 2L], 'l', col = col_path[[b]])
 		}
 		
-		points(evs[dpt@tips, dcx], evs[dpt@tips, dcy], col = col_tip)
+		points(evs[dpt@tips[, 1], dcx], evs[dpt@tips[, 1], dcy], col = col_tip)
 	}
 	
 	args <- switch(col_by,
 		dpt    = list(col = pt_vec, pal = col_map, draw_legend = TRUE, legend_main = 'DPT'),
-		branch = list(col = dpt@branch,            draw_legend = TRUE, legend_main = 'Branch'),
+		branch = list(col = dpt@branch[, 1],       draw_legend = TRUE, legend_main = 'Branch'),
 		         list(col_by = col_by))
 	
 	do.call(plot, c(list(dpt@dm, c(dcx, dcy), plot_more = plot_more), args, ...))

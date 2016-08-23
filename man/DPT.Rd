@@ -6,28 +6,17 @@
 \alias{DPT-class}
 \title{Diffusion Pseudo Time}
 \usage{
-DPT(dm, branching = length(tips) > 1L, tips = if (branching) find_tips(dm,
-  root) else root, root = random_root(dm))
+DPT(dm, branching = TRUE, root = random_root(dm))
 }
 \arguments{
 \item{dm}{A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT}
 
 \item{branching}{Detect a branching? (\code{TRUE} or \code{FALSE})}
 
-\item{tips}{Tip cell indices for each branch (integer vector of length 1 or 3)}
-
 \item{root}{The root index from which to calculate the DPTs (integer of length 1)}
 }
 \description{
 Create pseudotime ordering and assigns cell to one of three branches
-}
-\details{
-All parameters are optional, but at least \code{branching} or \code{tips} has to be there.
-If unspecified: \describe{
- \item{\code{root}}{will be the furthest cell from a random one}
-	\item{\code{branching}}{will be \code{TRUE} if multiple \code{tips} are specified}
- \item{\code{tips}}{will be \code{root} and (\code{if (branching)}) the most distant cells from it}
-}
 }
 \section{Slots}{
 
@@ -35,8 +24,6 @@ If unspecified: \describe{
 \item{\code{branch}}{Branch labels for each cell; \code{1:3} or \code{NA} for undeceided}
 
 \item{\code{parent}}{\code{\link{matrix}} of parent branches (may be of \code{ncol(...) == 0})}
-
-\item{\code{tips}}{Indices of tips}
 
 \item{\code{dpt}}{Diffusion pseudotime in respect to the root cell (and other tips if \code{branching == TRUE})}
 
