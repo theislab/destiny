@@ -17,7 +17,7 @@ auto_branch <- function(propagations, stats, nmin = 10L, gmin = 1.1) {
 			return(NULL)
 		
 		sub_props <- as(propagations[idx_sub, idx_sub, drop = FALSE], 'symmetricMatrix')
-		sub_root <- abs_idx_to_sub_idx(idx_sub, stats$tips[[s]])
+		sub_root  <- abs_idx_to_sub_idx(idx_sub, stats$tips[[s]])
 		sub_stats <- tipstats(sub_props, sub_root)
 		if (sub_stats$g < gmin)
 			return(NULL)
@@ -27,25 +27,27 @@ auto_branch <- function(propagations, stats, nmin = 10L, gmin = 1.1) {
 	
 	# add dpt columns to dpt and a level column to branch/tips if any branch was subdivided
 	nonnull_subs <- vapply(subs, Negate(is.null), logical(1L))
-	n_sublevels <- Reduce(function(so_far, sub) max(so_far, ncol(sub$branch)), subs[nonnull_subs], 0L)
 	if (any(nonnull_subs)) {
+		n_sublevels <- do.call(max, lapply(subs[nonnull_subs], function(s) ncol(s$branch)))
+		
 		branch <- cbind(branch, matrix(NA_integer_, n, n_sublevels))
-		tips   <- cbind(tips,   matrix(FALSE,       n, n_sublevels))
-	}
-	
-	for (s in which(nonnull_subs)) {
-		sub <- subs[[s]]
-		idx_sub <- branches[[s]]
+		tips   <- cbind(tips,   matrix(NA,          n, n_sublevels))
 		
-		d_new <- matrix(NA_real_, n, ncol(sub$dpt))
-		d_new[idx_sub, ] <- sub$dpt
-		dpt <- cbind(dpt, d_new)
-		
-		idx_newcol <- seq(ncol(branch) - n_sublevels + 1L, length.out = ncol(sub$branch))
-		
-		branch_offset <- max(branch[, ncol(branch) - 1L], na.rm = TRUE)
-		branch[idx_sub, idx_newcol] <- sub$branch + branch_offset
-		tips[  idx_sub, idx_newcol] <- TRUE
+		for (s in which(nonnull_subs)) {
+			sub <- subs[[s]]
+			idx_sub <- branches[[s]]
+			
+			d_new <- matrix(NA_real_, n, ncol(sub$dpt))
+			d_new[idx_sub, ] <- sub$dpt
+			dpt <- cbind(dpt, d_new)
+			
+			idx_newcol <- seq.int(ncol(branch) - n_sublevels + 1L, length.out = ncol(sub$branch))
+			stopifnot(ncol(sub$branch) == ncol(sub$tips))
+			
+			branch_offset <- max(branch, na.rm = TRUE)
+			branch[idx_sub, idx_newcol] <- sub$branch + branch_offset
+			tips[  idx_sub, idx_newcol] <- sub$tips
+		}
 	}
 	
 	stopifnot(ncol(branch) == ncol(tips))
