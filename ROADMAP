@@ -1,11 +1,12 @@
 Roadmap
 =======
 
-* Local sigma
-* CV-based gene preselection
+* 2.0 Vignette
+
+	* CV-based gene preselection (scLVM)
+
 * DPT
 
-	* Autotree
 	* Density-over-DPT plots
 	* Heat Map
 
