@@ -65,7 +65,7 @@ plot.DPT <- function(
 		branch = list(col = dpt@branch[, 1],       draw_legend = TRUE, legend_main = 'Branch'),
 		         list(col_by = col_by))
 	
-	do.call(plot, c(list(dpt@dm, c(dcx, dcy), plot_more = plot_more), args, ...))
+	do.call(plot, c(list(dpt@dm, c(dcx, dcy), plot_more = plot_more), args, list(...)))
 }
 
 #' @name plot.DPT
