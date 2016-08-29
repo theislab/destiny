@@ -46,23 +46,23 @@ DPT <- function(dm, branching = TRUE, root = random_root(dm)) {
 		stats <- tipstats(propagations, root)
 		branches <- auto_branch(propagations, stats)
 		
-		new(
-			'DPT',
-			branch = branches$branch,
-			tips = branches$tips,
-			dpt = branches$dpt,
-			dm = dm)
+		branch <- branches$branch
+		tips <- branches$tips
+		dpt <- branches$dpt
 	} else {
 		propagations <- propagation_matrix(dm)
 		dpt_to_root <- dpt_to_cell(propagations, root)
 		
-		new(
-			'DPT',
-			branch = rep(1L, n),
-			tips = root,
-			dpt = matrix(dpt_to_root, n, 1L),
-			dm = dm)
+		branch <- matrix(rep(1L, n), 1L, n)
+		tips <- root
+		dpt <- matrix(dpt_to_root, n, 1L)
 	}
+	
+	colnames(branch) <- paste0('Branch', seq_len(ncol(branch)))
+	colnames(tips)   <- paste0('Tips',   seq_len(ncol(tips)))
+	colnames(dpt)    <- paste0('DPT',    seq_len(ncol(dpt)))
+	
+	new('DPT', branch = branch, tips = tips, dpt = dpt, dm = dm)
 }
 
 

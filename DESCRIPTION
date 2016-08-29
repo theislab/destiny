@@ -65,6 +65,7 @@ Collate:
     'diffusionmap-methods.r'
     'plothelpers.r'
     'diffusionmap-plotting.r'
+    'dpt-methods.r'
     'dpt_branching.r'
     'dpt_helpers.r'
     'dpt_plotting.r'

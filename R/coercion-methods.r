@@ -57,13 +57,8 @@ fortify.DiffusionMap <- function(model, data, ...) as.data.frame(model, ...)
 #' @name coercions
 #' @export
 setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE, ...) cbind(
-	data.frame(
-		Branch = x@branch,
-		Parent = x@parent,
-		Tip    = l_which(x@tips, len = length(x@branch)),
-		row.names = row.names),
-	as.data.frame(x@dpt, row.names = row.names, optional = optional, ...),
-	as.data.frame(x@dm,  row.names = row.names, optional = optional, ...)))
+	as.data.frame(cbind(x@branch, x@tips, x@dpt), row.names = row.names, optional = optional, ...),
+	as.data.frame(x@dm,                           row.names = row.names, optional = optional, ...)))
 
 
 #' @usage fortify.DPT(model, data, ...)

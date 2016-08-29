@@ -56,6 +56,8 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{consec_col}{If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})}
 
+\item{col_na}{Color for \code{NA} in the data. specify \code{NA} to hide.}
+
 \item{plot_more}{Function without arguments that will be called while the plot margins are temporarily changed}
 }
 \value{
