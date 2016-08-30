@@ -7,9 +7,9 @@
 \alias{plot.DPT}
 \title{Plot DPT}
 \usage{
-plot.DPT(x, branches = 1L, dcx = 1L, dcy = 2L, w_width = 0.1,
-  col_by = "dpt", col_path = palette(), col_tip = "red", ...,
-  pal = switch(col_by, dpt = cube.helix, palette()))
+plot.DPT(x, root = 1L, branches = integer(0L), dcx = 1L, dcy = 2L,
+  w_width = 0.1, col_by = "dpt", col_path = palette(), col_tip = "red",
+  ..., pal = switch(col_by, dpt = cube_helix, palette()))
 
 \S4method{plot}{DPT,numeric}(x, y, ...)
 
@@ -17,6 +17,8 @@ plot.DPT(x, branches = 1L, dcx = 1L, dcy = 2L, w_width = 0.1,
 }
 \arguments{
 \item{x}{A \code{\link{DPT}} object.}
+
+\item{branches}{Numeric Branch IDs. Are used as target(s) for the path(s) to draw.}
 
 \item{dcx, dcy}{The dimensions to use from the DiffusionMap}
 
@@ -32,7 +34,8 @@ plot.DPT(x, branches = 1L, dcx = 1L, dcy = 2L, w_width = 0.1,
 
 \item{pal}{Palette to use for coloring the points}
 
-\item{y, branches}{Numeric Branch IDs. The first one will be used as the start of the DPT, subsequent ones for the path(s).}
+\item{y, root}{Root branch ID. Will be used as the start of the DPT.
+(If longer than size 1, will be interpreted as \code{c(root, branches)})}
 }
 \description{
 Plots diffusion components from a Diffusion Map and the accompanying Diffusion Pseudo Time (\code{\link{DPT}})
@@ -42,8 +45,8 @@ data(guo_norm)
 dm <- DiffusionMap(guo_norm)
 dpt <- DPT(dm, branching = TRUE)
 plot(dpt)
-plot(dpt, 2L,  col_by = 'branch')
-plot(dpt, 1:3, col_by = 'num_cells')
+plot(dpt, 2L,      col_by = 'branch')
+plot(dpt, 1L, 2:3, col_by = 'num_cells')
 
 }
 
