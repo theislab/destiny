@@ -8,8 +8,8 @@
 \title{Plot DPT}
 \usage{
 plot.DPT(x, branches = 1L, dcx = 1L, dcy = 2L, w_width = 0.1,
-  col_by = "dpt", col_map = cube_helix, col_path = palette(),
-  col_tip = "red", ...)
+  col_by = "dpt", col_path = palette(), col_tip = "red", ...,
+  pal = switch(col_by, dpt = cube.helix, palette()))
 
 \S4method{plot}{DPT,numeric}(x, y, ...)
 
@@ -24,13 +24,13 @@ plot.DPT(x, branches = 1L, dcx = 1L, dcy = 2L, w_width = 0.1,
 
 \item{col_by}{Color by 'dpt' (DPT starting at \code{branches[[1]]}), 'branch', or a veriable of the data.}
 
-\item{col_map}{Color Map for DPT coloring. Sequence of colors or a function accepting the number of colors to create}
-
 \item{col_path}{Colors for the path or a function creating n colors}
 
 \item{col_tip}{Color for branch tips}
 
 \item{...}{Graphical parameters supplied to \code{\link{plot.DiffusionMap}}}
+
+\item{pal}{Palette to use for coloring the points}
 
 \item{y, branches}{Numeric Branch IDs. The first one will be used as the start of the DPT, subsequent ones for the path(s).}
 }

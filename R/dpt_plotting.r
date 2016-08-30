@@ -10,10 +10,10 @@ NULL
 #' @param dcx,dcy     The dimensions to use from the DiffusionMap
 #' @param w_width     Window width for smoothing the path (see \code{\link[smoother]{smth.gaussian}})
 #' @param col_by      Color by 'dpt' (DPT starting at \code{branches[[1]]}), 'branch', or a veriable of the data.
-#' @param col_map     Color Map for DPT coloring. Sequence of colors or a function accepting the number of colors to create
 #' @param col_path    Colors for the path or a function creating n colors
 #' @param col_tip     Color for branch tips
 #' @param ...         Graphical parameters supplied to \code{\link{plot.DiffusionMap}}
+#' @param pal         Palette to use for coloring the points
 #' 
 #' @aliases plot,DPT,numeric-method plot,DPT,missing-method
 #' 
@@ -34,18 +34,14 @@ plot.DPT <- function(
 	dcx = 1L, dcy = 2L,
 	w_width = .1,
 	col_by = 'dpt',
-	col_map = cube_helix,
 	col_path = palette(),
 	col_tip = 'red',
-	...
+	...,
+	pal = switch(col_by, dpt = cube_helix, palette())
 ) {
 	dpt <- x
 	branches <- as.integer(branches)
 	stopifnot(length(dcx) == 1L, length(dcy) == 1L)
-	
-	if (!is.function(col_map)) {
-		col_map <- colour_ramp(col_map)
-	}
 	
 	evs <- eigenvectors(dpt@dm)
 	pt_vec <- dpt@dpt[, branches[[1L]]]
@@ -61,11 +57,11 @@ plot.DPT <- function(
 	}
 	
 	args <- switch(col_by,
-		dpt    = list(col = pt_vec, pal = col_map, draw_legend = TRUE, legend_main = 'DPT'),
-		branch = list(col = dpt@branch[, 1],       draw_legend = TRUE, legend_main = 'Branch'),
+		dpt    = list(col = pt_vec,          draw_legend = TRUE, legend_main = 'DPT'),
+		branch = list(col = dpt@branch[, 1], draw_legend = TRUE, legend_main = 'Branch'),
 		         list(col_by = col_by))
 	
-	do.call(plot, c(list(dpt@dm, c(dcx, dcy), plot_more = plot_more), args, list(...)))
+	do.call(plot, c(list(dpt@dm, c(dcx, dcy), plot_more = plot_more, pal = pal), args, list(...)))
 }
 
 #' @name plot.DPT
