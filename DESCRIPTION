@@ -48,6 +48,7 @@ biocViews: CellBiology,
     Visualization
 Collate:
     'RcppExports.R'
+    'aaa.r'
     'accessor-generics.r'
     'censoring.r'
     's4-null-unions.r'
