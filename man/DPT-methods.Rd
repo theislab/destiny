@@ -3,13 +3,36 @@
 \docType{methods}
 \name{DPT methods}
 \alias{DPT methods}
+\alias{branch_divide}
 \title{DPT methods}
 \usage{
+branch_divide(dpt, divide = integer(0L))
+
 \S4method{dataset}{DPT}(object)
 
 \S4method{dataset}{DPT}(object) <- value
 }
+\arguments{
+\item{dpt, object}{DPT object}
+
+\item{divide}{Vector of branch numbers to use for division}
+
+\item{value}{Value of slot to set}
+}
+\value{
+\code{branch_divide} and \code{dataset<-} return the changed object, \code{dataset} the extracted data.
+}
 \description{
-Methods for the \link{DPT} class
+Methods for the \link{DPT} class. \code{branch_divide} subdivides branches for plotting (see the examples).
+}
+\examples{
+data(guo_norm)
+dpt <- DPT(DiffusionMap(guo_norm))
+dpt_9_branches <- branch_divide(dpt, 1:3)
+plot(dpt_9_branches, col_by = 'branches')
+
+}
+\seealso{
+\link{plot.DPT} uses \code{branch_divide} for its \code{divide} argument.
 }
 

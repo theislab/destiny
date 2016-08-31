@@ -10,7 +10,7 @@ NULL
 #'                    (If longer than size 1, will be interpreted as \code{c(root, branches)})
 #' @param branches    Numeric Branch IDs. Are used as target(s) for the path(s) to draw.
 #' @param dcx,dcy     The dimensions to use from the DiffusionMap
-#' @param divide      If \code{col_by = 'branch'}, this specifies which branches to divide.
+#' @param divide      If \code{col_by = 'branch'}, this specifies which branches to divide. (see \code{\link{branch_divide}})
 #' @param w_width     Window width for smoothing the path (see \code{\link[smoother]{smth.gaussian}})
 #' @param col_by      Color by 'dpt' (DPT starting at \code{branches[[1]]}), 'branch', or a veriable of the data.
 #' @param col_path    Colors for the path or a function creating n colors
@@ -60,7 +60,7 @@ plot.DPT <- function(
 	evs <- eigenvectors(dpt@dm)[, dcs]
 	pt_vec <- dpt@dpt[, root]
 	
-	flat <- divide_flatten(dpt, divide)
+	dpt_flat <- branch_divide(dpt, divide)
 	
 	plot_more <- function(p) {
 		for (b in seq_along(branches)) {
@@ -69,41 +69,22 @@ plot.DPT <- function(
 			points(path[, 1L], path[, 2L], 'l', col = col_path[[b]])
 		}
 		
-		tips <- evs[flat$tips, ]
+		tips <- evs[dpt_flat@tips[, 1], ]
 		if (is.null(p)) {  # 2d plot
 			points(tips, col = col_tip)
 		} else if (is.list(p)) {  # scatterplot3d
 			p$points3d(tips, col = col_tip)
-		} else if (is.vector(test)) {  # rgl
+		} else if (is.vector(p)) {  # rgl
 			rgl::points3d(tips, col = col_tip)
 		} else stop('unknown p passed to plot_more (class: ', class(p), ')')
 	}
 	
 	args <- switch(col_by,
-		dpt    = list(col = pt_vec,      draw_legend = TRUE, legend_main = 'DPT'),
-		branch = list(col = flat$branch, draw_legend = TRUE, legend_main = 'Branch'),
+		dpt    = list(col = pt_vec,               draw_legend = TRUE, legend_main = 'DPT'),
+		branch = list(col = dpt_flat@branch[, 1], draw_legend = TRUE, legend_main = 'Branch'),
 		         list(col_by = col_by))
 	
 	do.call(plot, c(list(dpt@dm, dcs, plot_more = plot_more, pal = pal), args, list(...)))
-}
-
-divide_flatten <- function(dpt, divide) {
-	flat <- data.frame(
-		branch = dpt@branch[, 1],
-		tips   = dpt@tips  [, 1])
-	
-	for (b in divide) {
-		replace_idx <- flat$branch == b & !is.na(flat$branch)
-		if (!any(replace_idx)) stop('invalid branch to divide ', b, ' not in ', unique(flat$branch))
-		
-		precursor_levels <- which(dpt@branch[replace_idx, ] == b, TRUE)[, 2]
-		new_lvl <- max(precursor_levels) + 1L
-		
-		flat$branch[replace_idx] <- dpt@branch[replace_idx, new_lvl]
-		flat$tips  [replace_idx] <- dpt@tips  [replace_idx, new_lvl]
-	}
-	
-	flat
 }
 
 #' @name plot.DPT

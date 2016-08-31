@@ -21,7 +21,7 @@ plot.DPT(x, root = 1L, branches = integer(0L), dcs = 1:2,
 
 \item{branches}{Numeric Branch IDs. Are used as target(s) for the path(s) to draw.}
 
-\item{divide}{If \code{col_by = 'branch'}, this specifies which branches to divide.}
+\item{divide}{If \code{col_by = 'branch'}, this specifies which branches to divide. (see \code{\link{branch_divide}})}
 
 \item{w_width}{Window width for smoothing the path (see \code{\link[smoother]{smth.gaussian}})}
 
