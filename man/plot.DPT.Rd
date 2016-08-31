@@ -7,9 +7,10 @@
 \alias{plot.DPT}
 \title{Plot DPT}
 \usage{
-plot.DPT(x, root = 1L, branches = integer(0L), dcx = 1L, dcy = 2L,
-  w_width = 0.1, col_by = "dpt", col_path = palette(), col_tip = "red",
-  ..., pal = switch(col_by, dpt = cube_helix, palette()))
+plot.DPT(x, root = 1L, branches = integer(0L), dcs = 1:2,
+  divide = integer(0L), w_width = 0.1, col_by = "dpt",
+  col_path = palette(), col_tip = "red", ..., pal = switch(col_by, dpt =
+  cube_helix, palette()))
 
 \S4method{plot}{DPT,numeric}(x, y, ...)
 
@@ -20,7 +21,7 @@ plot.DPT(x, root = 1L, branches = integer(0L), dcx = 1L, dcy = 2L,
 
 \item{branches}{Numeric Branch IDs. Are used as target(s) for the path(s) to draw.}
 
-\item{dcx, dcy}{The dimensions to use from the DiffusionMap}
+\item{divide}{If \code{col_by = 'branch'}, this specifies which branches to divide.}
 
 \item{w_width}{Window width for smoothing the path (see \code{\link[smoother]{smth.gaussian}})}
 
@@ -36,6 +37,8 @@ plot.DPT(x, root = 1L, branches = integer(0L), dcx = 1L, dcy = 2L,
 
 \item{y, root}{Root branch ID. Will be used as the start of the DPT.
 (If longer than size 1, will be interpreted as \code{c(root, branches)})}
+
+\item{dcx, dcy}{The dimensions to use from the DiffusionMap}
 }
 \description{
 Plots diffusion components from a Diffusion Map and the accompanying Diffusion Pseudo Time (\code{\link{DPT}})

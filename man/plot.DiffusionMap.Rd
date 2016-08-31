@@ -12,7 +12,7 @@ plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
   ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
   legend_opts = list(), interactive = FALSE, draw_legend = !is.null(col)
   && length(col) > 1 && !is.character(col), consec_col = TRUE,
-  col_na = "grey", plot_more = function() NULL)
+  col_na = "grey", plot_more = identity)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 
@@ -34,7 +34,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{col_new}{If \code{new_dcs} is given, it will take on this color. (default: red)}
 
-\item{pal}{Palette used to map the \code{col} vector to colors (default: \link{palette}\code{()})}
+\item{pal}{Palette used to map the \code{col} vector to colors (default: \code{\link{palette}()})}
 
 \item{...}{Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})}
 
@@ -58,7 +58,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{col_na}{Color for \code{NA} in the data. specify \code{NA} to hide.}
 
-\item{plot_more}{Function without arguments that will be called while the plot margins are temporarily changed}
+\item{plot_more}{Function that will be called while the plot margins are temporarily changed (its argument is the rgl or scatterplot3d instance or NULL)}
 }
 \value{
 The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.

@@ -16,7 +16,7 @@ NULL
 #' @param col_by       Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color
 #' @param col_limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
 #' @param col_new      If \code{new_dcs} is given, it will take on this color. (default: red)
-#' @param pal          Palette used to map the \code{col} vector to colors (default: \link{palette}\code{()})
+#' @param pal          Palette used to map the \code{col} vector to colors (default: \code{\link{palette}()})
 #' @param ...          Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})
 #' @param mar          Bottom, left, top, and right margins (default: \code{par(mar)})
 #' @param ticks        logical. If TRUE, show axis ticks (default: FALSE)
@@ -28,7 +28,7 @@ NULL
 #' @param draw_legend  logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)
 #' @param consec_col   If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})
 #' @param col_na       Color for \code{NA} in the data. specify \code{NA} to hide.
-#' @param plot_more    Function without arguments that will be called while the plot margins are temporarily changed
+#' @param plot_more    Function that will be called while the plot margins are temporarily changed (its argument is the rgl or scatterplot3d instance or NULL)
 #' 
 #' @return The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.
 #' 
@@ -59,7 +59,7 @@ plot.DiffusionMap <- function(
 	interactive = FALSE,
 	draw_legend = !is.null(col) && length(col) > 1 && !is.character(col),
 	consec_col = TRUE, col_na = 'grey',
-	plot_more = function() NULL
+	plot_more = identity
 ) {
 	dif <- x
 	
@@ -160,7 +160,7 @@ plot.DiffusionMap <- function(
 			r2 <- range(point_data[, 2L])
 			tl <- 0
 		}
-		plot_more()
+		plot_more(p)
 		al <- if (axes && !box) 1 else 0
 		axis(1, r1, labels = ticks, lwd = al, lwd.ticks = tl)
 		axis(2, r2, labels = ticks, lwd = al, lwd.ticks = tl)
@@ -173,13 +173,13 @@ plot.DiffusionMap <- function(
 				rgl::bbox3d(xlen = nticks, ylen = nticks, zlen = nticks, front = axtype, back = axtype)
 			}
 			if (box) rgl::box3d()
-			rgl::bgplot3d(plot_more())
+			plot_more(p)
 		} else {
 			p <- scatterplot3d(
 				point_data, ..., color = col_plot, mar = mar,
 				axis = axes || box || ticks, lty.axis = if (axes || box) 'solid' else 'blank',
 				box = box, tick.marks = ticks)
-			plot_more()
+			plot_more(p)
 		}
 	} else stop(sprintf('dims is of wrong length (%s): Can only handle 2 or 3 dimensions', dims))
 	
