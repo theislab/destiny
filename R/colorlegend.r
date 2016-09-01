@@ -35,16 +35,19 @@ colorlegend <- function(
 	col, pal = palette(), log = FALSE,
 	posx = c(.9, .93), posy = c(.05, .9),
 	main = NULL, cex_main = par('cex.sub'),
+	cex_axis = par('cex.axis'),
 	col_main = par('col.sub'), col_lab = par('col.lab'),
 	steps = 5, steps_color = 100,
 	digit = 2, left = FALSE,
 	...,
 	cex.main = NULL,
+	cex.axis = NULL,
 	col.main = NULL,
 	col.lab = NULL) {
 	draw_ticks <- as.logical(steps)
 	if (!draw_ticks) steps <- 2L
 	if (!is.null(cex.main)) cex_main <- cex.main
+	if (!is.null(cex.axis)) cex_axis <- cex.axis
 	if (!is.null(col.main)) col_main <- col.main
 	if (!is.null(col.lab))  col_lab  <- col.lab
 	
@@ -118,7 +121,7 @@ colorlegend <- function(
 	if (draw_ticks) {
 		if (is.double(col))
 			segments(xmax, Ypos, xpos + Dx * .25, Ypos, col = col_lab)
-		text(xpos, Ypos, zval_txt, pos = pos, col = col_lab, ...)
+		text(xpos, Ypos, zval_txt, pos = pos, col = col_lab, cex = cex_axis, ...)
 	}
 	
 	if (!is.null(main)) {

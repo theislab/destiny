@@ -6,9 +6,10 @@
 \usage{
 colorlegend(col, pal = palette(), log = FALSE, posx = c(0.9, 0.93),
   posy = c(0.05, 0.9), main = NULL, cex_main = par("cex.sub"),
-  col_main = par("col.sub"), col_lab = par("col.lab"), steps = 5,
-  steps_color = 100, digit = 2, left = FALSE, ..., cex.main = NULL,
-  col.main = NULL, col.lab = NULL)
+  cex_axis = par("cex.axis"), col_main = par("col.sub"),
+  col_lab = par("col.lab"), steps = 5, steps_color = 100, digit = 2,
+  left = FALSE, ..., cex.main = NULL, cex.axis = NULL, col.main = NULL,
+  col.lab = NULL)
 }
 \arguments{
 \item{col}{Vector of factor, integer, or double used to determine the ticks.}
