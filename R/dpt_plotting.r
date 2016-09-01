@@ -8,7 +8,7 @@ NULL
 #' @param x           A \code{\link{DPT}} object.
 #' @param y,root      Root branch ID. Will be used as the start of the DPT.
 #'                    (If longer than size 1, will be interpreted as \code{c(root, branches)})
-#' @param branches    Numeric Branch IDs. Are used as target(s) for the path(s) to draw.
+#' @param paths_to    Numeric Branch IDs. Are used as target(s) for the path(s) to draw.
 #' @param dcx,dcy     The dimensions to use from the DiffusionMap
 #' @param divide      If \code{col_by = 'branch'}, this specifies which branches to divide. (see \code{\link{branch_divide}})
 #' @param w_width     Window width for smoothing the path (see \code{\link[smoother]{smth.gaussian}})
@@ -17,6 +17,7 @@ NULL
 #' @param col_tip     Color for branch tips
 #' @param ...         Graphical parameters supplied to \code{\link{plot.DiffusionMap}}
 #' @param pal         Palette to use for coloring the points
+#' @param draw_legend,legend_main  See corresponding parameters in \code{\link{plot.DiffusionMap}}
 #' 
 #' @aliases plot,DPT,numeric-method plot,DPT,missing-method
 #' 
@@ -34,7 +35,7 @@ NULL
 #' @export
 plot.DPT <- function(
 	x, root = 1L,
-	branches = integer(0L),
+	paths_to = integer(0L),
 	dcs = 1:2,
 	divide = integer(0L),
 	w_width = .1,
@@ -42,18 +43,20 @@ plot.DPT <- function(
 	col_path = palette(),
 	col_tip = 'red',
 	...,
-	pal = switch(col_by, dpt = cube_helix, palette())
+	pal = switch(col_by, dpt = cube_helix, palette()),
+	draw_legend = TRUE,
+	legend_main = switch(col_by, dpt = 'DPT', branch = 'Branch', col_by)
 ) {
 	dpt <- x
 	root     <- as.integer(root)
-	branches <- as.integer(branches)
+	paths_to <- as.integer(paths_to)
 	if (length(root) < 1L) stop('root needs to be specified')
-	if (length(root) > 1L && length(branches) > 0L)
-		stop('(length(root), length(branches)) needs to be (1, 0-n) or (2-n, 0), but is (', length(root), ', ', length(branches), ')')
+	if (length(root) > 1L && length(paths_to) > 0L)
+		stop('(length(root), length(paths_to)) needs to be (1, 0-n) or (2-n, 0), but is (', length(root), ', ', length(paths_to), ')')
 	stopifnot(length(dcs) %in% 2:3)
 	
-	if (length(root) > 1L && length(branches) == 0L) {
-		branches <- root[-1]
+	if (length(root) > 1L && length(paths_to) == 0L) {
+		paths_to <- root[-1]
 		root <- root[[1]]
 	}
 	
@@ -63,8 +66,8 @@ plot.DPT <- function(
 	dpt_flat <- branch_divide(dpt, divide)
 	
 	plot_more <- function(p) {
-		for (b in seq_along(branches)) {
-			idx <- dpt@branch[, 1] %in% c(root, branches[[b]])
+		for (b in seq_along(paths_to)) {
+			idx <- dpt@branch[, 1] %in% c(root, paths_to[[b]])
 			path <- average_path(pt_vec[idx], evs[idx, ], w_width)
 			points(path[, 1L], path[, 2L], 'l', col = col_path[[b]])
 		}
@@ -79,12 +82,16 @@ plot.DPT <- function(
 		} else stop('unknown p passed to plot_more (class: ', class(p), ')')
 	}
 	
-	args <- switch(col_by,
-		dpt    = list(col = pt_vec,               draw_legend = TRUE, legend_main = 'DPT'),
-		branch = list(col = dpt_flat@branch[, 1], draw_legend = TRUE, legend_main = 'Branch'),
-		         list(col_by = col_by))
+	args <- c(
+		list(dpt@dm, dcs, plot_more = plot_more, pal = pal, draw_legend = draw_legend, legend_main = legend_main),
+		switch(col_by,
+			dpt    = list(col = pt_vec),
+			branch = list(col = dpt_flat@branch[, 1]),
+			list(col_by = col_by)),
+		list(...))
 	
-	do.call(plot, c(list(dpt@dm, dcs, plot_more = plot_more, pal = pal), args, list(...)))
+	if (!identical(Sys.getenv('LOG_LEVEL'), '')) message('Args:\n', paste(capture.output(print(args)), collapse = '\n'))
+	do.call(plot, args)
 }
 
 #' @name plot.DPT

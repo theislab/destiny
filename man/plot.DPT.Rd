@@ -7,10 +7,11 @@
 \alias{plot.DPT}
 \title{Plot DPT}
 \usage{
-plot.DPT(x, root = 1L, branches = integer(0L), dcs = 1:2,
+plot.DPT(x, root = 1L, paths_to = integer(0L), dcs = 1:2,
   divide = integer(0L), w_width = 0.1, col_by = "dpt",
   col_path = palette(), col_tip = "red", ..., pal = switch(col_by, dpt =
-  cube_helix, palette()))
+  cube_helix, palette()), draw_legend = TRUE, legend_main = switch(col_by,
+  dpt = "DPT", branch = "Branch", col_by))
 
 \S4method{plot}{DPT,numeric}(x, y, ...)
 
@@ -19,7 +20,7 @@ plot.DPT(x, root = 1L, branches = integer(0L), dcs = 1:2,
 \arguments{
 \item{x}{A \code{\link{DPT}} object.}
 
-\item{branches}{Numeric Branch IDs. Are used as target(s) for the path(s) to draw.}
+\item{paths_to}{Numeric Branch IDs. Are used as target(s) for the path(s) to draw.}
 
 \item{divide}{If \code{col_by = 'branch'}, this specifies which branches to divide. (see \code{\link{branch_divide}})}
 
@@ -34,6 +35,8 @@ plot.DPT(x, root = 1L, branches = integer(0L), dcs = 1:2,
 \item{...}{Graphical parameters supplied to \code{\link{plot.DiffusionMap}}}
 
 \item{pal}{Palette to use for coloring the points}
+
+\item{draw_legend, legend_main}{See corresponding parameters in \code{\link{plot.DiffusionMap}}}
 
 \item{y, root}{Root branch ID. Will be used as the start of the DPT.
 (If longer than size 1, will be interpreted as \code{c(root, branches)})}
