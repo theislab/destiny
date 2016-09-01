@@ -116,7 +116,8 @@ colorlegend <- function(
 	
 	Ypos <- ymin + (zval_num - zmin)/(zmax - zmin) * dy
 	if (draw_ticks) {
-		segments(xmax, Ypos, xpos + Dx * .25, Ypos, col = col_lab)
+		if (is.double(col))
+			segments(xmax, Ypos, xpos + Dx * .25, Ypos, col = col_lab)
 		text(xpos, Ypos, zval_txt, pos = pos, col = col_lab, ...)
 	}
 	
