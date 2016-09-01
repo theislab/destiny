@@ -10,14 +10,15 @@
 #' @param posx         Left and right borders of the color bar relative to plot area (Vector of length 2; 0-1)
 #' @param posy         Bottom and top borders of color bar relative to plot area (Vector of length 2; 0-1)
 #' @param main         Legend title
-#' @param cex_main     Size of legend title font
-#' @param col_main     Color of legend title
-#' @param col_lab      Color of tick or category labels
-#' @param steps        Number of labels in case of a continuous axis
+#' @param cex_main     Size of legend title font (default: subtitle font size \code{\link{par}('cex.sub')})
+#' @param col_main     Color of legend title (default: subtitle color \code{\link{par}('col.sub')})
+#' @param col_lab      Color of tick or category labels (default: axis color \code{\link{par}('col.lab')})
+#' @param steps        Number of labels in case of a continuous axis. If 0 or FALSE, draw no ticks
 #' @param steps_color  Number of gradient samples in case of continuous axis
 #' @param digit        Number of digits for continuous axis labels
 #' @param left         logical. If TRUE, invert posx
 #' @param ...          Additional parameters for the \link[graphics]{text} call used for labels
+#' @param cex.main,col.main,col.lab  For compatibility with \code{\link{par}}
 #' 
 #' @return This function is called for the side effect of adding a colorbar to a plot and returns nothing/NULL.
 #' 
@@ -33,11 +34,20 @@
 colorlegend <- function(
 	col, pal = palette(), log = FALSE,
 	posx = c(.9, .93), posy = c(.05, .9),
-	main = NULL, cex_main = 1,
-	col_main = par('fg'), col_lab = par('fg'),
+	main = NULL, cex_main = par('cex.sub'),
+	col_main = par('col.sub'), col_lab = par('col.lab'),
 	steps = 5, steps_color = 100,
 	digit = 2, left = FALSE,
-	...) {
+	...,
+	cex.main = NULL,
+	col.main = NULL,
+	col.lab = NULL) {
+	draw_ticks <- as.logical(steps)
+	if (!draw_ticks) steps <- 2L
+	if (!is.null(cex.main)) cex_main <- cex.main
+	if (!is.null(col.main)) col_main <- col.main
+	if (!is.null(col.lab))  col_lab  <- col.lab
+	
 	zval <-
 		if      (is.double(col)) seq(min(col, na.rm = TRUE), max(col, na.rm = TRUE), length.out = steps)
 		else if (is.factor(col)) factor(levels(col))
@@ -105,8 +115,10 @@ colorlegend <- function(
 	zval_txt <- if (is.double(col)) formatC(zval, digits = digit, format = 'fg') else zval
 	
 	Ypos <- ymin + (zval_num - zmin)/(zmax - zmin) * dy
-	segments(xmax, Ypos, xpos + Dx * .25, Ypos, col = col_lab)
-	text(xpos, Ypos, zval_txt, pos = pos, col = col_lab, ...)
+	if (draw_ticks) {
+		segments(xmax, Ypos, xpos + Dx * .25, Ypos, col = col_lab)
+		text(xpos, Ypos, zval_txt, pos = pos, col = col_lab, ...)
+	}
 	
 	if (!is.null(main)) {
 		for (i in length(main):1)

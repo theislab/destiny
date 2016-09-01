@@ -5,9 +5,10 @@
 \title{Color legend}
 \usage{
 colorlegend(col, pal = palette(), log = FALSE, posx = c(0.9, 0.93),
-  posy = c(0.05, 0.9), main = NULL, cex_main = 1, col_main = par("fg"),
-  col_lab = par("fg"), steps = 5, steps_color = 100, digit = 2,
-  left = FALSE, ...)
+  posy = c(0.05, 0.9), main = NULL, cex_main = par("cex.sub"),
+  col_main = par("col.sub"), col_lab = par("col.lab"), steps = 5,
+  steps_color = 100, digit = 2, left = FALSE, ..., cex.main = NULL,
+  col.main = NULL, col.lab = NULL)
 }
 \arguments{
 \item{col}{Vector of factor, integer, or double used to determine the ticks.}
@@ -22,13 +23,13 @@ colorlegend(col, pal = palette(), log = FALSE, posx = c(0.9, 0.93),
 
 \item{main}{Legend title}
 
-\item{cex_main}{Size of legend title font}
+\item{cex_main}{Size of legend title font (default: subtitle font size \code{\link{par}('cex.sub')})}
 
-\item{col_main}{Color of legend title}
+\item{col_main}{Color of legend title (default: subtitle color \code{\link{par}('col.sub')})}
 
-\item{col_lab}{Color of tick or category labels}
+\item{col_lab}{Color of tick or category labels (default: axis color \code{\link{par}('col.lab')})}
 
-\item{steps}{Number of labels in case of a continuous axis}
+\item{steps}{Number of labels in case of a continuous axis. If 0 or FALSE, draw no ticks}
 
 \item{steps_color}{Number of gradient samples in case of continuous axis}
 
@@ -37,6 +38,8 @@ colorlegend(col, pal = palette(), log = FALSE, posx = c(0.9, 0.93),
 \item{left}{logical. If TRUE, invert posx}
 
 \item{...}{Additional parameters for the \link[graphics]{text} call used for labels}
+
+\item{cex.main, col.main, col.lab}{For compatibility with \code{\link{par}}}
 }
 \value{
 This function is called for the side effect of adding a colorbar to a plot and returns nothing/NULL.
