@@ -25,7 +25,7 @@ NULL
 #' @param legend_main  Title of legend. (default: nothing unless col_by is given)
 #' @param legend_opts  Other \link{colorlegend} options (default: empty list)
 #' @param interactive  Use \link[rgl]{plot3d} to plot instead of \link[scatterplot3d]{scatterplot3d}?
-#' @param draw_legend  logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)
+#' @param draw_legend  logical. If TRUE, draw color legend (default: TRUE if \code{col_by} is given or \code{col} is given and a vector to be mapped)
 #' @param consec_col   If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})
 #' @param col_na       Color for \code{NA} in the data. specify \code{NA} to hide.
 #' @param plot_more    Function that will be called while the plot margins are temporarily changed (its argument is the rgl or scatterplot3d instance or NULL)
@@ -57,7 +57,7 @@ plot.DiffusionMap <- function(
 	box = FALSE,
 	legend_main = col_by, legend_opts = list(),
 	interactive = FALSE,
-	draw_legend = !is.null(col) && length(col) > 1 && !is.character(col),
+	draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
 	consec_col = TRUE, col_na = 'grey',
 	plot_more = identity
 ) {

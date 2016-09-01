@@ -10,9 +10,9 @@
 plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
   col_limits = NULL, col_new = "red", pal = palette(), ..., mar = NULL,
   ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
-  legend_opts = list(), interactive = FALSE, draw_legend = !is.null(col)
-  && length(col) > 1 && !is.character(col), consec_col = TRUE,
-  col_na = "grey", plot_more = identity)
+  legend_opts = list(), interactive = FALSE,
+  draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
+  consec_col = TRUE, col_na = "grey", plot_more = identity)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 
@@ -52,7 +52,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{interactive}{Use \link[rgl]{plot3d} to plot instead of \link[scatterplot3d]{scatterplot3d}?}
 
-\item{draw_legend}{logical. If TRUE, draw color legend (default: TRUE if \code{col} is given and a vector to be mapped)}
+\item{draw_legend}{logical. If TRUE, draw color legend (default: TRUE if \code{col_by} is given or \code{col} is given and a vector to be mapped)}
 
 \item{consec_col}{If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})}
 
