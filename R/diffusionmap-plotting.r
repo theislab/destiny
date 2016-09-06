@@ -175,6 +175,9 @@ plot.DiffusionMap <- function(
 			if (box) rgl::box3d()
 			plot_more(p)
 		} else {
+			if (!ticks) {  # -> scatterplot3d's pretty() should not mess things up
+				point_data <- apply(point_data, 2L, scales::rescale)
+			}
 			p <- scatterplot3d(
 				point_data, ..., color = col_plot, mar = mar,
 				axis = axes || box || ticks, lty.axis = if (axes || box) 'solid' else 'blank',
