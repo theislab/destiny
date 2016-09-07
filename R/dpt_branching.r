@@ -1,4 +1,4 @@
-auto_branch <- function(propagations, stats, nmin = 10L, gmin = 1.1) {
+auto_branch <- function(propagations, stats, w_width, nmin = 10L, gmin = 1.1) {
 	n <- ncol(propagations)
 	
 	stopifnot(n >= nmin)
@@ -6,7 +6,7 @@ auto_branch <- function(propagations, stats, nmin = 10L, gmin = 1.1) {
 	
 	# initialize one level (branch, tips) and three branches (dpt)
 	dpt <- dpt_from_tips(propagations, stats$tips)
-	branches <- cut_branches(dpt)  # list ov vectors of numeric indices
+	branches <- cut_branches(dpt, w_width)  # list ov vectors of numeric indices
 	branch <- matrix(idx_list_to_vec(branches, n), n, 1L)
 	tips <- matrix(logical(n), n, 1L)
 	tips[stats$tips, 1L] <- TRUE
@@ -22,7 +22,7 @@ auto_branch <- function(propagations, stats, nmin = 10L, gmin = 1.1) {
 		if (sub_stats$g < gmin)
 			return(NULL)
 		
-		auto_branch(sub_props, sub_stats, nmin, gmin)
+		auto_branch(sub_props, sub_stats, w_width, nmin, gmin)
 	})
 	
 	# add dpt columns to dpt and a level column to branch/tips if any branch was subdivided
@@ -79,16 +79,16 @@ dpt_from_tips <- function(propagations, tips) {
 }
 
 
-cut_branches <- function(dpt) {
+cut_branches <- function(dpt, w_width) {
 	bid <- apply(dpt, 2, order)
-	branches <- lapply(seq_len(3), function(b) branchcut(dpt, bid, b))
+	branches <- lapply(seq_len(3), function(b) branchcut(dpt, bid, b, w_width))
 	organize_branches(branches)
 }
 
 
 #' @importFrom smoother smth.gaussian
 #' @export
-branchcut <- function(dpt, bid, b) {
+branchcut <- function(dpt, bid, b, w_width) {
 	n <- nrow(bid)
 	all_branches <- seq_len(3L)
 	
@@ -119,7 +119,7 @@ branchcut <- function(dpt, bid, b) {
 		k_l/s1 - k_r/(n - s1)
 	}, double(1L))
 	
-	kcor <- smth.gaussian(kcor, 5L)
+	kcor <- smth.gaussian(kcor, w_width)
 	cut <- which.max(kcor)
 	
 	b3_idxs[seq_len(cut)]

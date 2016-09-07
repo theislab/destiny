@@ -6,7 +6,7 @@
 \alias{DPT-class}
 \title{Diffusion Pseudo Time}
 \usage{
-DPT(dm, branching = TRUE, root = random_root(dm))
+DPT(dm, branching = TRUE, root = random_root(dm), ..., w_width = 0.1)
 }
 \arguments{
 \item{dm}{A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT}
@@ -14,6 +14,8 @@ DPT(dm, branching = TRUE, root = random_root(dm))
 \item{branching}{Detect a branching? (\code{TRUE} or \code{FALSE})}
 
 \item{root}{The root index from which to calculate the DPTs (integer of length 1)}
+
+\item{w_width}{Window width to use for deciding the branch cutoff}
 }
 \description{
 Create pseudotime ordering and assigns cell to one of three branches
