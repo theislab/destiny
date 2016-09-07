@@ -1,3 +1,6 @@
+#' @include utils.r
+NULL
+
 #' Update old \link{DiffusionMap}s or \link{Sigmas} to a newer version
 #' 
 #' @param object  A \link{DiffusionMap} or \link{Sigmas} object created with an older destiny release
@@ -17,21 +20,21 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 	if (verbose) 
 		message("updateObject(object = 'DiffusionMap')")
 	
-	if (!.hasSlot(object, 'distance'))
+	if (!hasattr(object, 'distance'))
 		slot(object, 'distance', check = FALSE) <- 'euclidean'
 	
-	if (!.hasSlot(object, 'transitions'))
+	if (!hasattr(object, 'transitions'))
 		slot(object, 'transitions', check = FALSE) <- NULL
 	
-	if (!.hasSlot(object, 'd.norm'))  # upgrade name and nonexistence
-		slot(object, 'd_norm', check = FALSE) <- rep(NA, length(object@d))
+	if (!hasattr(object, 'd.norm'))  # upgrade only nonexistence, name later
+		slot(object, 'd.norm', check = FALSE) <- rep(NA_real_, length(object@d))
 	
-	if (!.hasSlot(object, 'n_local'))
+	if (!hasattr(object, 'n_local'))
 		slot(object, 'n_local', check = FALSE) <- 5L
 	
 	object <- update_slot_names(object, c('data.env', 'd.norm', 'density.norm', 'censor.val', 'censor.range', 'missing.range'))
 	
-	object@sigmas <- updateObject(object@sigmas)
+	slot(object, 'sigmas', check = FALSE) <- updateObject(object@sigmas)
 	
 	validObject(object)
 	object
@@ -51,11 +54,14 @@ setMethod('updateObject', 'Sigmas', function(object, ..., verbose = FALSE) {
 
 
 update_slot_names <- function(object, old_slots, new_slots = sub('.', '_', old_slots, fixed = TRUE)) {
-	if (.hasSlot(object, old_slots[[1]]))
-		mapply(function(old_slot, new_slot) {
-			slot(object, new_slot, check = FALSE) <- slot(object, old_slot)
-			NULL
-		}, old_slots, new_slots)
+	atts <- attributes(object)
+	update_idx <- old_slots %in% names(atts)
+	if (!length(update_idx)) return(object)
+	
+	slot_idx <- na.omit(match(old_slots[update_idx], names(atts)))
+	
+	names(atts)[slot_idx] <- new_slots[update_idx]
+	attributes(object) <- atts
 	
 	object
 }

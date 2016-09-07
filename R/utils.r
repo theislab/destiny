@@ -56,3 +56,6 @@ propagation_matrix <- function(dm) {
 	
 	dm@data_env$propagations
 }
+
+
+hasattr <- function(x, which) !is.null(attr(x, which, exact = TRUE))
