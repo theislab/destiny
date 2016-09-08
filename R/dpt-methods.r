@@ -1,3 +1,6 @@
+#' @include dpt.r
+NULL
+
 #' DPT methods
 #' 
 #' Methods for the \link{DPT} class. \code{branch_divide} subdivides branches for plotting (see the examples).
