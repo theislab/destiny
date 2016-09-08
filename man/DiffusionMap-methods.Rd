@@ -21,6 +21,6 @@
 Methods for external operations on diffusion maps
 }
 \seealso{
-\link{DiffusionMap accessors}, \link{DiffusionMap extraction}, \link{coercions} for more methods
+\link{DiffusionMap accessors}, \link{extractions}, \link{coercions} for more methods
 }
 

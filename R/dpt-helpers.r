@@ -23,12 +23,12 @@ random_root <- function(dm) {
 find_tips <- function(dm, root = random_root(dm))
 	tipstats(propagation_matrix(dm), root)$tips
 
-tipstats <- function(propagations, root) {
-	x <- root
+tipstats <- function(propagations, tips) {
+	x <- tips[[1L]]
 	dx <- dpt_to_cell(propagations, x)
-	y <- which.max(dx)
+	y <- if (length(tips) >= 2L) tips[[2L]] else which.max(dx)
 	dy <- dpt_to_cell(propagations, y)
-	z <- which.max(dx + dy)
+	z <- if (length(tips) == 3L) tips[[3L]] else which.max(dx + dy)
 	
 	list(
 		tips = c(x, y, z),

@@ -4,7 +4,7 @@
 #' 
 #' @param x,object  A \code{\link{DiffusionMap}}
 #' 
-#' @seealso \link{DiffusionMap accessors}, \link{DiffusionMap extraction}, \link{coercions} for more methods
+#' @seealso \link{DiffusionMap accessors}, \link{extractions}, \link{coercions} for more methods
 #' 
 #' @aliases DiffusionMap-methods
 #' print.DiffusionMap        show.DiffusionMap       

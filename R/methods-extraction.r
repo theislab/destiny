@@ -1,7 +1,7 @@
-#' DiffusionMap extraction methods
+#' Extraction methods
 #' 
-#' @param x       \code{\link{DiffusionMap}} object
-#' @param i,name  Name of a diffusion component (DC1,...), or column from the data
+#' @param x       \code{\link{DiffusionMap}} or \code{\link{DPT}}  object
+#' @param i,name  Name of a diffusion component 'DCx', 'DPTx', 'Branch' or column from the data
 #' @param j       N/A
 #' @param ...     ignored
 #' 
@@ -14,14 +14,18 @@
 #' dm$Actb       # A gene expression vector
 #' dm$num_cells  # Phenotype metadata
 #' 
-#' @name DiffusionMap extraction
+#' dpt <- DPT(dm)
+#' dm$Branch
+#' dm$DPT1
+#' 
+#' @name extractions
 #' @aliases names.DiffusionMap names,DiffusionMap-method $,DiffusionMap-method [[,DiffusionMap,character,missing-method
 NULL
 
 
 #' @importFrom methods is
 #' @importFrom Biobase featureNames varLabels
-#' @name DiffusionMap extraction
+#' @name extractions
 #' @export
 setMethod('names', 'DiffusionMap', function(x) {
 	dta <- dataset(x)
@@ -32,11 +36,14 @@ setMethod('names', 'DiffusionMap', function(x) {
 	}
 	c(colnames(eigenvectors(x)), data_names)
 })
+#' @name extractions
+#' @export
+setMethod('names', 'DPT', function(x) c(colnames(x@dpt), 'Branch', names(x@dm)))
 
 
 #' @importFrom methods is
 #' @importFrom Biobase exprs featureNames
-#' @name DiffusionMap extraction
+#' @name extractions
 #' @export
 setMethod('[[', c('DiffusionMap', 'character', 'missing'), function(x, i, j, ...) {
 	dta <- if (grepl('^DC\\d+$', i)) eigenvectors(x) else dataset(x)
@@ -48,8 +55,21 @@ setMethod('[[', c('DiffusionMap', 'character', 'missing'), function(x, i, j, ...
 		dta[[i]]
 	}
 })
+#' @name extractions
+#' @export
+setMethod('[[', c('DPT', 'character', 'missing'), function(x, i, j, ...) {
+	if (identical(i, 'dpt')) i <- 'DPT1'
+	if (i %in% colnames(x@dpt)) {
+		x@dpt[, i]
+	} else if (identical(i, 'Branch') || identical(i, 'branch')) {
+		x@branch[, 1L]
+	} else x@dm[[i]]
+})
 
 
-#' @name DiffusionMap extraction
+#' @name extractions
 #' @export
 setMethod('$', 'DiffusionMap', function(x, name) x[[name]])
+#' @name extractions
+#' @export
+setMethod('$', 'DPT', function(x, name) x[[name]])

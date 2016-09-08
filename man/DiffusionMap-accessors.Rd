@@ -60,6 +60,6 @@ optimal_sigma(dm)
 
 }
 \seealso{
-\link{DiffusionMap extraction}, \link{DiffusionMap methods}, \link{coercions} for more methods
+\link{extractions}, \link{DiffusionMap methods}, \link{coercions} for more methods
 }
 

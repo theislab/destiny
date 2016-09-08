@@ -17,7 +17,6 @@ NULL
 #' @param col_tip     Color for branch tips
 #' @param ...         Graphical parameters supplied to \code{\link{plot.DiffusionMap}}
 #' @param pal         Palette to use for coloring the points
-#' @param draw_legend,legend_main  See corresponding parameters in \code{\link{plot.DiffusionMap}}
 #' 
 #' @aliases plot,DPT,numeric-method plot,DPT,missing-method
 #' 
@@ -43,11 +42,10 @@ plot.DPT <- function(
 	col_path = palette(),
 	col_tip = 'red',
 	...,
-	pal = switch(col_by, dpt = cube_helix, palette()),
-	draw_legend = TRUE,
-	legend_main = switch(col_by, dpt = 'DPT', branch = 'Branch', col_by)
+	pal = if (is.double(x[[col_by]])) cube_helix else palette(),
+	draw_legend = TRUE
 ) {
-	dpt <- x
+	dpt      <- x
 	root     <- as.integer(root)
 	paths_to <- as.integer(paths_to)
 	if (length(root) < 1L) stop('root needs to be specified')
@@ -83,10 +81,11 @@ plot.DPT <- function(
 	}
 	
 	args <- c(
-		list(dpt@dm, dcs, plot_more = plot_more, pal = pal, draw_legend = draw_legend, legend_main = legend_main),
+		list(dpt@dm, dcs, plot_more = plot_more, pal = pal, draw_legend = draw_legend),
 		switch(col_by,
 			dpt    = list(col = pt_vec),
-			branch = list(col = dpt_flat@branch[, 1]),
+			branch = ,
+			Branch = list(col = dpt_flat@branch[, 1]),
 			list(col_by = col_by)),
 		list(...))
 	

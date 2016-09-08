@@ -16,7 +16,7 @@ NULL
 #' 
 #' @return An object of the desired class
 #' 
-#' @seealso \link{DiffusionMap accessors}, \link{DiffusionMap extraction}, \link{DiffusionMap methods} for more methods
+#' @seealso \link{DiffusionMap accessors}, \link{extractions}, \link{DiffusionMap methods} for more methods
 #' 
 #' @examples
 #' library(Biobase)

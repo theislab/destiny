@@ -2,10 +2,9 @@
 #'
 #' Create pseudotime ordering and assigns cell to one of three branches
 #' 
-#' @param dm           A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT
-#' @param branching    Detect a branching? (\code{TRUE} or \code{FALSE})
-#' @param root         The root index from which to calculate the DPTs (integer of length 1)
-#' @param w_width      Window width to use for deciding the branch cutoff
+#' @param dm       A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT
+#' @param tips     The cell index/indices from which to calculate the DPT(s) (integer of length 1-3)
+#' @param w_width  Window width to use for deciding the branch cutoff
 #' 
 #' @slot branch  Branch labels for each cell; \code{1:3} or \code{NA} for undeceided
 #' @slot parent  \code{\link{matrix}} of parent branches (may be of \code{ncol(...) == 0})
@@ -36,34 +35,23 @@ setClass(
 
 #' @name DPT
 #' @export
-DPT <- function(dm, branching = TRUE, root = random_root(dm), ..., w_width = .1) {
+DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be of class DiffusionMap, not ', class(dm))
+	if (!length(tips) %in% 1:3) stop('you need to specify 1-3 tips, got ', length(tips))
 	
-	n <- length(dm@d_norm)
-	stopifnot(is.logical(branching), length(branching) == 1L)
+	propagations <- propagation_matrix(dm)
+	stats <- tipstats(propagations, tips)
+	branches <- auto_branch(propagations, stats, w_width)
 	
-	if (branching) {
-		propagations <- propagation_matrix(dm)
-		stats <- tipstats(propagations, root)
-		branches <- auto_branch(propagations, stats, w_width)
-		
-		branch <- branches$branch
-		tips <- branches$tips
-		dpt <- branches$dpt
-	} else {
-		propagations <- propagation_matrix(dm)
-		dpt_to_root <- dpt_to_cell(propagations, root)
-		
-		branch <- matrix(rep(1L, n), 1L, n)
-		tips <- root
-		dpt <- matrix(dpt_to_root, n, 1L)
-	}
+	branch  <- branches$branch
+	tip_mat <- branches$tips
+	dpt     <- branches$dpt
 	
-	colnames(branch) <- paste0('Branch', seq_len(ncol(branch)))
-	colnames(tips)   <- paste0('Tips',   seq_len(ncol(tips)))
-	colnames(dpt)    <- paste0('DPT',    seq_len(ncol(dpt)))
+	colnames(branch)  <- paste0('Branch', seq_len(ncol(branch)))
+	colnames(tip_mat) <- paste0('Tips',   seq_len(ncol(tip_mat)))
+	colnames(dpt)     <- paste0('DPT',    seq_len(ncol(dpt)))
 	
-	new('DPT', branch = branch, tips = tips, dpt = dpt, dm = dm)
+	new('DPT', branch = branch, tips = tip_mat, dpt = dpt, dm = dm)
 }
 
 
