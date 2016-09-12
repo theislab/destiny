@@ -42,8 +42,8 @@ branch_divide <- function(dpt, divide = integer(0L)) {
 	}
 	
 	vacant_levels <- apply(dpt@branch, 2L, function(col) all(is.na(col)))
-	dpt@branch[, vacant_levels] <- NULL
-	dpt@tips  [, vacant_levels] <- NULL
+	dpt@branch <- dpt@branch[, !vacant_levels]
+	dpt@tips   <- dpt@tips  [, !vacant_levels]
 	
 	dpt
 }
