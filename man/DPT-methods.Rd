@@ -4,6 +4,8 @@
 \name{DPT methods}
 \alias{DPT methods}
 \alias{branch_divide}
+\alias{dataset,DPT-method}
+\alias{dataset<-,DPT-method}
 \title{DPT methods}
 \usage{
 branch_divide(dpt, divide = integer(0L))
@@ -29,7 +31,7 @@ Methods for the \link{DPT} class. \code{branch_divide} subdivides branches for p
 data(guo_norm)
 dpt <- DPT(DiffusionMap(guo_norm))
 dpt_9_branches <- branch_divide(dpt, 1:3)
-plot(dpt_9_branches, col_by = 'branches')
+plot(dpt_9_branches, col_by = 'branch')
 
 }
 \seealso{

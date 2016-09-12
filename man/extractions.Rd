@@ -2,10 +2,14 @@
 % Please edit documentation in R/methods-extraction.r
 \docType{methods}
 \name{extractions}
+\alias{$,DPT-method}
 \alias{$,DiffusionMap-method}
+\alias{[[,DPT,character,missing-method}
 \alias{[[,DiffusionMap,character,missing-method}
 \alias{extractions}
+\alias{names,DPT-method}
 \alias{names,DiffusionMap-method}
+\alias{names.DPT}
 \alias{names.DiffusionMap}
 \title{Extraction methods}
 \usage{

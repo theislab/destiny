@@ -19,7 +19,8 @@
 #' dm$DPT1
 #' 
 #' @name extractions
-#' @aliases names.DiffusionMap names,DiffusionMap-method $,DiffusionMap-method [[,DiffusionMap,character,missing-method
+#' @aliases names.DPT names,DPT-method          $,DPT-method          [[,DPT,character,missing-method
+#' names.DiffusionMap names,DiffusionMap-method $,DiffusionMap-method [[,DiffusionMap,character,missing-method
 NULL
 
 

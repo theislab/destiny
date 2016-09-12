@@ -4,10 +4,11 @@
 #' 
 #' @param dm       A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT
 #' @param tips     The cell index/indices from which to calculate the DPT(s) (integer of length 1-3)
+#' @param ...      All parameters after this have to be specified by name
 #' @param w_width  Window width to use for deciding the branch cutoff
 #' 
 #' @slot branch  Branch labels for each cell; \code{1:3} or \code{NA} for undeceided
-#' @slot parent  \code{\link{matrix}} of parent branches (may be of \code{ncol(...) == 0})
+#' @slot tips    \code{\link[base]{matrix}} indicating if a cell is a tip of the corresponding banch level
 #' @slot dpt     Diffusion pseudotime in respect to the root cell (and other tips if \code{branching == TRUE})
 #' @slot dm      \code{\link{DiffusionMap}} used to create this DPT object
 #' 

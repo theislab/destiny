@@ -53,6 +53,7 @@ setMethod('updateObject', 'Sigmas', function(object, ..., verbose = FALSE) {
 })
 
 
+#' @importFrom stats na.omit
 update_slot_names <- function(object, old_slots, new_slots = sub('.', '_', old_slots, fixed = TRUE)) {
 	atts <- attributes(object)
 	update_idx <- old_slots %in% names(atts)

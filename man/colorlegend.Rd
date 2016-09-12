@@ -26,6 +26,8 @@ colorlegend(col, pal = palette(), log = FALSE, posx = c(0.9, 0.93),
 
 \item{cex_main}{Size of legend title font (default: subtitle font size \code{\link{par}('cex.sub')})}
 
+\item{cex_axis}{Size of ticks/category labels (default: axis font size \code{\link{par}('cex.axis')})}
+
 \item{col_main}{Color of legend title (default: subtitle color \code{\link{par}('col.sub')})}
 
 \item{col_lab}{Color of tick or category labels (default: axis color \code{\link{par}('col.lab')})}
@@ -40,7 +42,7 @@ colorlegend(col, pal = palette(), log = FALSE, posx = c(0.9, 0.93),
 
 \item{...}{Additional parameters for the \link[graphics]{text} call used for labels}
 
-\item{cex.main, col.main, col.lab}{For compatibility with \code{\link{par}}}
+\item{cex.main, cex.axis, col.main, col.lab}{For compatibility with \code{\link{par}}}
 }
 \value{
 This function is called for the side effect of adding a colorbar to a plot and returns nothing/NULL.

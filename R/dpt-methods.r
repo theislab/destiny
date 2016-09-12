@@ -15,12 +15,16 @@ NULL
 #' data(guo_norm)
 #' dpt <- DPT(DiffusionMap(guo_norm))
 #' dpt_9_branches <- branch_divide(dpt, 1:3)
-#' plot(dpt_9_branches, col_by = 'branches')
+#' plot(dpt_9_branches, col_by = 'branch')
 #' 
 #' @seealso \link{plot.DPT} uses \code{branch_divide} for its \code{divide} argument.
 #' 
+#' @aliases dataset,DPT-method dataset<-,DPT-method
+#' @importFrom stats na.omit
 #' @name DPT methods
+#' @export
 branch_divide <- function(dpt, divide = integer(0L)) {
+	if (!is(dpt, 'DPT')) stop('branch_divide needs to be called on a DPT object, not a ', class(dpt))
 	if (length(divide) == 0L) return(dpt)
 	
 	for (b in divide) {

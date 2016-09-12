@@ -9,14 +9,15 @@ NULL
 #' @param y,root      Root branch ID. Will be used as the start of the DPT.
 #'                    (If longer than size 1, will be interpreted as \code{c(root, branches)})
 #' @param paths_to    Numeric Branch IDs. Are used as target(s) for the path(s) to draw.
-#' @param dcx,dcy     The dimensions to use from the DiffusionMap
+#' @param dcs         The dimensions to use from the DiffusionMap
 #' @param divide      If \code{col_by = 'branch'}, this specifies which branches to divide. (see \code{\link{branch_divide}})
 #' @param w_width     Window width for smoothing the path (see \code{\link[smoother]{smth.gaussian}})
 #' @param col_by      Color by 'dpt' (DPT starting at \code{branches[[1]]}), 'branch', or a veriable of the data.
 #' @param col_path    Colors for the path or a function creating n colors
 #' @param col_tip     Color for branch tips
 #' @param ...         Graphical parameters supplied to \code{\link{plot.DiffusionMap}}
-#' @param pal         Palette to use for coloring the points
+#' @param pal         Palette to use for coloring the points. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)
+#' @param col         See \code{\link{plot.DiffusionMap}}. This overrides \code{col_by}
 #' 
 #' @aliases plot,DPT,numeric-method plot,DPT,missing-method
 #' 
@@ -31,6 +32,7 @@ NULL
 #' @importFrom graphics plot points
 #' @importFrom methods is setMethod
 #' @importFrom scales colour_ramp rescale
+#' @importFrom utils capture.output
 #' @export
 plot.DPT <- function(
 	x, root = 1L,
@@ -42,8 +44,8 @@ plot.DPT <- function(
 	col_path = palette(),
 	col_tip = 'red',
 	...,
-	pal = if (is.double(x[[col_by]])) cube_helix else palette(),
-	draw_legend = TRUE
+	pal = NULL,
+	col = NULL
 ) {
 	dpt      <- x
 	root     <- as.integer(root)
@@ -56,6 +58,11 @@ plot.DPT <- function(
 	if (length(root) > 1L && length(paths_to) == 0L) {
 		paths_to <- root[-1]
 		root <- root[[1]]
+	}
+	
+	if (is.null(pal)) {
+		col_column <- if (is.null(col)) x[[col_by]] else col
+		pal <- if (is.double(col_column)) cube_helix else palette()
 	}
 	
 	evs <- eigenvectors(dpt@dm)[, dcs]
@@ -80,13 +87,17 @@ plot.DPT <- function(
 		} else stop('unknown p passed to plot_more (class: ', class(p), ')')
 	}
 	
-	args <- c(
-		list(dpt@dm, dcs, plot_more = plot_more, pal = pal, draw_legend = draw_legend),
-		switch(col_by,
+	col_args <-
+		if (!is.null(col)) list(col = col)
+		else switch(col_by,
 			dpt    = list(col = pt_vec),
 			branch = ,
 			Branch = list(col = dpt_flat@branch[, 1]),
-			list(col_by = col_by)),
+			list(col_by = col_by))
+	
+	args <- c(
+		list(dpt@dm, dcs, plot_more = plot_more, pal = pal),
+		col_args,
 		list(...))
 	
 	if (!identical(Sys.getenv('LOG_LEVEL'), '')) message('Args:\n', paste(capture.output(print(args)), collapse = '\n'))

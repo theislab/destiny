@@ -11,6 +11,7 @@
 #' @param posy         Bottom and top borders of color bar relative to plot area (Vector of length 2; 0-1)
 #' @param main         Legend title
 #' @param cex_main     Size of legend title font (default: subtitle font size \code{\link{par}('cex.sub')})
+#' @param cex_axis     Size of ticks/category labels (default: axis font size \code{\link{par}('cex.axis')})
 #' @param col_main     Color of legend title (default: subtitle color \code{\link{par}('col.sub')})
 #' @param col_lab      Color of tick or category labels (default: axis color \code{\link{par}('col.lab')})
 #' @param steps        Number of labels in case of a continuous axis. If 0 or FALSE, draw no ticks
@@ -18,7 +19,7 @@
 #' @param digit        Number of digits for continuous axis labels
 #' @param left         logical. If TRUE, invert posx
 #' @param ...          Additional parameters for the \link[graphics]{text} call used for labels
-#' @param cex.main,col.main,col.lab  For compatibility with \code{\link{par}}
+#' @param cex.main,cex.axis,col.main,col.lab  For compatibility with \code{\link{par}}
 #' 
 #' @return This function is called for the side effect of adding a colorbar to a plot and returns nothing/NULL.
 #' 

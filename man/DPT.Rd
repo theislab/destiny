@@ -13,6 +13,8 @@ DPT(dm, tips = random_root(dm), ..., w_width = 0.1)
 
 \item{tips}{The cell index/indices from which to calculate the DPT(s) (integer of length 1-3)}
 
+\item{...}{All parameters after this have to be specified by name}
+
 \item{w_width}{Window width to use for deciding the branch cutoff}
 }
 \description{
@@ -23,7 +25,7 @@ Create pseudotime ordering and assigns cell to one of three branches
 \describe{
 \item{\code{branch}}{Branch labels for each cell; \code{1:3} or \code{NA} for undeceided}
 
-\item{\code{parent}}{\code{\link{matrix}} of parent branches (may be of \code{ncol(...) == 0})}
+\item{\code{tips}}{\code{\link[base]{matrix}} indicating if a cell is a tip of the corresponding banch level}
 
 \item{\code{dpt}}{Diffusion pseudotime in respect to the root cell (and other tips if \code{branching == TRUE})}
 
