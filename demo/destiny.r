@@ -1,9 +1,9 @@
 library(destiny)
-library(RColorBrewer)
 
 data(guo)
 
-palette(brewer.pal(8L, 'Dark2'))
+Dark2 <- scales::brewer_pal(palette = 'Dark2')
+palette(Dark2(8L))
 
 
 
