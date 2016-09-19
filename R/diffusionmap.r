@@ -296,7 +296,7 @@ no_censoring <- function(imputed_data, sigma, distance, knn, cb) {
 		exp(-d2@x / (2 * sigma ^ 2))
 	} else {
 		# TODO: optimize local sigma no-censoring case
-		mask <- which(d2 == 0)
+		mask <- which(d2 != 0)
 		S1 <- (sigma %*% t(sigma))[mask]
 		S2 <- outer(sigma ^ 2, sigma ^ 2, '+')[mask]
 		sqrt(2 * S1 / S2) * exp(-d2@x / S2)
