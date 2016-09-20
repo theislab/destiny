@@ -8,7 +8,7 @@
 \title{3D or 2D plot of diffusion map}
 \usage{
 plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
-  col_limits = NULL, col_new = "red", pal = palette(), ..., mar = NULL,
+  col_limits = NULL, col_new = "red", pal = NULL, ..., mar = NULL,
   ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
   legend_opts = list(), interactive = FALSE,
   draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
@@ -34,7 +34,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{col_new}{If \code{new_dcs} is given, it will take on this color. (default: red)}
 
-\item{pal}{Palette used to map the \code{col} vector to colors (default: \code{\link{palette}()})}
+\item{pal}{Palette used to map the \code{col} vector to colors. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)}
 
 \item{...}{Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})}
 
@@ -46,7 +46,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{box}{logical. If TRUE, draw plot frame (default: TRUE or the same as \code{axes} if specified)}
 
-\item{legend_main}{Title of legend. (default: nothing unless col_by is given)}
+\item{legend_main}{Title of legend. (default: nothing unless \code{col_by} is given)}
 
 \item{legend_opts}{Other \link{colorlegend} options (default: empty list)}
 

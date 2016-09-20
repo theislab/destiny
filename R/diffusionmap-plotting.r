@@ -16,13 +16,13 @@ NULL
 #' @param col_by       Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color
 #' @param col_limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
 #' @param col_new      If \code{new_dcs} is given, it will take on this color. (default: red)
-#' @param pal          Palette used to map the \code{col} vector to colors (default: \code{\link{palette}()})
+#' @param pal          Palette used to map the \code{col} vector to colors. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)
 #' @param ...          Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})
 #' @param mar          Bottom, left, top, and right margins (default: \code{par(mar)})
 #' @param ticks        logical. If TRUE, show axis ticks (default: FALSE)
 #' @param axes         logical. If TRUE, draw plot axes (default: Only if \code{ticks} is TRUE)
 #' @param box          logical. If TRUE, draw plot frame (default: TRUE or the same as \code{axes} if specified)
-#' @param legend_main  Title of legend. (default: nothing unless col_by is given)
+#' @param legend_main  Title of legend. (default: nothing unless \code{col_by} is given)
 #' @param legend_opts  Other \link{colorlegend} options (default: empty list)
 #' @param interactive  Use \link[rgl]{plot3d} to plot instead of \link[scatterplot3d]{scatterplot3d}?
 #' @param draw_legend  logical. If TRUE, draw color legend (default: TRUE if \code{col_by} is given or \code{col} is given and a vector to be mapped)
@@ -49,7 +49,7 @@ plot.DiffusionMap <- function(
 	new_dcs = NULL,
 	col = NULL, col_by = NULL, col_limits = NULL,
 	col_new = 'red',
-	pal = palette(),
+	pal = NULL,
 	...,
 	mar = NULL,
 	ticks = FALSE,
@@ -98,20 +98,26 @@ plot.DiffusionMap <- function(
 		par(mgp = c(1, 0, 0))
 	}
 	
-	#make consecutive the colors for the color legend
+	# make consecutive the colors for the color legend
 	if (is.integer(col) && consec_col) {
 		# c(5,0,0,3) -> c(3,1,1,2)
 		col <- factor(col)
 	}
 	
-	#colors to assign to plot rows
+	# use a fitting default palette
+	if (is.null(pal)) {
+		col_column <- if (is.null(col)) dif[[col_by]] else col
+		pal <- if (is.double(col_column)) cube_helix else palette()
+	}
+	
+	# colors to assign to plot rows
 	col_plot <- col
 	if (is.double(col))
 		col_plot <- continuous_colors(col, pal, col_limits)
 	else if (is.factor(col_plot))
 		col_plot <- as.integer(col_plot)
 	
-	#limit pal to number of existing colors to maybe attach col_new
+	# limit pal to number of existing colors to maybe attach col_new
 	length_pal <- if (is.factor(col)) length(levels(col)) else length(unique(col_plot))
 	if (is.function(pal)) {
 		# pal is a colorRampPalette-type function
@@ -122,14 +128,14 @@ plot.DiffusionMap <- function(
 		pal <- pal[seq_len(length_pal)]
 	}
 	
-	#set col_plot to color strings
+	# set col_plot to color strings
 	if (is.integer(col_plot)) {
 		idx_wrapped <- ((col_plot - 1L) %% length_pal) + 1L
 		col_plot <- pal[idx_wrapped]
 		col_plot[is.na(col_plot)] <- col_na
 	}
 	
-	#attach the new_dcs and col_new parameters to data and colors
+	# attach the new_dcs and col_new parameters to data and colors
 	point_data <- eigenvectors(dif)[, dims]
 	point_data[, flip] <- -point_data[, flip]
 	if (!is.null(new_dcs)) {

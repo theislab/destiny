@@ -9,7 +9,7 @@
 \usage{
 plot.DPT(x, root = 1L, paths_to = integer(0L), dcs = 1:2,
   divide = integer(0L), w_width = 0.1, col_by = "dpt",
-  col_path = palette(), col_tip = "red", ..., pal = NULL, col = NULL)
+  col_path = palette(), col_tip = "red", ..., col = NULL)
 
 \S4method{plot}{DPT,numeric}(x, y, ...)
 
@@ -33,8 +33,6 @@ plot.DPT(x, root = 1L, paths_to = integer(0L), dcs = 1:2,
 \item{col_tip}{Color for branch tips}
 
 \item{...}{Graphical parameters supplied to \code{\link{plot.DiffusionMap}}}
-
-\item{pal}{Palette to use for coloring the points. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)}
 
 \item{col}{See \code{\link{plot.DiffusionMap}}. This overrides \code{col_by}}
 

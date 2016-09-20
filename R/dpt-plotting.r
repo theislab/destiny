@@ -16,7 +16,6 @@ NULL
 #' @param col_path    Colors for the path or a function creating n colors
 #' @param col_tip     Color for branch tips
 #' @param ...         Graphical parameters supplied to \code{\link{plot.DiffusionMap}}
-#' @param pal         Palette to use for coloring the points. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)
 #' @param col         See \code{\link{plot.DiffusionMap}}. This overrides \code{col_by}
 #' 
 #' @aliases plot,DPT,numeric-method plot,DPT,missing-method
@@ -44,7 +43,6 @@ plot.DPT <- function(
 	col_path = palette(),
 	col_tip = 'red',
 	...,
-	pal = NULL,
 	col = NULL
 ) {
 	dpt      <- x
@@ -58,11 +56,6 @@ plot.DPT <- function(
 	if (length(root) > 1L && length(paths_to) == 0L) {
 		paths_to <- root[-1]
 		root <- root[[1]]
-	}
-	
-	if (is.null(pal)) {
-		col_column <- if (is.null(col)) x[[col_by]] else col
-		pal <- if (is.double(col_column)) cube_helix else palette()
 	}
 	
 	evs <- eigenvectors(dpt@dm)[, dcs]
@@ -92,7 +85,7 @@ plot.DPT <- function(
 			list(col_by = col_by))
 	
 	args <- c(
-		list(dpt@dm, dcs, plot_more = plot_paths, pal = pal),
+		list(dpt@dm, dcs, plot_more = plot_paths),
 		col_args,
 		list(...))
 	
