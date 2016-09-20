@@ -80,9 +80,9 @@ plot.DPT <- function(
 		tips <- evs[dpt_flat@tips[, 1], ]
 		if (is.null(p)) {  # 2d plot
 			points(tips, col = col_tip)
-		} else if (is.list(p)) {  # scatterplot3d
+		} else if (is.list(p) && 'points3d' %in% names(p)) {# scatterplot3d
 			p$points3d(tips, col = col_tip)
-		} else if (is.vector(p)) {  # rgl
+		} else if (is(p, 'rglHighlevel')) {  # rgl
 			rgl::points3d(tips, col = col_tip)
 		} else stop('unknown p passed to plot_more (class: ', class(p), ')')
 	}
