@@ -188,7 +188,7 @@ plot.DiffusionMap <- function(
 				point_data, ..., color = col_plot, mar = mar,
 				axis = axes || box || ticks, lty.axis = if (axes || box) 'solid' else 'blank',
 				box = box, tick.marks = ticks)
-			plot_more(p, mar = mar)
+			plot_more(p)
 		}
 	} else stop(sprintf('dims is of wrong length (%s): Can only handle 2 or 3 dimensions', dims))
 	
