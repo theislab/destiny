@@ -12,7 +12,7 @@ plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
   ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
   legend_opts = list(), interactive = FALSE,
   draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
-  consec_col = TRUE, col_na = "grey", plot_more = identity)
+  consec_col = TRUE, col_na = "grey", plot_more = function(p, ...) NULL)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 

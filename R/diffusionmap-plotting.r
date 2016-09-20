@@ -59,7 +59,7 @@ plot.DiffusionMap <- function(
 	interactive = FALSE,
 	draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
 	consec_col = TRUE, col_na = 'grey',
-	plot_more = identity
+	plot_more = function(p, ...) NULL
 ) {
 	dif <- x
 	
@@ -182,7 +182,7 @@ plot.DiffusionMap <- function(
 				point_data, ..., color = col_plot, mar = mar,
 				axis = axes || box || ticks, lty.axis = if (axes || box) 'solid' else 'blank',
 				box = box, tick.marks = ticks)
-			plot_more(p)
+			plot_more(p, mar = mar)
 		}
 	} else stop(sprintf('dims is of wrong length (%s): Can only handle 2 or 3 dimensions', dims))
 	

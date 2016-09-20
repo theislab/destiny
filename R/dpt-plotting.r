@@ -70,21 +70,17 @@ plot.DPT <- function(
 	
 	dpt_flat <- branch_divide(dpt, divide)
 	
-	plot_more <- function(p) {
+	plot_paths <- function(p, ...) {
+		plot_points <- get_plot_fn(p)
+		
 		for (b in seq_along(paths_to)) {
 			idx <- dpt@branch[, 1] %in% c(root, paths_to[[b]])
 			path <- average_path(pt_vec[idx], evs[idx, ], w_width)
-			points(path[, 1L], path[, 2L], 'l', col = col_path[[b]])
+			plot_points(path, type = 'l', col = col_path[[b]], ...)
 		}
 		
 		tips <- evs[dpt_flat@tips[, 1], ]
-		if (is.null(p)) {  # 2d plot
-			points(tips, col = col_tip)
-		} else if (is.list(p) && 'points3d' %in% names(p)) {# scatterplot3d
-			p$points3d(tips, col = col_tip)
-		} else if (is(p, 'rglHighlevel')) {  # rgl
-			rgl::points3d(tips, col = col_tip)
-		} else stop('unknown p passed to plot_more (class: ', class(p), ')')
+		plot_points(tips, col = col_tip, ...)
 	}
 	
 	col_args <-
@@ -96,7 +92,7 @@ plot.DPT <- function(
 			list(col_by = col_by))
 	
 	args <- c(
-		list(dpt@dm, dcs, plot_more = plot_more, pal = pal),
+		list(dpt@dm, dcs, plot_more = plot_paths, pal = pal),
 		col_args,
 		list(...))
 	
@@ -118,4 +114,16 @@ setMethod('plot', c('DPT', 'missing'), function(x, y, ...) plot.DPT(x, 1L, ...))
 average_path <- function(pt, x, w_width = .1) {
 	stopifnot(identical(nrow(x), length(pt)))
 	as.data.frame(apply(x[order(pt), ], 2, function(col) smth.gaussian(col, w_width, tails = TRUE)))
+}
+
+
+get_plot_fn <- function(p) {
+	if (is.null(p)) {  # 2d plot
+		points
+	} else if (is.list(p) && 'points3d' %in% names(p)) {# scatterplot3d
+		p$points3d
+	} else if (is(p, 'rglHighlevel')) {  # rgl
+		function(x, y = NULL, z = NULL, type = 'p', ...)
+			switch(type, p = rgl::points3d, l = rgl::lines3d, stop)(x, y, z, ...)
+	} else stop('unknown p passed to plot_more (class: ', class(p), ')')
 }
