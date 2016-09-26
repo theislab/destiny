@@ -64,3 +64,12 @@ accumulated_transitions <- function(dm) {
 
 
 hasattr <- function(x, which) !is.null(attr(x, which, exact = TRUE))
+
+
+flipped_dcs <- function(d, dcs) {
+	if (is(d, 'DiffusionMap')) d <- eigenvectors(d)
+	
+	evs <- as.matrix(d[, abs(dcs)])
+	evs[, dcs < 0] <- -evs[, dcs < 0]
+	evs
+}

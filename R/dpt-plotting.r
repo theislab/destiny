@@ -61,7 +61,8 @@ plot.DPT <- function(
 		root <- root[[1]]
 	}
 	
-	evs <- eigenvectors(dpt@dm)[, dcs]
+	evs <- flipped_dcs(dpt@dm, dcs)
+	
 	pt_vec <- dpt@dpt[, root]
 	
 	dpt_flat <- branch_divide(dpt, divide)

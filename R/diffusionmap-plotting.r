@@ -70,9 +70,6 @@ plot.DiffusionMap <- function(
 			stop('Only 3d plots can be made interactive')
 	}
 	
-	flip <- dims < 0
-	dims[flip] <- -dims[flip]
-	
 	if (!is.null(col) && !is.null(col_by)) stop('Only specify one of col or col_by')
 	
 	col_default <- is.null(col) && is.null(col_by)
@@ -136,10 +133,9 @@ plot.DiffusionMap <- function(
 	}
 	
 	# attach the new_dcs and col_new parameters to data and colors
-	point_data <- eigenvectors(dif)[, dims]
-	point_data[, flip] <- -point_data[, flip]
+	point_data <- flipped_dcs(dif, dims)
 	if (!is.null(new_dcs)) {
-		point_data <- rbind(point_data, as.matrix(new_dcs[, dims]))
+		point_data <- rbind(point_data, flipped_dcs(new_dcs, dims))
 		if (!is.character(col_new)) {
 			idx_wrapped <- ((col_plot - 1L) %% length_pal) + 1L
 			col_new <- pal[idx_wrapped]
