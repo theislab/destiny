@@ -107,7 +107,13 @@ setMethod('plot', c('DPT', 'numeric'), function(x, y, ...) plot.DPT(x, y, ...))
 
 #' @name plot.DPT
 #' @export
-setMethod('plot', c('DPT', 'missing'), function(x, y, ...) plot.DPT(x, 1L, ...))
+setMethod('plot', c('DPT', 'missing'), function(x, y, ...) {
+	args <- list(...)
+	root <- if (is.null(args$root)) 1L else args$root
+	args$root <- NULL
+	
+	do.call(plot.DPT, c(list(x, root), args))
+})
 
 
 #' @importFrom graphics plot
