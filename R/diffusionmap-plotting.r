@@ -28,7 +28,9 @@ NULL
 #' @param draw_legend  logical. If TRUE, draw color legend (default: TRUE if \code{col_by} is given or \code{col} is given and a vector to be mapped)
 #' @param consec_col   If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})
 #' @param col_na       Color for \code{NA} in the data. specify \code{NA} to hide.
-#' @param plot_more    Function that will be called while the plot margins are temporarily changed (its argument is the rgl or scatterplot3d instance or NULL)
+#' @param plot_more    Function that will be called while the plot margins are temporarily changed
+#'                     (its \code{p} argument is the rgl or scatterplot3d instance or NULL,
+#'                     its \code{rescale} argument is \code{NULL} or of the shape \code{list(from = c(a, b), to = c(c,d))})
 #' 
 #' @return The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.
 #' 
@@ -59,7 +61,7 @@ plot.DiffusionMap <- function(
 	interactive = FALSE,
 	draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
 	consec_col = TRUE, col_na = 'grey',
-	plot_more = function(p, ...) NULL
+	plot_more = function(p, ..., rescale = NULL) NULL
 ) {
 	dif <- x
 	
@@ -162,7 +164,7 @@ plot.DiffusionMap <- function(
 			r2 <- range(point_data[, 2L])
 			tl <- 0
 		}
-		plot_more(p)
+		plot_more(p, rescale = NULL)
 		al <- if (axes && !box) 1 else 0
 		axis(1, r1, labels = ticks, lwd = al, lwd.ticks = tl)
 		axis(2, r2, labels = ticks, lwd = al, lwd.ticks = tl)
@@ -175,16 +177,18 @@ plot.DiffusionMap <- function(
 				rgl::bbox3d(xlen = nticks, ylen = nticks, zlen = nticks, front = axtype, back = axtype)
 			}
 			if (box) rgl::box3d()
-			plot_more(p)
+			plot_more(p, rescale = NULL)
 		} else {
+			rescale <- NULL
 			if (!ticks) {  # -> scatterplot3d's pretty() should not mess things up
-				point_data <- apply(point_data, 2L, scales::rescale)
+				rescale <- list(from = range(point_data, na.rm = TRUE, finite = TRUE), to = c(0,1))
+				point_data <- rescale_mat(point_data, from = rescale$from, to = rescale$to)
 			}
 			p <- scatterplot3d(
 				point_data, ..., color = col_plot, mar = mar,
 				axis = axes || box || ticks, lty.axis = if (axes || box) 'solid' else 'blank',
 				box = box, tick.marks = ticks)
-			plot_more(p)
+			plot_more(p, rescale = rescale)
 		}
 	} else stop(sprintf('dims is of wrong length (%s): Can only handle 2 or 3 dimensions', dims))
 	

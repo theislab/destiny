@@ -12,7 +12,8 @@ plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
   ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
   legend_opts = list(), interactive = FALSE,
   draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
-  consec_col = TRUE, col_na = "grey", plot_more = function(p, ...) NULL)
+  consec_col = TRUE, col_na = "grey", plot_more = function(p, ..., rescale
+  = NULL) NULL)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 
@@ -58,7 +59,9 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{col_na}{Color for \code{NA} in the data. specify \code{NA} to hide.}
 
-\item{plot_more}{Function that will be called while the plot margins are temporarily changed (its argument is the rgl or scatterplot3d instance or NULL)}
+\item{plot_more}{Function that will be called while the plot margins are temporarily changed
+(its \code{p} argument is the rgl or scatterplot3d instance or NULL,
+its \code{rescale} argument is \code{NULL} or of the shape \code{list(from = c(a, b), to = c(c,d))})}
 }
 \value{
 The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.

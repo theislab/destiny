@@ -9,7 +9,7 @@
 \usage{
 plot.DPT(x, root = 1L, paths_to = integer(0L), dcs = 1:2,
   divide = integer(0L), w_width = 0.1, col_by = "dpt",
-  col_path = palette(), col_tip = "red", ..., col = NULL,
+  col_path = rev(palette()), col_tip = "red", ..., col = NULL,
   legend_main = col_by)
 
 \S4method{plot}{DPT,numeric}(x, y, ...)

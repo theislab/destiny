@@ -67,17 +67,20 @@ plot.DPT <- function(
 	
 	dpt_flat <- branch_divide(dpt, divide)
 	
-	plot_paths <- function(p, ...) {
+	plot_paths <- function(p, ..., rescale) {
 		plot_points <- get_plot_fn(p)
+		rescale_fun <-
+			if (is.null(rescale)) identity
+			else function(x) rescale_mat(x, from = rescale$from, to = rescale$to)
 		
 		for (b in seq_along(paths_to)) {
 			idx <- dpt@branch[, 1] %in% c(root, paths_to[[b]])
 			path <- average_path(pt_vec[idx], evs[idx, ], w_width)
-			plot_points(path, type = 'l', col = col_path[[b]], ...)
+			plot_points(rescale_fun(path), type = 'l', col = col_path[[b]], ...)
 		}
 		
 		tips <- evs[dpt_flat@tips[, 1], ]
-		plot_points(tips, col = col_tip, ...)
+		plot_points(rescale_fun(tips), col = col_tip, ...)
 	}
 	
 	col <-

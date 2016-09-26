@@ -73,3 +73,6 @@ flipped_dcs <- function(d, dcs) {
 	evs[, dcs < 0] <- -evs[, dcs < 0]
 	evs
 }
+
+
+rescale_mat <- function(mat, ...) apply(mat, 2L, scales::rescale, ...)
