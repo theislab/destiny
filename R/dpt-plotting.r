@@ -28,6 +28,7 @@ NULL
 #' plot(dpt)
 #' plot(dpt, 2L,      col_by = 'branch')
 #' plot(dpt, 1L, 2:3, col_by = 'num_cells')
+#' plot(dpt, col_by = 'DPT3')
 #' 
 #' @importFrom graphics plot points
 #' @importFrom methods is setMethod
@@ -78,20 +79,22 @@ plot.DPT <- function(
 		plot_points(tips, col = col_tip, ...)
 	}
 	
-	col_args <-
-		if (!is.null(col)) list(col = col)
+	col <-
+		if (!is.null(col)) col
 		else switch(col_by,
-			dpt    = list(col = pt_vec),
+			dpt    = pt_vec,
 			branch = ,
-			Branch = list(col = dpt_flat@branch[, 1]),
-			list(col_by = col_by))
+			Branch = dpt_flat@branch[, 1],
+			dpt[[col_by]])
 	
 	legend_main <- switch(legend_main, dpt = 'DPT', branch = 'Branch', legend_main)
 	
-	args <- c(
-		list(dpt@dm, dcs, plot_more = plot_paths, legend_main = legend_main),
-		col_args,
-		list(...))
+	args <- list(
+		dpt@dm, dcs,
+		plot_more = plot_paths,
+		legend_main = legend_main,
+		col = col,
+		...)
 	
 	if (!identical(Sys.getenv('LOG_LEVEL'), '')) message('Args:\n', paste(capture.output(print(args)), collapse = '\n'))
 	do.call(plot, args)

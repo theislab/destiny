@@ -52,6 +52,7 @@ dpt <- DPT(dm, branching = TRUE)
 plot(dpt)
 plot(dpt, 2L,      col_by = 'branch')
 plot(dpt, 1L, 2:3, col_by = 'num_cells')
+plot(dpt, col_by = 'DPT3')
 
 }
 
