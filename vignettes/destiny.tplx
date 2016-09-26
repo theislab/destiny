@@ -115,12 +115,19 @@
 ((* endblock abstract *))
 
 ((*- block any_cell -*))
-((*- if cell.metadata.get('name') != 'introduction' and  cell['metadata'].get('slideshow', {}).get('slide_type', '') != 'skip' -*))
+((*- if not cell.metadata.hidden -*))
 ((( super() )))
 ((*- endif -*))
 ((*- endblock any_cell -*))
 
+((* block input *))
+((*- if not cell.metadata.hide_input -*))
+    ((( super() )))
+((*- endif -*))
+((* endblock input *))
+
 ((*- block execute_result -*))
+((*- if not cell.metadata.hide_output -*))
     ((*- for type in output.data | filter_data_type -*))
 	\begin{minipage}[t]{1.8cm}
 	\vspace{0pt}
@@ -134,6 +141,7 @@
 	\end{minipage}
 	((*- endfor -*))
 	\\[1em]
+((*- endif -*))
 ((*- endblock execute_result -*))
 
 ((*- block figure -*))
