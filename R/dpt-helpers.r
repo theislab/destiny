@@ -6,9 +6,9 @@
 #' 
 #' @export
 random_root <- function(dm) {
-	propagations <- propagation_matrix(dm)
+	acc <- accumulated_transitions(dm)
 	random_idx <- sample.int(length(dm@d_norm), 1L)
-	which.max(dpt_to_cell(propagations, random_idx))
+	which.max(dpt_to_cell(acc, random_idx))
 }
 
 
@@ -21,13 +21,13 @@ random_root <- function(dm) {
 #' 
 #' @export
 find_tips <- function(dm, root = random_root(dm))
-	tipstats(propagation_matrix(dm), root)$tips
+	tipstats(accumulated_transitions(dm), root)$tips
 
-tipstats <- function(propagations, tips) {
+tipstats <- function(acc_trans, tips) {
 	x <- tips[[1L]]
-	dx <- dpt_to_cell(propagations, x)
+	dx <- dpt_to_cell(acc_trans, x)
 	y <- if (length(tips) >= 2L) tips[[2L]] else which.max(dx)
-	dy <- dpt_to_cell(propagations, y)
+	dy <- dpt_to_cell(acc_trans, y)
 	z <- if (length(tips) == 3L) tips[[3L]] else which.max(dx + dy)
 	
 	list(

@@ -42,8 +42,13 @@ verbose_timing <- function(verbose, msg, expr) {
 
 #' @importFrom Matrix Diagonal
 #' @importMethodsFrom Matrix solve
-propagation_matrix <- function(dm) {
-	if (is.null(dm@data_env$propagations)) {
+accumulated_transitions <- function(dm) {
+	if (!is.null(dm@data_env$propagations)) {  # compat
+		dm@data_env$accumulated_transitions <- dm@data_env$propagations
+		rm('propagations', envir = dm@data_env)
+	}
+	
+	if (is.null(dm@data_env$accumulated_transitions)) {
 		if (is.null(dm@transitions))
 			stop('DiffusionMap was created with suppress_dpt = TRUE')
 		
@@ -51,10 +56,10 @@ propagation_matrix <- function(dm) {
 		
 		phi0 <- dm@d_norm / sqrt(sum(dm@d_norm ^ 2))
 		inv <- solve(Diagonal(n) - dm@transitions + phi0 %*% t(phi0))
-		dm@data_env$propagations <- inv - Diagonal(n)
+		dm@data_env$accumulated_transitions <- inv - Diagonal(n)
 	}
 	
-	dm@data_env$propagations
+	dm@data_env$accumulated_transitions
 }
 
 

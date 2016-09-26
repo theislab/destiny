@@ -89,7 +89,7 @@ setClass(
 			'There must be exactly one eigenvalue per eigenvector: length(eigenvalues(dm)) == ncol(eigenvectors(dm))'
 		else if (!isTRUE(validObject(object@sigmas, test = TRUE)))
 			paste('sigmas invalid:', validObject(object@sigmas, test = TRUE))
-		#TODO: validate data_env (data, propagations) and eigenvec0
+		#TODO: validate data_env (data, accumulated_transitions) and eigenvec0
 		else if (length(object@d) != nrow(object@eigenvectors))
 			'd must be as long as each eigenvector'
 		else if (length(object@k) != 1)

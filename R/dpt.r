@@ -40,9 +40,9 @@ DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be of class DiffusionMap, not ', class(dm))
 	if (!length(tips) %in% 1:3) stop('you need to specify 1-3 tips, got ', length(tips))
 	
-	propagations <- propagation_matrix(dm)
-	stats <- tipstats(propagations, tips)
-	branches <- auto_branch(propagations, stats, w_width)
+	acc <- accumulated_transitions(dm)
+	stats <- tipstats(acc, tips)
+	branches <- auto_branch(acc, stats, w_width)
 	
 	branch  <- branches$branch
 	tip_mat <- branches$tips
@@ -56,9 +56,9 @@ DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
 }
 
 
-dpt_to_cell <- function(propagations, cell) {
-	cell_propagations <- propagations[cell, ]
+dpt_to_cell <- function(acc_trans, cell) {
+	acc_cell_trans <- acc_trans[cell, ]
 	
-	apply(propagations, 1, function(row)
-		sqrt(sum((cell_propagations - row) ^ 2)))
+	apply(acc_trans, 1, function(row)
+		sqrt(sum((acc_cell_trans - row) ^ 2)))
 }

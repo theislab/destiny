@@ -1,11 +1,11 @@
-auto_branch <- function(propagations, stats, w_width, nmin = 10L, gmin = 1.1) {
-	n <- ncol(propagations)
+auto_branch <- function(acc_trans, stats, w_width, nmin = 10L, gmin = 1.1) {
+	n <- ncol(acc_trans)
 	
 	stopifnot(n >= nmin)
 	stopifnot(stats$g >= gmin)
 	
 	# initialize one level (branch, tips) and three branches (dpt)
-	dpt <- dpt_from_tips(propagations, stats$tips)
+	dpt <- dpt_from_tips(acc_trans, stats$tips)
 	branches <- cut_branches(dpt, w_width)  # list ov vectors of numeric indices
 	branch <- matrix(idx_list_to_vec(branches, n), n, 1L)
 	tips <- matrix(logical(n), n, 1L)
@@ -16,7 +16,7 @@ auto_branch <- function(propagations, stats, w_width, nmin = 10L, gmin = 1.1) {
 		if (length(idx_sub) < nmin)
 			return(NULL)
 		
-		sub_props <- as(propagations[idx_sub, idx_sub, drop = FALSE], 'symmetricMatrix')
+		sub_props <- as(acc_trans[idx_sub, idx_sub, drop = FALSE], 'symmetricMatrix')
 		sub_root  <- abs_idx_to_sub_idx(idx_sub, stats$tips[[s]])
 		sub_stats <- tipstats(sub_props, sub_root)
 		if (sub_stats$g < gmin)
@@ -73,9 +73,9 @@ abs_idx_to_sub_idx <- function(idx_sub, i) {
 }
 
 
-dpt_from_tips <- function(propagations, tips) {
-	n <- ncol(propagations)
-	vapply(tips, function(cell) dpt_to_cell(propagations, cell), double(n))
+dpt_from_tips <- function(acc_trans, tips) {
+	n <- ncol(acc_trans)
+	vapply(tips, function(cell) dpt_to_cell(acc_trans, cell), double(n))
 }
 
 
