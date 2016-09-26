@@ -42,7 +42,7 @@ plot.DPT <- function(
 	divide = integer(0L),
 	w_width = .1,
 	col_by = 'dpt',
-	col_path = palette(),
+	col_path = rev(palette()),
 	col_tip = 'red',
 	...,
 	col = NULL,
