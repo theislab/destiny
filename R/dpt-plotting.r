@@ -17,6 +17,7 @@ NULL
 #' @param col_tip     Color for branch tips
 #' @param ...         Graphical parameters supplied to \code{\link{plot.DiffusionMap}}
 #' @param col         See \code{\link{plot.DiffusionMap}}. This overrides \code{col_by}
+#' @param legend_main See \code{\link{plot.DiffusionMap}}.
 #' 
 #' @aliases plot,DPT,numeric-method plot,DPT,missing-method
 #' 
@@ -43,7 +44,8 @@ plot.DPT <- function(
 	col_path = palette(),
 	col_tip = 'red',
 	...,
-	col = NULL
+	col = NULL,
+	legend_main = col_by
 ) {
 	dpt      <- x
 	root     <- as.integer(root)
@@ -84,8 +86,10 @@ plot.DPT <- function(
 			Branch = list(col = dpt_flat@branch[, 1]),
 			list(col_by = col_by))
 	
+	legend_main <- switch(legend_main, dpt = 'DPT', branch = 'Branch', legend_main)
+	
 	args <- c(
-		list(dpt@dm, dcs, plot_more = plot_paths),
+		list(dpt@dm, dcs, plot_more = plot_paths, legend_main = legend_main),
 		col_args,
 		list(...))
 	
