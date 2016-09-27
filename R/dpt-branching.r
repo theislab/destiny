@@ -13,11 +13,12 @@ auto_branch <- function(acc_trans, stats, w_width, nmin = 10L, gmin = 1.1) {
 	
 	subs <- lapply(seq_len(3L), function(s) {
 		idx_sub <- branches[[s]]
-		if (length(idx_sub) < nmin)
+		i <- stats$tips[[s]]
+		if (length(idx_sub) < nmin || !i %in% idx_sub)  # Tip cells can end up undecided!
 			return(NULL)
 		
 		sub_props <- as(acc_trans[idx_sub, idx_sub, drop = FALSE], 'symmetricMatrix')
-		sub_root  <- abs_idx_to_sub_idx(idx_sub, stats$tips[[s]])
+		sub_root  <- abs_idx_to_sub_idx(idx_sub, i)
 		sub_stats <- tipstats(sub_props, sub_root)
 		if (sub_stats$g < gmin)
 			return(NULL)
@@ -65,11 +66,11 @@ idx_list_to_vec <- function(idx_list, n) {
 
 # v <- c(F,T,F,T,T,F)
 # abs_idx_to_sub_idx(which(v), c(2, 5)) -> c(1, 3)
-abs_idx_to_sub_idx <- function(idx_sub, i) {
-	n_new <- length(idx_sub)
-	idx_abs <- rep(NA_integer_, max(i, na.rm = TRUE))
-	idx_abs[idx_sub] <- seq_len(n_new)
-	idx_abs[i]
+abs_idx_to_sub_idx <- function(idx_abs, i) {
+	n_new <- length(idx_abs)
+	idx_sub <- rep(NA_integer_, max(i, na.rm = TRUE))
+	idx_sub[idx_abs] <- seq_len(n_new)
+	idx_sub[i]
 }
 
 
