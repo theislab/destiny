@@ -19,6 +19,8 @@ Imports:
     methods,
     graphics,
     grDevices,
+    utils,
+    stats,
     Matrix,
     Rcpp (>= 0.10.3),
     RcppEigen,

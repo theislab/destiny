@@ -9,7 +9,16 @@ random_root(dm)
 \arguments{
 \item{dm}{A \code{\link{DiffusionMap}} object}
 }
+\value{
+A cell index
+}
 \description{
-Finds a cell index whose cell has the maximum DPT distance from a randomly selected one.
+Finds a cell that has the maximum DPT distance from a randomly selected one.
+}
+\examples{
+data(guo)
+dm <- DiffusionMap(guo)
+random_root(dm)
+
 }
 

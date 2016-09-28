@@ -7,6 +7,8 @@
 #' @param ...      All parameters after this have to be specified by name
 #' @param w_width  Window width to use for deciding the branch cutoff
 #' 
+#' @return A \code{DPT} object:
+#' 
 #' @slot branch  Branch labels for each cell; \code{1:3} or \code{NA} for undeceided
 #' @slot tips    \code{\link[base]{matrix}} indicating if a cell is a tip of the corresponding banch level
 #' @slot dpt     Diffusion pseudotime in respect to the root cell (and other tips if \code{branching == TRUE})

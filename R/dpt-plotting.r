@@ -19,6 +19,8 @@ NULL
 #' @param col         See \code{\link{plot.DiffusionMap}}. This overrides \code{col_by}
 #' @param legend_main See \code{\link{plot.DiffusionMap}}.
 #' 
+#' @return The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object for 3D plots.
+#' 
 #' @aliases plot,DPT,numeric-method plot,DPT,missing-method
 #' 
 #' @examples

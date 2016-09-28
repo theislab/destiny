@@ -19,4 +19,8 @@ n eigenvectors of the transition matrix
 \description{
 Fast eigen decomposition using ARPACK
 }
+\examples{
+eig_decomp(cbind(c(1,-1), c(-1,1)), 2)
+
+}
 

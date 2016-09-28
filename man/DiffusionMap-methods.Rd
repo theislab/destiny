@@ -17,8 +17,18 @@
 \arguments{
 \item{x, object}{A \code{\link{DiffusionMap}}}
 }
+\value{
+The \code{DiffusionMap} object (\code{print}), or NULL (\code{show}), invisibly
+}
 \description{
 Methods for external operations on diffusion maps
+}
+\examples{
+data(guo)
+dm <- DiffusionMap(guo)
+print(dm)
+show(dm)
+
 }
 \seealso{
 \link{DiffusionMap accessors}, \link{extractions}, \link{coercions} for more methods

@@ -1,8 +1,15 @@
 #' Find a random root cell index
 #' 
-#' Finds a cell index whose cell has the maximum DPT distance from a randomly selected one.
+#' Finds a cell that has the maximum DPT distance from a randomly selected one.
 #' 
 #' @param dm  A \code{\link{DiffusionMap}} object
+#' 
+#' @return A cell index
+#' 
+#' @examples
+#' data(guo)
+#' dm <- DiffusionMap(guo)
+#' random_root(dm)
 #' 
 #' @export
 random_root <- function(dm) {
@@ -18,6 +25,12 @@ random_root <- function(dm) {
 #' @param root  Root cell index from which to find tips. (default: random)
 #' 
 #' @return An integer vector of length 3
+#' 
+#' @examples
+#' data(guo)
+#' dm <- DiffusionMap(guo)
+#' is_tip <- l_which(find_tips(dm), len = ncol(dataset(dm)))
+#' plot(dm, col = factor(is_tip))
 #' 
 #' @export
 find_tips <- function(dm, root = random_root(dm))

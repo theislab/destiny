@@ -6,6 +6,9 @@
 #' 
 #' @return n eigenvectors of the transition matrix
 #' 
+#' @examples
+#' eig_decomp(cbind(c(1,-1), c(-1,1)), 2)
+#' 
 #' @importFrom Matrix isSymmetric
 #' @importFrom igraph arpack
 #' @export

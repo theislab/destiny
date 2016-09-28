@@ -5,6 +5,8 @@
 #' @param j       N/A
 #' @param ...     ignored
 #' 
+#' @return The names or data row, see respective generics.
+#' 
 #' @seealso \link[base]{Extract}, \code{\link[base]{names}} for the generics. \link{DiffusionMap accessors}, \link{DiffusionMap methods}, \link{coercions} for more methods
 #' 
 #' @examples

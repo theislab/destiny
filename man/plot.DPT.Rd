@@ -42,6 +42,9 @@ plot.DPT(x, root = 1L, paths_to = integer(0L), dcs = 1:2,
 \item{y, root}{Root branch ID. Will be used as the start of the DPT.
 (If longer than size 1, will be interpreted as \code{c(root, branches)})}
 }
+\value{
+The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object for 3D plots.
+}
 \description{
 Plots diffusion components from a Diffusion Map and the accompanying Diffusion Pseudo Time (\code{\link{DPT}})
 }

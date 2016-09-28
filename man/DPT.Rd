@@ -17,6 +17,9 @@ DPT(dm, tips = random_root(dm), ..., w_width = 0.1)
 
 \item{w_width}{Window width to use for deciding the branch cutoff}
 }
+\value{
+A \code{DPT} object:
+}
 \description{
 Create pseudotime ordering and assigns cell to one of three branches
 }

@@ -34,6 +34,9 @@
 
 \item{...}{ignored}
 }
+\value{
+The names or data row, see respective generics.
+}
 \description{
 Extraction methods
 }
