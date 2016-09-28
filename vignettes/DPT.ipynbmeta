@@ -1,4 +1,4 @@
 %\VignetteIndexEntry{DPT}
 %\VignetteEngine{nbconvertR::nbconvert}
 %\VignetteTemplate{latex}{destiny-base.tplx}
- 
+%\VignettePreprocessors{latex}{destiny_processors.LatexTracPreprocessor}
