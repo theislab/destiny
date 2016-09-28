@@ -1,0 +1,119 @@
+((*- extends 'article.tplx' -*))
+
+((* block packages *))
+	\usepackage[svgnames]{xcolor}
+	((( super() )))
+	\usepackage{authblk}
+	\usepackage{csquotes}
+	\usepackage{textcomp}
+	\usepackage{etoolbox}
+	\usepackage[authoryear,round]{natbib}
+	\usepackage{parskip}
+	\usepackage[inline,shortlabels]{enumitem}
+	\usepackage{upquote}
+	\AtBeginDocument{%
+		\def\PYZsq{\textquotesingle}%
+	}
+	
+	\usepackage[default]{sourcesanspro}
+	\usepackage{sourcecodepro}
+	
+	\newtoggle{txsf}
+	\IfFileExists{newtxsf.sty}{\toggletrue{txsf}}{\togglefalse{txsf}}
+	\iftoggle{txsf}{ %work around broken MikTeX installation on Bioconductor
+		\IfFileExists{zsfmi-reg.tfm}{}{\togglefalse{txsf}}
+	}{}
+	
+	\iftoggle{txsf}{
+		\usepackage{newtxsf}
+	}{
+		\IfFileExists{sfmath.sty}{\usepackage{sfmath}}{}
+	}
+((* endblock packages *))
+
+((* block definitions *))
+	((( super() )))
+	
+	\setcounter{secnumdepth}{1}
+	\setcounter{tocdepth}{2}
+	
+	\renewenvironment{quote}
+		{\list{}{\rightmargin\leftmargin}\item“\ignorespaces}
+		{\unskip”\endlist}
+
+	\makeatletter
+	% patch the patch by authblk so that the author block is flush left
+	\def\maketitle{{%
+	\renewenvironment{tabular}[2][]
+		{\begin{flushleft}}
+		{\end{flushleft}}
+	\AB@maketitle}}
+	\makeatother
+((* endblock definitions *))
+
+((* block commands *))
+	((( super() )))
+	
+    \hypersetup{
+		urlcolor=DarkOrange,
+		linkcolor=DarkOrange,
+		citecolor=DarkOrange,
+	}
+	
+	\setlist[enumerate,1]{label=\textcircled{\scriptsize\arabic*}, itemjoin=\quad}
+	\setlist[description,1]{style=standard}
+((* endblock commands *))
+
+((* block title *))
+\title{
+	\fontsize{1.5cm}{1em}\fontseries{el}\selectfont
+	((( resources.metadata.name | ascii_only | escape_latex )))
+}
+((* endblock title *))
+((* block date *))\date{\today}((* endblock date *))
+
+((* block abstract *))
+	\tableofcontents
+((* endblock abstract *))
+
+((*- block any_cell -*))
+((*- if not cell.metadata.hidden -*))
+((( super() )))
+((*- endif -*))
+((*- endblock any_cell -*))
+
+((* block input *))
+((*- if not cell.metadata.hide_input -*))
+    ((( super() )))
+((*- endif -*))
+((* endblock input *))
+
+((*- block execute_result -*))
+((*- if not cell.metadata.hide_output -*))
+    ((*- for type in output.data | filter_data_type -*))
+	\begin{minipage}[t]{1.8cm}
+	\vspace{0pt}
+	\texttt{\color{outcolor}Out[{\color{outcolor}((( cell.execution_count )))}]:}
+	\end{minipage}
+	\begin{minipage}[t]{\dimexpr\linewidth-2cm\relax}
+		\vspace{0pt}
+		((*- block data_priority -*))
+		((( super() )))
+		((*- endblock -*))
+	\end{minipage}
+	((*- endfor -*))
+	\\[1em]
+((*- endif -*))
+((*- endblock execute_result -*))
+
+((*- block figure -*))
+    \begin{center}
+    \adjustimage{max size={0.6\linewidth}{0.9\paperheight}}{((( filename )))}
+    \end{center}
+    { \hspace*{\fill} \\}
+((*- endblock figure -*))
+
+((* block bibliography *))
+	\bibliographystyle{humannat}
+	\bibliography{bibliography}
+((* endblock bibliography *))
