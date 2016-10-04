@@ -1,4 +1,4 @@
-#' @include s4-null-unions.r dist-matrix-coerce.r accessor-generics.r
+#' @include s4-unions.r dist-matrix-coerce.r accessor-generics.r
 NULL
 
 #' Sigmas Object

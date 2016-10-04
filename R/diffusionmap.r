@@ -1,5 +1,5 @@
 #' @include sigmas.r
-#' @include s4-null-unions.r
+#' @include s4-unions.r
 #' @useDynLib destiny
 NULL
 

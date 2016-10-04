@@ -4,3 +4,5 @@ setClassUnion('characterOrnumericOrNULL', members = c('character', 'numeric', 'N
 setClassUnion('numericOrNULL', members = c('numeric', 'NULL'))
 setClassUnion('integerOrNULL', members = c('integer', 'NULL'))
 setClassUnion('dMatrixOrNULL', members = c('dMatrix', 'NULL'))
+
+setClassUnion('logicalOrMissing', members = c('logical', 'missing'))
