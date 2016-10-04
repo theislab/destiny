@@ -1,12 +1,12 @@
-auto_branch <- function(acc_trans, stats, w_width, nmin = 10L, gmin = 1.1) {
-	n <- ncol(acc_trans)
+auto_branch <- function(dpt, cells, stats, w_width, nmin = 10L, gmin = 1.1) {
+	n <- length(cells)
 	
 	stopifnot(n >= nmin)
 	stopifnot(stats$g >= gmin)
 	
 	# initialize one level (branch, tips) and three branches (dpt)
-	dpt <- dpt_from_tips(acc_trans, stats$tips)
-	branches <- cut_branches(dpt, w_width)  # list ov vectors of numeric indices
+	dpt_mat <- dpt[stats$tips, cells]
+	branches <- cut_branches(dpt_mat, w_width)  # list ov vectors of numeric indices
 	branch <- matrix(idx_list_to_vec(branches, n), n, 1L)
 	tips <- matrix(logical(n), n, 1L)
 	tips[stats$tips, 1L] <- TRUE
@@ -17,13 +17,12 @@ auto_branch <- function(acc_trans, stats, w_width, nmin = 10L, gmin = 1.1) {
 		if (length(idx_sub) < nmin || !i %in% idx_sub)  # Tip cells can end up undecided!
 			return(NULL)
 		
-		sub_props <- as(acc_trans[idx_sub, idx_sub, drop = FALSE], 'symmetricMatrix')
 		sub_root  <- abs_idx_to_sub_idx(idx_sub, i)
-		sub_stats <- tipstats(sub_props, sub_root)
+		sub_stats <- tipstats(dpt, cells, sub_root)
 		if (sub_stats$g < gmin)
 			return(NULL)
 		
-		auto_branch(sub_props, sub_stats, w_width, nmin, gmin)
+		auto_branch(dpt, cells[idx_sub], sub_stats, w_width, nmin, gmin)
 	})
 	
 	# add dpt columns to dpt and a level column to branch/tips if any branch was subdivided
@@ -74,29 +73,23 @@ abs_idx_to_sub_idx <- function(idx_abs, i) {
 }
 
 
-dpt_from_tips <- function(acc_trans, tips) {
-	n <- ncol(acc_trans)
-	vapply(tips, function(cell) dpt_to_cell(acc_trans, cell), double(n))
-}
-
-
-cut_branches <- function(dpt, w_width) {
-	bid <- apply(dpt, 2, order)
-	branches <- lapply(seq_len(3), function(b) branchcut(dpt, bid, b, w_width))
+cut_branches <- function(dpt_mat, w_width) {
+	bid <- apply(dpt_mat, 2, order)
+	branches <- lapply(seq_len(3), function(b) branchcut(dpt_mat, bid, b, w_width))
 	organize_branches(branches)
 }
 
 
 #' @importFrom smoother smth.gaussian
-branchcut <- function(dpt, bid, b, w_width) {
+branchcut <- function(dpt_mat, bid, b, w_width) {
 	n <- nrow(bid)
 	all_branches <- seq_len(3L)
 	
 	# sanity checks
 	stopifnot(b %in% all_branches)
-	stopifnot(ncol(dpt) == 3L, ncol(bid) == 3L)
-	stopifnot(nrow(dpt) == n)
-	stopifnot(is.double(dpt), is.integer(bid))
+	stopifnot(ncol(dpt_mat) == 3L, ncol(bid) == 3L)
+	stopifnot(nrow(dpt_mat) == n)
+	stopifnot(is.double(dpt_mat), is.integer(bid))
 	
 	# find cell indexes per branch 
 	other <- all_branches[all_branches != b]
@@ -105,8 +98,8 @@ branchcut <- function(dpt, bid, b, w_width) {
 	
 	# DPT for other branches, sorted by b3
 	b3_idxs <- bid[, b]
-	dpt1 <- dpt[b3_idxs, b1]
-	dpt2 <- dpt[b3_idxs, b2]
+	dpt1 <- dpt_mat[b3_idxs, b1]
+	dpt2 <- dpt_mat[b3_idxs, b2]
 	
 	kcor <- vapply(seq_len(n - 1L), function(s1) {
 		s2 <- s1 + 1L

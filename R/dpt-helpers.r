@@ -13,7 +13,7 @@
 #' 
 #' @export
 random_root <- function(dm) {
-	acc <- accumulated_transitions(dm)
+	dpt <- dummy_dpt(dm)
 	random_idx <- sample.int(length(dm@d_norm), 1L)
 	which.max(dpt_to_cell(acc, random_idx))
 }
@@ -33,14 +33,16 @@ random_root <- function(dm) {
 #' plot(dm, col = factor(is_tip))
 #' 
 #' @export
-find_tips <- function(dm, root = random_root(dm))
-	tipstats(accumulated_transitions(dm), root)$tips
+find_tips <- function(dm, root = random_root(dm)) {
+	dpt <- dummy_dpt(dm)
+	tipstats(dpt, seq_len(nrow(dpt)), root)$tips
+}
 
-tipstats <- function(acc_trans, tips) {
+tipstats <- function(dpt, cells, tips) {
 	x <- tips[[1L]]
-	dx <- dpt_to_cell(acc_trans, x)
+	dx <- dpt[x, cells]
 	y <- if (length(tips) >= 2L) tips[[2L]] else which.max(dx)
-	dy <- dpt_to_cell(acc_trans, y)
+	dy <- dpt[y, cells]
 	z <- if (length(tips) == 3L) tips[[3L]] else which.max(dx + dy)
 	
 	list(

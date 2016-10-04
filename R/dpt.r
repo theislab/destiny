@@ -30,7 +30,6 @@ setClass(
 	slots = c(
 		branch = 'matrix', # 'integer'
 		tips   = 'matrix', # 'logical'
-		dpt    = 'matrix', # 'double'
 		dm     = 'DiffusionMap'),
 	validity = function(object) {
 		TRUE  # TODO
@@ -42,25 +41,17 @@ DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be of class DiffusionMap, not ', class(dm))
 	if (!length(tips) %in% 1:3) stop('you need to specify 1-3 tips, got ', length(tips))
 	
-	acc <- accumulated_transitions(dm)
-	stats <- tipstats(acc, tips)
-	branches <- auto_branch(acc, stats, w_width)
+	dpt <- dummy_dpt(dm)
 	
-	branch  <- branches$branch
-	tip_mat <- branches$tips
-	dpt     <- branches$dpt
+	stats <- tipstats(dpt, tips)
+	branches <- auto_branch(dpt, seq_len(nrow(dpt)), stats, w_width)
 	
-	colnames(branch)  <- paste0('Branch', seq_len(ncol(branch)))
-	colnames(tip_mat) <- paste0('Tips',   seq_len(ncol(tip_mat)))
-	colnames(dpt)     <- paste0('DPT',    seq_len(ncol(dpt)))
+	colnames(branches$branch) <- paste0('Branch', seq_len(ncol(branch)))
+	colnames(branches$tips)   <- paste0('Tips',   seq_len(ncol(tip_mat)))
 	
-	new('DPT', branch = branch, tips = tip_mat, dpt = dpt, dm = dm)
+	dpt@branch <- branches$branch
+	dpt@tips <- branches$tips
+	dpt
 }
 
-
-dpt_to_cell <- function(acc_trans, cell) {
-	acc_cell_trans <- acc_trans[cell, ]
-	
-	apply(acc_trans, 1, function(row)
-		sqrt(sum((acc_cell_trans - row) ^ 2)))
-}
+dummy_dpt <- function(dm) new('DPT', branch = matrix(), tips = matrix(), dm = dm)
