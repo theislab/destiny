@@ -42,16 +42,28 @@ DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
 	if (!length(tips) %in% 1:3) stop('you need to specify 1-3 tips, got ', length(tips))
 	
 	dpt <- dummy_dpt(dm)
+	all_cells <- seq_len(nrow(dpt))
 	
-	stats <- tipstats(dpt, tips)
-	branches <- auto_branch(dpt, seq_len(nrow(dpt)), stats, w_width)
+	stats <- tipstats(dpt, all_cells, tips)
+	branches <- auto_branch(dpt, all_cells, stats, w_width)
 	
-	colnames(branches$branch) <- paste0('Branch', seq_len(ncol(branch)))
-	colnames(branches$tips)   <- paste0('Tips',   seq_len(ncol(tip_mat)))
+	colnames(branches$branch) <- paste0('Branch', seq_len(ncol(branches$branch)))
+	colnames(branches$tips)   <- paste0('Tips',   seq_len(ncol(branches$tips)))
 	
 	dpt@branch <- branches$branch
-	dpt@tips <- branches$tips
+	dpt@tips   <- branches$tips
 	dpt
 }
 
-dummy_dpt <- function(dm) new('DPT', branch = matrix(), tips = matrix(), dm = dm)
+dummy_dpt <- function(dm_or_dpt) {
+	if (is(dm_or_dpt, 'DPT')) dm_or_dpt
+	else if (is(dm_or_dpt, 'DiffusionMap')) new('DPT', branch = matrix(), tips = matrix(), dm = dm_or_dpt)
+	else stop('dm_or_dpt needs to be DPT or DiffusionMap object, not ', class(dm_or_dpt))
+}
+
+dpt_for_branch <- function(dpt, branch_id) {
+	branch_idx <- dpt@branch[, 1L] == branch_id
+	tip_cells <- which(branch_idx & dpt@tips[, 1L])
+	if (length(tip_cells) == 0L) tip_cells <- which(branch_idx)
+	dpt[tip_cells[[1L]], ]
+}

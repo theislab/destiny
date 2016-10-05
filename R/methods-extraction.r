@@ -41,7 +41,7 @@ setMethod('names', 'DiffusionMap', function(x) {
 })
 #' @name extractions
 #' @export
-setMethod('names', 'DPT', function(x) c(colnames(x@dpt), 'Branch', names(x@dm)))
+setMethod('names', 'DPT', function(x) c(paste0('DPT', seq_len(nrow(x))), 'Branch', names(x@dm)))
 
 
 #' @importFrom methods is
@@ -61,12 +61,22 @@ setMethod('[[', c('DiffusionMap', 'character', 'missing'), function(x, i, j, ...
 #' @name extractions
 #' @export
 setMethod('[[', c('DPT', 'character', 'missing'), function(x, i, j, ...) {
-	if (identical(i, 'dpt')) i <- 'DPT1'
-	if (i %in% colnames(x@dpt)) {
-		x@dpt[, i]
+	if (identical(i, 'dpt')) return(dpt_for_branch(dpt, 1L))  #TODO
+	
+	num_i <- if (grepl('DPT\\d+', i)) as.integer(sub('DPT(\\d+)', '\\1', i))
+	
+	if (!is.null(num_i) && 1L <= num_i && num_i <= nrow(x)) {
+		x[num_i, ]
 	} else if (identical(i, 'Branch') || identical(i, 'branch')) {
 		x@branch[, 1L]
 	} else x@dm[[i]]
+})
+#' @name extractions
+#' @export
+setMethod('[[', c('DPT', 'index', 'index'), function(x, i, j, ...) {
+	if (length(i) != 1L || length(j) == 1L)
+		stop('Can only extract one element, but i and j were of lengths ', length(i), ' and ', length(j))
+	x[i, j, ...]
 })
 
 

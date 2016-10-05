@@ -21,6 +21,8 @@
 
 \S4method{[[}{DPT,character,missing}(x, i, j, ...)
 
+\S4method{[[}{DPT,index,index}(x, i, j, ...)
+
 \S4method{$}{DiffusionMap}(x, name)
 
 \S4method{$}{DPT}(x, name)

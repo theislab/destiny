@@ -4,10 +4,10 @@
 \alias{random_root}
 \title{Find a random root cell index}
 \usage{
-random_root(dm)
+random_root(dm_or_dpt)
 }
 \arguments{
-\item{dm}{A \code{\link{DiffusionMap}} object}
+\item{dm_or_dpt}{A \code{\link{DiffusionMap}} or \code{\link{DPT}} object}
 }
 \value{
 A cell index

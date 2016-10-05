@@ -65,9 +65,9 @@ plot.DPT <- function(
 	
 	evs <- flipped_dcs(dpt@dm, dcs)
 	
-	pt_vec <- dpt@dpt[, root]
-	
 	dpt_flat <- branch_divide(dpt, divide)
+	
+	pt_vec <- dpt_for_branch(dpt_flat, root)
 	
 	plot_paths <- function(p, ..., rescale) {
 		plot_points <- get_plot_fn(p)

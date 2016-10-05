@@ -4,10 +4,10 @@
 \alias{find_tips}
 \title{Find tips in a DiffusionMap object}
 \usage{
-find_tips(dm, root = random_root(dm))
+find_tips(dm_or_dpt, root = random_root(dm_or_dpt))
 }
 \arguments{
-\item{dm}{A \code{\link{DiffusionMap}} object}
+\item{dm_or_dpt}{A \code{\link{DiffusionMap}} or \code{\link{DPT}} object}
 
 \item{root}{Root cell index from which to find tips. (default: random)}
 }
