@@ -21,7 +21,7 @@ NULL
 #' 
 #' @return The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object for 3D plots.
 #' 
-#' @aliases plot,DPT,numeric-method plot,DPT,missing-method
+#' @aliases plot.DPT plot,DPT,numeric-method plot,DPT,missing-method
 #' 
 #' @examples
 #' data(guo_norm)
