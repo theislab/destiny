@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{destiny}
+%\VignetteIndexEntry{destiny main vignette: Start here!}
 %\VignetteEngine{nbconvertR::nbconvert}
 %\VignetteTemplate{latex}{destiny.tplx}
 %\VignettePreprocessors{latex}{destiny_processors.LatexTracPreprocessor}

@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{destiny recap}
+%\VignetteIndexEntry{Reproduce the Diffusion Map vignette with the supplied data()}
 %\VignetteEngine{nbconvertR::nbconvert}
 %\VignetteTemplate{latex}{destiny-base.tplx}
 %\VignettePreprocessors{latex}{destiny_processors.LatexTracPreprocessor}
