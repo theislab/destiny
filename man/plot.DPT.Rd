@@ -7,7 +7,7 @@
 \alias{plot.DPT}
 \title{Plot DPT}
 \usage{
-plot.DPT(x, root = 1L, paths_to = integer(0L), dcs = 1:2,
+plot.DPT(x, root = NULL, paths_to = integer(0L), dcs = 1:2,
   divide = integer(0L), w_width = 0.1, col_by = "dpt",
   col_path = rev(palette()), col_tip = "red", ..., col = NULL,
   legend_main = col_by)
@@ -39,7 +39,7 @@ plot.DPT(x, root = 1L, paths_to = integer(0L), dcs = 1:2,
 
 \item{legend_main}{See \code{\link{plot.DiffusionMap}}.}
 
-\item{y, root}{Root branch ID. Will be used as the start of the DPT.
+\item{y, root}{Root branch ID. Will be used as the start of the DPT. (default: lowest branch ID)
 (If longer than size 1, will be interpreted as \code{c(root, branches)})}
 }
 \value{

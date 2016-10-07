@@ -63,6 +63,7 @@ dummy_dpt <- function(dm_or_dpt) {
 
 dpt_for_branch <- function(dpt, branch_id) {
 	branch_idx <- dpt@branch[, 1L] == branch_id
+	stopifnot(any(branch_idx))
 	tip_cells <- which(branch_idx & dpt@tips[, 1L])
 	if (length(tip_cells) == 0L) tip_cells <- which(branch_idx)
 	dpt[tip_cells[[1L]], ]

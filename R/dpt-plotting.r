@@ -6,7 +6,7 @@ NULL
 #' Plots diffusion components from a Diffusion Map and the accompanying Diffusion Pseudo Time (\code{\link{DPT}})
 #' 
 #' @param x           A \code{\link{DPT}} object.
-#' @param y,root      Root branch ID. Will be used as the start of the DPT.
+#' @param y,root      Root branch ID. Will be used as the start of the DPT. (default: lowest branch ID)
 #'                    (If longer than size 1, will be interpreted as \code{c(root, branches)})
 #' @param paths_to    Numeric Branch IDs. Are used as target(s) for the path(s) to draw.
 #' @param dcs         The dimensions to use from the DiffusionMap
@@ -38,7 +38,7 @@ NULL
 #' @importFrom utils capture.output
 #' @export
 plot.DPT <- function(
-	x, root = 1L,
+	x, root = NULL,
 	paths_to = integer(0L),
 	dcs = 1:2,
 	divide = integer(0L),
@@ -50,10 +50,15 @@ plot.DPT <- function(
 	col = NULL,
 	legend_main = col_by
 ) {
-	dpt      <- x
-	root     <- as.integer(root)
+	dpt  <- x
+	dpt_flat <- branch_divide(dpt, divide)
+	
+	if (!is.null(root) && length(root) < 1L) stop('root needs to be specified')
+	root <-
+		if (is.null(root)) min(dpt_flat@branch[, 1], na.rm = TRUE)
+		else as.integer(root)
 	paths_to <- as.integer(paths_to)
-	if (length(root) < 1L) stop('root needs to be specified')
+	
 	if (length(root) > 1L && length(paths_to) > 0L)
 		stop('(length(root), length(paths_to)) needs to be (1, 0-n) or (2-n, 0), but is (', length(root), ', ', length(paths_to), ')')
 	stopifnot(length(dcs) %in% 2:3)
@@ -63,11 +68,9 @@ plot.DPT <- function(
 		root <- root[[1]]
 	}
 	
-	evs <- flipped_dcs(dpt@dm, dcs)
-	
-	dpt_flat <- branch_divide(dpt, divide)
-	
 	pt_vec <- dpt_for_branch(dpt_flat, root)
+	
+	evs <- flipped_dcs(dpt@dm, dcs)
 	
 	plot_paths <- function(p, ..., rescale) {
 		plot_points <- get_plot_fn(p)
@@ -114,7 +117,7 @@ setMethod('plot', c('DPT', 'numeric'), function(x, y, ...) plot.DPT(x, y, ...))
 #' @export
 setMethod('plot', c('DPT', 'missing'), function(x, y, ...) {
 	args <- list(...)
-	root <- if (is.null(args$root)) 1L else args$root
+	root <- args$root  # may be NULL
 	args$root <- NULL
 	
 	do.call(plot.DPT, c(list(x, root), args))
