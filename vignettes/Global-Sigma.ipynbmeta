@@ -1,4 +1,4 @@
 %\VignetteIndexEntry{The effects of a global vs. local kernel}
 %\VignetteEngine{nbconvertR::nbconvert}
-%\VignetteTemplate{latex}{destiny-base.tplx}
+%\VignetteTemplate{latex}{destiny-bib.tplx}
 %\VignettePreprocessors{latex}{destiny_processors.LatexTracPreprocessor}

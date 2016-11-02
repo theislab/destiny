@@ -112,8 +112,3 @@
     \end{center}
     { \hspace*{\fill} \\}
 ((*- endblock figure -*))
-
-((* block bibliography *))
-	\bibliographystyle{humannat}
-	\bibliography{bibliography}
-((* endblock bibliography *))

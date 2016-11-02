@@ -1,4 +1,4 @@
-((*- extends 'destiny-base.tplx' -*))
+((*- extends 'destiny-bib.tplx' -*))
 
 ((* block author *))
 	\PrerenderUnicode{ü}
