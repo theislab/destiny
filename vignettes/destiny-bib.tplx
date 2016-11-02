@@ -1,0 +1,11 @@
+((*- extends 'destiny-base.tplx' -*))
+
+((* block packages *))
+	((( super() )))
+	\usepackage[authoryear,round]{natbib}
+((* endblock packages *))
+
+((* block bibliography *))
+	\bibliographystyle{humannat}
+	\bibliography{bibliography}
+((* endblock bibliography *))
