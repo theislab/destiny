@@ -15,7 +15,7 @@ continuous_colors <- function(vals, pal = palette(), limits = NULL, levels = 100
 	if (is.null(limits))
 		limits <- range(vals, na.rm = TRUE)
 	
-	ramp <- colour_ramp(pal)
+	ramp <- colour_ramp(pal, alpha = TRUE)
 	
 	ramp(rescale(vals, from = limits))
 }
