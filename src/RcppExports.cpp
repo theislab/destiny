@@ -39,30 +39,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// d2_no_censor
-Eigen::SparseMatrix<double> d2_no_censor(const IntegerMatrix nn_index, const NumericMatrix nn_dist, const Function callback);
-RcppExport SEXP destiny_d2_no_censor(SEXP nn_indexSEXP, SEXP nn_distSEXP, SEXP callbackSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const IntegerMatrix >::type nn_index(nn_indexSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix >::type nn_dist(nn_distSEXP);
-    Rcpp::traits::input_parameter< const Function >::type callback(callbackSEXP);
-    rcpp_result_gen = Rcpp::wrap(d2_no_censor(nn_index, nn_dist, callback));
-    return rcpp_result_gen;
-END_RCPP
-}
 // icor2_no_censor
-Eigen::SparseMatrix<double> icor2_no_censor(const IntegerMatrix nn_index, NumericMatrix imputed_data, const Function callback, bool use_rank);
-RcppExport SEXP destiny_icor2_no_censor(SEXP nn_indexSEXP, SEXP imputed_dataSEXP, SEXP callbackSEXP, SEXP use_rankSEXP) {
+Eigen::SparseMatrix<double> icor2_no_censor(const Eigen::SparseMatrix<double> dists, NumericMatrix imputed_data, const Function callback, bool use_rank);
+RcppExport SEXP destiny_icor2_no_censor(SEXP distsSEXP, SEXP imputed_dataSEXP, SEXP callbackSEXP, SEXP use_rankSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const IntegerMatrix >::type nn_index(nn_indexSEXP);
+    Rcpp::traits::input_parameter< const Eigen::SparseMatrix<double> >::type dists(distsSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type imputed_data(imputed_dataSEXP);
     Rcpp::traits::input_parameter< const Function >::type callback(callbackSEXP);
     Rcpp::traits::input_parameter< bool >::type use_rank(use_rankSEXP);
-    rcpp_result_gen = Rcpp::wrap(icor2_no_censor(nn_index, imputed_data, callback, use_rank));
+    rcpp_result_gen = Rcpp::wrap(icor2_no_censor(dists, imputed_data, callback, use_rank));
     return rcpp_result_gen;
 END_RCPP
 }

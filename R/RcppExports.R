@@ -9,11 +9,7 @@ predict_censoring_impl <- function(data, data2, thr, uncertain, missing, sigma) 
     .Call('destiny_predict_censoring_impl', PACKAGE = 'destiny', data, data2, thr, uncertain, missing, sigma)
 }
 
-d2_no_censor <- function(nn_index, nn_dist, callback) {
-    .Call('destiny_d2_no_censor', PACKAGE = 'destiny', nn_index, nn_dist, callback)
-}
-
-icor2_no_censor <- function(nn_index, imputed_data, callback, use_rank = FALSE) {
-    .Call('destiny_icor2_no_censor', PACKAGE = 'destiny', nn_index, imputed_data, callback, use_rank)
+icor2_no_censor <- function(dists, imputed_data, callback, use_rank = FALSE) {
+    .Call('destiny_icor2_no_censor', PACKAGE = 'destiny', dists, imputed_data, callback, use_rank)
 }
 
