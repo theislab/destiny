@@ -306,12 +306,12 @@ no_censoring <- function(imputed_data, sigma, distance, dists, cb) {
 		# TODO: optimize local sigma no-censoring case
 		stopifnot(d2@uplo == 'U')
 		mask <- d2 != 0 & upper.tri(dists)
-		m <- function(mat) suppressWarnings(as(mat, 'dsCMatrix')[mask])  # suppress warning about "inefficient .M.sub.i.logical"
+		m <- function(mat) suppressMessages(as(mat, 'dsCMatrix')[mask])  # suppress warning about "inefficient .M.sub.i.logical"
 		
 		S1 <- m(tcrossprod(Matrix(sigma)))
 		S2 <- m(outer(sigma ^ 2, sigma ^ 2, '+'))
 		
-		sqrt(2 * S1 / S2) * exp(-d2@x / S2)
+		sqrt(2 * S1 / S2) * exp(-d2@x / (2*S2))
 	}
 	
 	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), symmetric = TRUE, index1 = FALSE)
