@@ -165,13 +165,13 @@ DiffusionMap <- function(
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
-	dists <- find_knn(imputed_data, k, verbose)
+	knn <- find_knn(imputed_data, k, verbose)
 	
-	sigmas <- get_sigmas(imputed_data, sigma, distance, dists, n_local, censor_val, censor_range, missing_range, vars, verbose)
+	sigmas <- get_sigmas(imputed_data, sigma, distance, knn$nn_dist, n_local, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
 	
-	trans_p <- transition_probabilities(imputed_data, sigma, distance, dists, censor, censor_val, censor_range, missing_range, verbose)
-	rm(dists)  # free memory
+	trans_p <- transition_probabilities(imputed_data, sigma, distance, knn$dist, censor, censor_val, censor_range, missing_range, verbose)
+	rm(knn)  # free memory
 	
 	d <- rowSums(trans_p, na.rm = TRUE) + 1 # diagonal set to 1
 	
@@ -212,11 +212,11 @@ DiffusionMap <- function(
 
 
 #' @importFrom methods new is
-get_sigmas <- function(imputed_data, sigma, distance, dists, n_local, censor_val, censor_range, missing_range, vars, verbose) {
+get_sigmas <- function(imputed_data, sigma, distance, nn_dists, n_local, censor_val, censor_range, missing_range, vars, verbose) {
 	unspecified_local <- identical(sigma, 'local')
 	if (unspecified_local || is.numeric(sigma)) {
 		if (unspecified_local)
-			sigma <- rowSums(dists[, seq(n_local, length.out = 3)]) / 3 / 2
+			sigma <- rowSums(nn_dists[, seq(n_local, length.out = 3)]) / 3 / 2
 		new('Sigmas', 
 			log_sigmas    = NULL,
 			dim_norms     = NULL,
@@ -254,7 +254,9 @@ find_knn <- function(imputed_data, k, verbose) {
 	
 	# (double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix)
 	# retain all differences fully. symmpart halves them in the case of trans_p[i,j] == 0 && trans_p[j,i] > 0
-	symmpart(dist_asym) + abs(forceSymmetric(skewpart(dist_asym))) # TODO: more efficient
+	dists <- symmpart(dist_asym) + abs(forceSymmetric(skewpart(dist_asym))) # TODO: more efficient
+	
+	list(nn_dist = knn$nn.dist, dist = dists)
 }
 
 
@@ -290,24 +292,29 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 	as(trans_p, 'symmetricMatrix')
 }
 
-#' @importFrom Matrix sparseMatrix which
+#' @importFrom Matrix sparseMatrix which tcrossprod
 no_censoring <- function(imputed_data, sigma, distance, dists, cb) {
 	d2 <- switch(distance,
-		euclidean  = dists^2,
+		euclidean  = dists ^ 2,
 		cosine  = icor2_no_censor(dists, imputed_data, cb),
 		rankcor = icor2_no_censor(dists, imputed_data, cb, TRUE))
+	stopifnot(isSymmetric(d2))
 	
 	t_p <- if (length(sigma) == 1L) {
 		exp(-d2@x / (2 * sigma ^ 2))
 	} else {
 		# TODO: optimize local sigma no-censoring case
-		mask <- which(d2 != 0)
-		S1 <- (sigma %*% t(sigma))[mask]
-		S2 <- outer(sigma ^ 2, sigma ^ 2, '+')[mask]
+		stopifnot(d2@uplo == 'U')
+		mask <- d2 != 0 & upper.tri(dists)
+		m <- function(mat) suppressWarnings(as(mat, 'dsCMatrix')[mask])  # suppress warning about "inefficient .M.sub.i.logical"
+		
+		S1 <- m(tcrossprod(Matrix(sigma)))
+		S2 <- m(outer(sigma ^ 2, sigma ^ 2, '+'))
+		
 		sqrt(2 * S1 / S2) * exp(-d2@x / S2)
 	}
 	
-	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), index1 = FALSE)
+	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), symmetric = TRUE, index1 = FALSE)
 }
 
 #' @importFrom methods as
