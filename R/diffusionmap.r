@@ -315,7 +315,7 @@ no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb 
 		S1 <- m(tcrossprod(Matrix(sigma)))
 		S2 <- m(outer(sigma ^ 2, sigma ^ 2, '+'))
 		
-		sqrt(2 * S1 / S2) * exp(-d2@x / (2*S2))
+		sqrt(2 * S1 / S2) * exp(-d2@x / S2)
 	}
 	
 	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), symmetric = TRUE, index1 = FALSE)

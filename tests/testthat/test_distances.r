@@ -4,7 +4,7 @@ full_t_p_local <- function(dat, sigma, dists) {
 	S1 <- sigma %*% t(sigma)
 	S2 <- outer(sigma ^ 2, sigma ^ 2, '+')
 	
-	rv <- sqrt(2 * S1 / S2) * exp(-d2 / (2*S2))
+	rv <- sqrt(2 * S1 / S2) * exp(-d2 / S2)
 	rv[d2 == 0] <- 0
 	rv
 }
