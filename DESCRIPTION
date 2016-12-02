@@ -40,7 +40,8 @@ NeedsCompilation: yes
 Enhances: rgl
 Suggests:
     ggplot2,
-    nbconvertR
+    nbconvertR,
+    testthat
 VignetteBuilder: nbconvertR
 biocViews: CellBiology,
     CellBasedAssays,

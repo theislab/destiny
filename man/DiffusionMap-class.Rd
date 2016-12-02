@@ -9,7 +9,7 @@
 \usage{
 DiffusionMap(data, sigma = "local", k = find_dm_k(nrow(data) - 1L),
   n_eigs = min(20L, nrow(data) - 2L), density_norm = TRUE, ...,
-  distance = c("euclidean", "cosine", "rankcor"), n_local = 5L,
+  distance = c("euclidean", "cosine", "rankcor"), n_local = 5:7,
   censor_val = NULL, censor_range = NULL, missing_range = NULL,
   vars = NULL, verbose = !is.null(censor_range), suppress_dpt = FALSE)
 }
@@ -30,7 +30,7 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 
 \item{distance}{Distance measurement method. Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).}
 
-\item{n_local}{If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor determines the local sigma.}
+\item{n_local}{If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma.}
 
 \item{censor_val}{Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)}
 
@@ -72,7 +72,7 @@ being treated as expression data features (and the others ignored), or an \link[
 
 \item{\code{k}}{The k parameter for kNN}
 
-\item{\code{n_local}}{The \code{n_local}th nearest neighbor is used to determine local kernel density}
+\item{\code{n_local}}{The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density}
 
 \item{\code{density_norm}}{Was density normalization used?}
 

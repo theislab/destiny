@@ -21,7 +21,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @param density_norm   logical. If TRUE, use density normalisation
 #' @param ...            All parameter after this are optional and have to be specified by name
 #' @param distance       Distance measurement method. Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).
-#' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor determines the local sigma.
+#' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma.
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)
 #' @param censor_range   Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
 #' @param missing_range  Whole data range for missing value model. Has to be specified if NAs are in the data
@@ -40,7 +40,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot d              Density vector of transition probability matrix
 #' @slot d_norm         Density vector of normalized transition probability matrix
 #' @slot k              The k parameter for kNN
-#' @slot n_local        The \code{n_local}th nearest neighbor is used to determine local kernel density
+#' @slot n_local        The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density
 #' @slot density_norm   Was density normalization used?
 #' @slot distance       Distance measurement method used.
 #' @slot censor_val     Censoring value
@@ -123,7 +123,7 @@ DiffusionMap <- function(
 	density_norm = TRUE,
 	...,
 	distance = c('euclidean', 'cosine', 'rankcor'),
-	n_local = 5L,
+	n_local = 5:7,
 	censor_val = NULL, censor_range = NULL,
 	missing_range = NULL,
 	vars = NULL,
@@ -153,7 +153,9 @@ DiffusionMap <- function(
 	
 	# arg validation
 	
-	if (n <= n_eigs + 1L) stop(sprintf('Eigen decomposition not possible if n \u2264 n_eigs+1 (And %s \u2264 %s)', n, n_eigs + 1L))
+	if (n <= n_eigs + 1L) stop('Eigen decomposition not possible if n \u2264 n_eigs+1 (And ', n,' \u2264 ', n_eigs + 1L, ')')
+	wrong_n_local <- n_local > n_eigs | n_local < 1
+	if (any(wrong_n_local)) stop('Using n_local needs to be in 1:n_eigs (And ', n_local[wrong_n_local], ' is not in 1:', n_eigs, ')')
 	
 	if (is.null(k) || is.na(k)) k <- n - 1L
 	#TODO: optimize case
@@ -167,7 +169,7 @@ DiffusionMap <- function(
 	
 	knn <- find_knn(imputed_data, k, verbose)
 	
-	sigmas <- get_sigmas(imputed_data, sigma, distance, knn$nn_dist, n_local, censor_val, censor_range, missing_range, vars, verbose)
+	sigmas <- get_sigmas(imputed_data, knn$nn_dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
 	
 	trans_p <- transition_probabilities(imputed_data, sigma, distance, knn$dist, censor, censor_val, censor_range, missing_range, verbose)
@@ -212,11 +214,13 @@ DiffusionMap <- function(
 
 
 #' @importFrom methods new is
-get_sigmas <- function(imputed_data, sigma, distance, nn_dists, n_local, censor_val, censor_range, missing_range, vars, verbose) {
+get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'euclidean', censor_val = NULL, censor_range = NULL, missing_range = NULL, vars = NULL, verbose = FALSE) {
 	unspecified_local <- identical(sigma, 'local')
 	if (unspecified_local || is.numeric(sigma)) {
-		if (unspecified_local)
-			sigma <- rowSums(nn_dists[, seq(n_local, length.out = 3)]) / 3 / 2
+		if (unspecified_local) {
+			sig_mat <- nn_dists[, n_local, drop = FALSE]
+			sigma <- rowSums(sig_mat) / length(n_local) / 2
+		}
 		new('Sigmas', 
 			log_sigmas    = NULL,
 			dim_norms     = NULL,
@@ -244,7 +248,7 @@ get_sigmas <- function(imputed_data, sigma, distance, nn_dists, n_local, censor_
 
 
 #' @importFrom FNN get.knn
-find_knn <- function(imputed_data, k, verbose) {
+find_knn <- function(imputed_data, k, verbose = FALSE) {
 	# get.knn(...)$nn.index : \eqn{n \times k} matrix for the nearest neighbor indices
 	# get.knn(...)$nn.dist  : \eqn{n \times k} matrix for the nearest neighbor Euclidean distances.
 	knn <- verbose_timing(verbose, 'finding knns', get.knn(imputed_data, k, algorithm = 'cover_tree'))
@@ -277,7 +281,7 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 		if (censor)
 			censoring(imputed_data, censor_val, censor_range, missing_range, sigma, dists, cb)
 		else
-			no_censoring(imputed_data, sigma, distance, dists, cb)
+			no_censoring(imputed_data, sigma, dists, distance, cb)
 	})
 	
 	if (verbose) close(pb)
@@ -293,7 +297,7 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 }
 
 #' @importFrom Matrix sparseMatrix which tcrossprod
-no_censoring <- function(imputed_data, sigma, distance, dists, cb) {
+no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb = invisible) {
 	d2 <- switch(distance,
 		euclidean  = dists ^ 2,
 		cosine  = icor2_no_censor(dists, imputed_data, cb),
