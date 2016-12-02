@@ -81,11 +81,11 @@ inline double censor_pair(
 // [[Rcpp::export]]
 Eigen::SparseMatrix<double> censoring_impl(
 		const NumericMatrix data,
+		const NumericVector sigmas,
+		const Eigen::SparseMatrix<double> dists,
 		const SEXP thr_or_null,
 		const SEXP uncertain_or_null,
 		const SEXP missing_or_null,
-		const NumericVector sigmas,
-		const SEXP nns_or_null,
 		const Function callback
 ) {
 	const int
@@ -93,45 +93,36 @@ Eigen::SparseMatrix<double> censoring_impl(
 		G = data.ncol();
 	
 	const Rboolean
-		no_nns = Rf_isNull(nns_or_null),
 		no_threshold = Rf_isNull(thr_or_null),
 		no_uncertain = Rf_isNull(uncertain_or_null),
 		no_missing = Rf_isNull(missing_or_null);
 	
-	IntegerMatrix nns         = (no_nns)       ? IntegerMatrix(0, n) : IntegerMatrix(nns_or_null);
 	NumericVector thr_v       = (no_threshold) ? NumericVector(0)    : NumericVector(thr_or_null);
 	NumericMatrix uncertain_m = (no_uncertain) ? NumericMatrix(0, 2) : NumericMatrix(uncertain_or_null);
 	NumericMatrix missing_m   = (no_missing)   ? NumericMatrix(0, 2) : NumericMatrix(missing_or_null);
 	
-	//the sparse matrix has about k·n elements (or k·(n+1)?)
-	typedef Eigen::Triplet<double> T;
-	std::vector<T> triplets;
-	triplets.reserve((no_nns) ? (n*n) : (nns.ncol() * (n+1)));
+	typedef Eigen::SparseMatrix<double> M;
+	M trans_p(dists);
 	
 	//either length 1 or n
 	const NumericVector kts = pow(sigmas, 2);
 	const bool local_sigma = sigmas.length() != 1;
 	
-	for (int row_idx=0; row_idx<n; row_idx++) {
+	for (int idx_major=0; idx_major<n; idx_major++) {
 		const double
-			sigma = (local_sigma) ? sigmas[row_idx] : sigmas[0],
-			kt    = (local_sigma) ?    kts[row_idx] :    kts[0];
+			sigma = (local_sigma) ? sigmas[idx_major] : sigmas[0],
+			kt    = (local_sigma) ?    kts[idx_major] :    kts[0];
 		
-		for (int j=0; j<nns.ncol(); j++) {
-			int nn_idx;
-			if (no_nns)
-				nn_idx = j;
-			else
-				nn_idx = nns(row_idx, j) - 1;
-			
+		for (M::InnerIterator it(trans_p, idx_major); it; ++it) {
 			//Rcout << "i=" << row_idx << ", j=" << nn_idx << '\n';
+			int idx_minor = it.index();
 			 
 			double x = 1.;
 			
 			for (int g=0; g<G; g++) {
 				const double
-					c = data(row_idx, g),
-					d = data(nn_idx, g),
+					c = data(idx_major, g),
+					d = data(idx_minor, g),
 					thr = (thr_v.size() == G) ? thr_v[g] : thr_v[0];
 				
 				const double
@@ -145,15 +136,13 @@ Eigen::SparseMatrix<double> censoring_impl(
 				//Rcout << "after  i=" << row_idx << " (" << c << "), j=" << nn_idx << " (" << d << "): " << x << "\n\n";
 			}
 			
-			triplets.push_back(T(row_idx, nn_idx, x));
+			it.valueRef() = x;
 		}
-		if (row_idx%1000 == 0)
-			callback(row_idx+1);
+		if (idx_major%1000 == 0)
+			callback(idx_major+1);
 	}
 	callback(n);
 	
-	Eigen::SparseMatrix<double> trans_p(n, n);
-	trans_p.setFromTriplets(triplets.begin(), triplets.end());
 	return trans_p;
 }
 
