@@ -30,6 +30,7 @@ NULL
 #' @aliases
 #' as.data.frame.DiffusionMap as.data.frame,DiffusionMap-method fortify.DiffusionMap
 #' as.data.frame.DPT          as.data.frame,DPT-method          fortify.DPT
+#'     as.matrix.DPT              as.matrix,DPT-method
 #' 
 #' @importFrom BiocGenerics as.data.frame
 #' @name coercions
@@ -68,3 +69,7 @@ setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE
 #' @name coercions
 #' @export fortify.DPT
 fortify.DPT <- function(model, data, ...) as.data.frame(model, ...)
+
+#' @name coercions
+#' @export
+setMethod('as.matrix', 'DPT', function(x, ...) x[])

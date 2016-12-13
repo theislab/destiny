@@ -26,4 +26,7 @@
 \description{
 Treat DPT object as a matrix of cell-by-cell DPT distances.
 }
+\seealso{
+\code{\link{as.matrix.DPT}}
+}
 

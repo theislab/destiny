@@ -6,6 +6,8 @@
 \alias{as.data.frame,DiffusionMap-method}
 \alias{as.data.frame.DPT}
 \alias{as.data.frame.DiffusionMap}
+\alias{as.matrix,DPT-method}
+\alias{as.matrix.DPT}
 \alias{coercions}
 \alias{fortify.DPT}
 \alias{fortify.DiffusionMap}
@@ -19,6 +21,8 @@ fortify.DiffusionMap(model, data, ...)
 \S4method{as.data.frame}{DPT}(x, row.names = NULL, optional = FALSE, ...)
 
 fortify.DPT(model, data, ...)
+
+\S4method{as.matrix}{DPT}(x, ...)
 }
 \arguments{
 \item{x, model}{A \code{\link{DiffusionMap}} or \code{\link{DPT}} object}
