@@ -57,7 +57,11 @@ validate_censoring <- function(data, sigma, dists, censor_val, censor_range, mis
 }
 
 test_censoring <- function(censor_val, censor_range, data, missing_range) {
-	!(missing(censor_range) || is.null(censor_range)) ||
-		any(is.na(data)) || any(data == censor_val) ||
-		!(missing(missing_range) || is.null(missing_range))
+	if (is.null(data)) return(FALSE)
+	
+	has_censor_range <- !(missing(censor_range) || is.null(censor_range))
+	has_missing_range <- !(missing(missing_range) || is.null(missing_range))
+	if (has_censor_range || has_missing_range) return(TRUE)
+	
+	any(is.na(data)) || any(data == censor_val)
 }

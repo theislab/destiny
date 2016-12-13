@@ -7,8 +7,9 @@
 \alias{DiffusionMap-class}
 \title{Create a diffusion map of cells}
 \usage{
-DiffusionMap(data, sigma = "local", k = find_dm_k(nrow(data) - 1L),
-  n_eigs = min(20L, nrow(data) - 2L), density_norm = TRUE, ...,
+DiffusionMap(data = stopifnot_distmatrix(distance), sigma = "local",
+  k = find_dm_k(n_samples(data, distance) - 1L), n_eigs = min(20L,
+  n_samples(data, distance) - 2L), density_norm = TRUE, ...,
   distance = c("euclidean", "cosine", "rankcor"), n_local = 5:7,
   censor_val = NULL, censor_range = NULL, missing_range = NULL,
   vars = NULL, verbose = !is.null(censor_range), suppress_dpt = FALSE)

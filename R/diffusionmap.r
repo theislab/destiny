@@ -116,10 +116,10 @@ setClass(
 #' @name DiffusionMap class
 #' @export
 DiffusionMap <- function(
-	data,
+	data = stopifnot_distmatrix(distance),
 	sigma = 'local',
-	k = find_dm_k(nrow(data) - 1L),
-	n_eigs = min(20L, nrow(data) - 2L),
+	k = find_dm_k(n_samples(data, distance) - 1L),
+	n_eigs = min(20L, n_samples(data, distance) - 2L),
 	density_norm = TRUE,
 	...,
 	distance = c('euclidean', 'cosine', 'rankcor'),
@@ -130,34 +130,39 @@ DiffusionMap <- function(
 	verbose = !is.null(censor_range),
 	suppress_dpt = FALSE
 ) {
+	# make sure those promises are resolved before we mess with `data`
+	force(k)
+	force(n_eigs)
+	
 	if (is.null(sigma) || !is(sigma, 'Sigmas') && isTRUE(is.na(sigma)))
 		sigma <- 'local'
 	if (!is(sigma, 'Sigmas') && !(length(sigma) == 1L && sigma %in% c('local', 'global')) && !is.numeric(sigma))
 		stop(sigma_msg(sigma))
 	
-	if (is.matrix(distance) || is(distance, 'dist')) {
-		if (nrow(distance) != ncol(distance))
-			stop('`distance` needs to be a square matrix, but is ', nrow(distance), ' by ', ncol(distance()))
-		dists <- as(distance, 'symmetricMatrix')
-		distance <- 'custom'
-	} else {
-		dists <- NULL
-		distance <- match.arg(distance)
-	}
-	
 	# store away data and continue using imputed, unified version
 	data_env <- new.env(parent = .GlobalEnv)
 	data_env$data <- data
 	
-	data <- extract_doublematrix(data, vars)
-	
 	#TODO: SVD
 	
-	imputed_data <- data
-	if (any(is.na(imputed_data)))
-		imputed_data <- as.matrix(hotdeck(data, imp_var = FALSE))
-	
-	n <- nrow(imputed_data)
+	if (is_distmatrix(distance)) {
+		if (!is.null(data)) stop('provide either `data` or a `distances` matrix')
+		
+		dists <- as(distance, 'symmetricMatrix')
+		distance <- 'custom'
+		imputed_data <- NULL
+		n <- nrow(dists)
+	} else {
+		dists <- NULL
+		distance <- match.arg(distance)
+		
+		data <- extract_doublematrix(data, vars)
+		imputed_data <- data
+		if (any(is.na(imputed_data)))
+			imputed_data <- as.matrix(hotdeck(data, imp_var = FALSE))
+		
+		n <- nrow(imputed_data)
+	}
 	
 	# arg validation
 	
@@ -169,13 +174,13 @@ DiffusionMap <- function(
 	#TODO: optimize case
 	#dense <- k == n - 1L
 	
-	if (k >= nrow(imputed_data)) stop(sprintf('k has to be < nrow(data) (And %s \u2265 nrow(data))', k))
+	if (k >= n) stop(sprintf('k has to be < nrow(data) (And %s \u2265 nrow(data))', k))
 	
 	censor <- test_censoring(censor_val, censor_range, data, missing_range)
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
-	knn <- find_knn(imputed_data, dists, k, verbose)
+	knn <- find_knn(imputed_data, dists, k, verbose)  # use dists if given, else compute from data
 	
 	sigmas <- get_sigmas(imputed_data, knn$nn_dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
@@ -221,6 +226,30 @@ DiffusionMap <- function(
 }
 
 
+is_distmatrix <- function(distance) {
+	if (is.character(distance))
+		FALSE
+	else if ((is.matrix(distance) && all.equal(dim(distance))) || is(distance, 'dist') || is(distance, 'symmetricMatrix'))
+		TRUE
+	else
+		stop(
+			'`distance` needs to be a distance measure or a square matrix, but is a ',
+			class(dist), ' of dim ', nrow(distance), ' by ', ncol(distance))
+}
+
+
+stopifnot_distmatrix <- function(distance) {
+	if (is_distmatrix(distance)) NULL
+	else stop('`data`` needs to be set if `distance` is a distance measure')
+}
+
+
+n_samples <- function(data, distances) {
+	if (is.null(data)) nrow(distances)
+	else nrow(data)
+}
+
+
 #' @importFrom methods new is
 get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'euclidean', censor_val = NULL, censor_range = NULL, missing_range = NULL, vars = NULL, verbose = FALSE) {
 	unspecified_local <- identical(sigma, 'local')
@@ -257,6 +286,8 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 
 #' @importFrom FNN get.knn
 find_knn <- function(imputed_data, dists, k, verbose = FALSE) {
+	stopifnot(is.null(imputed_data) != is.null(dists))
+	
 	if (!is.null(dists)) {
 		nn_dist <- t(apply(dists, 1, function(row) sort(row)[2:k]))
 		list(nn_dist = nn_dist, dist = dists)
@@ -270,7 +301,7 @@ find_knn <- function(imputed_data, dists, k, verbose = FALSE) {
 		
 		# (double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix)
 		# retain all differences fully. symmpart halves them in the case of trans_p[i,j] == 0 && trans_p[j,i] > 0
-		dists <- symmpart(dist_asym) + abs(forceSymmetric(skewpart(dist_asym))) # TODO: more efficient
+		dists <- symmpart(dist_asym) + abs(forceSymmetric(skewpart(dist_asym), 'U')) # TODO: more efficient
 		
 		list(nn_dist = knn$nn.dist, dist = dists)
 	}
