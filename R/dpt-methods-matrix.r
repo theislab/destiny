@@ -7,6 +7,8 @@ NULL
 #' 
 #' @aliases [.DPT nrow.DPT ncol.DPT dim.DPT
 #' @name DPT matrix methods
+#' 
+#' @seealso \code{\link{as.matrix.DPT}}
 #' @export
 setMethod('[', c('DPT', 'index', 'index', 'logicalOrMissing'), function(x, i, j, ..., drop = TRUE) {
 	evas <- eigenvalues(x@dm)
