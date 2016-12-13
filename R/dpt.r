@@ -2,6 +2,8 @@
 #'
 #' Create pseudotime ordering and assigns cell to one of three branches
 #' 
+#' Treat it as a matrix of pseudotime by subsetting (\code{\link[=dim.DPT]{[ dim nrow ncol}} \code{\link[=as.matrix.DPT]{as.matrix}}), and as a list of pseudodime, and expression vectors (\code{\link[=names.DPT]{$ [[ names}} \code{\link[=as.data.frame.DPT]{as.data.frame}}).
+#' 
 #' @param dm       A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT
 #' @param tips     The cell index/indices from which to calculate the DPT(s) (integer of length 1-3)
 #' @param ...      All parameters after this have to be specified by name
@@ -9,9 +11,8 @@
 #' 
 #' @return A \code{DPT} object:
 #' 
-#' @slot branch  Branch labels for each cell; \code{1:3} or \code{NA} for undeceided
-#' @slot tips    \code{\link[base]{matrix}} indicating if a cell is a tip of the corresponding banch level
-#' @slot dpt     Diffusion pseudotime in respect to the root cell (and other tips if \code{branching == TRUE})
+#' @slot branch  \code{\link[base]{matrix}} (of \code{\link[base]{integer}}) recursive branch labels for each cell (row); \code{NA} for undeceided. Use \code{\link{branch_divide}} to modify this.
+#' @slot tips    \code{\link[base]{matrix}} (of \code{\link[base]{logical}}) indicating if a cell (row) is a tip of the corresponding banch level (col)
 #' @slot dm      \code{\link{DiffusionMap}} used to create this DPT object
 #' 
 #' @aliases DPT-class
