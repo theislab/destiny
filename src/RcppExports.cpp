@@ -7,19 +7,19 @@
 using namespace Rcpp;
 
 // censoring_impl
-Eigen::SparseMatrix<double> censoring_impl(const NumericMatrix data, const NumericVector sigmas, const Eigen::SparseMatrix<double> dists, const SEXP thr_or_null, const SEXP uncertain_or_null, const SEXP missing_or_null, const Function callback);
-RcppExport SEXP destiny_censoring_impl(SEXP dataSEXP, SEXP sigmasSEXP, SEXP distsSEXP, SEXP thr_or_nullSEXP, SEXP uncertain_or_nullSEXP, SEXP missing_or_nullSEXP, SEXP callbackSEXP) {
+Eigen::SparseMatrix<double> censoring_impl(const NumericMatrix data, const SEXP thr_or_null, const SEXP uncertain_or_null, const SEXP missing_or_null, const NumericVector sigmas, const SEXP nns_or_null, const Function callback);
+RcppExport SEXP destiny_censoring_impl(SEXP dataSEXP, SEXP thr_or_nullSEXP, SEXP uncertain_or_nullSEXP, SEXP missing_or_nullSEXP, SEXP sigmasSEXP, SEXP nns_or_nullSEXP, SEXP callbackSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericMatrix >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type sigmas(sigmasSEXP);
-    Rcpp::traits::input_parameter< const Eigen::SparseMatrix<double> >::type dists(distsSEXP);
     Rcpp::traits::input_parameter< const SEXP >::type thr_or_null(thr_or_nullSEXP);
     Rcpp::traits::input_parameter< const SEXP >::type uncertain_or_null(uncertain_or_nullSEXP);
     Rcpp::traits::input_parameter< const SEXP >::type missing_or_null(missing_or_nullSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type sigmas(sigmasSEXP);
+    Rcpp::traits::input_parameter< const SEXP >::type nns_or_null(nns_or_nullSEXP);
     Rcpp::traits::input_parameter< const Function >::type callback(callbackSEXP);
-    rcpp_result_gen = Rcpp::wrap(censoring_impl(data, sigmas, dists, thr_or_null, uncertain_or_null, missing_or_null, callback));
+    rcpp_result_gen = Rcpp::wrap(censoring_impl(data, thr_or_null, uncertain_or_null, missing_or_null, sigmas, nns_or_null, callback));
     return rcpp_result_gen;
 END_RCPP
 }

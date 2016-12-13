@@ -279,7 +279,7 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 	# initialize trans_p
 	trans_p <- verbose_timing(verbose, 'Calculating transition probabilities', {
 		if (censor)
-			censoring(imputed_data, sigma, as(dists, 'dgCMatrix'), censor_val, censor_range, missing_range, cb)
+			censoring(imputed_data, censor_val, censor_range, missing_range, sigma, dists, cb)
 		else
 			no_censoring(imputed_data, sigma, dists, distance, cb)
 	})
@@ -292,7 +292,7 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 	diag(trans_p) <- 0
 	trans_p <- drop0(trans_p)
 	
-	#TODO: make symmetric
+	#TODO: is symmetry maintained?
 	as(trans_p, 'symmetricMatrix')
 }
 

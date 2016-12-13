@@ -52,11 +52,10 @@ Eigen::SparseMatrix<double> icor2_no_censor(
 		}
 	}
 	
-	typedef Eigen::SparseMatrix<double> M;
-	M d2(dists);
+	Eigen::SparseMatrix<double> d2(dists);
 	
 	for (int i=0; i<n; ++i) {
-		for (M::InnerIterator it(d2, i); it; ++it) {
+		for (Eigen::SparseMatrix<double>::InnerIterator it(d2, i); it; ++it) {
 			const double d = 1 - cor(data(i, _), data(it.index(), _));
 			it.valueRef() = d*d;
 		}

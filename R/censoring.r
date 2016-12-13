@@ -1,15 +1,15 @@
-censoring <- function(data, sigma, dists, censor_val = NULL, censor_range = NULL, missing_range = NULL, callback = invisible) {
+censoring <- function(data, censor_val = NULL, censor_range = NULL, missing_range = NULL, sigma, nns = NULL, callback = function(i) {}) {
 	if (!is.null(censor_range))
 		censor_range <- matrix(censor_range, ncol = 2)
 	
 	if (!is.null(missing_range))
 		missing_range <- matrix(missing_range, ncol = 2)
 	
-	validate_censoring(data, sigma, dists, censor_val, censor_range, missing_range)
+	validate_censoring(censor_val, censor_range, missing_range, data, sigma, nns)
 	
 	data <- as.matrix(data)
 	
-	censoring_impl(data, sigma, dists, censor_val, censor_range, missing_range, callback)
+	censoring_impl(data, censor_val, censor_range, missing_range, sigma, nns, callback)
 }
 
 predict_censoring <- function(data, data2, censor_val = NULL, censor_range = NULL, missing_range = NULL, sigma) {
@@ -20,8 +20,7 @@ predict_censoring <- function(data, data2, censor_val = NULL, censor_range = NUL
 	predict_censoring_impl(data, data2, censor_val, censor_range, missing_range, sigma)
 }
 
-#' @importFrom Matrix sparseMatrix
-validate_censoring <- function(data, sigma, dists, censor_val, censor_range, missing_range) {
+validate_censoring <- function(censor_val, censor_range, missing_range, data, sigma, nns) {
 	G <- ncol(data)
 	n <- nrow(data)
 	no_censor_val     <- missing(censor_val)    || is.null(censor_val)
@@ -52,8 +51,8 @@ validate_censoring <- function(data, sigma, dists, censor_val, censor_range, mis
 	if (!is.numeric(sigma) || !length(sigma) %in% c(n, 1L))
 		stop('sigma has to be a single numeric value or of length nrow(data)')
 	
-	if (!is(dists, 'dgCMatrix'))
-		stop('nns has to be a dgCMatrix, not ', class(dists))
+	if (!missing(nns) && !is.null(nns) && !is.integer(nns))
+		stop('nns has to be a integer matrix or NULL')
 }
 
 test_censoring <- function(censor_val, censor_range, data, missing_range) {
