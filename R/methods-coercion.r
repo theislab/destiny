@@ -32,6 +32,7 @@ NULL
 #' as.data.frame.DPT          as.data.frame,DPT-method          fortify.DPT
 #'     as.matrix.DPT              as.matrix,DPT-method
 #' 
+#' @importFrom methods canCoerce
 #' @importFrom BiocGenerics as.data.frame
 #' @name coercions
 #' @include diffusionmap.r
@@ -41,8 +42,12 @@ NULL
 #' @name coercions
 #' @export
 setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optional = FALSE, ...) {
-	cbind(as.data.frame(eigenvectors(x), row.names, optional, ...),
-				as.data.frame(dataset(x),      row.names, optional, ...))
+	dta <- dataset(x)
+	evdf <- as.data.frame(eigenvectors(x), row.names, optional, ...)
+	
+	if (canCoerce(dta, 'data.frame')) {
+		cbind(evdf, as.data.frame(dta, row.names, optional, ...))
+	} else evdf
 })
 
 

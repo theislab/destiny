@@ -141,13 +141,13 @@ DiffusionMap <- function(
 	
 	# store away data and continue using imputed, unified version
 	data_env <- new.env(parent = .GlobalEnv)
-	data_env$data <- data
 	
 	#TODO: SVD
 	
 	if (is_distmatrix(distance)) {
 		if (!is.null(data)) stop('provide either `data` or a `distances` matrix')
 		
+		data_env$data <- distance
 		dists <- as(distance, 'symmetricMatrix')
 		distance <- 'custom'
 		imputed_data <- NULL
