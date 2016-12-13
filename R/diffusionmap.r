@@ -20,7 +20,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @param n_eigs         Number of eigenvectors/values to return (default: 20)
 #' @param density_norm   logical. If TRUE, use density normalisation
 #' @param ...            All parameter after this are optional and have to be specified by name
-#' @param distance       Distance measurement method. Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).
+#' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).
 #' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma.
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)
 #' @param censor_range   Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
@@ -96,7 +96,7 @@ setClass(
 			'k must be a number'
 		else if (length(object@density_norm) != 1)
 			'density_norm must be TRUE or FALSE'
-		else if (!(object@distance %in% c('euclidean', 'cosine', 'rankcor')))
+		else if (!(object@distance %in% c('euclidean', 'cosine', 'rankcor', 'custom')))
 			'distance must be "euclidean", "cosine" or "rankcor"'
 		else if (is.null(object@censor_val) != is.null(object@censor_range))
 			'Both censor_val and censor_range either need to be NULL or not'
@@ -135,7 +135,15 @@ DiffusionMap <- function(
 	if (!is(sigma, 'Sigmas') && !(length(sigma) == 1L && sigma %in% c('local', 'global')) && !is.numeric(sigma))
 		stop(sigma_msg(sigma))
 	
-	distance <- match.arg(distance)
+	if (is.matrix(distance) || is(distance, 'dist')) {
+		if (nrow(distance) != ncol(distance))
+			stop('`distance` needs to be a square matrix, but is ', nrow(distance), ' by ', ncol(distance()))
+		dists <- as(distance, 'symmetricMatrix')
+		distance <- 'custom'
+	} else {
+		dists <- NULL
+		distance <- match.arg(distance)
+	}
 	
 	# store away data and continue using imputed, unified version
 	data_env <- new.env(parent = .GlobalEnv)
@@ -167,7 +175,7 @@ DiffusionMap <- function(
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
-	knn <- find_knn(imputed_data, k, verbose)
+	knn <- find_knn(imputed_data, dists, k, verbose)
 	
 	sigmas <- get_sigmas(imputed_data, knn$nn_dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
@@ -248,19 +256,24 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 
 
 #' @importFrom FNN get.knn
-find_knn <- function(imputed_data, k, verbose = FALSE) {
-	# get.knn(...)$nn.index : \eqn{n \times k} matrix for the nearest neighbor indices
-	# get.knn(...)$nn.dist  : \eqn{n \times k} matrix for the nearest neighbor Euclidean distances.
-	knn <- verbose_timing(verbose, 'finding knns', get.knn(imputed_data, k, algorithm = 'cover_tree'))
-	
-	i <- rep(seq_len(nrow(knn$nn.dist)), ncol(knn$nn.dist))
-	dist_asym <- sparseMatrix(i, knn$nn.index, x = as.vector(knn$nn.dist))
-	
-	# (double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix)
-	# retain all differences fully. symmpart halves them in the case of trans_p[i,j] == 0 && trans_p[j,i] > 0
-	dists <- symmpart(dist_asym) + abs(forceSymmetric(skewpart(dist_asym))) # TODO: more efficient
-	
-	list(nn_dist = knn$nn.dist, dist = dists)
+find_knn <- function(imputed_data, dists, k, verbose = FALSE) {
+	if (!is.null(dists)) {
+		nn_dist <- t(apply(dists, 1, function(row) sort(row)[2:k]))
+		list(nn_dist = nn_dist, dist = dists)
+	} else {
+		# get.knn(...)$nn.index : \eqn{n \times k} matrix for the nearest neighbor indices
+		# get.knn(...)$nn.dist  : \eqn{n \times k} matrix for the nearest neighbor Euclidean distances.
+		knn <- verbose_timing(verbose, 'finding knns', get.knn(imputed_data, k, algorithm = 'cover_tree'))
+		
+		i <- rep(seq_len(nrow(knn$nn.dist)), ncol(knn$nn.dist))
+		dist_asym <- sparseMatrix(i, knn$nn.index, x = as.vector(knn$nn.dist))
+		
+		# (double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix)
+		# retain all differences fully. symmpart halves them in the case of trans_p[i,j] == 0 && trans_p[j,i] > 0
+		dists <- symmpart(dist_asym) + abs(forceSymmetric(skewpart(dist_asym))) # TODO: more efficient
+		
+		list(nn_dist = knn$nn.dist, dist = dists)
+	}
 }
 
 
@@ -299,9 +312,10 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 #' @importFrom Matrix sparseMatrix which tcrossprod
 no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb = invisible) {
 	d2 <- switch(distance,
-		euclidean  = dists ^ 2,
+		euclidean = , custom = dists ^ 2,
 		cosine  = icor2_no_censor(dists, imputed_data, cb),
-		rankcor = icor2_no_censor(dists, imputed_data, cb, TRUE))
+		rankcor = icor2_no_censor(dists, imputed_data, cb, TRUE),
+		stop('you added a dists measure but did not handle it here'))
 	stopifnot(isSymmetric(d2))
 	
 	t_p <- if (length(sigma) == 1L) {
