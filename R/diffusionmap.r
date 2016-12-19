@@ -156,6 +156,7 @@ DiffusionMap <- function(
 		dists <- NULL
 		distance <- match.arg(distance)
 		
+		data_env$data <- data
 		data <- extract_doublematrix(data, vars)
 		imputed_data <- data
 		if (any(is.na(imputed_data)))
