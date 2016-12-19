@@ -78,8 +78,10 @@ plot.DiffusionMap <- function(
 	if (col_default) col <- par('col')
 	
 	#get col from data
-	if (!is.null(col_by))
+	if (!is.null(col_by)) {
 		col <- extract_col(dataset(dif), col_by)
+		if (is.null(col)) stop('no "', col_by, '" in dataset(x)')
+	}
 	
 	# extend margin for legend
 	mar_old <- par('mar')
