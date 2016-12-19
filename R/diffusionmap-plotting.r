@@ -117,7 +117,12 @@ plot.DiffusionMap <- function(
 		col_plot <- as.integer(col_plot)
 	
 	# limit pal to number of existing colors to maybe attach col_new
-	length_pal <- if (is.factor(col)) length(levels(col)) else length(unique(col_plot))
+	length_pal <-
+		if (is.factor(col))
+			length(levels(col))
+		else if (is.integer(col))
+			length(unique(col_plot))
+		else 5L
 	if (is.function(pal)) {
 		# pal is a colorRampPalette-type function
 		pal <- pal(length_pal)
