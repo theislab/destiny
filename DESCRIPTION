@@ -81,5 +81,6 @@ Collate:
     'methods-extraction.r'
     'methods-update.r'
     'predict.r'
+    'projection-dist.r'
     'sigmas-plotting.r'
 RoxygenNote: 5.0.1

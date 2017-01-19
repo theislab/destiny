@@ -6,3 +6,5 @@ setClassUnion('integerOrNULL', members = c('integer', 'NULL'))
 setClassUnion('dMatrixOrNULL', members = c('dMatrix', 'NULL'))
 
 setClassUnion('logicalOrMissing', members = c('logical', 'missing'))
+
+setClassUnion('anyMatrix', members = c('matrix', 'Matrix', 'data.frame'))
