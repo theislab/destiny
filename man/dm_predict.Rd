@@ -4,17 +4,20 @@
 \alias{dm_predict}
 \title{Predict new data points using an existing DiffusionMap. The resulting matrix can be used in \link[=plot.DiffusionMap]{the plot method for the DiffusionMap}}
 \usage{
-dm_predict(dm, new_data, verbose = FALSE)
+dm_predict(dm, new_data, ..., verbose = FALSE)
 }
 \arguments{
-\item{dm}{A \link{DiffusionMap} object}
+\item{dm}{A \code{\link{DiffusionMap}} object.}
 
-\item{new_data}{New data points to project into the diffusion map. Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.}
+\item{new_data}{New data points to project into the diffusion map.
+Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.}
+
+\item{...}{Passed to \code{\link{proxy::dist}(new_data, data, dm@distance, ...)}.}
 
 \item{verbose}{Show progress messages?}
 }
 \value{
-A \eqn{nrow(new_data) \times ncol(eigenvectors(dif))} matrix of projected diffusion components for the new data.
+A \eqn{nrow(new\_data) \times ncol(eigenvectors(dif))} matrix of projected diffusion components for the new data.
 }
 \description{
 Predict new data points using an existing DiffusionMap. The resulting matrix can be used in \link[=plot.DiffusionMap]{the plot method for the DiffusionMap}

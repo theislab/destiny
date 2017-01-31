@@ -7,13 +7,13 @@
 \alias{plot.DiffusionMap}
 \title{3D or 2D plot of diffusion map}
 \usage{
-plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
-  col_limits = NULL, col_new = "red", pal = NULL, ..., mar = NULL,
-  ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
-  legend_opts = list(), interactive = FALSE,
-  draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
-  consec_col = TRUE, col_na = "grey", plot_more = function(p, ..., rescale
-  = NULL) NULL)
+plot.DiffusionMap(x, dims = 1:3, new_dcs = NULL, new_data = NULL,
+  col = NULL, col_by = NULL, col_limits = NULL, col_new = "red",
+  pal = NULL, ..., mar = NULL, ticks = FALSE, axes = TRUE,
+  box = FALSE, legend_main = col_by, legend_opts = list(),
+  interactive = FALSE, draw_legend = !is.null(col_by) || (length(col) > 1 &&
+  !is.character(col)), consec_col = TRUE, col_na = "grey",
+  plot_more = function(p, ..., rescale = NULL) NULL)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 
@@ -25,6 +25,8 @@ plot.DiffusionMap(x, dims, new_dcs = NULL, col = NULL, col_by = NULL,
 \item{dims, y}{Diffusion components (eigenvectors) to plot (default: first three components; 1:3)}
 
 \item{new_dcs}{An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)}
+
+\item{new_data}{A data set in the same format as \code{x} that is used to create \code{new_dcs <- \link{dm_predict}(dif, new_data)}}
 
 \item{col}{Single color string or vector of discrete or categoric values to be mapped to colors.
 E.g. a column of the data matrix used for creation of the diffusion map. (default: \link{par}\code{('fg')})}

@@ -4,15 +4,15 @@
 \alias{projection_dist}
 \title{Projection distance}
 \usage{
-projection_dist(dists_or_data, new_data, ...)
+projection_dist(dm, new_data, ..., verbose = FALSE)
 }
 \arguments{
-\item{dists_or_data}{If new_data is not preset, this needs to be a \code{\link[=proxy::dist]{crossdist}} object}
+\item{dm}{A \code{\link{DiffusionMap}} object.}
 
-\item{new_data}{A \code{\link[base]{matrix}} \code{\link[Matrix]{Matrix}}, or \code{\link[base]{data.frame}}.
-If given, \code{dists_or_data e} needs to be of one of the same classes.}
+\item{new_data}{New data points to project into the diffusion map.
+Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.}
 
-\item{...}{Passed to \code{\link{proxa::dist}}}
+\item{...}{Passed to \code{\link{proxy::dist}}}
 }
 \description{
 Projection distance

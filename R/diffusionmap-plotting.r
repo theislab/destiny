@@ -11,11 +11,12 @@ NULL
 #' @param x            A \link{DiffusionMap}
 #' @param dims,y       Diffusion components (eigenvectors) to plot (default: first three components; 1:3)
 #' @param new_dcs      An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)
+#' @param new_data     A data set in the same format as \code{x} that is used to create \code{new_dcs <- \link{dm_predict}(dif, new_data)}
 #' @param col          Single color string or vector of discrete or categoric values to be mapped to colors.
 #'                     E.g. a column of the data matrix used for creation of the diffusion map. (default: \link{par}\code{('fg')})
 #' @param col_by       Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color
 #' @param col_limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
-#' @param col_new      If \code{new_dcs} is given, it will take on this color. (default: red)
+#' @param col_new      If \code{new_dcs} is given, it will take on this color. A vector is also possible. (default: red)
 #' @param pal          Palette used to map the \code{col} vector to colors. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)
 #' @param ...          Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})
 #' @param mar          Bottom, left, top, and right margins (default: \code{par(mar)})
@@ -47,11 +48,11 @@ NULL
 #' @name plot.DiffusionMap
 #' @export
 plot.DiffusionMap <- function(
-	x, dims,
-	new_dcs = NULL,
+	x, dims = 1:3,
+	new_dcs = NULL, new_data = NULL,
 	col = NULL, col_by = NULL, col_limits = NULL,
 	col_new = 'red',
-	pal = NULL,
+	pal = NULL, pal_new = NULL,
 	...,
 	mar = NULL,
 	ticks = FALSE,
@@ -70,6 +71,11 @@ plot.DiffusionMap <- function(
 			stop(sprintf('The package %s is required for interactive plots', sQuote('rgl')))
 		if (length(dims) != 3L)
 			stop('Only 3d plots can be made interactive')
+	}
+	
+	if (!is.null(new_data)) {
+		if (!is.null(new_dcs)) stop('either provide new_data or new_dcs')
+		new_dcs <- dm_predict(dif, new_data)
 	}
 	
 	if (!is.null(col) && !is.null(col_by)) stop('Only specify one of col or col_by')
@@ -145,17 +151,28 @@ plot.DiffusionMap <- function(
 	point_data <- flipped_dcs(dif, dims)
 	if (!is.null(new_dcs)) {
 		point_data <- rbind(point_data, flipped_dcs(new_dcs, dims))
-		if (!is.character(col_new)) {
-			idx_wrapped <- ((col_plot - 1L) %% length_pal) + 1L
-			col_new <- pal[idx_wrapped]
+		if (length(col_new) > 1L) {
+			if (length(col_new) != nrow(new_dcs)) stop('either provide one col_new or ', nrow(new_dcs), ', not ', length(col_new))
+			if (is.null(pal_new))
+				pal_new <- if (is.double(col_new)) cube_helix else palette()
+			if (is.double(col_new))
+				col_new <- continuous_colors(col_new, pal_new)
+			
+			col_plot <- c(rep_len(col_plot, nrow(point_data) - nrow(new_dcs)),
+										col_new)
+		} else {
+			if (!is.character(col_new)) {
+				idx_wrapped <- ((col_plot - 1L) %% length_pal) + 1L
+				col_new <- pal[idx_wrapped]
+			}
+			col_plot <- c(rep_len(col_plot, nrow(point_data) - nrow(new_dcs)),
+										rep_len(col_new, nrow(new_dcs)))
+			#colorlegend
+			if (!is.double(col)) {
+				col <- factor(c(as.character(col), 'proj'))
+			}
+			pal <- c(pal, col_new)
 		}
-		col_plot <- c(rep_len(col_plot, nrow(point_data) - nrow(new_dcs)),
-									rep_len(col_new, nrow(new_dcs)))
-		#colorlegend
-		if (!is.double(col)) {
-			col <- factor(c(as.character(col), 'proj'))
-		}
-		pal <- c(pal, col_new)
 	}
 	
 	if (length(dims) == 2) {
