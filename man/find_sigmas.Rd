@@ -16,7 +16,7 @@ find_sigmas(data, step_size = 0.1, steps = 10L, start = NULL,
 
 \item{steps}{Number of steps/calculations}
 
-\item{start}{Initial value to search from. (Optional. default: \eqn{\log_10(min(dist(data)))})}
+\item{start}{Initial value to search from. (Optional. default: \eqn{\log_{10}(min(dist(data)))})}
 
 \item{sample_rows}{Number of random rows to use for sigma estimation or vector of row indices/names to use.
 In the first case, only used if actually smaller than the number of available rows (Optional. default: 500)}

@@ -14,11 +14,13 @@ centered_cosine_dist <- function(x, y) 1 - cor(x, y)
 
 #' Predict new data points using an existing DiffusionMap. The resulting matrix can be used in \link[=plot.DiffusionMap]{the plot method for the DiffusionMap}
 #' 
-#' @param dm        A \link{DiffusionMap} object
-#' @param new_data  New data points to project into the diffusion map. Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.
+#' @param dm        A \code{\link{DiffusionMap}} object.
+#' @param new_data  New data points to project into the diffusion map.
+#'                  Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.
 #' @param verbose   Show progress messages?
+#' @param ...       Passed to \code{\link{proxy::dist}(new_data, data, dm@distance, ...)}.
 #' 
-#' @return A \eqn{nrow(new_data) \times ncol(eigenvectors(dif))} matrix of projected diffusion components for the new data.
+#' @return A \eqn{nrow(new\_data) \times ncol(eigenvectors(dif))} matrix of projected diffusion components for the new data.
 #' 
 #' @examples
 #' data(guo)
@@ -32,7 +34,7 @@ centered_cosine_dist <- function(x, y) 1 - cor(x, y)
 #' @importFrom Matrix Diagonal colSums rowSums
 #' @importFrom proxy dist
 #' @export
-dm_predict <- function(dm, new_data, verbose = FALSE) {
+dm_predict <- function(dm, new_data, ..., verbose = FALSE) {
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be a DiffusionMap')
 	
 	data <- extract_doublematrix(dataset(dm), dm@vars)
@@ -47,7 +49,7 @@ dm_predict <- function(dm, new_data, verbose = FALSE) {
 	if (!censor) {
 		if (verbose) cat('Creating distance matrix without censoring\n')
 		measure <- switch(dm@distance, euclidean = 'Euclidean', cosine = centered_cosine_dist, rankcor = rankcor_dist, stop('Unknown distance measure'))
-		d2 <- unclass(proxy::dist(new_data, data, measure) ^ 2) # matrix (dense)
+		d2 <- unclass(proxy::dist(new_data, data, measure, ...) ^ 2) # matrix (dense)
 		
 		#TODO: zeros not on diag
 		trans_p <- exp(-d2 / (2 * sigma ^ 2))

@@ -75,7 +75,7 @@ setMethod('show', 'Sigmas', function(object) {
 #' @param data           Data set with \eqn{n} samples. Can be a \link[base]{data.frame}, \link[base]{matrix} or \link[Biobase]{ExpressionSet}.
 #' @param step_size      Size of log-sigma steps
 #' @param steps          Number of steps/calculations
-#' @param start          Initial value to search from. (Optional. default: \eqn{\log_10(min(dist(data)))})
+#' @param start          Initial value to search from. (Optional. default: \eqn{\log_{10}(min(dist(data)))})
 #' @param sample_rows    Number of random rows to use for sigma estimation or vector of row indices/names to use.
 #'                       In the first case, only used if actually smaller than the number of available rows (Optional. default: 500)
 #' @param early_exit     logical. If TRUE, return if the first local maximum is found, else keep running
