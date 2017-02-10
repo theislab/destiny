@@ -48,7 +48,7 @@ biocViews: CellBiology,
     Clustering,
     Software,
     Visualization
-Collate:
+Collate: 
     'RcppExports.R'
     'aaa.r'
     'accessor-generics.r'
@@ -75,6 +75,8 @@ Collate:
     'utils.r'
     'expressionset-helpers.r'
     'find_dm_k.r'
+    'gene-relevance.r'
+    'gene-relevance-plotting.r'
     'guo-data.r'
     'l_which.r'
     'methods-coercion.r'
@@ -83,4 +85,4 @@ Collate:
     'predict.r'
     'projection-dist.r'
     'sigmas-plotting.r'
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
