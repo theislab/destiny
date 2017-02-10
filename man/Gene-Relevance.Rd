@@ -2,17 +2,28 @@
 % Please edit documentation in R/gene-relevance.r
 \docType{class}
 \name{Gene Relevance}
+\alias{Gene Relevance}
 \alias{gene_relevance}
 \title{Gene relevances for entire data set}
 \usage{
-gene_relevance(dm, k = 20, dims = 1:2, n_proc = 1)
+gene_relevance(coords, exprs, ..., k = 20, dims = 1:2, verbose = FALSE)
+
+\S4method{gene_relevance}{DiffusionMap,missing}(coords, exprs, ..., k = 20,
+  dims = 1:2, verbose = FALSE)
+
+\S4method{gene_relevance}{matrix,matrix}(coords, exprs, ..., k = 20,
+  dims = 1:2, verbose = FALSE)
 }
 \arguments{
-\item{dm}{A \code{\link{DiffusionMap}} object.}
+\item{coords}{A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.}
+
+\item{exprs}{An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.}
+
+\item{...}{Ignored.}
+
+\item{k}{Number of nearest neighbors to use}
 
 \item{dims}{Index into columns of \code{coord}}
-
-\item{n_proc}{Number of threads for parallelisation.}
 }
 \value{
 A \code{GeneRelevance} object:
@@ -23,7 +34,11 @@ The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 \section{Slots}{
 
 \describe{
-\item{\code{partial}}{Array of partial derivatives wrt to considered dimensions in reduced space.
+\item{\code{coords}}{A cells \eqn{\times} dims \code{\link{matrix}} of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}.}
+
+\item{\code{exprs}}{A cells \eqn{\times} genes matrix of expressions.}
+
+\item{\code{partials}}{Array of partial derivatives wrt to considered dimensions in reduced space.
 (genes \eqn{\times} cells \eqn{\times} dimensions)}
 
 \item{\code{partials_norm}}{Matrix with norm of aforementioned derivatives. (n\_genes \eqn{\times} cells)}

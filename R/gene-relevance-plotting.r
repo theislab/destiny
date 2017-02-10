@@ -5,51 +5,77 @@ NULL
 #' 
 #' \code{plot(gene_relevance, 'Gene')} plots the gradient map of this gene,
 #' \code{plot(gene_relevance)} a relevance map of a selection of genes.
+#' Alternatively, you can use \code{plot_gradient_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
 #' 
 #' @param x            \code{\link{GeneRelevance}} object.
-#' @param dm           \code{\link{DiffusionMap}} object.
 #' @param y,gene       Gene name or index to create gradient map for. (a number or string)
+#' @param coords       A \code{\link{DiffusionMap}}/\code{\link{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
+#' @param exprs        An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is a matrix.
+#' @param ...          Passed to \code{plot_gradient_map}/\code{plot_gene_relevance}
 #' @param iter_smooth  Number of label smoothing iterations to perform on relevance map.
 #'                     The higher the more homogenous and the less local structure.
 #' @param genes        Genes to based relevance map on or number of genes to use. (vector of strings or one number)
 #'                     You can also pass an index into the gene names. (vector of numbers or logicals with length > 1)
-#' @param pal          Palette. Either A colormap function or a list of colors
-#' @param ...          Passed to \code{plot_gradient_map}/\code{plot_gene_relevance}
+#' @param pal          Palette. Either A colormap function or a list of colors.
 #' 
 #' @return ggplot2 plot, when plotting a relevance map with a list member $ids containing the IDs used.
 #' 
-#' @aliases plot.GeneRelevance
+#' @aliases plot.GeneRelevance plot_gradient_map plot_gene_relevance
 #' 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot', c('GeneRelevance', 'character'), function(x, y, ...) plot_gradient_map(x@dm, y, ...))
+setMethod('plot', c('GeneRelevance', 'character'), function(x, y, ...) plot_gradient_map(x, gene = y, ...))
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot', c('GeneRelevance', 'numeric'),   function(x, y, ...) plot_gradient_map(x@dm, y, ...))
+setMethod('plot', c('GeneRelevance', 'numeric'),   function(x, y, ...) plot_gradient_map(x, gene = y, ...))
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot', c('GeneRelevance', 'missing'), function(x, y, ...) plot_gene_relevance(x@dm, 2L, ...))
+setMethod('plot', c('GeneRelevance', 'missing'), function(x, y, ...) plot_gene_relevance(x, ...))
 
-#' @importFrom ggplot2 ggplot aes geom_point geom_segment scale_colour_gradientn ggtitle
+
+# plot_gradient_map -------------------------------------------------------------------------------------------------------
+
+
 #' @name Gene Relevance plotting
 #' @export
-plot_gradient_map <- function(dm, gene, ..., pal = cube_helix) {
-	if (!is(dm, 'DiffusionMap')) stop('dm needs to be a DiffusionMap object')
-	if (length(gene) != 1L) stop('You need to supply a single gene name or index')
+setGeneric('plot_gradient_map', function(coords, exprs, ..., gene, pal = cube_helix) standardGeneric('plot_gradient_map'))
+
+#' @name Gene Relevance plotting
+#' @export
+setMethod('plot_gradient_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, pal = cube_helix) {
+	plot_gradient_map_impl(gene_relevance(coords, exprs), gene = gene, pal = pal)
+})
+
+#' @name Gene Relevance plotting
+#' @export
+setMethod('plot_gradient_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, pal = cube_helix) {
+	plot_gradient_map_impl(gene_relevance(coords), gene = gene, pal = pal)
+})
+
+#' @name Gene Relevance plotting
+#' @export
+setMethod('plot_gradient_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, pal = cube_helix) {
+	plot_gradient_map_impl(coords, gene = gene, pal = pal)
+})
+
+#' @importFrom ggplot2 ggplot aes geom_point geom_segment scale_colour_gradientn labs
+plot_gradient_map_impl <- function(relevance_map, ..., gene, pal) {
+	if (missing(gene) || length(gene) != 1L) stop('You need to supply a single gene name or index')
 	if (is.function(pal)) pal <- pal(12)
 	
-	relevance_map <- gene_relevance(dm)
+	exprs <- relevance_map@exprs
+	coords <- relevance_map@coords
 	
-	all_exprs <- extract_doublematrix(dataset(dm))
-	gene_name <- if (is.character(gene)) gene else colnames(all_exprs)[[gene]]
-	expr <- all_exprs[, gene]
+	gene_name <- if (is.character(gene)) gene else colnames(exprs)[[gene]]
+	expr <- exprs[, gene]
 	partials_norm <- relevance_map@partials_norm[gene, ]
 	nn_index <- cbind(seq_along(expr), relevance_map@nn_index)
 	
 	# Plot gradient vectors
-	scatter <- cbind(
-		as.data.frame(dm),
+	scatter <- data.frame(
+		D1 = coords[, 1],
+		D2 = coords[, 2],
 		Expression = expr,
 		PartialsNorm = partials_norm)
 	
@@ -58,38 +84,59 @@ plot_gradient_map <- function(dm, gene, ..., pal = cube_helix) {
 	norm_top[sapply(norm_top, length) == 0] <- FALSE
 	norm_top <- unlist(norm_top)
 	
-	dc_var <- .05  # Fraction of overall DC variability
-	partials <- lapply(1:2, function(n_dc) {
-		dc <- dm[[paste0('DC', n_dc)]][norm_top]
-		partials <- relevance_map@partials[gene, norm_top, n_dc]
+	d_var <- .05  # Fraction of overall dimension variability
+	partials <- lapply(1:2, function(d) {
+		dc <- coords[norm_top, d]
+		partials <- relevance_map@partials[gene, norm_top, d]
 		# Scale magnitude of partial derivates
 		delta <- max(dc, na.rm = TRUE) - min(dc, na.rm = TRUE)
-		partials / max(abs(partials), na.rm = TRUE) * dc_var * delta
+		partials / max(abs(partials), na.rm = TRUE) * d_var * delta
 	})
 	
 	scatter_top <- cbind(
 		scatter[norm_top, ],
-		PartialsDC1 = partials[[1]],
-		PartialsDC2 = partials[[2]])
+		PartialsD1 = partials[[1]],
+		PartialsD2 = partials[[2]])
 	
+	names_dim <- get_dimension_names(coords)
 	ggplot() +
-		geom_point(aes(DC1, DC2, colour = Expression), scatter, alpha = 1) + 
+		geom_point(aes(D1, D2, colour = Expression), scatter, alpha = 1) + 
 		scale_colour_gradientn(colours = pal) + 
 		geom_segment(aes(
-			x = DC1 - PartialsDC1, xend = DC1 + PartialsDC1,
-			y = DC2 - PartialsDC2, yend = DC2 + PartialsDC2,
+			x = D1 - PartialsD1, xend = D1 + PartialsD1,
+			y = D2 - PartialsD2, yend = D2 + PartialsD2,
 			alpha = PartialsNorm), scatter_top) +
-		ggtitle(gene_name)
+		labs(title = gene_name, x = names_dim[[1]], y = names_dim[[2]])
 }
 
-#' @importFrom ggplot2 ggplot aes geom_point scale_color_manual ggtitle
+
+# plot_gene_relevance -----------------------------------------------------------------------------------------------------
+
 #' @name Gene Relevance plotting
 #' @export
-plot_gene_relevance <- function(dm, iter_smooth = 2L, genes = 5L, ..., pal = palette()) {
-	if (!is(dm, 'DiffusionMap')) stop('dm needs to be a DiffusionMap object')
-	
-	relevance_map <- gene_relevance(dm)
-	# TODO: non-dm, relevance_map is used below
+setGeneric('plot_gene_relevance', function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, pal = palette()) standardGeneric('plot_gene_relevance'))
+
+#' @name Gene Relevance plotting
+#' @export
+setMethod('plot_gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, pal = palette()) {
+	plot_gene_relevance_impl(gene_relevance(coords, exprs), iter_smooth = iter_smooth, genes = genes, pal = pal)
+})
+
+#' @name Gene Relevance plotting
+#' @export
+setMethod('plot_gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, pal = palette()) {
+	plot_gene_relevance_impl(gene_relevance(coords), iter_smooth = iter_smooth, genes = genes, pal = pal)
+})
+
+#' @name Gene Relevance plotting
+#' @export
+setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, pal = palette()) {
+	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, genes = genes, pal = pal)
+})
+
+#' @importFrom ggplot2 ggplot aes geom_point scale_color_manual labs
+plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, pal) {
+	coords <- relevance_map@coords
 	partials_norm <- relevance_map@partials_norm
 	
 	if (is.character(genes)) {
@@ -121,14 +168,20 @@ plot_gene_relevance <- function(dm, iter_smooth = 2L, genes = 5L, ..., pal = pal
 	}
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
-	rel_map_data <- cbind(as.data.frame(dm), Gene = as.factor(max_gene))
+	rel_map_data <- data.frame(D1 = coords[, 1], D2 = coords[, 2], Gene = as.factor(max_gene))
 	
-	rel_map <- ggplot(rel_map_data, aes(x = DC1, y = DC2, colour = Gene)) +
+	names_dim <- get_dimension_names(coords)
+	rel_map <- ggplot(rel_map_data, aes(x = D1, y = D2, colour = Gene)) +
 		geom_point(alpha = .8) + 
 		scale_color_manual(values = pal) +
-		ggtitle('Gene relevance map: DC1 vs DC2')
+		labs(title = sprintf('Gene relevance map: %s vs %s', names_dim[[1]], names_dim[[2]]), x = names_dim[[1]], y = names_dim[[2]])
 	
 	rel_map$ids <- gene_ids
 	
 	rel_map
+}
+
+get_dimension_names <- function(coords) {
+	if (!is.null(colnames(coords))) colnames(coords)[1:2]
+	else paste('Dimension', 1:2)
 }
