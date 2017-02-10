@@ -23,4 +23,3 @@ Fast eigen decomposition using ARPACK
 eig_decomp(cbind(c(1,-1), c(-1,1)), 2)
 
 }
-

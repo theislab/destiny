@@ -2,9 +2,9 @@
 % Please edit documentation in R/dpt-plotting.r
 \docType{methods}
 \name{plot.DPT}
-\alias{plot,DPT,missing-method}
-\alias{plot,DPT,numeric-method}
 \alias{plot.DPT}
+\alias{plot,DPT,numeric-method}
+\alias{plot,DPT,missing-method}
 \title{Plot DPT}
 \usage{
 plot.DPT(x, root = NULL, paths_to = integer(0L), dcs = 1:2,
@@ -58,4 +58,3 @@ plot(dpt, 1L, 2:3, col_by = 'num_cells')
 plot(dpt, col_by = 'DPT3')
 
 }
-

@@ -4,10 +4,10 @@
 \name{DiffusionMap methods}
 \alias{DiffusionMap methods}
 \alias{DiffusionMap-methods}
-\alias{print,DiffusionMap-method}
 \alias{print.DiffusionMap}
-\alias{show,DiffusionMap-method}
 \alias{show.DiffusionMap}
+\alias{print,DiffusionMap-method}
+\alias{show,DiffusionMap-method}
 \title{DiffusionMap methods}
 \usage{
 \S4method{print}{DiffusionMap}(x)
@@ -33,4 +33,3 @@ show(dm)
 \seealso{
 \link{DiffusionMap accessors}, \link{extractions}, \link{coercions} for more methods
 }
-

@@ -21,4 +21,3 @@ dm <- DiffusionMap(guo)
 random_root(dm)
 
 }
-

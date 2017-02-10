@@ -2,9 +2,9 @@
 % Please edit documentation in R/methods-update.r
 \docType{methods}
 \name{updateObject-method}
+\alias{updateObject-method}
 \alias{updateObject,DiffusionMap-method}
 \alias{updateObject,Sigmas-method}
-\alias{updateObject-method}
 \title{Update old \link{DiffusionMap}s or \link{Sigmas} to a newer version}
 \usage{
 \S4method{updateObject}{DiffusionMap}(object, ..., verbose = FALSE)
@@ -24,4 +24,3 @@ A \link{DiffusionMap} or \link{Sigmas} object that is valid when used with the c
 \description{
 Update old \link{DiffusionMap}s or \link{Sigmas} to a newer version
 }
-

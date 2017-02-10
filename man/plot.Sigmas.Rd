@@ -2,8 +2,8 @@
 % Please edit documentation in R/sigmas-plotting.r
 \docType{methods}
 \name{plot.Sigmas}
-\alias{plot,Sigmas,missing-method}
 \alias{plot.Sigmas}
+\alias{plot,Sigmas,missing-method}
 \title{Plot \link{Sigmas} object}
 \usage{
 \S4method{plot}{Sigmas,missing}(x, col = par("fg"),
@@ -46,4 +46,3 @@ sigs <- find_sigmas(guo)
 plot(sigs)
 
 }
-

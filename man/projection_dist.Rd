@@ -4,17 +4,18 @@
 \alias{projection_dist}
 \title{Projection distance}
 \usage{
-projection_dist(dm, new_data, ..., verbose = FALSE)
+projection_dist(dm, new_dcs = NULL, ..., new_data, verbose = FALSE)
 }
 \arguments{
 \item{dm}{A \code{\link{DiffusionMap}} object.}
 
+\item{new_dcs}{Diffusion component matrix of which to calculate the distance to the data.}
+
+\item{...}{Passed to \code{\link{proxy::dist}} if \code{new_data} was passed.}
+
 \item{new_data}{New data points to project into the diffusion map.
 Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.}
-
-\item{...}{Passed to \code{\link{proxy::dist}}}
 }
 \description{
 Projection distance
 }
-

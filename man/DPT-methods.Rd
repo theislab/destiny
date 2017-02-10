@@ -37,4 +37,3 @@ plot(dpt_9_branches, col_by = 'branch')
 \seealso{
 \link{plot.DPT} uses \code{branch_divide} for its \code{divide} argument.
 }
-

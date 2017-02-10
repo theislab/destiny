@@ -12,4 +12,3 @@ The main function is \code{\link{DiffusionMap}}, which returns an object you can
 demo(destiny, ask = FALSE)
 
 }
-

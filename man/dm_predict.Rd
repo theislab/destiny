@@ -31,4 +31,3 @@ dc2 <- dm_predict(dm, g2)
 plot(dm, new_dcs = dc2)
 
 }
-

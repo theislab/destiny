@@ -2,8 +2,8 @@
 % Please edit documentation in R/cube_helix.r
 \name{cube_helix}
 \alias{cube_helix}
-\alias{scale_color_cube_helix}
 \alias{scale_colour_cube_helix}
+\alias{scale_color_cube_helix}
 \alias{scale_fill_cube_helix}
 \title{Sequential color palette using the cube helix system}
 \usage{
@@ -60,4 +60,3 @@ r <- runif(100)
 plot(1:100, r, col = cr(r), type = 'b', pch = 20)
 
 }
-

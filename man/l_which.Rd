@@ -30,4 +30,3 @@ all(l_which(2, len = 3L) == c(FALSE, TRUE, FALSE))
 all(l_which(c('a', 'c'), letters[1:3]) == c(TRUE, FALSE, TRUE))
 
 }
-

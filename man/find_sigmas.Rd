@@ -51,4 +51,3 @@ DiffusionMap(guo, sigs)
 \seealso{
 \code{\link{Sigmas}}, the class returned by this; \code{\link{DiffusionMap}}, the class this is used for
 }
-

@@ -4,9 +4,9 @@
 \name{DPT matrix methods}
 \alias{DPT matrix methods}
 \alias{[.DPT}
-\alias{dim.DPT}
-\alias{ncol.DPT}
 \alias{nrow.DPT}
+\alias{ncol.DPT}
+\alias{dim.DPT}
 \title{DPT Matrix methods}
 \usage{
 \S4method{[}{DPT,index,index,logicalOrMissing}(x, i, j, ..., drop = TRUE)
@@ -29,4 +29,3 @@ Treat DPT object as a matrix of cell-by-cell DPT distances.
 \seealso{
 \code{\link{as.matrix.DPT}}
 }
-

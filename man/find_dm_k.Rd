@@ -26,4 +26,3 @@ still being computationally feasible. This function approximates it depending on
 curve(find_dm_k(n),     0, 13000, xname = 'n')
 curve(find_dm_k(n) / n, 0, 13000, xname = 'n')
 }
-

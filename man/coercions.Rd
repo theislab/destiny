@@ -2,15 +2,15 @@
 % Please edit documentation in R/methods-coercion.r
 \docType{methods}
 \name{coercions}
-\alias{as.data.frame,DPT-method}
-\alias{as.data.frame,DiffusionMap-method}
-\alias{as.data.frame.DPT}
-\alias{as.data.frame.DiffusionMap}
-\alias{as.matrix,DPT-method}
-\alias{as.matrix.DPT}
 \alias{coercions}
-\alias{fortify.DPT}
+\alias{as.data.frame.DiffusionMap}
+\alias{as.data.frame,DiffusionMap-method}
 \alias{fortify.DiffusionMap}
+\alias{as.data.frame.DPT}
+\alias{as.data.frame,DPT-method}
+\alias{fortify.DPT}
+\alias{as.matrix.DPT}
+\alias{as.matrix,DPT-method}
 \title{Coercion methods}
 \usage{
 \S4method{as.data.frame}{DiffusionMap}(x, row.names = NULL,
@@ -57,4 +57,3 @@ stopifnot(all(classes[   varLabels(guo) ] == c('factor', 'integer')))
 \seealso{
 \link{DiffusionMap accessors}, \link{extractions}, \link{DiffusionMap methods} for more methods
 }
-

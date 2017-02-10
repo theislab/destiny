@@ -2,13 +2,13 @@
 % Please edit documentation in R/sigmas.r
 \docType{class}
 \name{Sigmas class}
-\alias{Sigmas}
 \alias{Sigmas class}
+\alias{Sigmas}
 \alias{Sigmas-class}
 \alias{Sigmas-methods}
-\alias{optimal_sigma,Sigmas-method}
 \alias{print,Sigmas-method}
 \alias{show,Sigmas-method}
+\alias{optimal_sigma,Sigmas-method}
 \title{Sigmas Object}
 \usage{
 Sigmas(...)
@@ -53,6 +53,7 @@ the resulting \code{Sigmas} object has all slots except of \code{optimal_sigma} 
 
 \item{\code{avrd_norms}}{Vector of length \eqn{m} containing the average dimensionality for the corresponding sigma.}
 }}
+
 \examples{
 data(guo)
 sigs <- find_sigmas(guo, verbose = FALSE)
@@ -63,4 +64,3 @@ print(sigs)
 \seealso{
 \code{\link{find_sigmas}}, the function to determine a locally optimal sigma and returning this class
 }
-

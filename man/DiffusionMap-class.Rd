@@ -2,8 +2,8 @@
 % Please edit documentation in R/diffusionmap.r
 \docType{class}
 \name{DiffusionMap class}
-\alias{DiffusionMap}
 \alias{DiffusionMap class}
+\alias{DiffusionMap}
 \alias{DiffusionMap-class}
 \title{Create a diffusion map of cells}
 \usage{
@@ -87,6 +87,7 @@ being treated as expression data features (and the others ignored), or an \link[
 
 \item{\code{vars}}{Vars parameter used to extract the part of the data used for diffusion map creation}
 }}
+
 \examples{
 data(guo)
 DiffusionMap(guo)
@@ -96,4 +97,3 @@ DiffusionMap(guo, 13, censor_val = 15, censor_range = c(15, 40), verbose = TRUE)
 \seealso{
 \link{DiffusionMap-methods} to get and set the slots. \code{\link{find_sigmas}} to pre-calculate a fitting global \code{sigma} parameter
 }
-

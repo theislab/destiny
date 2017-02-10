@@ -2,15 +2,15 @@
 % Please edit documentation in R/diffusionmap-plotting.r
 \docType{methods}
 \name{plot.DiffusionMap}
+\alias{plot.DiffusionMap}
 \alias{plot,DiffusionMap,missing-method}
 \alias{plot,DiffusionMap,numeric-method}
-\alias{plot.DiffusionMap}
 \title{3D or 2D plot of diffusion map}
 \usage{
 plot.DiffusionMap(x, dims = 1:3, new_dcs = NULL, new_data = NULL,
   col = NULL, col_by = NULL, col_limits = NULL, col_new = "red",
-  pal = NULL, ..., mar = NULL, ticks = FALSE, axes = TRUE,
-  box = FALSE, legend_main = col_by, legend_opts = list(),
+  pal = NULL, pal_new = NULL, ..., mar = NULL, ticks = FALSE,
+  axes = TRUE, box = FALSE, legend_main = col_by, legend_opts = list(),
   interactive = FALSE, draw_legend = !is.null(col_by) || (length(col) > 1 &&
   !is.character(col)), consec_col = TRUE, col_na = "grey",
   plot_more = function(p, ..., rescale = NULL) NULL)
@@ -35,7 +35,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{col_limits}{If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})}
 
-\item{col_new}{If \code{new_dcs} is given, it will take on this color. (default: red)}
+\item{col_new}{If \code{new_dcs} is given, it will take on this color. A vector is also possible. (default: red)}
 
 \item{pal}{Palette used to map the \code{col} vector to colors. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)}
 
@@ -79,4 +79,3 @@ data(guo)
 plot(DiffusionMap(guo))
 
 }
-

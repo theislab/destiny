@@ -60,4 +60,3 @@ plot(sample(6), col = color_data)
 colorlegend(color_data)
 
 }
-

@@ -4,8 +4,8 @@
 \name{ExpressionSet helpers}
 \alias{ExpressionSet helpers}
 \alias{as.ExpressionSet}
-\alias{as.ExpressionSet,data.frame-method}
 \alias{as.ExpressionSet-method}
+\alias{as.ExpressionSet,data.frame-method}
 \alias{read.ExpressionSet}
 \title{Convert object to \link[Biobase]{ExpressionSet} or read it from a file}
 \usage{
@@ -49,4 +49,3 @@ phenoData(set)$Time == 1:3
 \seealso{
 \link[utils]{read.table} on which \code{read.ExpressionSet} is based, and \link[Biobase]{ExpressionSet}.
 }
-

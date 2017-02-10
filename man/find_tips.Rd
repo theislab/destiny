@@ -24,4 +24,3 @@ is_tip <- l_which(find_tips(dm), len = ncol(dataset(dm)))
 plot(dm, col = factor(is_tip))
 
 }
-

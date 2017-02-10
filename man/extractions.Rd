@@ -2,15 +2,15 @@
 % Please edit documentation in R/methods-extraction.r
 \docType{methods}
 \name{extractions}
-\alias{$,DPT-method}
-\alias{$,DiffusionMap-method}
-\alias{[[,DPT,character,missing-method}
-\alias{[[,DiffusionMap,character,missing-method}
 \alias{extractions}
-\alias{names,DPT-method}
-\alias{names,DiffusionMap-method}
 \alias{names.DPT}
+\alias{names,DPT-method}
+\alias{$,DPT-method}
+\alias{[[,DPT,character,missing-method}
 \alias{names.DiffusionMap}
+\alias{names,DiffusionMap-method}
+\alias{$,DiffusionMap-method}
+\alias{[[,DiffusionMap,character,missing-method}
 \title{Extraction methods}
 \usage{
 \S4method{names}{DiffusionMap}(x)
@@ -57,4 +57,3 @@ dm$DPT1
 \seealso{
 \link[base]{Extract}, \code{\link[base]{names}} for the generics. \link{DiffusionMap accessors}, \link{DiffusionMap methods}, \link{coercions} for more methods
 }
-

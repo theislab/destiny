@@ -3,17 +3,17 @@
 \docType{methods}
 \name{DiffusionMap accessors}
 \alias{DiffusionMap accessors}
-\alias{dataset,DiffusionMap-method}
-\alias{dataset<-,DiffusionMap-method}
-\alias{distance,DiffusionMap-method}
-\alias{distance<-,DiffusionMap-method}
 \alias{eigenvalues,DiffusionMap-method}
-\alias{eigenvalues<-,DiffusionMap-method}
 \alias{eigenvectors,DiffusionMap-method}
-\alias{eigenvectors<-,DiffusionMap-method}
-\alias{optimal_sigma,DiffusionMap-method}
 \alias{sigmas,DiffusionMap-method}
+\alias{eigenvalues<-,DiffusionMap-method}
+\alias{eigenvectors<-,DiffusionMap-method}
 \alias{sigmas<-,DiffusionMap-method}
+\alias{dataset,DiffusionMap-method}
+\alias{distance,DiffusionMap-method}
+\alias{optimal_sigma,DiffusionMap-method}
+\alias{dataset<-,DiffusionMap-method}
+\alias{distance<-,DiffusionMap-method}
 \title{DiffusionMap accession methods}
 \usage{
 \S4method{eigenvalues}{DiffusionMap}(object)
@@ -62,4 +62,3 @@ optimal_sigma(dm)
 \seealso{
 \link{extractions}, \link{DiffusionMap methods}, \link{coercions} for more methods
 }
-
