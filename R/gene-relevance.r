@@ -1,4 +1,4 @@
-#' @include diffusionmap.r
+#' @include diffusionmap.r s4-unions.r
 NULL
 
 #' Gene relevances for entire data set
@@ -30,7 +30,8 @@ setClass('GeneRelevance', slots = c(
 	exprs = 'matrix',
 	partials = 'array',
 	partials_norm = 'matrix',
-	nn_index = 'matrix'))
+	nn_index = 'matrix',  # k = ncol(nn_index)
+	dims = 'ColIndex'))
 
 #' @name Gene Relevance
 #' @export
@@ -40,12 +41,14 @@ setGeneric('gene_relevance', function(coords, exprs, ..., k = 20, dims = 1:2, ve
 #' @export
 setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k = 20, dims = 1:2, verbose = FALSE) {
 	dm <- coords
-	if (!is.null(dm@data_env$relevance_map))
-		return(dm@data_env$relevance_map)
-	coords <- eigenvectors(dm)
-	exprs <- extract_doublematrix(dataset(dm))
-	dm@data_env$relevance_map <- gene_relevance_impl(coords, exprs, k = k, dims = dims, verbose = verbose)
-	dm@data_env$relevance_map
+	relevance_map <- dm@data_env$relevance_map
+	if (is.null(relevance_map) || ncol(relevance_map@nn_index) != k || !identical(relevance_map@dims, dims)) {
+		coords <- eigenvectors(dm)
+		exprs <- extract_doublematrix(dataset(dm))
+		relevance_map <- gene_relevance_impl(coords, exprs, k = k, dims = dims, verbose = verbose)
+		dm@data_env$relevance_map <- relevance_map
+	}
+	relevance_map
 })
 
 #' @name Gene Relevance
@@ -58,13 +61,13 @@ setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., 
 #' @importFrom Biobase rowMedians
 gene_relevance_impl <- function(coords, exprs, ..., k, dims, verbose) {
 	if (is.null(colnames(exprs))) stop('The expression matrix columns need to be named but are NULL')
-	coords <- coords[, dims]
+	coords_used <- coords[, dims]
 	nn_index <- get.knn(exprs, k, algorithm = 'cover_tree')$nn.index
 	
 	k <- ncol(nn_index)
 	n_genes <- ncol(exprs)
-	n_cells <- nrow(coords)
-	n_dims <- ncol(coords) # Diffusion components to compute partial derivatives for
+	n_cells <- nrow(coords_used)
+	n_dims <- ncol(coords_used) # Diffusion components to compute partial derivatives for
 	partials <- array(NA, dim = c(n_genes, n_cells, n_dims))
 	
 	if (verbose) cat('Calculating expression gradient\n')
@@ -85,8 +88,8 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, verbose) {
 		# Compute partial derivatives in direction of current dimension
 		
 		if (verbose) cat('Calculating partial derivatives of dimension ', d, '/', n_dims, '\n')
-		# We could optionaly add normalization by max(coords[, d]) - min(coords[, d])
-		gradient_coord <- apply(nn_index, 2L, function(nn) coords[nn, d] - coords[, d])
+		# We could optionaly add normalization by max(coords_used[, d]) - min(coords_used[, d])
+		gradient_coord <- apply(nn_index, 2L, function(nn) coords_used[nn, d] - coords_used[, d])
 		
 		partials[, , d] <- apply(gradient_exprs, 3L, function(grad_gene_exprs) {
 			# Compute median of difference quotients to NN
@@ -108,11 +111,12 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, verbose) {
 	# Prepare output
 	rownames(partials_norm) <- colnames(exprs)
 	dimnames(partials)[[1]] <- colnames(exprs)
-	dimnames(partials)[[3]] <- if (is.character(dims)) dims else colnames(coords)
+	dimnames(partials)[[3]] <- if (is.character(dims)) dims else colnames(coords_used)
 	new('GeneRelevance',
 		coords = coords,
 		exprs = exprs,
 		partials = partials,
 		partials_norm = partials_norm,
-		nn_index = nn_index)
+		nn_index = nn_index,
+		dims = dims)
 }

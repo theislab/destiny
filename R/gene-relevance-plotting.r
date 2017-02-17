@@ -59,13 +59,15 @@ setMethod('plot_gradient_map', c('GeneRelevance', 'missing'), function(coords, e
 	plot_gradient_map_impl(coords, gene = gene, pal = pal)
 })
 
-#' @importFrom ggplot2 ggplot aes geom_point geom_segment scale_colour_gradientn labs
+#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_segment scale_colour_gradientn ggtitle
 plot_gradient_map_impl <- function(relevance_map, ..., gene, pal) {
 	if (missing(gene) || length(gene) != 1L) stop('You need to supply a single gene name or index')
 	if (is.function(pal)) pal <- pal(12)
 	
 	exprs <- relevance_map@exprs
-	coords <- relevance_map@coords
+	dims <- relevance_map@dims
+	coords <- relevance_map@coords[, dims]
+	colnames(coords) <- get_dimension_names(coords)
 	
 	gene_name <- if (is.character(gene)) gene else colnames(exprs)[[gene]]
 	expr <- exprs[, gene]
@@ -73,9 +75,8 @@ plot_gradient_map_impl <- function(relevance_map, ..., gene, pal) {
 	nn_index <- cbind(seq_along(expr), relevance_map@nn_index)
 	
 	# Plot gradient vectors
-	scatter <- data.frame(
-		D1 = coords[, 1],
-		D2 = coords[, 2],
+	scatter <- cbind(
+		as.data.frame(coords),
 		Expression = expr,
 		PartialsNorm = partials_norm)
 	
@@ -85,7 +86,7 @@ plot_gradient_map_impl <- function(relevance_map, ..., gene, pal) {
 	norm_top <- unlist(norm_top)
 	
 	d_var <- .05  # Fraction of overall dimension variability
-	partials <- lapply(1:2, function(d) {
+	partials <- lapply(seq_len(length(dims)), function(d) {
 		dc <- coords[norm_top, d]
 		partials <- relevance_map@partials[gene, norm_top, d]
 		# Scale magnitude of partial derivates
@@ -93,20 +94,23 @@ plot_gradient_map_impl <- function(relevance_map, ..., gene, pal) {
 		partials / max(abs(partials), na.rm = TRUE) * d_var * delta
 	})
 	
+	D1 <- scatter[norm_top, 1]
+	D2 <- scatter[norm_top, 2]
 	scatter_top <- cbind(
 		scatter[norm_top, ],
-		PartialsD1 = partials[[1]],
-		PartialsD2 = partials[[2]])
+		D1start = D1 - partials[[1]], D1end = D1 + partials[[1]],
+		D2start = D2 - partials[[2]], D2end = D2 + partials[[2]])
 	
-	names_dim <- get_dimension_names(coords)
+	d1 <- colnames(coords)[[1]]
+	d2 <- colnames(coords)[[2]]
 	ggplot() +
-		geom_point(aes(D1, D2, colour = Expression), scatter, alpha = 1) + 
+		geom_point(aes_string(d1, d2, colour = 'Expression'), scatter, alpha = 1) + 
 		scale_colour_gradientn(colours = pal) + 
 		geom_segment(aes(
-			x = D1 - PartialsD1, xend = D1 + PartialsD1,
-			y = D2 - PartialsD2, yend = D2 + PartialsD2,
+			x = D1start, xend = D1end,
+			y = D2start, yend = D2end,
 			alpha = PartialsNorm), scatter_top) +
-		labs(title = gene_name, x = names_dim[[1]], y = names_dim[[2]])
+		ggtitle(gene_name)
 }
 
 
@@ -134,10 +138,11 @@ setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords,
 	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, genes = genes, pal = pal)
 })
 
-#' @importFrom ggplot2 ggplot aes geom_point scale_color_manual labs
+#' @importFrom ggplot2 ggplot aes_string geom_point scale_color_manual ggtitle
 plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, pal) {
-	coords <- relevance_map@coords
 	partials_norm <- relevance_map@partials_norm
+	coords <- relevance_map@coords[, relevance_map@dims]
+	colnames(coords) <- get_dimension_names(coords)
 	
 	if (is.character(genes)) {
 		found <- sapply(genes, function(id) length(grep(id, rownames(partials_norm))) > 0)
@@ -168,13 +173,14 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, pal
 	}
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
-	rel_map_data <- data.frame(D1 = coords[, 1], D2 = coords[, 2], Gene = as.factor(max_gene))
+	rel_map_data <- cbind(as.data.frame(coords), Gene = as.factor(max_gene))
 	
-	names_dim <- get_dimension_names(coords)
-	rel_map <- ggplot(rel_map_data, aes(x = D1, y = D2, colour = Gene)) +
+	d1 <- colnames(coords)[[1]]
+	d2 <- colnames(coords)[[2]]
+	rel_map <- ggplot(rel_map_data, aes_string(x = d1, y = d2, colour = 'Gene')) +
 		geom_point(alpha = .8) + 
 		scale_color_manual(values = pal) +
-		labs(title = sprintf('Gene relevance map: %s vs %s', names_dim[[1]], names_dim[[2]]), x = names_dim[[1]], y = names_dim[[2]])
+		ggtitle(sprintf('Gene relevance map'))
 	
 	rel_map$ids <- gene_ids
 	
