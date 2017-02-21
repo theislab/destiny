@@ -245,8 +245,10 @@ stopifnot_distmatrix <- function(distance) {
 }
 
 
+#' @importFrom Biobase sampleNames
 n_samples <- function(data, distances) {
 	if (is.null(data)) nrow(distances)
+	else if (is(data, 'ExpressionSet')) length(sampleNames(data))
 	else nrow(data)
 }
 
