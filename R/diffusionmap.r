@@ -118,8 +118,8 @@ setClass(
 DiffusionMap <- function(
 	data,
 	sigma = 'local',
-	k = find_dm_k(nrow(data) - 1L),
-	n_eigs = min(20L, nrow(data) - 2L),
+	k = find_dm_k(n_samples(data) - 1L),
+	n_eigs = min(20L, n_samples(data) - 2L),
 	density_norm = TRUE,
 	...,
 	distance = c('euclidean', 'cosine', 'rankcor'),
@@ -208,6 +208,13 @@ DiffusionMap <- function(
 		censor_val    = censor_val,
 		censor_range  = censor_range,
 		missing_range = missing_range)
+}
+
+
+#' @importFrom Biobase sampleNames
+n_samples <- function(data) {
+	if (is(data, 'ExpressionSet')) length(sampleNames(data))
+	else nrow(data)
 }
 
 
