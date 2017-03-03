@@ -15,7 +15,7 @@ DiffusionMap(data = stopifnot_distmatrix(distance), sigma = "local",
   vars = NULL, verbose = !is.null(censor_range), suppress_dpt = FALSE)
 }
 \arguments{
-\item{data}{Expression data to be analyzed. Provide \code{vars} to select specific columns other than the default: all double value columns}
+\item{data}{Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns. If \code{distance} is a distance matrix, \code{data} has to be a \code{\link{data.frame}} with covariates only.}
 
 \item{sigma}{Diffusion scale parameter of the Gaussian kernel. One of \code{'local'}, \code{'global'}, a (\link[base]{numeric}) global sigma or a \link{Sigmas} object.
 When choosing \code{'global'}, a global sigma will be calculated using \code{\link{find_sigmas}}. (Optional. default: \code{'local'})
@@ -92,6 +92,10 @@ being treated as expression data features (and the others ignored), or an \link[
 data(guo)
 DiffusionMap(guo)
 DiffusionMap(guo, 13, censor_val = 15, censor_range = c(15, 40), verbose = TRUE)
+
+covars <- data.frame(covar1 = letters[1:100])
+dists <- dist(matrix(rnorm(100*10), 100))
+DiffusionMap(covars, distance = dists)
 
 }
 \seealso{

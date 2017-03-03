@@ -12,7 +12,7 @@ sigma_msg <- function(sigma) sprintf(
 #' The provided data can be a double \link[base]{matrix} of expression data or a \link[base]{data.frame} with all non-integer (double) columns
 #' being treated as expression data features (and the others ignored), or an \link[Biobase]{ExpressionSet}.
 #' 
-#' @param data           Expression data to be analyzed. Provide \code{vars} to select specific columns other than the default: all double value columns
+#' @param data           Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns. If \code{distance} is a distance matrix, \code{data} has to be a \code{\link{data.frame}} with covariates only.
 #' @param sigma          Diffusion scale parameter of the Gaussian kernel. One of \code{'local'}, \code{'global'}, a (\link[base]{numeric}) global sigma or a \link{Sigmas} object.
 #'                       When choosing \code{'global'}, a global sigma will be calculated using \code{\link{find_sigmas}}. (Optional. default: \code{'local'})
 #'                       A larger sigma might be necessary if the eigenvalues can not be found because of a singularity in the matrix
@@ -54,6 +54,10 @@ sigma_msg <- function(sigma) sprintf(
 #' data(guo)
 #' DiffusionMap(guo)
 #' DiffusionMap(guo, 13, censor_val = 15, censor_range = c(15, 40), verbose = TRUE)
+#' 
+#' covars <- data.frame(covar1 = letters[1:100])
+#' dists <- dist(matrix(rnorm(100*10), 100))
+#' DiffusionMap(covars, distance = dists)
 #' 
 #' @aliases DiffusionMap DiffusionMap-class
 #' 
@@ -145,9 +149,9 @@ DiffusionMap <- function(
 	#TODO: SVD
 	
 	if (is_distmatrix(distance)) {
-		if (!is.null(data)) stop('provide either `data` or a `distances` matrix')
+		if (!(is.data.frame(data) || is.null(data))) stop('If you provide a matrix for `distance`, `data` has to be NULL or a covariate `data.frame` is of class', class(data))
 		
-		data_env$data <- distance
+		data_env$data <- if (is.null(data)) distance else data  # put covariates or distance
 		dists <- as(distance, 'symmetricMatrix')
 		distance <- 'custom'
 		imputed_data <- NULL
@@ -177,7 +181,7 @@ DiffusionMap <- function(
 	
 	if (k >= n) stop(sprintf('k has to be < nrow(data) (And %s \u2265 nrow(data))', k))
 	
-	censor <- test_censoring(censor_val, censor_range, data, missing_range)
+	censor <- test_censoring(censor_val, censor_range, imputed_data, missing_range)
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
