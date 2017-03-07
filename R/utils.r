@@ -1,7 +1,7 @@
 #' @importFrom Biobase exprs
 extract_doublematrix <- function(data, vars = NULL) {
 	if (is.data.frame(data)) {
-		data <- as.matrix(data[sapply(data, is.double)])
+		data <- as.matrix(data[, sapply(data, is.double)])
 	} else if (inherits(data, 'ExpressionSet')) {
 		data <- t(exprs(data))
 	} else if (!is.matrix(data)) {

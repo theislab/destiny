@@ -12,6 +12,10 @@
 #' @param step.size,steps,sample.rows,early.exit                                     Corresponding \code{\link{find_sigmas}} parameters
 #' @param object                                                                     Corresponding \code{\link{optimal_sigma}} parameters
 #' 
+#' @examples
+#' DiffusionMap <- DiffusionMapCompat
+#' \dontrun{source('my-old-script.r')}
+#' 
 #' @name destiny-deprecated
 #' @importFrom BiocGenerics updateObject
 #' @keywords internal

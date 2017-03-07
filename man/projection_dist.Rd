@@ -19,3 +19,11 @@ Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{Expr
 \description{
 Projection distance
 }
+\examples{
+data(guo_norm)
+g2_32 <- guo_norm[, guo_norm$num_cells < 64]
+g64  <- guo_norm[, guo_norm$num_cells == 64]
+dm <- DiffusionMap(g2_32)
+d <- projection_dist(dm, new_data = g64)
+
+}

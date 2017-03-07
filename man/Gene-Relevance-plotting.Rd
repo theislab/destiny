@@ -64,3 +64,16 @@ ggplot2 plot, when plotting a relevance map with a list member $ids containing t
 \code{plot(gene_relevance)} a relevance map of a selection of genes.
 Alternatively, you can use \code{plot_gradient_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
 }
+\examples{
+data(guo_norm)
+dm <- DiffusionMap(guo_norm)
+gr <- gene_relevance(dm)
+plot(gr)          # or plot_gene_relevance(dm)
+plot(gr, 'Fgf4')  # or plot_gradient_map(dm, 'Fgf4')
+
+guo_norm_mat <- t(Biobase::exprs(guo_norm))
+pca <- prcomp(guo_norm_mat)$x
+plot_gene_relevance(pca, guo_norm_mat)
+plot_gradient_map(pca, guo_norm_mat, gene = 'Fgf4')
+
+}

@@ -57,4 +57,9 @@ lWhich(idx, nms = seq_len(len), len = length(nms), useNames = TRUE)
 This is most useful if you have old scripts that use the old argument order and the default being global sigma.
 Simply put \code{DiffusionMap <- DiffusionMapCompat} on top of your script to make it work with destiny 2.x.
 }
+\examples{
+DiffusionMap <- DiffusionMapCompat
+\dontrun{source('my-old-script.r')}
+
+}
 \keyword{internal}

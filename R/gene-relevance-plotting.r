@@ -20,6 +20,18 @@ NULL
 #' 
 #' @return ggplot2 plot, when plotting a relevance map with a list member $ids containing the IDs used.
 #' 
+#' @examples
+#' data(guo_norm)
+#' dm <- DiffusionMap(guo_norm)
+#' gr <- gene_relevance(dm)
+#' plot(gr)          # or plot_gene_relevance(dm)
+#' plot(gr, 'Fgf4')  # or plot_gradient_map(dm, 'Fgf4')
+#' 
+#' guo_norm_mat <- t(Biobase::exprs(guo_norm))
+#' pca <- prcomp(guo_norm_mat)$x
+#' plot_gene_relevance(pca, guo_norm_mat)
+#' plot_gradient_map(pca, guo_norm_mat, gene = 'Fgf4')
+#' 
 #' @aliases plot.GeneRelevance plot_gradient_map plot_gene_relevance
 #' 
 #' @name Gene Relevance plotting

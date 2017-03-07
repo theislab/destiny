@@ -5,6 +5,16 @@
 #' @param object  Object from which to extract or to which to assign a value
 #' @param value   Value to assign within an object
 #' 
+#' @examples
+#' data(guo_norm)
+#' dm <- DiffusionMap(guo_norm)
+#' eigenvalues(dm)
+#' eigenvectors(dm)
+#' sigmas(dm)
+#' optimal_sigma(dm)
+#' dataset(dm)
+#' distance(dm)
+#' 
 #' @seealso \link{DiffusionMap methods} and \link{Sigmas class} for implementations
 #' @aliases eigenvalues   eigenvectors   sigmas   dataset   distance   optimal_sigma
 #'          eigenvalues<- eigenvectors<- sigmas<- dataset<- distance<-

@@ -58,6 +58,17 @@ optimal_sigma(object)
 \description{
 destiny provides several generic methods and implements them for the \code{\link{DiffusionMap}} and \code{\link{Sigmas}} classes.
 }
+\examples{
+data(guo_norm)
+dm <- DiffusionMap(guo_norm)
+eigenvalues(dm)
+eigenvectors(dm)
+sigmas(dm)
+optimal_sigma(dm)
+dataset(dm)
+distance(dm)
+
+}
 \seealso{
 \link{DiffusionMap methods} and \link{Sigmas class} for implementations
 }

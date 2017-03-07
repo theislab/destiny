@@ -20,6 +20,12 @@ NULL
 #' @slot partials_norm  Matrix with norm of aforementioned derivatives. (n\_genes \eqn{\times} cells)
 #' @slot nn_index       Matrix of k nearest neighbor indices. (cells \eqn{\times} k)
 #' 
+#' @examples
+#' data(guo_norm)
+#' dm <- DiffusionMap(guo_norm)
+#' gr <- gene_relevance(dm)
+#' # now plot them!
+#' 
 #' @seealso \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
 #' 
 #' @aliases gene_relevance

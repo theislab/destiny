@@ -6,6 +6,13 @@
 #' @param new_data  New data points to project into the diffusion map.
 #'                  Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.
 #' 
+#' @examples
+#' data(guo_norm)
+#' g2_32 <- guo_norm[, guo_norm$num_cells < 64]
+#' g64  <- guo_norm[, guo_norm$num_cells == 64]
+#' dm <- DiffusionMap(g2_32)
+#' d <- projection_dist(dm, new_data = g64)
+#' 
 #' @importFrom FNN get.knnx
 #' @export
 projection_dist <- function(dm, new_dcs = NULL, ..., new_data, verbose = FALSE) {
