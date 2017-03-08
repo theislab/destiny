@@ -76,3 +76,19 @@ flipped_dcs <- function(d, dcs) {
 
 
 rescale_mat <- function(mat, ...) apply(mat, 2L, scales::rescale, ...)
+
+
+#' @importFrom Biobase sampleNames
+n_samples <- function(data, distances) {
+	if (is.null(data)) nrow(distances)
+	else if (is(data, 'ExpressionSet')) length(sampleNames(data))
+	else nrow(data)
+}
+
+
+#' @importFrom Biobase featureNames
+n_features <- function(data, distances) {
+	if (is.null(data)) ncol(distances)
+	else if (is(data, 'ExpressionSet')) length(featureNames(data))
+	else ncol(data)
+}

@@ -39,7 +39,8 @@ dm_predict <- function(dm, new_data, ..., verbose = FALSE) {
 	
 	data <- extract_doublematrix(dataset(dm), dm@vars)
 	new_data <- extract_doublematrix(new_data, dm@vars)
-	if (!ncol(data) == ncol(new_data)) stop('new data needs to have the same features as the one used to create the diffusion map')
+	if (!n_features(data) == n_features(new_data))
+		stop('new data needs to have the same features as the one used to create the diffusion map')
 	
 	censor <- !is.null(dm@censor_val) || any(is.na(data)) || any(is.na(new_data))
 	#censor imples euclidean distance

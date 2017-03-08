@@ -249,14 +249,6 @@ stopifnot_distmatrix <- function(distance) {
 }
 
 
-#' @importFrom Biobase sampleNames
-n_samples <- function(data, distances) {
-	if (is.null(data)) nrow(distances)
-	else if (is(data, 'ExpressionSet')) length(sampleNames(data))
-	else nrow(data)
-}
-
-
 #' @importFrom methods new is
 get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'euclidean', censor_val = NULL, censor_range = NULL, missing_range = NULL, vars = NULL, verbose = FALSE) {
 	unspecified_local <- identical(sigma, 'local')
