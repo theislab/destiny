@@ -9,7 +9,7 @@ NULL
 #' @param divide      Vector of branch numbers to use for division
 #' @param value       Value of slot to set
 #' 
-#' @return \code{branch_divide} and \code{dataset<-} return the changed object, \code{dataset} the extracted data.
+#' @return \code{branch_divide} and \code{dataset<-} return the changed object, \code{dataset} the extracted data, and \code{tips} the tip indices.
 #' 
 #' @examples
 #' data(guo_norm)
@@ -24,7 +24,7 @@ NULL
 #' @name DPT methods
 #' @export
 branch_divide <- function(dpt, divide = integer(0L)) {
-	if (!is(dpt, 'DPT')) stop('branch_divide needs to be called on a DPT object, not a ', class(dpt))
+	check_dpt(dpt)
 	if (length(divide) == 0L) return(dpt)
 	
 	for (b in divide) {
@@ -50,6 +50,15 @@ branch_divide <- function(dpt, divide = integer(0L)) {
 
 #' @name DPT methods
 #' @export
+tips <- function(dpt) {
+	check_dpt(dpt)
+	tip_idx <- pt@tips[, 1]
+	branch_order <- order(pt@branch[tip_idx, 1])
+	which(tip_idx)[branch_order]
+}
+
+#' @name DPT methods
+#' @export
 setMethod('dataset', 'DPT', function(object) dataset(object@dm))
 
 #' @name DPT methods
@@ -59,3 +68,5 @@ setMethod('dataset<-', 'DPT', function(object, value) {
 	validObject(object)
 	object
 })
+
+check_dpt <- function(dpt) if (!is(dpt, 'DPT')) stop('branch_divide needs to be called on a DPT object, not a ', class(dpt))

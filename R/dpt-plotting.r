@@ -50,7 +50,7 @@ plot.DPT <- function(
 	col = NULL,
 	legend_main = col_by
 ) {
-	dpt  <- x
+	dpt <- x
 	dpt_flat <- branch_divide(dpt, divide)
 	
 	if (!is.null(root) && length(root) < 1L) stop('root needs to be specified')

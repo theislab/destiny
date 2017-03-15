@@ -6,9 +6,12 @@
 \alias{branch_divide}
 \alias{dataset,DPT-method}
 \alias{dataset<-,DPT-method}
+\alias{tips}
 \title{DPT methods}
 \usage{
 branch_divide(dpt, divide = integer(0L))
+
+tips(dpt)
 
 \S4method{dataset}{DPT}(object)
 
@@ -22,7 +25,7 @@ branch_divide(dpt, divide = integer(0L))
 \item{value}{Value of slot to set}
 }
 \value{
-\code{branch_divide} and \code{dataset<-} return the changed object, \code{dataset} the extracted data.
+\code{branch_divide} and \code{dataset<-} return the changed object, \code{dataset} the extracted data, and \code{tips} the tip indices.
 }
 \description{
 Methods for the \link{DPT} class. \code{branch_divide} subdivides branches for plotting (see the examples).
