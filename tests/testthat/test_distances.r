@@ -14,7 +14,7 @@ test_that('no_censoring produces the correct output for local sigma', {
 	k <- 3L
 	n_local <- 2:3
 	
-	knn <- find_knn(test_data, k)
+	knn <- find_knn(test_data, NULL, k)
 	expect_identical(dim(knn$nn_dist), c(nrow(test_data), k))
 	expect_identical(dim(knn$dist), rep(nrow(test_data), 2L))
 	expect_identical(sum(!is.finite(knn$dist)), 0L)
