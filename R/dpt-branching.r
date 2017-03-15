@@ -107,13 +107,11 @@ branchcut <- function(dpt_mat, bid, b, w_width) {
 # as cells which are not assigned to any branch are defined as undeceided (label NA)
 #' @importFrom utils combn
 organize_branches <- function(branches) {
-	n <- do.call(max, branches)
-	
 	intersect_branches <- function(bs) intersect(branches[[bs[[1L]]]], branches[[bs[[2L]]]])
 	branch_intersections <- lapply(combn(3L, 2L, simplify = FALSE), intersect_branches)
 	inters <- Reduce(union, branch_intersections, integer())
 	
-	lapply(branches, function(b) setdiff(b, inters))
+	lapply(branches, function(b) union(setdiff(b, inters), b[[1]]))
 }
 
 
