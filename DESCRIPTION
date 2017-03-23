@@ -1,7 +1,7 @@
 Package: destiny
 Type: Package
 Title: Creates diffusion maps
-Version: 2.0.5
+Version: 2.0.6
 Date: 2014-12-19
 Authors@R: c(
 	person('Philipp', 'Angerer', NULL, 'philipp.angerer@helmholtz-muenchen.de', c('cre', 'aut')),
