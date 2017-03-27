@@ -1,3 +1,5 @@
+library(Matrix)
+
 full_t_p_local <- function(dat, sigma, dists) {
 	d2 <- as.matrix(dists ^ 2)
 	
@@ -26,4 +28,26 @@ test_that('no_censoring produces the correct output for local sigma', {
 	dists <- no_censoring(test_data, sigma, knn$dist)
 	expect_equal(dim(dists), dim(dists_expected))
 	expect_equal(as.matrix(dists), dists_expected)
+})
+
+matidx_apply <- function(nrow, ncol, FUN) {
+	mat <- matrix(NA, nrow, ncol)
+	vals <- mapply(FUN, row(mat), col(mat))
+	matrix(vals, nrow, ncol)
+}
+
+test_that('no_censoring produces the correct output for cor distance', {
+	test_data <- matrix(rnorm(4L*5L), 4L, 5L)
+	k <- 3L
+	
+	cor_dists_expected <- matidx_apply(nrow(test_data), nrow(test_data), function(r1, r2) 1 - cor(test_data[r1, ], test_data[r2, ]))
+	cor_dists_expected <- cor_dists_expected ^ 2
+	
+	dists <- destiny:::find_knn(test_data, NULL, k)$dist
+	cor_dists <- destiny:::no_censoring_icor_rank(dists, test_data)
+	cor_dists <- as.matrix(cor_dists)
+	dimnames(cor_dists) <- NULL
+	
+	expect_identical(dim(cor_dists), dim(cor_dists_expected))
+	expect_equal(cor_dists, cor_dists_expected)
 })

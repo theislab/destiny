@@ -343,8 +343,7 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb = invisible) {
 	d2 <- switch(distance,
 		euclidean = , custom = dists ^ 2,
-		cosine  = icor2_no_censor(dists, imputed_data, cb),
-		rankcor = icor2_no_censor(dists, imputed_data, cb, TRUE),
+		cosine  = , rankcor = no_censoring_icor_rank(dists, imputed_data, distance == 'rankcor', cb),
 		stop('you added a dists measure but did not handle it here'))
 	stopifnot(isSymmetric(d2))
 	
@@ -363,6 +362,13 @@ no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb 
 	}
 	
 	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), symmetric = TRUE, index1 = FALSE)
+}
+
+#' @importFrom Matrix forceSymmetric
+no_censoring_icor_rank <- function(euclid_dists, imputed_data, rank = FALSE, cb = invisible) {
+	euclid_dists <- as(euclid_dists, 'dsTMatrix')
+	dists <- icor2_no_censor(euclid_dists@i, euclid_dists@j, nrow(euclid_dists), imputed_data, cb, rank)
+	forceSymmetric(dists, euclid_dists@uplo)
 }
 
 #' @importFrom methods as

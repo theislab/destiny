@@ -13,7 +13,7 @@ double cor(const NumericVector v1,
 	if (n != v2.size()) stop("v1 needs to be of same size as v2");
 	
 	double v1sum, v2sum, v12sum, v1sqr_sum, v2sqr_sum;
-	v1sum = v2sum = v12sum = v1sqr_sum = v1sqr_sum = 0;
+	v1sum = v2sum = v12sum = v1sqr_sum = v2sqr_sum = 0;
 	
 	for (int i=0; i<n; i++) {
 		v1sum += v1[i];
@@ -35,35 +35,37 @@ IntegerVector rank(NumericVector x) {
 
 // [[Rcpp::export]]
 Eigen::SparseMatrix<double> icor2_no_censor(
-	const Eigen::SparseMatrix<double> dists,
-	NumericMatrix imputed_data,
-	const Function callback,
-	bool use_rank = false
+		const IntegerVector i,
+		const IntegerVector j,
+		const int n,
+		const NumericMatrix imputed_data,
+		const Function callback,
+		const bool use_rank = false
 ) {
-	const int n = dists.rows();
-	
 	NumericMatrix data;
 	if (!use_rank) {
-		data = imputed_data;
+		data = clone(imputed_data);
 	} else {
 		data = NumericMatrix(imputed_data.nrow(), imputed_data.ncol());
-		for (int i=0; i<data.nrow(); i++) {
-			data(i, _) = rank(imputed_data(i, _));
+		for (int r=0; r<data.nrow(); r++) {
+			data(r, _) = rank(imputed_data(r, _));
 		}
 	}
 	
-	typedef Eigen::SparseMatrix<double> M;
-	M d2(dists);
+	typedef Eigen::Triplet<double> T;
+	std::vector<T> triplets;
+	triplets.reserve(i.size());
 	
-	for (int i=0; i<n; ++i) {
-		for (M::InnerIterator it(d2, i); it; ++it) {
-			const double d = 1 - cor(data(i, _), data(it.index(), _));
-			it.valueRef() = d*d;
-		}
-		if (i%1000 == 0)
-			callback(i+1);
+	for (int k=0; k<i.size(); k++) {
+		const double d = 1 - cor(data(i[k], _), data(j[k], _));
+		triplets.push_back(T(i[k], j[k], d*d));
+		
+		if (k%1000 == 0)
+			callback(k+1);
 	}
-	callback(n);
+	callback(i.size());
 	
+	Eigen::SparseMatrix<double> d2(n, n);
+	d2.setFromTriplets(triplets.begin(), triplets.end());
 	return d2;
 }
