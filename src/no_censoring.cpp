@@ -13,7 +13,7 @@ double cor(const NumericVector v1,
 	if (n != v2.size()) stop("v1 needs to be of same size as v2");
 	
 	double v1sum, v2sum, v12sum, v1sqr_sum, v2sqr_sum;
-	v1sum = v2sum = v12sum = v1sqr_sum = v1sqr_sum = 0;
+	v1sum = v2sum = v12sum = v1sqr_sum = v2sqr_sum = 0;
 	
 	for (int i=0; i<n; i++) {
 		v1sum += v1[i];
