@@ -2,6 +2,7 @@
 
 ((* block packages *))
 	\usepackage[svgnames]{xcolor}
+	\usepackage[inline,shortlabels]{enumitem}
 	((( super() )))
 	\usepackage{authblk}
 	\usepackage{csquotes}
@@ -9,7 +10,6 @@
 	\usepackage{etoolbox}
 	\usepackage[authoryear,round]{natbib}
 	\usepackage{parskip}
-	\usepackage[inline,shortlabels]{enumitem}
 	\usepackage{upquote}
 	\AtBeginDocument{%
 		\def\PYZsq{\textquotesingle}%
