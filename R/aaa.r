@@ -3,6 +3,7 @@ bad_default_palette <- c('black', 'red', 'green3', 'blue', 'cyan', 'magenta', 'y
 gud_default_palette <- c('#8DD3C7', '#FFED6F', '#BEBADA', '#FB8072', '#80B1D3', '#FDB462', '#B3DE69', '#BC80BD', '#FCCDE5', '#D9D9D9', '#CCEBC5', '#FFFFB3')
 
 # do not use .Call.graphics like grDevices::palette
+#' @importFrom utils getFromNamespace
 set_palette <- function(v) .Call(getFromNamespace('C_palette', 'grDevices'), v)
 
 .onLoad <- function(libname, pkgname) {
