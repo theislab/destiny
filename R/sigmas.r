@@ -134,6 +134,7 @@ find_sigmas <- function(
 	min_dist <- min(dists)
 	if (min_dist == 0)
 		stop('Minimum distance in the data may not be 0')
+	dists <- as(dists, 'symmetricMatrix')
 	
 	if (is.null(start))
 		start <- log10(min_dist)
@@ -144,9 +145,9 @@ find_sigmas <- function(
 	
 	get_trans_p <-
 		if (test_censoring(censor_val, censor_range, data, missing_range)) {
-			function(sigma) censoring(data, censor_val, censor_range, missing_range, sigma)
+			function(sigma) censoring(data, sigma, dists, censor_val, censor_range, missing_range)
 		} else {
-			msqd <- as(-(dists ^ 2), 'Matrix')
+			msqd <- -(dists ^ 2)
 			function(sigma) exp(msqd / (2 * sigma ^ 2))
 		}
 	

@@ -9,7 +9,11 @@ censoring <- function(data, sigma, dists, censor_val = NULL, censor_range = NULL
 	
 	data <- as.matrix(data)
 	
-	censoring_impl(data, sigma, dists, censor_val, censor_range, missing_range, callback)
+	# dists is a sparse symmetrix matrix, which eigen cannot handle
+	# so we just pass its filled triangle as sparse matrix and convert it back afterwards
+	uplo <- dists@uplo
+	half <- censoring_impl(data, sigma, structure(dists, class = 'dgCMatrix'), censor_val, censor_range, missing_range, callback)
+	structure(half, class = 'dsCMatrix', uplo = uplo)
 }
 
 predict_censoring <- function(data, data2, censor_val = NULL, censor_range = NULL, missing_range = NULL, sigma) {
@@ -24,17 +28,14 @@ predict_censoring <- function(data, data2, censor_val = NULL, censor_range = NUL
 validate_censoring <- function(data, sigma, dists, censor_val, censor_range, missing_range) {
 	G <- ncol(data)
 	n <- nrow(data)
-	no_censor_val     <- missing(censor_val)    || is.null(censor_val)
-	no_censor_range   <- missing(censor_range)  || is.null(censor_range)
-	no_missing_range  <- missing(missing_range) || is.null(missing_range)
 	
-	if (any(is.na(data)) && no_missing_range)
+	if (any(is.na(data)) && is.null(missing_range))
 		stop('Your data contains missing values (NA). You have to provide a the `missing_range` parameter.')
 	
-	if (no_censor_val != no_censor_range)
+	if (is.null(censor_val) != is.null(censor_range))
 		stop('You have to provide both a censoring value and a censor_range or none')
 	
-	if (!no_censor_range) {
+	if (!is.null(censor_range)) {
 		if (!is.numeric(censor_val) || (length(censor_val) != 1L && length(censor_val) != G))
 		stop('censor_val has to be a single numeric value, or length(censor_val) == ncol(data) must be TRUE')
 		
@@ -43,7 +44,7 @@ validate_censoring <- function(data, sigma, dists, censor_val, censor_range, mis
 				 or a matrix with nrow(censor_range) == ncol(data) where each row is such a vector')
 	}
 	
-	if (!no_missing_range) {
+	if (!is.null(missing_range)) {
 		if (!is.numeric(missing_range) || !(nrow(missing_range) %in% c(G, 1L)) || ncol(missing_range) != 2L || any(diff(t(missing_range)) <= 0L))
 		stop('missing_range has to be a numeric vector of length 2, the second of which being larger,
 				 or a matrix with nrow(missing_range) == ncol(data) where each row is such a vector')
@@ -52,8 +53,8 @@ validate_censoring <- function(data, sigma, dists, censor_val, censor_range, mis
 	if (!is.numeric(sigma) || !length(sigma) %in% c(n, 1L))
 		stop('sigma has to be a single numeric value or of length nrow(data)')
 	
-	if (!is(dists, 'dgCMatrix'))
-		stop('nns has to be a dgCMatrix, not ', class(dists))
+	if (!is(dists, 'dsCMatrix'))
+		stop('dists has to be a dsCMatrix, not ', class(dists))
 }
 
 test_censoring <- function(censor_val, censor_range, data, missing_range) {

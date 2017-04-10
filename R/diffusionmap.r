@@ -322,7 +322,7 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 	# initialize trans_p
 	trans_p <- verbose_timing(verbose, 'Calculating transition probabilities', {
 		if (censor)
-			censoring(imputed_data, sigma, as(dists, 'dgCMatrix'), censor_val, censor_range, missing_range, cb)
+			censoring(imputed_data, sigma, dists, censor_val, censor_range, missing_range, cb)
 		else
 			no_censoring(imputed_data, sigma, dists, distance, cb)
 	})
@@ -335,8 +335,8 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 	diag(trans_p) <- 0
 	trans_p <- drop0(trans_p)
 	
-	#TODO: make symmetric
-	as(trans_p, 'symmetricMatrix')
+	stopifnot(is(trans_p, 'symmetricMatrix'))
+	trans_p
 }
 
 #' @importFrom Matrix sparseMatrix which tcrossprod
