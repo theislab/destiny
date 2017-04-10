@@ -4,8 +4,17 @@
 \name{Gene Relevance plotting}
 \alias{Gene Relevance plotting}
 \alias{plot.GeneRelevance}
+\alias{plot,GeneRelevance,character-method}
+\alias{plot,GeneRelevance,numeric-method}
+\alias{plot,GeneRelevance,missing-method}
 \alias{plot_gradient_map}
+\alias{plot_gradient_map,matrix,matrix-method}
+\alias{plot_gradient_map,DiffusionMap,missing-method}
+\alias{plot_gradient_map,GeneRelevance,missing-method}
 \alias{plot_gene_relevance}
+\alias{plot_gene_relevance,matrix,matrix-method}
+\alias{plot_gene_relevance,DiffusionMap,missing-method}
+\alias{plot_gene_relevance,GeneRelevance,missing-method}
 \title{Plot gene relevance or gradient map}
 \usage{
 \S4method{plot}{GeneRelevance,character}(x, y, ...)

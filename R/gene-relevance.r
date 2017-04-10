@@ -5,11 +5,12 @@ NULL
 #' 
 #' The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 #' 
-#' @param coords  A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
-#' @param exprs   An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.
-#' @param ...     Ignored.
-#' @param k       Number of nearest neighbors to use
-#' @param dims    Index into columns of \code{coord}
+#' @param coords   A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
+#' @param exprs    An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.
+#' @param ...      Ignored.
+#' @param k        Number of nearest neighbors to use
+#' @param dims     Index into columns of \code{coord}
+#' @param verbose  If TRUE, log additional info to the console
 #' 
 #' @return A \code{GeneRelevance} object:
 #' 
@@ -19,6 +20,7 @@ NULL
 #'                      (genes \eqn{\times} cells \eqn{\times} dimensions)
 #' @slot partials_norm  Matrix with norm of aforementioned derivatives. (n\_genes \eqn{\times} cells)
 #' @slot nn_index       Matrix of k nearest neighbor indices. (cells \eqn{\times} k)
+#' @slot dims           Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}.
 #' 
 #' @examples
 #' data(guo_norm)
@@ -28,7 +30,11 @@ NULL
 #' 
 #' @seealso \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
 #' 
-#' @aliases gene_relevance
+#' @aliases
+#'   GeneRelevance GeneRelevance-class
+#'   gene_relevance
+#'   gene_relevance,matrix,matrix-method
+#'   gene_relevance,DiffusionMap,missing-method
 #' @name Gene Relevance
 #' @export
 setClass('GeneRelevance', slots = c(

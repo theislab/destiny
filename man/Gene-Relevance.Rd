@@ -3,7 +3,11 @@
 \docType{class}
 \name{Gene Relevance}
 \alias{Gene Relevance}
+\alias{GeneRelevance}
+\alias{GeneRelevance-class}
 \alias{gene_relevance}
+\alias{gene_relevance,matrix,matrix-method}
+\alias{gene_relevance,DiffusionMap,missing-method}
 \title{Gene relevances for entire data set}
 \usage{
 gene_relevance(coords, exprs, ..., k = 20, dims = 1:2, verbose = FALSE)
@@ -24,6 +28,8 @@ gene_relevance(coords, exprs, ..., k = 20, dims = 1:2, verbose = FALSE)
 \item{k}{Number of nearest neighbors to use}
 
 \item{dims}{Index into columns of \code{coord}}
+
+\item{verbose}{If TRUE, log additional info to the console}
 }
 \value{
 A \code{GeneRelevance} object:
@@ -44,6 +50,8 @@ The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 \item{\code{partials_norm}}{Matrix with norm of aforementioned derivatives. (n\_genes \eqn{\times} cells)}
 
 \item{\code{nn_index}}{Matrix of k nearest neighbor indices. (cells \eqn{\times} k)}
+
+\item{\code{dims}}{Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}.}
 }}
 
 \examples{

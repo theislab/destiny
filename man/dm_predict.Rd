@@ -12,7 +12,7 @@ dm_predict(dm, new_data, ..., verbose = FALSE)
 \item{new_data}{New data points to project into the diffusion map.
 Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.}
 
-\item{...}{Passed to \code{\link{proxy::dist}(new_data, data, dm@distance, ...)}.}
+\item{...}{Passed to \code{\link[proxy:dist]{proxy::dist}(new_data, data, dm@distance, ...)}.}
 
 \item{verbose}{Show progress messages?}
 }

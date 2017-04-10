@@ -32,7 +32,19 @@ NULL
 #' plot_gene_relevance(pca, guo_norm_mat)
 #' plot_gradient_map(pca, guo_norm_mat, gene = 'Fgf4')
 #' 
-#' @aliases plot.GeneRelevance plot_gradient_map plot_gene_relevance
+#' @aliases
+#'   plot.GeneRelevance
+#'   plot,GeneRelevance,character-method
+#'   plot,GeneRelevance,numeric-method
+#'   plot,GeneRelevance,missing-method
+#'   plot_gradient_map
+#'   plot_gradient_map,matrix,matrix-method
+#'   plot_gradient_map,DiffusionMap,missing-method
+#'   plot_gradient_map,GeneRelevance,missing-method
+#'   plot_gene_relevance
+#'   plot_gene_relevance,matrix,matrix-method
+#'   plot_gene_relevance,DiffusionMap,missing-method
+#'   plot_gene_relevance,GeneRelevance,missing-method
 #' 
 #' @name Gene Relevance plotting
 #' @export
@@ -118,10 +130,10 @@ plot_gradient_map_impl <- function(relevance_map, ..., gene, pal) {
 	ggplot() +
 		geom_point(aes_string(d1, d2, colour = 'Expression'), scatter, alpha = 1) + 
 		scale_colour_gradientn(colours = pal) + 
-		geom_segment(aes(
-			x = D1start, xend = D1end,
-			y = D2start, yend = D2end,
-			alpha = PartialsNorm), scatter_top) +
+		geom_segment(aes_string(
+			x = 'D1start', xend = 'D1end',
+			y = 'D2start', yend = 'D2end',
+			alpha = 'PartialsNorm'), scatter_top) +
 		ggtitle(gene_name)
 }
 

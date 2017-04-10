@@ -5,7 +5,21 @@ NULL
 #' 
 #' Treat DPT object as a matrix of cell-by-cell DPT distances.
 #' 
-#' @aliases [.DPT nrow.DPT ncol.DPT dim.DPT
+#' @param x     \code{\link{DPT}} object.
+#' @param i,j   \link[=numeric]{Numeric} or \link{logical} index.
+#' @param ...   ignored
+#' @param drop  If \code{\link{TRUE}}, coerce result to a vector if it would otherwise have \code{1 \%in\% dim(result)}.
+#' 
+#' @aliases
+#'   [.DPT
+#'   [,DPT,index,index,logicalOrMissing-method
+#'   [,DPT,index,missing,logicalOrMissing-method
+#'   [,DPT,missing,index,logicalOrMissing-method
+#'   [,DPT,missing,missing,logicalOrMissing-method
+#'   [[,DPT,index,index-method
+#'   nrow.DPT nrow,DPT-method
+#'   ncol.DPT ncol,DPT-method
+#'   dim.DPT  dim,DPT-method
 #' @name DPT matrix methods
 #' 
 #' @seealso \code{\link{as.matrix.DPT}}
@@ -53,10 +67,22 @@ setMethod('[', c('DPT', 'missing', 'missing', 'logicalOrMissing'), function(x, i
 
 #' @name DPT matrix methods
 #' @export
+setMethod('[[', c('DPT', 'index', 'index'), function(x, i, j, ...) {
+	if (length(i) != 1L || length(j) == 1L)
+		stop('Can only extract one element, but i and j were of lengths ', length(i), ' and ', length(j))
+	x[i, j, ...]
+})
+
+#' @importFrom BiocGenerics nrow
+#' @name DPT matrix methods
+#' @export
 setMethod('nrow', 'DPT', function(x) length(x@dm@d))
+
+#' @importFrom BiocGenerics ncol
 #' @name DPT matrix methods
 #' @export
 setMethod('ncol', 'DPT', function(x) length(x@dm@d))
+
 #' @name DPT matrix methods
 #' @export
 setMethod('dim', 'DPT', function(x) c(nrow(x), ncol(x)))

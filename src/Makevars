@@ -1,1 +1,1 @@
-PKG_CXXFLAGS=-g
+PKG_CXXFLAGS=-ggdb

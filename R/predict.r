@@ -18,7 +18,7 @@ centered_cosine_dist <- function(x, y) 1 - cor(x, y)
 #' @param new_data  New data points to project into the diffusion map.
 #'                  Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.
 #' @param verbose   Show progress messages?
-#' @param ...       Passed to \code{\link{proxy::dist}(new_data, data, dm@distance, ...)}.
+#' @param ...       Passed to \code{\link[proxy:dist]{proxy::dist}(new_data, data, dm@distance, ...)}.
 #' 
 #' @return A \eqn{nrow(new\_data) \times ncol(eigenvectors(dif))} matrix of projected diffusion components for the new data.
 #' 

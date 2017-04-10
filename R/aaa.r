@@ -4,7 +4,10 @@ gud_default_palette <- c('#8DD3C7', '#FFED6F', '#BEBADA', '#FB8072', '#80B1D3', 
 
 # do not use .Call.graphics like grDevices::palette
 #' @importFrom utils getFromNamespace
-set_palette <- function(v) .Call(getFromNamespace('C_palette', 'grDevices'), v)
+set_palette <- function(v) {
+	cp <- getFromNamespace('C_palette', 'grDevices')
+	.Call(cp, v)
+}
 
 .onLoad <- function(libname, pkgname) {
 	if (identical(palette(), bad_default_palette)) {

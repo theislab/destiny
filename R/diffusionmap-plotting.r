@@ -18,6 +18,7 @@ NULL
 #' @param col_limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
 #' @param col_new      If \code{new_dcs} is given, it will take on this color. A vector is also possible. (default: red)
 #' @param pal          Palette used to map the \code{col} vector to colors. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)
+#' @param pal_new      Palette used to map the \code{col_new} vector to colors. (default: see \code{pal} argument)
 #' @param ...          Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})
 #' @param mar          Bottom, left, top, and right margins (default: \code{par(mar)})
 #' @param ticks        logical. If TRUE, show axis ticks (default: FALSE)

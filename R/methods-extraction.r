@@ -61,7 +61,7 @@ setMethod('[[', c('DiffusionMap', 'character', 'missing'), function(x, i, j, ...
 #' @name extractions
 #' @export
 setMethod('[[', c('DPT', 'character', 'missing'), function(x, i, j, ...) {
-	if (identical(i, 'dpt')) return(dpt_for_branch(dpt, 1L))  #TODO
+	if (identical(i, 'dpt')) return(dpt_for_branch(x, 1L))  #TODO
 	
 	num_i <- if (grepl('DPT\\d+', i)) as.integer(sub('DPT(\\d+)', '\\1', i))
 	
@@ -70,13 +70,6 @@ setMethod('[[', c('DPT', 'character', 'missing'), function(x, i, j, ...) {
 	} else if (identical(i, 'Branch') || identical(i, 'branch')) {
 		x@branch[, 1L]
 	} else x@dm[[i]]
-})
-#' @name extractions
-#' @export
-setMethod('[[', c('DPT', 'index', 'index'), function(x, i, j, ...) {
-	if (length(i) != 1L || length(j) == 1L)
-		stop('Can only extract one element, but i and j were of lengths ', length(i), ' and ', length(j))
-	x[i, j, ...]
 })
 
 

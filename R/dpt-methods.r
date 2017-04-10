@@ -52,8 +52,8 @@ branch_divide <- function(dpt, divide = integer(0L)) {
 #' @export
 tips <- function(dpt) {
 	check_dpt(dpt)
-	tip_idx <- pt@tips[, 1]
-	branch_order <- order(pt@branch[tip_idx, 1])
+	tip_idx <- dpt@tips[, 1]
+	branch_order <- order(dpt@branch[tip_idx, 1])
 	which(tip_idx)[branch_order]
 }
 

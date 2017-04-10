@@ -39,6 +39,8 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{pal}{Palette used to map the \code{col} vector to colors. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)}
 
+\item{pal_new}{Palette used to map the \code{col_new} vector to colors. (default: see \code{pal} argument)}
+
 \item{...}{Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})}
 
 \item{mar}{Bottom, left, top, and right margins (default: \code{par(mar)})}
