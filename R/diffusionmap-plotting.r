@@ -44,7 +44,6 @@ NULL
 #' 
 #' @importFrom graphics par axis plot plot.new
 #' @importFrom grDevices palette
-#' @importFrom scatterplot3d scatterplot3d
 #' 
 #' @name plot.DiffusionMap
 #' @export
