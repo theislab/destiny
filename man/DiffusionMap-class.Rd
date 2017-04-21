@@ -34,6 +34,8 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 
 \item{n_local}{If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma.}
 
+\item{rotate}{logical. If TRUE, rotate the eigenvalues to get a slimmer diffusion map}
+
 \item{censor_val}{Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)}
 
 \item{censor_range}{Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix}
@@ -77,6 +79,8 @@ being treated as expression data features (and the others ignored), or an \link[
 \item{\code{n_local}}{The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density}
 
 \item{\code{density_norm}}{Was density normalization used?}
+
+\item{\code{rotate}}{Were the eigenvectors rotated?}
 
 \item{\code{distance}}{Distance measurement method used.}
 
