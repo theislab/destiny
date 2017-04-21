@@ -22,6 +22,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @param ...            All parameter after this are optional and have to be specified by name
 #' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).
 #' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma.
+#' @param rotate         logical. If TRUE, rotate the eigenvalues to get a slimmer diffusion map
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)
 #' @param censor_range   Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
 #' @param missing_range  Whole data range for missing value model. Has to be specified if NAs are in the data
@@ -42,6 +43,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot k              The k parameter for kNN
 #' @slot n_local        The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density
 #' @slot density_norm   Was density normalization used?
+#' @slot rotate         Were the eigenvectors rotated?
 #' @slot distance       Distance measurement method used.
 #' @slot censor_val     Censoring value
 #' @slot censor_range   Censoring range
@@ -78,6 +80,7 @@ setClass(
 		k             = 'numeric',
 		n_local       = 'numeric',
 		density_norm  = 'logical',
+		rotate        = 'logical',
 		distance      = 'character',
 		censor_val    = 'numericOrNULL',
 		censor_range  = 'numericOrNULL',
@@ -100,6 +103,8 @@ setClass(
 			'k must be a number'
 		else if (length(object@density_norm) != 1)
 			'density_norm must be TRUE or FALSE'
+		else if (length(object@rotate) != 1)
+			'rotate must be TRUE or FALSE'
 		else if (!(object@distance %in% c('euclidean', 'cosine', 'rankcor', 'custom')))
 			'distance must be "euclidean", "cosine" or "rankcor"'
 		else if (is.null(object@censor_val) != is.null(object@censor_range))
@@ -128,6 +133,7 @@ DiffusionMap <- function(
 	...,
 	distance = c('euclidean', 'cosine', 'rankcor'),
 	n_local = 5:7,
+	rotate = FALSE,
 	censor_val = NULL, censor_range = NULL,
 	missing_range = NULL,
 	vars = NULL,
@@ -208,7 +214,8 @@ DiffusionMap <- function(
 	
 	eig_transitions <- decomp_transitions(transitions, n_eigs, verbose)
 	
-	eig_vec <- as.matrix(t(t(eig_transitions$vectors) %*% d_rot))
+	eig_vec <- eig_transitions$vectors
+	if (rotate) eig_vec <- as.matrix(t(t(eig_vec) %*% d_rot))
 	colnames(eig_vec) <- paste0('DC', seq(0, n_eigs))
 	
 	new(
@@ -223,6 +230,7 @@ DiffusionMap <- function(
 		d_norm        = d_norm,
 		k             = k,
 		n_local       = n_local,
+		rotate        = rotate,
 		density_norm  = density_norm,
 		distance      = distance,
 		censor_val    = censor_val,
@@ -358,7 +366,7 @@ no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb 
 		S1 <- m(tcrossprod(Matrix(sigma)))
 		S2 <- m(outer(sigma ^ 2, sigma ^ 2, '+'))
 		
-		sqrt(2 * S1 / S2) * exp(-d2@x / S2)
+		sqrt(2 * S1 / S2) * exp(-d2@x / S2 / 2)
 	}
 	
 	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), symmetric = TRUE, index1 = FALSE)
