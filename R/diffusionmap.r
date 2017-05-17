@@ -242,7 +242,7 @@ DiffusionMap <- function(
 is_distmatrix <- function(distance) {
 	if (is.character(distance))
 		FALSE
-	else if ((is.matrix(distance) && all.equal(dim(distance))) || is(distance, 'dist') || is(distance, 'symmetricMatrix'))
+	else if ((is.matrix(distance) && diff(dim(distance)) == 0L) || is(distance, 'dist') || is(distance, 'symmetricMatrix'))
 		TRUE
 	else
 		stop(
