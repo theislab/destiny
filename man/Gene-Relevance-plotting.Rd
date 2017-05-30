@@ -23,16 +23,17 @@
 
 \S4method{plot}{GeneRelevance,missing}(x, y, ...)
 
-plot_gradient_map(coords, exprs, ..., gene, pal = cube_helix)
+plot_gradient_map(coords, exprs, ..., gene, pal = cube_helix,
+  faceter = facet_wrap(~Gene))
 
 \S4method{plot_gradient_map}{matrix,matrix}(coords, exprs, ..., gene,
-  pal = cube_helix)
+  pal = cube_helix, faceter = facet_wrap(~Gene))
 
 \S4method{plot_gradient_map}{DiffusionMap,missing}(coords, exprs, ..., gene,
-  pal = cube_helix)
+  pal = cube_helix, faceter = facet_wrap(~Gene))
 
 \S4method{plot_gradient_map}{GeneRelevance,missing}(coords, exprs, ..., gene,
-  pal = cube_helix)
+  pal = cube_helix, faceter = facet_wrap(~Gene))
 
 plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, genes = 5L,
   pal = palette())
@@ -49,7 +50,7 @@ plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, genes = 5L,
 \arguments{
 \item{x}{\code{\link{GeneRelevance}} object.}
 
-\item{y, gene}{Gene name or index to create gradient map for. (a number or string)}
+\item{y, gene}{Gene name(s) or index/indices to create gradient map for. (integer or character)}
 
 \item{...}{Passed to \code{plot_gradient_map}/\code{plot_gene_relevance}}
 
@@ -58,6 +59,8 @@ plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, genes = 5L,
 \item{exprs}{An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is a matrix.}
 
 \item{pal}{Palette. Either A colormap function or a list of colors.}
+
+\item{faceter}{A ggplot faceter like \code{\link[ggplot2]{facet_wrap}(~ Gene)}.}
 
 \item{iter_smooth}{Number of label smoothing iterations to perform on relevance map.
 The higher the more homogenous and the less local structure.}

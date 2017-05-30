@@ -8,7 +8,7 @@ NULL
 #' Alternatively, you can use \code{plot_gradient_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
 #' 
 #' @param x            \code{\link{GeneRelevance}} object.
-#' @param y,gene       Gene name or index to create gradient map for. (a number or string)
+#' @param y,gene       Gene name(s) or index/indices to create gradient map for. (integer or character)
 #' @param coords       A \code{\link{DiffusionMap}}/\code{\link{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
 #' @param exprs        An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is a matrix.
 #' @param ...          Passed to \code{plot_gradient_map}/\code{plot_gene_relevance}
@@ -17,6 +17,7 @@ NULL
 #' @param genes        Genes to based relevance map on or number of genes to use. (vector of strings or one number)
 #'                     You can also pass an index into the gene names. (vector of numbers or logicals with length > 1)
 #' @param pal          Palette. Either A colormap function or a list of colors.
+#' @param faceter      A ggplot faceter like \code{\link[ggplot2]{facet_wrap}(~ Gene)}.
 #' 
 #' @return ggplot2 plot, when plotting a relevance map with a list member $ids containing the IDs used.
 #' 
@@ -63,29 +64,29 @@ setMethod('plot', c('GeneRelevance', 'missing'), function(x, y, ...) plot_gene_r
 
 #' @name Gene Relevance plotting
 #' @export
-setGeneric('plot_gradient_map', function(coords, exprs, ..., gene, pal = cube_helix) standardGeneric('plot_gradient_map'))
+setGeneric('plot_gradient_map', function(coords, exprs, ..., gene, pal = cube_helix, faceter = facet_wrap(~ Gene)) standardGeneric('plot_gradient_map'))
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gradient_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, pal = cube_helix) {
-	plot_gradient_map_impl(gene_relevance(coords, exprs), gene = gene, pal = pal)
+setMethod('plot_gradient_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_gradient_map_impl(gene_relevance(coords, exprs), genes = gene, pal = pal, faceter = faceter)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gradient_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, pal = cube_helix) {
-	plot_gradient_map_impl(gene_relevance(coords), gene = gene, pal = pal)
+setMethod('plot_gradient_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_gradient_map_impl(gene_relevance(coords), genes = gene, pal = pal, faceter = faceter)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gradient_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, pal = cube_helix) {
-	plot_gradient_map_impl(coords, gene = gene, pal = pal)
+setMethod('plot_gradient_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_gradient_map_impl(coords, genes = gene, pal = pal, faceter = faceter)
 })
 
-#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_segment scale_colour_gradientn ggtitle
-plot_gradient_map_impl <- function(relevance_map, ..., gene, pal) {
-	if (missing(gene) || length(gene) != 1L) stop('You need to supply a single gene name or index')
+#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_segment scale_colour_gradientn ggtitle facet_wrap
+plot_gradient_map_impl <- function(relevance_map, ..., genes, pal, faceter) {
+	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
 	if (is.function(pal)) pal <- pal(12)
 	
 	exprs <- relevance_map@exprs
@@ -93,48 +94,55 @@ plot_gradient_map_impl <- function(relevance_map, ..., gene, pal) {
 	coords <- relevance_map@coords[, dims]
 	colnames(coords) <- get_dimension_names(coords)
 	
-	gene_name <- if (is.character(gene)) gene else colnames(exprs)[[gene]]
-	expr <- exprs[, gene]
-	partials_norm <- relevance_map@partials_norm[gene, ]
-	nn_index <- cbind(seq_along(expr), relevance_map@nn_index)
+	gene_names <- if (is.character(genes)) genes else colnames(exprs)[genes]
+	partials_norms <- relevance_map@partials_norm[genes, , drop = FALSE]
+	nn_index <- cbind(seq_len(nrow(exprs)), relevance_map@nn_index)
 	
 	# Plot gradient vectors
-	scatter <- cbind(
-		as.data.frame(coords),
-		Expression = expr,
-		PartialsNorm = partials_norm)
+	scatters <- do.call(rbind, lapply(genes, function(g) {
+		cbind(
+			as.data.frame(coords),
+			Expression = exprs[, g],
+			PartialsNorm = partials_norms[g, ],
+			Gene = g)
+	}))
 	
-	# Select highest vectors in neighbourhoods
-	norm_top <- apply(nn_index, 1, function(cell) which.max(partials_norm[cell]) == 1)
-	norm_top[sapply(norm_top, length) == 0] <- FALSE
-	norm_top <- unlist(norm_top)
-	
-	d_var <- .05  # Fraction of overall dimension variability
-	partials <- lapply(seq_len(length(dims)), function(d) {
-		dc <- coords[norm_top, d]
-		partials <- relevance_map@partials[gene, norm_top, d]
-		# Scale magnitude of partial derivates
-		delta <- max(dc, na.rm = TRUE) - min(dc, na.rm = TRUE)
-		partials / max(abs(partials), na.rm = TRUE) * d_var * delta
-	})
-	
-	D1 <- scatter[norm_top, 1]
-	D2 <- scatter[norm_top, 2]
-	scatter_top <- cbind(
-		scatter[norm_top, ],
-		D1start = D1 - partials[[1]], D1end = D1 + partials[[1]],
-		D2start = D2 - partials[[2]], D2end = D2 + partials[[2]])
+	scatters_top <- do.call(rbind, lapply(genes, function(g) {
+		# Select highest vectors in neighbourhoods
+		norm_top <- apply(nn_index, 1, function(cell) which.max(partials_norms[g, cell]) == 1)
+		norm_top[sapply(norm_top, length) == 0] <- FALSE
+		norm_top <- unlist(norm_top)
+		
+		d_var <- .05  # Fraction of overall dimension variability
+		partials <- lapply(seq_len(length(dims)), function(d) {
+			dc <- coords[norm_top, d]
+			partials <- relevance_map@partials[g, norm_top, d]
+			# Scale magnitude of partial derivates
+			delta <- max(dc, na.rm = TRUE) - min(dc, na.rm = TRUE)
+			partials / max(abs(partials), na.rm = TRUE) * d_var * delta
+		})
+		
+		scatter <- subset(scatters, Gene == g)
+		D1 <- scatter[norm_top, 1]
+		D2 <- scatter[norm_top, 2]
+		cbind(
+			scatter[norm_top, ],
+			D1start = D1 - partials[[1]], D1end = D1 + partials[[1]],
+			D2start = D2 - partials[[2]], D2end = D2 + partials[[2]],
+			Gene = g)
+	}))
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
-	ggplot() +
-		geom_point(aes_string(d1, d2, colour = 'Expression'), scatter, alpha = 1) + 
+	gg <- ggplot() +
+		geom_point(aes_string(d1, d2, colour = 'Expression'), scatters, alpha = 1) + 
 		scale_colour_gradientn(colours = pal) + 
 		geom_segment(aes_string(
 			x = 'D1start', xend = 'D1end',
 			y = 'D2start', yend = 'D2end',
-			alpha = 'PartialsNorm'), scatter_top) +
-		ggtitle(gene_name)
+			alpha = 'PartialsNorm'), scatters_top)
+	
+	if (length(genes) > 1) gg + faceter else gg + ggtitle(gene_names)
 }
 
 
