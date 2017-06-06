@@ -58,9 +58,12 @@ The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 data(guo_norm)
 dm <- DiffusionMap(guo_norm)
 gr <- gene_relevance(dm)
+
+m <- t(Biobase::exprs(guo_norm))
+gr_pca <- gene_relevance(prcomp(m)$x, m)
 # now plot them!
 
 }
 \seealso{
-\link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
+\link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
 }

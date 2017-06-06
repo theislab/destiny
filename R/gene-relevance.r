@@ -22,13 +22,16 @@ NULL
 #' @slot nn_index       Matrix of k nearest neighbor indices. (cells \eqn{\times} k)
 #' @slot dims           Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}.
 #' 
+#' @seealso \link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
+#' 
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
 #' gr <- gene_relevance(dm)
-#' # now plot them!
 #' 
-#' @seealso \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
+#' m <- t(Biobase::exprs(guo_norm))
+#' gr_pca <- gene_relevance(prcomp(m)$x, m)
+#' # now plot them!
 #' 
 #' @aliases
 #'   GeneRelevance GeneRelevance-class

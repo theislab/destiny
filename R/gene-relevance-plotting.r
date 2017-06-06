@@ -3,7 +3,7 @@ NULL
 
 #' Plot gene relevance or gradient map
 #' 
-#' \code{plot(gene_relevance, 'Gene')} plots the gradient map of this gene,
+#' \code{plot(gene_relevance, 'Gene')} plots the gradient map of this/these gene(s),
 #' \code{plot(gene_relevance)} a relevance map of a selection of genes.
 #' Alternatively, you can use \code{plot_gradient_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
 #' 
@@ -11,15 +11,18 @@ NULL
 #' @param y,gene       Gene name(s) or index/indices to create gradient map for. (integer or character)
 #' @param coords       A \code{\link{DiffusionMap}}/\code{\link{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
 #' @param exprs        An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is a matrix.
-#' @param ...          Passed to \code{plot_gradient_map}/\code{plot_gene_relevance}
+#' @param ...          Passed to \code{plot_gradient_map}/\code{plot_gene_relevance}.
 #' @param iter_smooth  Number of label smoothing iterations to perform on relevance map.
 #'                     The higher the more homogenous and the less local structure.
 #' @param genes        Genes to based relevance map on or number of genes to use. (vector of strings or one number)
 #'                     You can also pass an index into the gene names. (vector of numbers or logicals with length > 1)
+#' @param dims         Names or indices of dimensions to plot. When not plotting a \code{\link{GeneRelevance}} object, the relevance for the dimensions \code{1:max(dims)} will be calculated.
 #' @param pal          Palette. Either A colormap function or a list of colors.
 #' @param faceter      A ggplot faceter like \code{\link[ggplot2]{facet_wrap}(~ Gene)}.
 #' 
 #' @return ggplot2 plot, when plotting a relevance map with a list member $ids containing the IDs used.
+#' 
+#' @seealso \code{\link{gene_relevance}}, \link{Gene Relevance methods}
 #' 
 #' @examples
 #' data(guo_norm)
@@ -30,8 +33,8 @@ NULL
 #' 
 #' guo_norm_mat <- t(Biobase::exprs(guo_norm))
 #' pca <- prcomp(guo_norm_mat)$x
-#' plot_gene_relevance(pca, guo_norm_mat)
-#' plot_gradient_map(pca, guo_norm_mat, gene = 'Fgf4')
+#' plot_gene_relevance(pca, guo_norm_mat, dims = 2:3)
+#' plot_gradient_map(pca, guo_norm_mat, gene = c('Fgf4', 'Nanog'))
 #' 
 #' @aliases
 #'   plot.GeneRelevance
@@ -64,35 +67,33 @@ setMethod('plot', c('GeneRelevance', 'missing'), function(x, y, ...) plot_gene_r
 
 #' @name Gene Relevance plotting
 #' @export
-setGeneric('plot_gradient_map', function(coords, exprs, ..., gene, pal = cube_helix, faceter = facet_wrap(~ Gene)) standardGeneric('plot_gradient_map'))
+setGeneric('plot_gradient_map', function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) standardGeneric('plot_gradient_map'))
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gradient_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
-	plot_gradient_map_impl(gene_relevance(coords, exprs), genes = gene, pal = pal, faceter = faceter)
+setMethod('plot_gradient_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_gradient_map_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gradient_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
-	plot_gradient_map_impl(gene_relevance(coords), genes = gene, pal = pal, faceter = faceter)
+setMethod('plot_gradient_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_gradient_map_impl(gene_relevance(coords, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gradient_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
-	plot_gradient_map_impl(coords, genes = gene, pal = pal, faceter = faceter)
+setMethod('plot_gradient_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_gradient_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
 #' @importFrom ggplot2 ggplot aes aes_string geom_point geom_segment scale_colour_gradientn ggtitle facet_wrap
-plot_gradient_map_impl <- function(relevance_map, ..., genes, pal, faceter) {
+plot_gradient_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
 	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
 	if (is.function(pal)) pal <- pal(12)
 	
 	exprs <- relevance_map@exprs
-	dims <- relevance_map@dims
-	coords <- relevance_map@coords[, dims]
-	colnames(coords) <- get_dimension_names(coords)
+	coords <- get_coords(relevance_map, dims)
 	
 	gene_names <- if (is.character(genes)) genes else colnames(exprs)[genes]
 	partials_norms <- relevance_map@partials_norm[genes, , drop = FALSE]
@@ -150,31 +151,31 @@ plot_gradient_map_impl <- function(relevance_map, ..., genes, pal, faceter) {
 
 #' @name Gene Relevance plotting
 #' @export
-setGeneric('plot_gene_relevance', function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, pal = palette()) standardGeneric('plot_gene_relevance'))
+setGeneric('plot_gene_relevance', function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, dims = 1:2, pal = palette()) standardGeneric('plot_gene_relevance'))
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, pal = palette()) {
-	plot_gene_relevance_impl(gene_relevance(coords, exprs), iter_smooth = iter_smooth, genes = genes, pal = pal)
+setMethod('plot_gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, dims = 1:2, pal = palette()) {
+	plot_gene_relevance_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), iter_smooth = iter_smooth, genes = genes, dims = dims, pal = pal)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, pal = palette()) {
-	plot_gene_relevance_impl(gene_relevance(coords), iter_smooth = iter_smooth, genes = genes, pal = pal)
+setMethod('plot_gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, dims = 1:2, pal = palette()) {
+	plot_gene_relevance_impl(gene_relevance(coords, dims = seq_len(max(dims))), iter_smooth = iter_smooth, genes = genes, dims = dims, pal = pal)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, pal = palette()) {
-	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, genes = genes, pal = pal)
+setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords, exprs, ..., iter_smooth = 2L, genes = 5L, dims = 1:2, pal = palette()) {
+	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, genes = genes, dims = dims, pal = pal)
 })
 
 #' @importFrom ggplot2 ggplot aes_string geom_point scale_color_manual ggtitle
-plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, pal) {
+plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dims, pal) {
 	partials_norm <- relevance_map@partials_norm
-	coords <- relevance_map@coords[, relevance_map@dims]
-	colnames(coords) <- get_dimension_names(coords)
+	
+	coords <- get_coords(relevance_map, dims)
 	
 	if (is.character(genes)) {
 		found <- sapply(genes, function(id) length(grep(id, rownames(partials_norm))) > 0)
@@ -219,7 +220,9 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, pal
 	rel_map
 }
 
-get_dimension_names <- function(coords) {
-	if (!is.null(colnames(coords))) colnames(coords)[1:2]
-	else paste('Dimension', 1:2)
+get_coords <- function(relevance_map, dims) {
+	coords <- relevance_map@coords[, dims, drop = FALSE]
+	if (is.null(colnames(coords)))
+		colnames(coords) <- paste('Dimension', dims)
+	coords
 }

@@ -76,6 +76,7 @@ Collate:
     'expressionset-helpers.r'
     'find_dm_k.r'
     'gene-relevance.r'
+    'gene-relevance-methods.r'
     'gene-relevance-plotting.r'
     'guo-data.r'
     'l_which.r'
