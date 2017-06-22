@@ -23,5 +23,7 @@ eig_decomp <- function(M, n_eigs, sym = isSymmetric(M)) {
 		ar$vectors <- Re(ar$vectors)
 		ar$values  <- Re(ar$values)
 	}
+	if (length(dim(ar$vectors)) == 0L)
+		ar$vectors <- matrix(ar$vectors, ncol = 1L)
 	ar
 }
