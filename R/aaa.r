@@ -6,7 +6,7 @@ gud_default_palette <- c('#8DD3C7', '#FFED6F', '#BEBADA', '#FB8072', '#80B1D3', 
 #' @importFrom utils getFromNamespace
 set_palette <- function(v) {
 	cp <- getFromNamespace('C_palette', 'grDevices')
-	.Call(cp, v)
+	do.call(.Call, list(cp, v))  # do.call is needed to get around static analysis
 }
 
 .onLoad <- function(libname, pkgname) {

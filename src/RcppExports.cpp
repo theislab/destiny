@@ -55,3 +55,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"destiny_censoring_impl", (DL_FUNC) &destiny_censoring_impl, 7},
+    {"destiny_predict_censoring_impl", (DL_FUNC) &destiny_predict_censoring_impl, 6},
+    {"destiny_icor2_no_censor", (DL_FUNC) &destiny_icor2_no_censor, 6},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_destiny(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}
