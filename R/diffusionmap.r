@@ -132,7 +132,7 @@ DiffusionMap <- function(
 	density_norm = TRUE,
 	...,
 	distance = c('euclidean', 'cosine', 'rankcor'),
-	n_local = 5:7,
+	n_local = seq(to = min(k, 7L), length.out = min(k, 3L)),
 	rotate = FALSE,
 	censor_val = NULL, censor_range = NULL,
 	missing_range = NULL,
@@ -148,6 +148,9 @@ DiffusionMap <- function(
 		sigma <- 'local'
 	if (!is(sigma, 'Sigmas') && !(length(sigma) == 1L && sigma %in% c('local', 'global')) && !is.numeric(sigma))
 		stop(sigma_msg(sigma))
+	
+	if (identical(sigma, 'local') && any(n_local > k))
+		stop('For local sigma, All entries of n_local (', paste(n_local, collapse = ','), ') have to be \u2264 k (', k, ')')
 	
 	# store away data and continue using imputed, unified version
 	data_env <- new.env(parent = .GlobalEnv)
@@ -301,8 +304,9 @@ find_knn <- function(imputed_data, dists, k, verbose = FALSE) {
 		# get.knn(...)$nn.dist  : \eqn{n \times k} matrix for the nearest neighbor Euclidean distances.
 		knn <- verbose_timing(verbose, 'finding knns', get.knn(imputed_data, k, algorithm = 'cover_tree'))
 		
-		i <- rep(seq_len(nrow(knn$nn.dist)), ncol(knn$nn.dist))
-		dist_asym <- sparseMatrix(i, knn$nn.index, x = as.vector(knn$nn.dist))
+		n <- nrow(knn$nn.dist)
+		i <- rep(seq_len(n), ncol(knn$nn.dist))
+		dist_asym <- sparseMatrix(i, knn$nn.index, x = as.vector(knn$nn.dist), dims = c(n, n))
 		
 		# (double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix)
 		# retain all differences fully. symmpart halves them in the case of trans_p[i,j] == 0 && trans_p[j,i] > 0
