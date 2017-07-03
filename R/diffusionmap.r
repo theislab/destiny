@@ -178,9 +178,7 @@ DiffusionMap <- function(
 	# arg validation
 	
 	if (n <= n_eigs + 1L) stop('Eigen decomposition not possible if n \u2264 n_eigs+1 (And ', n,' \u2264 ', n_eigs + 1L, ')')
-	wrong_n_local <- n_local > n_eigs | n_local < 1
-	if (any(wrong_n_local)) stop('Using n_local needs to be in 1:n_eigs (And ', n_local[wrong_n_local], ' is not in 1:', n_eigs, ')')
-	
+
 	if (is.null(k) || is.na(k)) k <- n - 1L
 	#TODO: optimize case
 	#dense <- k == n - 1L
@@ -221,7 +219,7 @@ DiffusionMap <- function(
 	new(
 		'DiffusionMap',
 		eigenvalues   = eig_transitions$values[-1],
-		eigenvectors  = eig_vec[, -1],
+		eigenvectors  = eig_vec[, -1, drop = FALSE],
 		sigmas        = sigmas,
 		data_env      = data_env,
 		eigenvec0     = eig_vec[, 1],
