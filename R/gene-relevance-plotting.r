@@ -20,7 +20,7 @@ NULL
 #' @param pal          Palette. Either A colormap function or a list of colors.
 #' @param faceter      A ggplot faceter like \code{\link[ggplot2]{facet_wrap}(~ Gene)}.
 #' 
-#' @return ggplot2 plot, when plotting a relevance map with a list member $ids containing the IDs used.
+#' @return ggplot2 plot, when plotting a relevance map with a list member \code{$ids} containing the gene IDs used.
 #' 
 #' @seealso \code{\link{gene_relevance}}, \link{Gene Relevance methods}
 #' 

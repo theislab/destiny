@@ -10,12 +10,12 @@
 \alias{gene_relevance,DiffusionMap,missing-method}
 \title{Gene relevances for entire data set}
 \usage{
-gene_relevance(coords, exprs, ..., k = 20, dims = 1:2, verbose = FALSE)
+gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2, verbose = FALSE)
 
-\S4method{gene_relevance}{DiffusionMap,missing}(coords, exprs, ..., k = 20,
+\S4method{gene_relevance}{DiffusionMap,missing}(coords, exprs, ..., k = 20L,
   dims = 1:2, verbose = FALSE)
 
-\S4method{gene_relevance}{matrix,matrix}(coords, exprs, ..., k = 20,
+\S4method{gene_relevance}{matrix,matrix}(coords, exprs, ..., k = 20L,
   dims = 1:2, verbose = FALSE)
 }
 \arguments{
@@ -23,7 +23,7 @@ gene_relevance(coords, exprs, ..., k = 20, dims = 1:2, verbose = FALSE)
 
 \item{exprs}{An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.}
 
-\item{...}{Ignored.}
+\item{...}{If no \code{\link{DiffusionMap}} is provided, a vector of \code{weights} (of the same length as \code{dims}) can be provided.}
 
 \item{k}{Number of nearest neighbors to use}
 
