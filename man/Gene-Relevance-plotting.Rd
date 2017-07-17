@@ -71,7 +71,7 @@ The higher the more homogenous and the less local structure.}
 You can also pass an index into the gene names. (vector of numbers or logicals with length > 1)}
 }
 \value{
-ggplot2 plot, when plotting a relevance map with a list member $ids containing the IDs used.
+ggplot2 plot, when plotting a relevance map with a list member \code{$ids} containing the gene IDs used.
 }
 \description{
 \code{plot(gene_relevance, 'Gene')} plots the gradient map of this/these gene(s),
