@@ -34,6 +34,8 @@ setMethod('print', 'DiffusionMap', function(x) {
 	invisible(x)
 })
 
+#' @importFrom methods show
+#' 
 #' @name DiffusionMap methods
 #' @export
 setMethod('show', 'DiffusionMap', function(object) {
