@@ -3,11 +3,18 @@
 \docType{methods}
 \name{Gene Relevance methods}
 \alias{Gene Relevance methods}
+\alias{featureNames,GeneRelevance-method}
+\alias{featureNames<-,GeneRelevance,characterOrFactor-method}
 \title{Gene Relevance methods}
 \usage{
 \S4method{featureNames}{GeneRelevance}(object)
 
 \S4method{featureNames}{GeneRelevance,characterOrFactor}(object) <- value
+}
+\arguments{
+\item{object}{\code{\link{GeneRelevance}} object}
+
+\item{value}{A text vector (\code{\link{character}} or \code{\link{factor}})}
 }
 \description{
 \code{featureNames <- ...} Can be used to set the gene names used for plotting
