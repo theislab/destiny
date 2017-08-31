@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // censoring_impl
 Eigen::SparseMatrix<double> censoring_impl(const NumericMatrix data, const NumericVector sigmas, const Eigen::SparseMatrix<double> dists, const SEXP thr_or_null, const SEXP uncertain_or_null, const SEXP missing_or_null, const Function callback);
-RcppExport SEXP destiny_censoring_impl(SEXP dataSEXP, SEXP sigmasSEXP, SEXP distsSEXP, SEXP thr_or_nullSEXP, SEXP uncertain_or_nullSEXP, SEXP missing_or_nullSEXP, SEXP callbackSEXP) {
+RcppExport SEXP _destiny_censoring_impl(SEXP dataSEXP, SEXP sigmasSEXP, SEXP distsSEXP, SEXP thr_or_nullSEXP, SEXP uncertain_or_nullSEXP, SEXP missing_or_nullSEXP, SEXP callbackSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -25,7 +25,7 @@ END_RCPP
 }
 // predict_censoring_impl
 NumericMatrix predict_censoring_impl(const NumericMatrix data, const NumericMatrix data2, const double thr, const NumericVector uncertain, const NumericVector missing, const double sigma);
-RcppExport SEXP destiny_predict_censoring_impl(SEXP dataSEXP, SEXP data2SEXP, SEXP thrSEXP, SEXP uncertainSEXP, SEXP missingSEXP, SEXP sigmaSEXP) {
+RcppExport SEXP _destiny_predict_censoring_impl(SEXP dataSEXP, SEXP data2SEXP, SEXP thrSEXP, SEXP uncertainSEXP, SEXP missingSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -41,7 +41,7 @@ END_RCPP
 }
 // icor2_no_censor
 Eigen::SparseMatrix<double> icor2_no_censor(const IntegerVector i, const IntegerVector j, const int n, const NumericMatrix imputed_data, const Function callback, const bool use_rank);
-RcppExport SEXP destiny_icor2_no_censor(SEXP iSEXP, SEXP jSEXP, SEXP nSEXP, SEXP imputed_dataSEXP, SEXP callbackSEXP, SEXP use_rankSEXP) {
+RcppExport SEXP _destiny_icor2_no_censor(SEXP iSEXP, SEXP jSEXP, SEXP nSEXP, SEXP imputed_dataSEXP, SEXP callbackSEXP, SEXP use_rankSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -57,9 +57,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"destiny_censoring_impl", (DL_FUNC) &destiny_censoring_impl, 7},
-    {"destiny_predict_censoring_impl", (DL_FUNC) &destiny_predict_censoring_impl, 6},
-    {"destiny_icor2_no_censor", (DL_FUNC) &destiny_icor2_no_censor, 6},
+    {"_destiny_censoring_impl", (DL_FUNC) &_destiny_censoring_impl, 7},
+    {"_destiny_predict_censoring_impl", (DL_FUNC) &_destiny_predict_censoring_impl, 6},
+    {"_destiny_icor2_no_censor", (DL_FUNC) &_destiny_icor2_no_censor, 6},
     {NULL, NULL, 0}
 };
 
