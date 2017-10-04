@@ -9,6 +9,10 @@ predict_censoring_impl <- function(data, data2, thr, uncertain, missing, sigma) 
     .Call('_destiny_predict_censoring_impl', PACKAGE = 'destiny', data, data2, thr, uncertain, missing, sigma)
 }
 
+knn <- function(imputed_data, k, distance = "euclidean") {
+    .Call('_destiny_knn', PACKAGE = 'destiny', imputed_data, k, distance)
+}
+
 icor2_no_censor <- function(i, j, n, imputed_data, callback, use_rank = FALSE) {
     .Call('_destiny_icor2_no_censor', PACKAGE = 'destiny', i, j, n, imputed_data, callback, use_rank)
 }
