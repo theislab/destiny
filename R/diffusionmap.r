@@ -374,11 +374,11 @@ no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb 
 	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), symmetric = TRUE, index1 = FALSE)
 }
 
-#' @importFrom Matrix forceSymmetric
+#' @importFrom Matrix forceSymmetric drop0
 no_censoring_icor_rank <- function(euclid_dists, imputed_data, rank = FALSE, cb = invisible) {
 	euclid_dists <- as(euclid_dists, 'dsTMatrix')
 	dists <- icor2_no_censor(euclid_dists@i, euclid_dists@j, nrow(euclid_dists), imputed_data, cb, rank)
-	forceSymmetric(dists, euclid_dists@uplo)
+	drop0(forceSymmetric(dists, euclid_dists@uplo))
 }
 
 #' @importFrom methods as
