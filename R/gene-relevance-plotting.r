@@ -119,7 +119,7 @@ plot_gradient_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter
 			dc <- coords[norm_top, d]
 			partials <- relevance_map@partials[g, norm_top, d]
 			# Scale magnitude of partial derivates
-			delta <- max(dc, na.rm = TRUE) - min(dc, na.rm = TRUE)
+			delta <- diff(rev(range(dc, na.rm = TRUE)))
 			partials / max(abs(partials), na.rm = TRUE) * d_var * delta
 		})
 		
