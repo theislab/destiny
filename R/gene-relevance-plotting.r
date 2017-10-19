@@ -181,6 +181,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 		found <- sapply(genes, function(id) length(grep(id, rownames(partials_norm))) > 0)
 		gene_ids <- genes[found]
 	} else if (length(genes) == 1L) {
+		genes <- min(genes, ncol(relevance_map@exprs))
 		# Select most often occurring genes with maximal norm of gradients at a cell.
 		max_gene_ids <- rownames(partials_norm)[unlist(apply(partials_norm, 2, function(cell) which.max(cell)))]
 		max_gene_ids_hist <- sapply(unique(max_gene_ids), function(id) sum(max_gene_ids == id, na.rm = TRUE) )
