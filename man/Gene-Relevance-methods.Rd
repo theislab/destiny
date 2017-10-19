@@ -10,6 +10,10 @@
 \S4method{featureNames}{GeneRelevance}(object)
 
 \S4method{featureNames}{GeneRelevance,characterOrFactor}(object) <- value
+
+\S4method{dataset}{GeneRelevance}(object)
+
+\S4method{dataset}{GeneRelevance}(object) <- value
 }
 \arguments{
 \item{object}{\code{\link{GeneRelevance}} object}

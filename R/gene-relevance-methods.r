@@ -34,3 +34,15 @@ setMethod('featureNames<-', c('GeneRelevance', 'characterOrFactor'), function(ob
 		value
 	object
 })
+
+#' @name Gene Relevance methods
+#' @export
+setMethod('dataset', 'GeneRelevance', function(object) object@exprs)
+
+#' @name Gene Relevance methods
+#' @export
+setMethod('dataset<-', 'GeneRelevance', function(object, value) {
+	object@exprs <- value
+	validObject(object)
+	object
+})

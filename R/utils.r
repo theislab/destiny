@@ -87,7 +87,7 @@ n_samples <- function(data, distances) {
 
 
 #' @importFrom Biobase featureNames
-n_features <- function(data, distances) {
+n_features <- function(data, distances = NULL) {
 	if (is.null(data)) ncol(distances)
 	else if (is(data, 'ExpressionSet')) length(featureNames(data))
 	else ncol(data)
