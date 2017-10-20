@@ -260,12 +260,10 @@ std::vector<typename CoverTree<Point>::CoverTreeNode*>
 CoverTree<Point>::kNearestNodes(const Point& p, const unsigned int& k) const
 {
 		if(_root==NULL) return std::vector<CoverTreeNode*>();
-		std::set<distNodePair> minNodes = kNearestNodeSet(p, k);
 		
     std::vector<CoverTreeNode*> kNN;
-    typename std::set<distNodePair>::const_iterator it;
-    for(it=minNodes.begin();it!=minNodes.end();++it) {
-        kNN.push_back(it->second);
+    for (distNodePair const& dist_node : kNearestNodeSet(p, k)) {
+        kNN.push_back(dist_node.second);
     }
     return kNN;
 }
@@ -521,10 +519,8 @@ std::vector<Point> CoverTree<Point>::kNearestNeighbors(const Point& p,
 template<class Point>
 std::vector<std::pair<double, Point>> CoverTree<Point>::kNearestNeighborDists(const Point& p, const unsigned int& k) const
 {
-	const std::set<distNodePair> minNodes = kNearestNodeSet(p, k);
-	
 	std::vector<std::pair<double, Point>> kNN;
-	for (distNodePair const& dist_node : minNodes) {
+	for (distNodePair const& dist_node : kNearestNodeSet(p, k)) {
 		//Rcpp::Rcout << "dist:" << dist_node.first << ", point:" << dist_node.second->getPoint() << " ";
 		kNN.push_back(std::make_pair(dist_node.first, dist_node.second->getPoint()));
 	}

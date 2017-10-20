@@ -194,10 +194,10 @@ DiffusionMap <- function(
 	
 	knn <- find_knn(imputed_data, dists, k, verbose)  # use dists if given, else compute from data
 	
-	sigmas <- get_sigmas(imputed_data, knn$nn_dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
+	sigmas <- get_sigmas(imputed_data, knn$dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
 	
-	trans_p <- transition_probabilities(imputed_data, sigma, distance, knn$dist, censor, censor_val, censor_range, missing_range, verbose)
+	trans_p <- transition_probabilities(imputed_data, sigma, distance, knn$dist_mat, censor, censor_val, censor_range, missing_range, verbose)
 	rm(knn)  # free memory
 	
 	d <- rowSums(trans_p, na.rm = TRUE) + 1 # diagonal set to 1
@@ -298,7 +298,7 @@ find_knn <- function(imputed_data, dists, k, verbose = FALSE) {
 	
 	if (!is.null(dists)) {
 		nn_dist <- t(apply(dists, 1, function(row) sort(row)[2:k]))
-		list(nn_dist = nn_dist, dist = dists)
+		list(dist = nn_dist, dist_mat = dists)
 	} else {
 		# get.knn(...)$nn.index : \eqn{n \times k} matrix for the nearest neighbor indices
 		# get.knn(...)$nn.dist  : \eqn{n \times k} matrix for the nearest neighbor Euclidean distances.
@@ -312,7 +312,7 @@ find_knn <- function(imputed_data, dists, k, verbose = FALSE) {
 		# retain all differences fully. symmpart halves them in the case of trans_p[i,j] == 0 && trans_p[j,i] > 0
 		dists <- symmpart(dist_asym) + abs(forceSymmetric(skewpart(dist_asym), 'U')) # TODO: more efficient
 		
-		list(nn_dist = knn$nn.dist, dist = dists)
+		list(dist = knn$nn.dist, dist_mat = dists)
 	}
 }
 
