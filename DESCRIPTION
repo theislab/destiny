@@ -28,7 +28,6 @@ Imports:
     BiocGenerics,
     ggplot2,
     Hmisc,
-    FNN,
     VIM,
     proxy,
     igraph,

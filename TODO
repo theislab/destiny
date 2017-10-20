@@ -1,0 +1,5 @@
+TODO:
+
+gene_relevance: use distance
+projection_dist: implement knnx
+knn: why is diag populated?

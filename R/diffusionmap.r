@@ -192,12 +192,12 @@ DiffusionMap <- function(
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
-	knn <- find_knn(imputed_data, dists, k, verbose)  # use dists if given, else compute from data
+	knn <- find_knn(imputed_data, dists, k, distance, verbose)  # use dists if given, else compute from data
 	
 	sigmas <- get_sigmas(imputed_data, knn$dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
 	
-	trans_p <- transition_probabilities(imputed_data, sigma, distance, knn$dist_mat, censor, censor_val, censor_range, missing_range, verbose)
+	trans_p <- transition_probabilities(imputed_data, sigma, knn$dist_mat, censor, censor_val, censor_range, missing_range, verbose)
 	rm(knn)  # free memory
 	
 	d <- rowSums(trans_p, na.rm = TRUE) + 1 # diagonal set to 1
@@ -292,34 +292,23 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 }
 
 
-#' @importFrom FNN get.knn
-find_knn <- function(imputed_data, dists, k, verbose = FALSE) {
+find_knn <- function(imputed_data, dists, k, distance = 'euclidean', verbose = FALSE) {
 	stopifnot(is.null(imputed_data) != is.null(dists))
 	
 	if (!is.null(dists)) {
 		nn_dist <- t(apply(dists, 1, function(row) sort(row)[2:k]))
 		list(dist = nn_dist, dist_mat = dists)
 	} else {
-		# get.knn(...)$nn.index : \eqn{n \times k} matrix for the nearest neighbor indices
-		# get.knn(...)$nn.dist  : \eqn{n \times k} matrix for the nearest neighbor Euclidean distances.
-		knn <- verbose_timing(verbose, 'finding knns', get.knn(imputed_data, k, algorithm = 'cover_tree'))
-		
-		n <- nrow(knn$nn.dist)
-		i <- rep(seq_len(n), ncol(knn$nn.dist))
-		dist_asym <- sparseMatrix(i, knn$nn.index, x = as.vector(knn$nn.dist), dims = c(n, n))
-		
-		# (double generic columnsparse to ... symmetric ...: dgCMatrix -> dsCMatrix)
-		# retain all differences fully. symmpart halves them in the case of trans_p[i,j] == 0 && trans_p[j,i] > 0
-		dists <- symmpart(dist_asym) + abs(forceSymmetric(skewpart(dist_asym), 'U')) # TODO: more efficient
-		
-		list(dist = knn$nn.dist, dist_mat = dists)
+		knn <- verbose_timing(verbose, 'finding knns', knn(imputed_data, k, distance))
+		knn$dist_mat <- as(knn$dist_mat, 'symmetricMatrix')
+		knn
 	}
 }
 
 
 #' @importFrom Matrix sparseMatrix diag<- drop0 forceSymmetric skewpart symmpart
 #' @importFrom utils txtProgressBar setTxtProgressBar
-transition_probabilities <- function(imputed_data, sigma, distance, dists, censor, censor_val, censor_range, missing_range, verbose) {
+transition_probabilities <- function(imputed_data, sigma, dists, censor, censor_val, censor_range, missing_range, verbose) {
 	n <- nrow(dists)
 	
 	# create markovian transition probability matrix (trans_p)
@@ -334,7 +323,7 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 		if (censor)
 			censoring(imputed_data, sigma, dists, censor_val, censor_range, missing_range, cb)
 		else
-			no_censoring(imputed_data, sigma, dists, distance, cb)
+			no_censoring(dists, sigma, cb)
 	})
 	
 	if (verbose) close(pb)
@@ -350,11 +339,8 @@ transition_probabilities <- function(imputed_data, sigma, distance, dists, censo
 }
 
 #' @importFrom Matrix sparseMatrix which tcrossprod
-no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb = invisible) {
-	d2 <- switch(distance,
-		euclidean = , custom = dists ^ 2,
-		cosine  = , rankcor = no_censoring_icor_rank(dists, imputed_data, distance == 'rankcor', cb),
-		stop('you added a dists measure but did not handle it here'))
+no_censoring <- function(dists, sigma, cb = invisible) {
+	d2 <- dists ^ 2
 	stopifnot(isSymmetric(d2))
 	
 	t_p <- if (length(sigma) == 1L) {
@@ -374,12 +360,6 @@ no_censoring <- function(imputed_data, sigma, dists, distance = 'euclidean', cb 
 	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), symmetric = TRUE, index1 = FALSE)
 }
 
-#' @importFrom Matrix forceSymmetric drop0
-no_censoring_icor_rank <- function(euclid_dists, imputed_data, rank = FALSE, cb = invisible) {
-	euclid_dists <- as(euclid_dists, 'dsTMatrix')
-	dists <- icor2_no_censor(euclid_dists@i, euclid_dists@j, nrow(euclid_dists), imputed_data, cb, rank)
-	drop0(forceSymmetric(dists, euclid_dists@uplo))
-}
 
 #' @importFrom methods as
 #' @importFrom Matrix sparseMatrix

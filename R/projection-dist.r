@@ -14,7 +14,6 @@
 #' dm <- DiffusionMap(g2_32)
 #' d <- projection_dist(dm, new_data = g64)
 #' 
-#' @importFrom FNN get.knnx
 #' @export
 projection_dist <- function(dm, new_dcs = NULL, ..., new_data, verbose = FALSE) {
 	if (is.null(new_dcs))
@@ -24,6 +23,7 @@ projection_dist <- function(dm, new_dcs = NULL, ..., new_data, verbose = FALSE) 
 	
 	evs <- eigenvectors(dm)
 	
+	# TODO
 	nns <- get.knnx(evs, new_dcs, 1)
 	
 	#nn_idx <- nns$nn.index[, 1]

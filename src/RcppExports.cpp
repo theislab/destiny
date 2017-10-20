@@ -52,28 +52,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// icor2_no_censor
-Eigen::SparseMatrix<double> icor2_no_censor(const IntegerVector i, const IntegerVector j, const int n, const NumericMatrix imputed_data, const Function callback, const bool use_rank);
-RcppExport SEXP _destiny_icor2_no_censor(SEXP iSEXP, SEXP jSEXP, SEXP nSEXP, SEXP imputed_dataSEXP, SEXP callbackSEXP, SEXP use_rankSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const IntegerVector >::type i(iSEXP);
-    Rcpp::traits::input_parameter< const IntegerVector >::type j(jSEXP);
-    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix >::type imputed_data(imputed_dataSEXP);
-    Rcpp::traits::input_parameter< const Function >::type callback(callbackSEXP);
-    Rcpp::traits::input_parameter< const bool >::type use_rank(use_rankSEXP);
-    rcpp_result_gen = Rcpp::wrap(icor2_no_censor(i, j, n, imputed_data, callback, use_rank));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_destiny_censoring_impl", (DL_FUNC) &_destiny_censoring_impl, 7},
     {"_destiny_predict_censoring_impl", (DL_FUNC) &_destiny_predict_censoring_impl, 6},
     {"_destiny_knn", (DL_FUNC) &_destiny_knn, 3},
-    {"_destiny_icor2_no_censor", (DL_FUNC) &_destiny_icor2_no_censor, 6},
     {NULL, NULL, 0}
 };
 
