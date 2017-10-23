@@ -54,7 +54,7 @@ setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, d
 
 #' @name Gene Relevance
 #' @export
-setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., distance = NULL, k = 20L, dims = 1:2, verbose = FALSE) {
+setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, verbose = FALSE) {
 	dm <- coords
 	relevance_map <- dm@data_env$relevance_map
 	if (is.null(relevance_map) || ncol(relevance_map@nn_index) != k || !identical(relevance_map@dims, dims)) {
@@ -75,7 +75,6 @@ setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., 
 	gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, verbose = verbose)
 })
 
-#' @importFrom FNN get.knn
 #' @importFrom Biobase rowMedians
 gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, weights = rep(1, n_dims)) {
 	coords_used <- coords[, dims]

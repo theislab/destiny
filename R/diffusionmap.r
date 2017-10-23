@@ -20,7 +20,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @param n_eigs         Number of eigenvectors/values to return (default: 20)
 #' @param density_norm   logical. If TRUE, use density normalisation
 #' @param ...            All parameter after this are optional and have to be specified by name
-#' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).
+#' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{knn}}.
 #' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma.
 #' @param rotate         logical. If TRUE, rotate the eigenvalues to get a slimmer diffusion map
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)
@@ -192,7 +192,7 @@ DiffusionMap <- function(
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
-	knn <- find_knn(imputed_data, dists, k, distance, verbose)  # use dists if given, else compute from data
+	knn <- get_knn(imputed_data, dists, k, distance, verbose)  # use dists if given, else compute from data
 	
 	sigmas <- get_sigmas(imputed_data, knn$dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
@@ -292,16 +292,14 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 }
 
 
-find_knn <- function(imputed_data, dists, k, distance = 'euclidean', verbose = FALSE) {
+get_knn <- function(imputed_data, dists, k, distance = 'euclidean', verbose = FALSE) {
 	stopifnot(is.null(imputed_data) != is.null(dists))
 	
 	if (!is.null(dists)) {
 		nn_dist <- t(apply(dists, 1, function(row) sort(row)[2:k]))
 		list(dist = nn_dist, dist_mat = dists)
 	} else {
-		knn <- verbose_timing(verbose, 'finding knns', knn(imputed_data, k, distance))
-		knn$dist_mat <- as(knn$dist_mat, 'symmetricMatrix')
-		knn
+		verbose_timing(verbose, 'finding knns', find_knn(imputed_data, k, distance))
 	}
 }
 

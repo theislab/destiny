@@ -9,7 +9,11 @@ predict_censoring_impl <- function(data, data2, thr, uncertain, missing, sigma) 
     .Call('_destiny_predict_censoring_impl', PACKAGE = 'destiny', data, data2, thr, uncertain, missing, sigma)
 }
 
-knn <- function(imputed_data, k, distance = "euclidean") {
-    .Call('_destiny_knn', PACKAGE = 'destiny', imputed_data, k, distance)
+knn_cross <- function(data, query, k, distance = "euclidean") {
+    .Call('_destiny_knn_cross', PACKAGE = 'destiny', data, query, k, distance)
+}
+
+knn_asym <- function(data, k, distance = "euclidean") {
+    .Call('_destiny_knn_asym', PACKAGE = 'destiny', data, k, distance)
 }
 

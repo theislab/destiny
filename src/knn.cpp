@@ -58,46 +58,48 @@ public:
 
 
 template<class Distance>
-List knn_impl(NumericMatrix data, size_t k) {
-	const size_t n_samples = data.nrow();
-	const size_t n_features = data.ncol();
+List knn_cross_impl(const NumericMatrix data, const NumericMatrix query, const size_t k, const size_t skip_self = 0) {
+	if (data.ncol() != query.ncol())
+		stop("data and query need the same number of features");
+	const size_t nsmp_data = data.nrow();
+	const size_t nsmp_query = query.nrow();
 	
 	std::vector<IndexedPoint<Distance>> points;
-	points.reserve(n_samples);
-	for (size_t s=0; s<n_samples; s++) {
+	points.reserve(nsmp_data);
+	for (size_t s=0; s<nsmp_data; s++) {
 		points.push_back(IndexedPoint<Distance>(data(s, _), s));
 	}
 	
 	double max = 1e10;//std::numeric_limits<double>::infinity();
 	CoverTree<IndexedPoint<Distance>> tree(max, points);
 	
-	IntegerMatrix index(n_samples, k);
-	NumericMatrix dists(n_samples, k);
+	IntegerMatrix index(nsmp_query, k);
+	NumericMatrix dists(nsmp_query, k);
 	std::fill(index.begin(), index.end(), NA_INTEGER);
 	std::fill(dists.begin(), dists.end(), NA_REAL);
 	
 	typedef Eigen::Triplet<double> T;
 	std::vector<T> triplets;
-	triplets.reserve(2 * n_samples * k);
+	triplets.reserve(2 * nsmp_query * k);
 	
 	typedef std::pair<double, IndexedPoint<Distance>> DP;
-	for (size_t s=0; s<n_samples; s++) {
-		// skip first NN, as it’s the point itself.
-		const std::vector<DP> nns = tree.kNearestNeighborDists(points[s], k + 1);
+	for (size_t s=0; s<nsmp_query; s++) {
+		const IndexedPoint<Distance> p(query(s, _), s);
+		const std::vector<DP> nns = tree.kNearestNeighborDists(p, k + skip_self);
 		//Rcout << "#nn:" << nns.size() << ", k:" << k << std::endl;
 		typename std::vector<DP>::const_iterator nn;
-		for (nn = nns.begin() + 1; nn<nns.end(); nn++) {
+		for (nn = nns.begin() + skip_self; nn<nns.end(); nn++) {
 			//Rcout << "dist:" << nn->first << ", idx:" << nn->second.idx() << ", vec:" << nn->second.vec() << std::endl;
-			const size_t n = nn - nns.begin() - 1;
+			const size_t n = nn - nns.begin() - skip_self;
 			const double dist = nn->first;
-			index(s, n) = nn->second.idx() + 1;  // R index
+			const size_t nn_idx = nn->second.idx();
+			index(s, n) = nn_idx + 1;  // R index
 			dists(s, n) = dist;
-			triplets.push_back(T(s, n, dist));
-			triplets.push_back(T(n, s, dist));
+			triplets.push_back(T(s, nn_idx, dist));
 		}
 	}
 	
-	Eigen::SparseMatrix<double> dist_mat(n_samples, n_samples);
+	Eigen::SparseMatrix<double> dist_mat(nsmp_query, nsmp_data);
 	dist_mat.setFromTriplets(triplets.begin(), triplets.end());
 	
 	List ret;
@@ -107,17 +109,44 @@ List knn_impl(NumericMatrix data, size_t k) {
 	return ret;
 }
 
+
+template<class Distance>
+List knn_impl(const NumericMatrix data, const size_t k) {
+	return knn_cross_impl<Distance>(data, data, k, 1);
+}
+
+
 // [[Rcpp::export]]
-List knn(NumericMatrix imputed_data, size_t k, std::string distance = "euclidean") {
+List knn_cross(const NumericMatrix data, const NumericMatrix query, const size_t k, const std::string distance = "euclidean") {
 	if (distance == "euclidean") {
-		return knn_impl<EuclideanDistance>(imputed_data, k);
+		return knn_cross_impl<EuclideanDistance>(data, query, k);
 	} else if (distance == "cosine") {
-		return knn_impl<CosineDistance>(imputed_data, k);
+		return knn_cross_impl<CosineDistance>(data, query, k);
 	} else if (distance == "rank") {
-		NumericMatrix data = NumericMatrix(imputed_data.nrow(), imputed_data.ncol());
-		for (int r=0; r<data.nrow(); r++) {
-			data(r, _) = rank(imputed_data(r, _));
+		NumericMatrix data_rank  = NumericMatrix(data.nrow(),  data.ncol());
+		NumericMatrix query_rank = NumericMatrix(query.nrow(), query.ncol());
+		for (int r=0; r<data_rank.nrow(); r++) {
+			data_rank(r, _) = rank(data(r, _));
 		}
+		for (int r=0; r<query_rank.nrow(); r++) {
+			query_rank(r, _) = rank(data(r, _));
+		}
+		return knn_cross_impl<CosineDistance>(data_rank, query_rank, k);
+	} else stop("Unknown distance specified");
+}
+
+
+// [[Rcpp::export]]
+List knn_asym(const NumericMatrix data, const size_t k, const std::string distance = "euclidean") {
+	if (distance == "euclidean") {
+		return knn_impl<EuclideanDistance>(data, k);
+	} else if (distance == "cosine") {
 		return knn_impl<CosineDistance>(data, k);
+	} else if (distance == "rank") {
+		NumericMatrix data_rank = NumericMatrix(data.nrow(), data.ncol());
+		for (int r=0; r<data_rank.nrow(); r++) {
+			data_rank(r, _) = rank(data(r, _));
+		}
+		return knn_impl<CosineDistance>(data_rank, k);
 	} else stop("Unknown distance specified");
 }

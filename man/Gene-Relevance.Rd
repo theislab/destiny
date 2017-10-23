@@ -10,13 +10,14 @@
 \alias{gene_relevance,DiffusionMap,missing-method}
 \title{Gene relevances for entire data set}
 \usage{
-gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2, verbose = FALSE)
+gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL,
+  verbose = FALSE)
 
 \S4method{gene_relevance}{DiffusionMap,missing}(coords, exprs, ..., k = 20L,
-  dims = 1:2, verbose = FALSE)
+  dims = 1:2, distance = NULL, verbose = FALSE)
 
 \S4method{gene_relevance}{matrix,matrix}(coords, exprs, ..., k = 20L,
-  dims = 1:2, verbose = FALSE)
+  dims = 1:2, distance = NULL, verbose = FALSE)
 }
 \arguments{
 \item{coords}{A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.}

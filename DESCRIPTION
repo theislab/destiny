@@ -78,6 +78,7 @@ Collate:
     'gene-relevance-methods.r'
     'gene-relevance-plotting.r'
     'guo-data.r'
+    'knn.r'
     'l_which.r'
     'methods-coercion.r'
     'methods-extraction.r'
