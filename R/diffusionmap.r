@@ -20,8 +20,8 @@ sigma_msg <- function(sigma) sprintf(
 #' @param n_eigs         Number of eigenvectors/values to return (default: 20)
 #' @param density_norm   logical. If TRUE, use density normalisation
 #' @param ...            All parameter after this are optional and have to be specified by name
-#' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{knn}}.
-#' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma.
+#' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}
+#' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma
 #' @param rotate         logical. If TRUE, rotate the eigenvalues to get a slimmer diffusion map
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)
 #' @param censor_range   Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
@@ -44,7 +44,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot n_local        The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density
 #' @slot density_norm   Was density normalization used?
 #' @slot rotate         Were the eigenvectors rotated?
-#' @slot distance       Distance measurement method used.
+#' @slot distance       Distance measurement method used
 #' @slot censor_val     Censoring value
 #' @slot censor_range   Censoring range
 #' @slot missing_range  Whole data range for missing value model

@@ -5,6 +5,8 @@
 \alias{Gene Relevance methods}
 \alias{featureNames,GeneRelevance-method}
 \alias{featureNames<-,GeneRelevance,characterOrFactor-method}
+\alias{dataset,GeneRelevance-method}
+\alias{dataset<-,GeneRelevance,ANY-method}
 \title{Gene Relevance methods}
 \usage{
 \S4method{featureNames}{GeneRelevance}(object)

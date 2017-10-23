@@ -5,14 +5,17 @@
 \alias{updateObject-method}
 \alias{updateObject,DiffusionMap-method}
 \alias{updateObject,Sigmas-method}
-\title{Update old \link{DiffusionMap}s or \link{Sigmas} to a newer version}
+\alias{updateObject,GeneRelevance-method}
+\title{Update old destiny objects to a newer version.}
 \usage{
 \S4method{updateObject}{DiffusionMap}(object, ..., verbose = FALSE)
 
 \S4method{updateObject}{Sigmas}(object, ..., verbose = FALSE)
+
+\S4method{updateObject}{GeneRelevance}(object, ..., verbose = FALSE)
 }
 \arguments{
-\item{object}{A \link{DiffusionMap} or \link{Sigmas} object created with an older destiny release}
+\item{object}{An object created with an older destiny release}
 
 \item{...}{ignored}
 
@@ -22,5 +25,5 @@
 A \link{DiffusionMap} or \link{Sigmas} object that is valid when used with the current destiny release
 }
 \description{
-Update old \link{DiffusionMap}s or \link{Sigmas} to a newer version
+Handles \link{DiffusionMap}, \link{Sigmas}, and \link{GeneRelevance}.
 }

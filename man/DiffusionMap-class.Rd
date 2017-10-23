@@ -30,9 +30,9 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 
 \item{...}{All parameter after this are optional and have to be specified by name}
 
-\item{distance}{Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{knn}}.}
+\item{distance}{Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}}
 
-\item{n_local}{If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma.}
+\item{n_local}{If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma}
 
 \item{rotate}{logical. If TRUE, rotate the eigenvalues to get a slimmer diffusion map}
 
@@ -82,7 +82,7 @@ being treated as expression data features (and the others ignored), or an \link[
 
 \item{\code{rotate}}{Were the eigenvectors rotated?}
 
-\item{\code{distance}}{Distance measurement method used.}
+\item{\code{distance}}{Distance measurement method used}
 
 \item{\code{censor_val}}{Censoring value}
 

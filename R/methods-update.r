@@ -1,15 +1,17 @@
 #' @include utils.r
 NULL
 
-#' Update old \link{DiffusionMap}s or \link{Sigmas} to a newer version
+#' Update old destiny objects to a newer version.
 #' 
-#' @param object  A \link{DiffusionMap} or \link{Sigmas} object created with an older destiny release
+#' Handles \link{DiffusionMap}, \link{Sigmas}, and \link{GeneRelevance}.
+#' 
+#' @param object  An object created with an older destiny release
 #' @param ...     ignored
 #' @param verbose tells what is being updated
 #' 
 #' @return A \link{DiffusionMap} or \link{Sigmas} object that is valid when used with the current destiny release
 #' 
-#' @aliases updateObject,DiffusionMap-method updateObject,Sigmas-method
+#' @aliases updateObject,DiffusionMap-method updateObject,Sigmas-method updateObject,GeneRelevance-method
 #' 
 #' @importFrom methods setMethod validObject .hasSlot slot slot<- 
 #' @importFrom Matrix Matrix
@@ -51,6 +53,19 @@ setMethod('updateObject', 'Sigmas', function(object, ..., verbose = FALSE) {
 		message("updateObject(object = 'Sigmas')")
 	
 	object <- update_slot_names(object, c('log.sigmas', 'dim.norms', 'optimal.sigma', 'optimal.idx', 'avrd.norms'))
+	
+	object
+})
+
+
+#' @name updateObject-method
+#' @export
+setMethod('updateObject', 'GeneRelevance', function(object, ..., verbose = FALSE) {
+	if (verbose) 
+		message("updateObject(object = 'GeneRelevance')")
+	
+	if (!hasattr(object, 'distance'))
+		slot(object, 'distance', check = FALSE) <- 'euclidean'
 	
 	object
 })

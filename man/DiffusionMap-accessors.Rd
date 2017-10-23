@@ -12,7 +12,7 @@
 \alias{dataset,DiffusionMap-method}
 \alias{distance,DiffusionMap-method}
 \alias{optimal_sigma,DiffusionMap-method}
-\alias{dataset<-,DiffusionMap-method}
+\alias{dataset<-,DiffusionMap,ANY-method}
 \alias{distance<-,DiffusionMap-method}
 \title{DiffusionMap accession methods}
 \usage{

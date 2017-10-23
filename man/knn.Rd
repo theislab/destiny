@@ -13,6 +13,8 @@ find_knn(data, k, ..., query = NULL, distance = c("euclidean", "cosine",
 
 \item{k}{Number of nearest neighbors.}
 
+\item{...}{Ignored.}
+
 \item{query}{Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical.}
 
 \item{distance}{Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).}

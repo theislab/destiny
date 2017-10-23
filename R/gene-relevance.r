@@ -5,22 +5,24 @@ NULL
 #' 
 #' The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 #' 
-#' @param coords   A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
-#' @param exprs    An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.
-#' @param ...      If no \code{\link{DiffusionMap}} is provided, a vector of \code{weights} (of the same length as \code{dims}) can be provided.
-#' @param k        Number of nearest neighbors to use
-#' @param dims     Index into columns of \code{coord}
-#' @param verbose  If TRUE, log additional info to the console
+#' @param coords    A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
+#' @param exprs     An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.
+#' @param ...       If no \code{\link{DiffusionMap}} is provided, a vector of \code{weights} (of the same length as \code{dims}) can be provided.
+#' @param k         Number of nearest neighbors to use
+#' @param dims      Index into columns of \code{coord}
+#' @param distance  Distance measure to use for the nearest neighbor search.
+#' @param verbose   If TRUE, log additional info to the console
 #' 
 #' @return A \code{GeneRelevance} object:
 #' 
-#' @slot coords         A cells \eqn{\times} dims \code{\link{matrix}} of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}.
-#' @slot exprs          A cells \eqn{\times} genes matrix of expressions.
-#' @slot partials       Array of partial derivatives wrt to considered dimensions in reduced space.
+#' @slot coords         A cells \eqn{\times} dims \code{\link{matrix}} of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}
+#' @slot exprs          A cells \eqn{\times} genes matrix of expressions
+#' @slot partials       Array of partial derivatives wrt to considered dimensions in reduced space
 #'                      (genes \eqn{\times} cells \eqn{\times} dimensions)
 #' @slot partials_norm  Matrix with norm of aforementioned derivatives. (n\_genes \eqn{\times} cells)
 #' @slot nn_index       Matrix of k nearest neighbor indices. (cells \eqn{\times} k)
-#' @slot dims           Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}.
+#' @slot dims           Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}
+#' @slot distance       Distance measure used in the nearest neighbor search. See \code{\link{find_knn}}
 #' 
 #' @seealso \link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
 #' 
@@ -46,7 +48,8 @@ setClass('GeneRelevance', slots = c(
 	partials = 'array',
 	partials_norm = 'matrix',
 	nn_index = 'matrix',  # k = ncol(nn_index)
-	dims = 'ColIndex'))
+	dims = 'ColIndex',
+	distance = 'character'))
 
 #' @name Gene Relevance
 #' @export
@@ -72,11 +75,12 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 #' @name Gene Relevance
 #' @export
 setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, verbose = FALSE) {
-	gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, verbose = verbose)
+	gene_relevance_impl(coords, exprs, ..., k = k, distance = distance, dims = dims, verbose = verbose)
 })
 
 #' @importFrom Biobase rowMedians
 gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, weights = rep(1, n_dims)) {
+	distance <- match.arg(distance, c('euclidean', 'cosine', 'rank'))
 	coords_used <- coords[, dims]
 	n_dims <- ncol(coords_used) # has to be defined early for `weights` default argument.
 	
@@ -138,5 +142,6 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, 
 		partials = partials,
 		partials_norm = partials_norm,
 		nn_index = nn_index,
-		dims = dims)
+		dims = dims,
+		distance = distance)
 }

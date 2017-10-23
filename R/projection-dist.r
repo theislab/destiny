@@ -23,11 +23,10 @@ projection_dist <- function(dm, new_dcs = NULL, ..., new_data, verbose = FALSE) 
 	
 	evs <- eigenvectors(dm)
 	
-	# TODO
-	nns <- get.knnx(evs, new_dcs, 1)
+	nns <- find_knn(evs, 1, query = as.matrix(new_dcs))
 	
-	#nn_idx <- nns$nn.index[, 1]
-	nn_dist <- nns$nn.dist[, 1]
+	#nn_idx <- nns$index[, 1]
+	nn_dist <- nns$dist[, 1]
 	
 	nn_dist
 }

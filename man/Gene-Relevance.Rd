@@ -30,6 +30,8 @@ gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL,
 
 \item{dims}{Index into columns of \code{coord}}
 
+\item{distance}{Distance measure to use for the nearest neighbor search.}
+
 \item{verbose}{If TRUE, log additional info to the console}
 }
 \value{
@@ -41,18 +43,20 @@ The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 \section{Slots}{
 
 \describe{
-\item{\code{coords}}{A cells \eqn{\times} dims \code{\link{matrix}} of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}.}
+\item{\code{coords}}{A cells \eqn{\times} dims \code{\link{matrix}} of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}}
 
-\item{\code{exprs}}{A cells \eqn{\times} genes matrix of expressions.}
+\item{\code{exprs}}{A cells \eqn{\times} genes matrix of expressions}
 
-\item{\code{partials}}{Array of partial derivatives wrt to considered dimensions in reduced space.
+\item{\code{partials}}{Array of partial derivatives wrt to considered dimensions in reduced space
 (genes \eqn{\times} cells \eqn{\times} dimensions)}
 
 \item{\code{partials_norm}}{Matrix with norm of aforementioned derivatives. (n\_genes \eqn{\times} cells)}
 
 \item{\code{nn_index}}{Matrix of k nearest neighbor indices. (cells \eqn{\times} k)}
 
-\item{\code{dims}}{Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}.}
+\item{\code{dims}}{Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}}
+
+\item{\code{distance}}{Distance measure used in the nearest neighbor search. See \code{\link{find_knn}}}
 }}
 
 \examples{
