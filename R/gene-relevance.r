@@ -50,18 +50,20 @@ setClass('GeneRelevance', slots = c(
 
 #' @name Gene Relevance
 #' @export
-setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, verbose = FALSE) standardGeneric('gene_relevance'))
+setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, verbose = FALSE) standardGeneric('gene_relevance'))
 
 #' @name Gene Relevance
 #' @export
-setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k = 20L, dims = 1:2, verbose = FALSE) {
+setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., distance = NULL, k = 20L, dims = 1:2, verbose = FALSE) {
 	dm <- coords
 	relevance_map <- dm@data_env$relevance_map
 	if (is.null(relevance_map) || ncol(relevance_map@nn_index) != k || !identical(relevance_map@dims, dims)) {
 		coords <- eigenvectors(dm)
 		exprs <- extract_doublematrix(dataset(dm))
 		weights <- eigenvalues(dm)[dims]
-		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, verbose = verbose, weights = weights)
+		if (is.null(distance)) distance <- dm@distance
+		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)
+		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, distance = distance, verbose = verbose, weights = weights)
 		dm@data_env$relevance_map <- relevance_map
 	}
 	relevance_map
@@ -69,20 +71,19 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 
 #' @name Gene Relevance
 #' @export
-setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k = 20L, dims = 1:2, verbose = FALSE) {
+setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, verbose = FALSE) {
 	gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, verbose = verbose)
 })
 
 #' @importFrom FNN get.knn
 #' @importFrom Biobase rowMedians
-gene_relevance_impl <- function(coords, exprs, ..., k, dims, verbose, weights = rep(1, n_dims)) {
+gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, weights = rep(1, n_dims)) {
 	coords_used <- coords[, dims]
 	n_dims <- ncol(coords_used) # has to be defined early for `weights` default argument.
 	
 	if (is.null(colnames(exprs))) stop('The expression matrix columns need to be named but are NULL')
 	if (n_dims != length(weights)) stop(n_dims, ' dimensions, but ', length(weights), ' weights were provided')
 	
-	# TODO: distance
 	nn_index <- find_knn(exprs, k, distance)$index
 	
 	k <- ncol(nn_index)
