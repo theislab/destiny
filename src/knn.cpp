@@ -122,7 +122,7 @@ List knn_cross(const NumericMatrix data, const NumericMatrix query, const size_t
 		return knn_cross_impl<EuclideanDistance>(data, query, k);
 	} else if (distance == "cosine") {
 		return knn_cross_impl<CosineDistance>(data, query, k);
-	} else if (distance == "rank") {
+	} else if (distance == "rankcor") {
 		NumericMatrix data_rank  = NumericMatrix(data.nrow(),  data.ncol());
 		NumericMatrix query_rank = NumericMatrix(query.nrow(), query.ncol());
 		for (int r=0; r<data_rank.nrow(); r++) {
@@ -142,7 +142,7 @@ List knn_asym(const NumericMatrix data, const size_t k, const std::string distan
 		return knn_impl<EuclideanDistance>(data, k);
 	} else if (distance == "cosine") {
 		return knn_impl<CosineDistance>(data, k);
-	} else if (distance == "rank") {
+	} else if (distance == "rankcor") {
 		NumericMatrix data_rank = NumericMatrix(data.nrow(), data.ncol());
 		for (int r=0; r<data_rank.nrow(); r++) {
 			data_rank(r, _) = rank(data(r, _));
