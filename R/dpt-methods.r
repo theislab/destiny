@@ -20,7 +20,7 @@ NULL
 #' @seealso \link{plot.DPT} uses \code{branch_divide} for its \code{divide} argument.
 #' 
 #' @aliases
-#'   dataset,DPT-method dataset<-,DPT,ANY-method
+#'   dataset,DPT-method dataset<-,DPT-method
 #' @importFrom stats na.omit
 #' @name DPT methods
 #' @export
@@ -64,7 +64,7 @@ setMethod('dataset', 'DPT', function(object) dataset(object@dm))
 
 #' @name DPT methods
 #' @export
-setMethod('dataset<-', c('DPT', 'ANY'), function(object, value) {
+setMethod('dataset<-', 'DPT', function(object, value) {
 	dataset(object@dm) <- value
 	validObject(object)
 	object

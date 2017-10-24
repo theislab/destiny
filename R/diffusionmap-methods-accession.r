@@ -25,7 +25,7 @@ NULL
 #'   eigenvalues,DiffusionMap-method   eigenvectors,DiffusionMap-method   sigmas,DiffusionMap-method
 #' eigenvalues<-,DiffusionMap-method eigenvectors<-,DiffusionMap-method sigmas<-,DiffusionMap-method
 #'   dataset,DiffusionMap-method   distance,DiffusionMap-method   optimal_sigma,DiffusionMap-method
-#' dataset<-,DiffusionMap,ANY-method distance<-,DiffusionMap-method
+#' dataset<-,DiffusionMap-method distance<-,DiffusionMap-method
 #' 
 #' @importFrom methods is setGeneric
 #' @name DiffusionMap accessors
@@ -78,7 +78,7 @@ setMethod('dataset', 'DiffusionMap', function(object) object@data_env$data)
 
 #' @name DiffusionMap accessors
 #' @export
-setMethod('dataset<-', c('DiffusionMap', 'ANY'), function(object, value) {
+setMethod('dataset<-', 'DiffusionMap', function(object, value) {
 	object@data_env$data <- value
 	validObject(object)
 	object

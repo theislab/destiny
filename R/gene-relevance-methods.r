@@ -22,7 +22,7 @@ NULL
 #' featureNames,GeneRelevance-method
 #' featureNames<-,GeneRelevance,characterOrFactor-method
 #' dataset,GeneRelevance-method
-#' dataset<-,GeneRelevance,ANY-method
+#' dataset<-,GeneRelevance-method
 #' @name Gene Relevance methods
 #' @export
 setMethod('featureNames', 'GeneRelevance', function(object) colnames(object@exprs))
@@ -43,7 +43,7 @@ setMethod('dataset', 'GeneRelevance', function(object) object@exprs)
 
 #' @name Gene Relevance methods
 #' @export
-setMethod('dataset<-', c('GeneRelevance', 'ANY'), function(object, value) {
+setMethod('dataset<-', 'GeneRelevance', function(object, value) {
 	object@exprs <- value
 	validObject(object)
 	object

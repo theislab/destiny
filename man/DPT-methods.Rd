@@ -5,7 +5,7 @@
 \alias{DPT methods}
 \alias{branch_divide}
 \alias{dataset,DPT-method}
-\alias{dataset<-,DPT,ANY-method}
+\alias{dataset<-,DPT-method}
 \alias{tips}
 \title{DPT methods}
 \usage{
