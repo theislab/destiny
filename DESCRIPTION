@@ -27,6 +27,7 @@ Imports:
     Biobase,
     BiocGenerics,
     ggplot2,
+    ggthemes,
     VIM,
     proxy,
     igraph,
