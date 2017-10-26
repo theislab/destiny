@@ -3,10 +3,10 @@
 #' k nearest neighbor search with custom distance function.
 #' 
 #' @param data      Data matrix
-#' @param query     Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical.
-#' @param k         Number of nearest neighbors.
-#' @param ...       Ignored.
-#' @param distance  Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).
+#' @param query     Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical
+#' @param k         Number of nearest neighbors
+#' @param ...       All parameters after this have to be specified by name
+#' @param distance  Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})
 #' @param sym       Return a symmetric matrix (as long as query is NULL)?
 #' 
 #' @return A \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} if \code{sym == TRUE}, else a \code{\link[Matrix:dsCMatrix-class]{dsCMatrix}} (\eqn{nrow(query) \times nrow(data)}).
@@ -15,6 +15,7 @@
 #' @export
 find_knn <- function(data, k, ..., query = NULL, distance = c('euclidean', 'cosine', 'rankcor'), sym = TRUE) {
 	distance <- match.arg(distance)
+	stopifnot(length(list(...)) == 0L)
 	if (is.null(query)) {
 		knn <- knn_asym(data, k, distance)
 		if (sym) knn$dist_mat <- symmetricise(knn$dist_mat)

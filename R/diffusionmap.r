@@ -144,6 +144,8 @@ DiffusionMap <- function(
 	force(k)
 	force(n_eigs)
 	
+	stopifnot(length(list(...)) == 0L)
+	
 	if (is.null(sigma) || !is(sigma, 'Sigmas') && isTRUE(is.na(sigma)))
 		sigma <- 'local'
 	if (!is(sigma, 'Sigmas') && !(length(sigma) == 1L && sigma %in% c('local', 'global')) && !is.numeric(sigma))
@@ -299,7 +301,7 @@ get_knn <- function(imputed_data, dists, k, distance = 'euclidean', verbose = FA
 		nn_dist <- t(apply(dists, 1, function(row) sort(row)[2:k]))
 		list(dist = nn_dist, dist_mat = dists)
 	} else {
-		verbose_timing(verbose, 'finding knns', find_knn(imputed_data, k, distance))
+		verbose_timing(verbose, 'finding knns', find_knn(imputed_data, k, distance = distance))
 	}
 }
 

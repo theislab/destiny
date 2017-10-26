@@ -25,6 +25,7 @@ NULL
 #' @seealso \code{\link{as.matrix.DPT}}
 #' @export
 setMethod('[', c('DPT', 'index', 'index', 'logicalOrMissing'), function(x, i, j, ..., drop = TRUE) {
+	stopifnot(length(list(...)) == 0L)
 	evas <- eigenvalues(x@dm)
 	eves <- eigenvectors(x@dm)
 	

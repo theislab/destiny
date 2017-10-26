@@ -113,6 +113,7 @@ find_sigmas <- function(
 	vars = NULL,
 	verbose = TRUE
 ) {
+	stopifnot(length(list(...)) == 0L)
 	data <- extract_doublematrix(data, vars)
 	
 	if (any(is.na(data)))

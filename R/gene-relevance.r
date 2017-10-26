@@ -87,7 +87,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, 
 	if (is.null(colnames(exprs))) stop('The expression matrix columns need to be named but are NULL')
 	if (n_dims != length(weights)) stop(n_dims, ' dimensions, but ', length(weights), ' weights were provided')
 	
-	nn_index <- find_knn(exprs, k, distance)$index
+	nn_index <- find_knn(exprs, k, distance = distance)$index
 	
 	k <- ncol(nn_index)
 	n_cells <- nrow(coords_used)

@@ -11,13 +11,13 @@ find_knn(data, k, ..., query = NULL, distance = c("euclidean", "cosine",
 \arguments{
 \item{data}{Data matrix}
 
-\item{k}{Number of nearest neighbors.}
+\item{k}{Number of nearest neighbors}
 
-\item{...}{Ignored.}
+\item{...}{All parameters after this have to be specified by name}
 
-\item{query}{Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical.}
+\item{query}{Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical}
 
-\item{distance}{Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))}).}
+\item{distance}{Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})}
 
 \item{sym}{Return a symmetric matrix (as long as query is NULL)?}
 }
