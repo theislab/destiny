@@ -39,7 +39,7 @@ Treat it as a matrix of pseudotime by subsetting (\code{\link[=dim.DPT]{[ dim nr
 \examples{
 data(guo_norm)
 dm <- DiffusionMap(guo_norm)
-dpt <- DPT(dm, branching = TRUE)
+dpt <- DPT(dm)
 str(dpt)
 
 }
