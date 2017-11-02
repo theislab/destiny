@@ -26,7 +26,7 @@ NULL
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
-#' dpt <- DPT(dm, branching = TRUE)
+#' dpt <- DPT(dm)
 #' plot(dpt)
 #' plot(dpt, 2L,      col_by = 'branch')
 #' plot(dpt, 1L, 2:3, col_by = 'num_cells')
