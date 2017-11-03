@@ -66,12 +66,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rank_mat
+NumericMatrix rank_mat(const NumericMatrix x);
+RcppExport SEXP _destiny_rank_mat(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(rank_mat(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_destiny_censoring_impl", (DL_FUNC) &_destiny_censoring_impl, 7},
     {"_destiny_predict_censoring_impl", (DL_FUNC) &_destiny_predict_censoring_impl, 6},
     {"_destiny_knn_cross", (DL_FUNC) &_destiny_knn_cross, 4},
     {"_destiny_knn_asym", (DL_FUNC) &_destiny_knn_asym, 3},
+    {"_destiny_rank_mat", (DL_FUNC) &_destiny_rank_mat, 1},
     {NULL, NULL, 0}
 };
 

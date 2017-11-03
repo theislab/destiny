@@ -123,14 +123,8 @@ List knn_cross(const NumericMatrix data, const NumericMatrix query, const size_t
 	} else if (distance == "cosine") {
 		return knn_cross_impl<CosineDistance>(data, query, k);
 	} else if (distance == "rankcor") {
-		NumericMatrix data_rank  = NumericMatrix(data.nrow(),  data.ncol());
-		NumericMatrix query_rank = NumericMatrix(query.nrow(), query.ncol());
-		for (int r=0; r<data_rank.nrow(); r++) {
-			data_rank(r, _) = rank(data(r, _));
-		}
-		for (int r=0; r<query_rank.nrow(); r++) {
-			query_rank(r, _) = rank(data(r, _));
-		}
+		NumericMatrix data_rank  = rank_mat(data);
+		NumericMatrix query_rank = rank_mat(query);
 		return knn_cross_impl<CosineDistance>(data_rank, query_rank, k);
 	} else stop("Unknown distance specified");
 }
@@ -143,10 +137,7 @@ List knn_asym(const NumericMatrix data, const size_t k, const std::string distan
 	} else if (distance == "cosine") {
 		return knn_impl<CosineDistance>(data, k);
 	} else if (distance == "rankcor") {
-		NumericMatrix data_rank = NumericMatrix(data.nrow(), data.ncol());
-		for (int r=0; r<data_rank.nrow(); r++) {
-			data_rank(r, _) = rank(data(r, _));
-		}
+		NumericMatrix data_rank = rank_mat(data);
 		return knn_impl<CosineDistance>(data_rank, k);
 	} else stop("Unknown distance specified");
 }

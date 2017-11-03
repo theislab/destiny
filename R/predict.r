@@ -1,17 +1,6 @@
 #' @include diffusionmap.r
 NULL
 
-#' @importFrom Hmisc rcorr
-rankcor_dist <- function(x, y) {
-	if (length(x) != length(y))
-		stop('Error: The vectors have different length!')
-	
-	1 - rcorr(x, y, type = 'spearman')$r[1, 2]
-}
-
-#' @importFrom stats cor
-centered_cosine_dist <- function(x, y) 1 - cor(x, y)
-
 #' Predict new data points using an existing DiffusionMap. The resulting matrix can be used in \link[=plot.DiffusionMap]{the plot method for the DiffusionMap}
 #' 
 #' @param dm        A \code{\link{DiffusionMap}} object.
@@ -49,8 +38,13 @@ dm_predict <- function(dm, new_data, ..., verbose = FALSE) {
 	sigma <- optimal_sigma(dm)
 	if (!censor) {
 		if (verbose) cat('Creating distance matrix without censoring\n')
-		measure <- switch(dm@distance, euclidean = 'Euclidean', cosine = centered_cosine_dist, rankcor = rankcor_dist, stop('Unknown distance measure'))
-		d2 <- unclass(proxy::dist(new_data, data, measure, ...) ^ 2) # matrix (dense)
+		measure <- switch(dm@distance, euclidean = 'Euclidean', cosine = 'correlation', rankcor = 'rankcor', stop('Unknown distance measure'))
+		d <-   # no auto-simil2dist to not use 1-abs(simil)
+			if (measure == 'Euclidean') proxy::dist(new_data, data, measure, ...)
+			else 1 - proxy::simil(new_data, data, measure, ...)
+		d2 <- unclass(d ^ 2) # matrix (dense)
+		stopifnot(nrow(d2) == nrow(new_data))
+		stopifnot(ncol(d2) == nrow(data))
 		
 		#TODO: zeros not on diag
 		trans_p <- exp(-d2 / (2 * sigma ^ 2))

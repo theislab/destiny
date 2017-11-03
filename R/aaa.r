@@ -13,6 +13,7 @@ set_palette <- function(v) {
 	if (identical(palette(), bad_default_palette)) {
 		set_palette(gud_default_palette)
 	}
+	proxy_add_rankcor_simil()
 }
 
 # work around scatterplot3d bug. use function from this package so `linepad` isn’t unset

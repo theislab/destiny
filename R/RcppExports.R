@@ -17,3 +17,7 @@ knn_asym <- function(data, k, distance = "euclidean") {
     .Call('_destiny_knn_asym', PACKAGE = 'destiny', data, k, distance)
 }
 
+rank_mat <- function(x) {
+    .Call('_destiny_rank_mat', PACKAGE = 'destiny', x)
+}
+

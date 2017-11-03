@@ -29,3 +29,12 @@ double cor(const NumericVector v1,
 IntegerVector rank(const NumericVector x) {
 	return match(x, clone(x).sort());
 }
+
+// [[Rcpp::export]]
+NumericMatrix rank_mat(const NumericMatrix x) {
+	NumericMatrix ranked = NumericMatrix(x.nrow(),  x.ncol());
+	for (int r=0; r<ranked.nrow(); r++) {
+		ranked(r, _) = rank(x(r, _));
+	}
+	return ranked;
+}

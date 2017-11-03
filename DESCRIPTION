@@ -27,7 +27,6 @@ Imports:
     Biobase,
     BiocGenerics,
     ggplot2,
-    Hmisc,
     VIM,
     proxy,
     igraph,
@@ -85,5 +84,6 @@ Collate:
     'methods-update.r'
     'predict.r'
     'projection-dist.r'
+    'rankcor.r'
     'sigmas-plotting.r'
 RoxygenNote: 6.0.1.9000
