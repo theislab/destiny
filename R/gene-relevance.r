@@ -115,13 +115,13 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, 
 		# We could optionaly add normalization by max(coords_used[, d]) - min(coords_used[, d])
 		gradient_coord <- apply(nn_index, 2L, function(nn) coords_used[nn, d] - coords_used[, d])
 		
-		partials[, , d] <- weights[[d]] * apply(gradient_exprs, 3L, function(grad_gene_exprs) {
+		partials[, , d] <- weights[[d]] * t(apply(gradient_exprs, 3L, function(grad_gene_exprs) {
 			# Compute median of difference quotients to NN
 			difference_quotients <- gradient_coord / grad_gene_exprs
 			# Only compute gradient if at least two observations are present!
 			stable_cells <- rowSums(!is.na(difference_quotients)) >= 2L
-			ifelse(stable_cells, rowMedians(difference_quotients), NA)
-		})
+			ifelse(stable_cells, rowMedians(difference_quotients, na.rm = TRUE), NA)
+		}))
 	}
 	
 	# Compute norm over partial derivates: Frobenius
