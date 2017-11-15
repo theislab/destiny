@@ -191,6 +191,14 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 	}
 	if (is.function(pal)) pal <- pal(length(gene_ids))
 	
+	num_top <- 5L
+	top_n <- apply(partials_norm, 2, function(cell) {
+		idxs <- head(order(cell, decreasing = TRUE), num_top)
+		names <- rownames(partials_norm)[idxs]
+		txt <- sprintf('%s. %s (%.3f)', seq_len(num_top), names, cell[idxs])
+		paste(txt, collapse = '\n')
+	})
+	
 	# Plot a single map with cells coloured by gene which has 
 	# the highest gradient norm of all genes considered.
 	
@@ -207,11 +215,11 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 	}
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
-	rel_map_data <- cbind(as.data.frame(coords), Gene = as.factor(max_gene))
+	rel_map_data <- cbind(as.data.frame(coords), Gene = as.factor(max_gene), TopN = top_n)
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
-	rel_map <- ggplot(rel_map_data, aes_string(x = d1, y = d2, colour = 'Gene')) +
+	rel_map <- ggplot(rel_map_data, aes_string(x = d1, y = d2, colour = 'Gene', text = 'TopN')) +
 		geom_point(alpha = .8) + 
 		scale_color_manual(values = pal) +
 		ggtitle(sprintf('Gene relevance map'))
