@@ -81,7 +81,7 @@ setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., 
 #' @importFrom Biobase rowMedians
 gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, weights = rep(1, n_dims)) {
 	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor'))
-	coords_used <- coords[, dims]
+	coords_used <- coords[, dims, drop = FALSE]
 	n_dims <- ncol(coords_used) # has to be defined early for `weights` default argument.
 	
 	if (is.null(colnames(exprs))) stop('The expression matrix columns need to be named but are NULL')
