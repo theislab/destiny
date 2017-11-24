@@ -28,13 +28,16 @@ stopifsmall <- function(max_dist) {
 }
 
 
+#' @importFrom utils flush.console
 verbose_timing <- function(verbose, msg, expr) {
 	if (verbose) {
 		cat(sprintf('%s...', msg))
+		flush.console()
 		dif <- system.time({
 			r <- force(expr)
 		})
 		cat(sprintf('...done. Time: %.2fs\n', dif[['elapsed']]))
+		flush.console()
 		r
 	} else expr
 }
