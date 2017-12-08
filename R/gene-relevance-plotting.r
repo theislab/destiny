@@ -92,7 +92,7 @@ plot_gradient_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter
 	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
 	if (is.function(pal)) pal <- pal(12)
 	
-	all_dims <- (if (is.character(dims)) dimnames else dim)(relevance_map@partials)[[3L]]
+	all_dims <- get_dim_range(relevance_map@partials, 3L, dims)
 	if (!all(dims %in% all_dims)) stop(
 		'The relevance map contains only dimensions ', paste(all_dims, collapse = ', '),
 		', not ', paste(setdiff(dims, all_dims), collapse = ', '))
@@ -239,4 +239,9 @@ get_coords <- function(relevance_map, dims) {
 	if (is.null(colnames(coords)))
 		colnames(coords) <- paste('Dimension', dims)
 	coords
+}
+
+get_dim_range <- function(arr, d, dims) {
+	if (is.character(dims)) dimnames(arr)[[d]]
+	else seq_len(dim(arr)[[d]])
 }
