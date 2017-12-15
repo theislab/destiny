@@ -30,9 +30,10 @@ setMethod('featureNames', 'GeneRelevance', function(object) colnames(object@expr
 #' @name Gene Relevance methods
 #' @export
 setMethod('featureNames<-', c('GeneRelevance', 'characterOrFactor'), function(object, value) {
+	object <- updateObject(object)
 	colnames(object@exprs) <-
-		rownames(object@partials_norm) <-
-		rownames(object@partials) <-
+		colnames(object@partials_norm) <-
+		colnames(object@partials) <-
 		value
 	object
 })
@@ -44,6 +45,7 @@ setMethod('dataset', 'GeneRelevance', function(object) object@exprs)
 #' @name Gene Relevance methods
 #' @export
 setMethod('dataset<-', 'GeneRelevance', function(object, value) {
+	object <- updateObject(object)
 	object@exprs <- value
 	validObject(object)
 	object

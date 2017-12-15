@@ -11,13 +11,13 @@
 \title{Gene relevances for entire data set}
 \usage{
 gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL,
-  verbose = FALSE)
+  smooth = TRUE, verbose = FALSE)
 
 \S4method{gene_relevance}{DiffusionMap,missing}(coords, exprs, ..., k = 20L,
-  dims = 1:2, distance = NULL, verbose = FALSE)
+  dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE)
 
 \S4method{gene_relevance}{matrix,matrix}(coords, exprs, ..., k = 20L,
-  dims = 1:2, distance = NULL, verbose = FALSE)
+  dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{coords}{A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.}
@@ -31,6 +31,9 @@ gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL,
 \item{dims}{Index into columns of \code{coord}}
 
 \item{distance}{Distance measure to use for the nearest neighbor search.}
+
+\item{smooth}{Smoothing parameters \code{c(window, alpha)} (see \code{\link[smoother]{smth.gaussian}}).
+Alternatively \code{\link{TRUE}} to use the \link{smoother} \link[smoother:smth.options]{defaults} or \code{\link{FALSE}} to skip smoothing,}
 
 \item{verbose}{If TRUE, log additional info to the console}
 }
@@ -57,6 +60,10 @@ The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 \item{\code{dims}}{Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}}
 
 \item{\code{distance}}{Distance measure used in the nearest neighbor search. See \code{\link{find_knn}}}
+
+\item{\code{smooth_window}}{Smoothing window used (see \code{\link[smoother]{smth.gaussian}})}
+
+\item{\code{smooth_alpha}}{Smoothing kernel width used (see \code{\link[smoother]{smth.gaussian}})}
 }}
 
 \examples{
