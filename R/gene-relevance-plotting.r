@@ -184,6 +184,7 @@ setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords,
 })
 
 #' @importFrom ggplot2 ggplot aes_string geom_point scale_color_manual ggtitle
+#' @importFrom utils head
 plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dims, pal) {
 	relevance_map <- updateObject(relevance_map)
 	partials_norm <- relevance_map@partials_norm
