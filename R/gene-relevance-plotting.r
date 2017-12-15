@@ -89,19 +89,26 @@ setMethod('plot_gradient_map', c('GeneRelevance', 'missing'), function(coords, e
 
 #' @importFrom ggplot2 ggplot aes aes_string geom_point geom_segment scale_colour_gradientn ggtitle facet_wrap
 plot_gradient_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
+	relevance_map <- updateObject(relevance_map)
 	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
 	if (is.function(pal)) pal <- pal(12)
 	
 	all_dims <- get_dim_range(relevance_map@partials, 3L, dims)
 	if (!all(dims %in% all_dims)) stop(
-		'The relevance map contains only dimensions ', paste(all_dims, collapse = ', '),
+		'The relevance map contains only the dimensions ', paste(all_dims, collapse = ', '),
 		', not ', paste(setdiff(dims, all_dims), collapse = ', '))
+	
+	genes_existing <- colnames(relevance_map@partials_norm)
+	genes_missing <- is.na(match(genes, genes_existing))
+	if (any(genes_missing)) stop(
+		'The dataset used for the relevance map does not contain gene(s) ', paste(genes[genes_missing], collapse = ', '),
+		'. Did you mean ', paste(agrep(genes[genes_missing], genes_existing, value = TRUE), collapse = ', '), '?')
 	
 	exprs <- relevance_map@exprs
 	coords <- get_coords(relevance_map, dims)
 	
 	gene_names <- if (is.character(genes)) genes else colnames(exprs)[genes]
-	partials_norms <- relevance_map@partials_norm[genes, , drop = FALSE]
+	partials_norms <- relevance_map@partials_norm[, genes, drop = FALSE]
 	nn_index <- cbind(seq_len(nrow(exprs)), relevance_map@nn_index)
 	
 	# Plot gradient vectors
@@ -109,20 +116,20 @@ plot_gradient_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter
 		cbind(
 			as.data.frame(coords),
 			Expression = exprs[, g],
-			PartialsNorm = partials_norms[g, ],
+			PartialsNorm = partials_norms[, g],
 			Gene = g)
 	}))
 	
 	scatters_top <- do.call(rbind, lapply(genes, function(g) {
 		# Select highest vectors in neighbourhoods
-		norm_top <- apply(nn_index, 1, function(cell) which.max(partials_norms[g, cell]) == 1)
+		norm_top <- apply(nn_index, 1, function(cell) which.max(partials_norms[cell, g]) == 1)
 		norm_top[sapply(norm_top, length) == 0] <- FALSE
 		norm_top <- unlist(norm_top)
 		
 		d_var <- .05  # Fraction of overall dimension variability
 		partials <- lapply(seq_len(length(dims)), function(d) {
 			dc <- coords[norm_top, d]
-			partials <- relevance_map@partials[g, norm_top, d]
+			partials <- relevance_map@partials[norm_top, g, d]
 			# Scale magnitude of partial derivates
 			delta <- diff(rev(range(dc, na.rm = TRUE)))
 			partials / max(abs(partials), na.rm = TRUE) * d_var * delta
@@ -178,28 +185,28 @@ setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords,
 
 #' @importFrom ggplot2 ggplot aes_string geom_point scale_color_manual ggtitle
 plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dims, pal) {
+	relevance_map <- updateObject(relevance_map)
 	partials_norm <- relevance_map@partials_norm
-	
 	coords <- get_coords(relevance_map, dims)
 	
 	if (is.character(genes)) {
-		found <- sapply(genes, function(id) length(grep(id, rownames(partials_norm))) > 0)
+		found <- sapply(genes, function(id) length(grep(id, colnames(partials_norm))) > 0)
 		gene_ids <- genes[found]
 	} else if (length(genes) == 1L) {
 		genes <- min(genes, ncol(relevance_map@exprs))
-		# Select most often occurring genes with maximal norm of gradients at a cell.
-		max_gene_ids <- rownames(partials_norm)[unlist(apply(partials_norm, 2, function(cell) which.max(cell)))]
-		max_gene_ids_hist <- sapply(unique(max_gene_ids), function(id) sum(max_gene_ids == id, na.rm = TRUE) )
-		gene_ids <- names(max_gene_ids_hist)[sort(max_gene_ids_hist, decreasing = TRUE, index.return = TRUE)$ix[1:genes]]
+		# gene with max norm for each cell
+		genes_max <- colnames(partials_norm)[apply(partials_norm, 1L, function(cell) which.max(cell))]
+		counts <- as.data.frame(table(genes_max), stringsAsFactors = FALSE)
+		gene_ids <- counts[order(counts$Freq, decreasing = TRUE)[1:genes], 'genes_max']
 	} else {
-		gene_ids <- rownames(partials_norm)[genes]
+		gene_ids <- colnames(partials_norm)[genes]
 	}
 	if (is.function(pal)) pal <- pal(length(gene_ids))
 	
 	num_top <- 5L
-	top_n <- apply(partials_norm, 2, function(cell) {
+	top_n <- apply(partials_norm, 1L, function(cell) {
 		idxs <- head(order(cell, decreasing = TRUE), num_top)
-		names <- rownames(partials_norm)[idxs]
+		names <- colnames(partials_norm)[idxs]
 		txt <- sprintf('%s. %s (%.3f)', seq_len(num_top), names, cell[idxs])
 		paste(txt, collapse = '\n')
 	})
@@ -207,7 +214,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 	# Plot a single map with cells coloured by gene which has 
 	# the highest gradient norm of all genes considered.
 	
-	max_gene_idx <- apply(partials_norm[gene_ids, , drop = FALSE], 2, which.max)
+	max_gene_idx <- apply(partials_norm[, gene_ids, drop = FALSE], 1L, which.max)
 	max_gene_idx[sapply(max_gene_idx, length) == 0] <- NA
 	max_gene <- gene_ids[unlist(max_gene_idx)]
 	# Label smoothing through graph structure
@@ -220,7 +227,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 	}
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
-	rel_map_data <- cbind(as.data.frame(coords), Gene = as.factor(max_gene), TopN = top_n)
+	rel_map_data <- cbind(as.data.frame(coords), Gene = factor(max_gene, levels = gene_ids), TopN = top_n)
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]

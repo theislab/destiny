@@ -11,6 +11,8 @@ NULL
 #' @param k         Number of nearest neighbors to use
 #' @param dims      Index into columns of \code{coord}
 #' @param distance  Distance measure to use for the nearest neighbor search.
+#' @param smooth    Smoothing parameters \code{c(window, alpha)} (see \code{\link[smoother]{smth.gaussian}}).
+#'                  Alternatively \code{\link{TRUE}} to use the \link{smoother} \link[smoother:smth.options]{defaults} or \code{\link{FALSE}} to skip smoothing,
 #' @param verbose   If TRUE, log additional info to the console
 #' 
 #' @return A \code{GeneRelevance} object:
@@ -23,6 +25,8 @@ NULL
 #' @slot nn_index       Matrix of k nearest neighbor indices. (cells \eqn{\times} k)
 #' @slot dims           Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}
 #' @slot distance       Distance measure used in the nearest neighbor search. See \code{\link{find_knn}}
+#' @slot smooth_window  Smoothing window used (see \code{\link[smoother]{smth.gaussian}})
+#' @slot smooth_alpha   Smoothing kernel width used (see \code{\link[smoother]{smth.gaussian}})
 #' 
 #' @seealso \link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
 #' 
@@ -49,24 +53,33 @@ setClass('GeneRelevance', slots = c(
 	partials_norm = 'matrix',
 	nn_index = 'matrix',  # k = ncol(nn_index)
 	dims = 'ColIndex',
-	distance = 'character'))
+	distance = 'character',
+	smooth_window = 'numeric',
+	smooth_alpha = 'numeric'))
 
 #' @name Gene Relevance
 #' @export
-setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, verbose = FALSE) standardGeneric('gene_relevance'))
+setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) standardGeneric('gene_relevance'))
 
+#' @importFrom Biobase updateObject
 #' @name Gene Relevance
 #' @export
-setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, verbose = FALSE) {
+setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) {
 	dm <- coords
-	relevance_map <- dm@data_env$relevance_map
-	if (is.null(relevance_map) || ncol(relevance_map@nn_index) != k || !identical(relevance_map@dims, dims)) {
+	relevance_map <- updateObject(dm@data_env$relevance_map)
+	smooth <- get_smoothing(smooth)
+	if (is.null(relevance_map) ||
+		ncol(relevance_map@nn_index) != k ||
+		!identical(relevance_map@dims, dims) ||
+		!identical(relevance_map@smooth_window, smooth[[1L]]) ||
+		!identical(relevance_map@smooth_alpha,  smooth[[2L]])
+	) {
 		coords <- eigenvectors(dm)
 		exprs <- extract_doublematrix(dataset(dm))
 		weights <- eigenvalues(dm)[dims]
 		if (is.null(distance)) distance <- dm@distance
 		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)
-		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, distance = distance, verbose = verbose, weights = weights)
+		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, distance = distance, smooth = smooth, verbose = verbose, weights = weights)
 		dm@data_env$relevance_map <- relevance_map
 	}
 	relevance_map
@@ -74,15 +87,16 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 
 #' @name Gene Relevance
 #' @export
-setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, verbose = FALSE) {
-	gene_relevance_impl(coords, exprs, ..., k = k, distance = distance, dims = dims, verbose = verbose)
+setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) {
+	gene_relevance_impl(coords, exprs, ..., k = k, distance = distance, smooth = smooth, dims = dims, verbose = verbose)
 })
 
 #' @importFrom Biobase rowMedians
-gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, weights = rep(1, n_dims)) {
+gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, verbose, weights = rep(1, n_dims)) {
 	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor'))
 	coords_used <- coords[, dims, drop = FALSE]
 	n_dims <- ncol(coords_used) # has to be defined early for `weights` default argument.
+	smooth <- get_smoothing(smooth)
 	
 	if (is.null(colnames(exprs))) stop('The expression matrix columns need to be named but are NULL')
 	if (n_dims != length(weights)) stop(n_dims, ' dimensions, but ', length(weights), ' weights were provided')
@@ -92,21 +106,24 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, 
 	k <- ncol(nn_index)
 	n_cells <- nrow(coords_used)
 	n_genes <- ncol(exprs)
-	partials <- array(NA, dim = c(n_genes, n_cells, n_dims))
+	partials <- array(NA, dim = c(n_cells, n_genes, n_dims))
 	
 	if (verbose) cat('Calculating expression gradient\n')
-	gradient_exprs <- apply(exprs, 2L, function(expr_gene) {
+	gene_grad <- function(expr_gene) {
 		# Compute change in expression
 		# Do not compute if reference is zero, could be drop-out
 		expr_masked <- expr_gene
 		expr_masked[expr_masked == 0] <- NA
 		gradient_expr <- apply(nn_index, 2, function(nn) expr_gene[nn] - expr_masked)
 		gradient_expr[gradient_expr == 0] <- NA  # Cannot evaluate partial
-		stopifnot(length(dim(gradient_expr)) == 2L)
+		#stopifnot(identical(dim(gradient_expr), c(n_cells, k)))
 		gradient_expr
-	})
+	}
+	gradient_exprs <- apply(exprs, 2L, gene_grad)
+	#stopifnot(identical(dim(gradient_exprs), c(n_cells * k, n_genes)))
 	# apply only handles returning vectors, so we have to reshape the return value
 	dim(gradient_exprs) <- c(n_cells, k, n_genes)
+	#stopifnot(identical(gene_grad(exprs[, 1L]), gradient_exprs[, , 1L]))
 	
 	for (d in seq_len(n_dims)) {
 		# Compute partial derivatives in direction of current dimension
@@ -115,14 +132,25 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, 
 		# We could optionaly add normalization by max(coords_used[, d]) - min(coords_used[, d])
 		gradient_coord <- apply(nn_index, 2L, function(nn) coords_used[nn, d] - coords_used[, d])
 		
-		partials_unweighted <- t(apply(gradient_exprs, 3L, function(grad_gene_exprs) {
+		partials_unweighted <- apply(gradient_exprs, 3L, function(grad_gene_exprs) {
 			# Compute median of difference quotients to NN
 			difference_quotients <- gradient_coord / grad_gene_exprs
 			# Only compute gradient if at least two observations are present!
 			stable_cells <- rowSums(!is.na(difference_quotients)) >= 2L
 			ifelse(stable_cells, rowMedians(difference_quotients, na.rm = TRUE), NA)
-		}))
-		stopifnot(identical(dim(partials)[1:2], dim(partials_unweighted)))
+		})
+		#stopifnot(identical(c(n_cells, n_genes), dim(partials_unweighted)))
+		
+		if (!any(is.na(smooth))) {
+			order_coor <- order(coords_used[, d])
+			order_orig <- order(order_coor)
+			partials_unweighted <- apply(partials_unweighted, 2L, function(gene_exprs) {
+				ordered <- gene_exprs[order_coor]
+				smoothed <- smth.gaussian(ordered, smooth[[1L]], smooth[[2L]], tails = TRUE)
+				smoothed[order_orig]
+			})
+			stopifnot(identical(c(n_cells, n_genes), dim(partials_unweighted)))
+		}
 		
 		partials[, , d] <- weights[[d]] * partials_unweighted
 	}
@@ -136,8 +164,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, 
 	#partials_norm[, outliers] <- NA
 	
 	# Prepare output
-	rownames(partials_norm) <- colnames(exprs)
-	dimnames(partials)[[1]] <- colnames(exprs)
+	colnames(partials_norm) <- colnames(partials) <- colnames(exprs)
 	dimnames(partials)[[3]] <- if (is.character(dims)) dims else colnames(coords_used)
 	new('GeneRelevance',
 		coords = coords,
@@ -146,5 +173,15 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, verbose, 
 		partials_norm = partials_norm,
 		nn_index = nn_index,
 		dims = dims,
+		smooth_window = smooth[[1L]],
+		smooth_alpha  = smooth[[2L]],
 		distance = distance)
+}
+
+get_smoothing <- function(smooth) {
+	if (isTRUE(smooth)) c(getOption('smoother.window'), getOption('smoother.gaussianwindow.alpha'))
+	else if (identical(smooth, FALSE)) c(NA_real_, NA_real_)
+	else if (!is.numeric(smooth) || length(smooth) != 2L)
+		stop('`smooth` needs to be TRUE, FALSE or a numeric c(window, alpha), not', capture.output(str(smooth)))
+	else smooth
 }

@@ -95,3 +95,9 @@ n_features <- function(data, distances = NULL) {
 	else if (is(data, 'ExpressionSet')) length(featureNames(data))
 	else ncol(data)
 }
+
+runs <- function(vec) {
+	enc <- rle(vec)
+	enc$values <- make.unique(enc$values, '_')
+	inverse.rle(enc)
+}

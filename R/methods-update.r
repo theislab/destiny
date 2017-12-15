@@ -67,6 +67,14 @@ setMethod('updateObject', 'GeneRelevance', function(object, ..., verbose = FALSE
 	if (!hasattr(object, 'distance'))
 		slot(object, 'distance', check = FALSE) <- 'euclidean'
 	
+	# the dimensions were switched to fit the convention elsewhere in the package.
+	if (!hasattr(object, 'smooth_window')) {
+		object@partials <- aperm(object@partials, c(2, 1, 3))
+		object@partials_norm <- t(object@partials_norm)
+		slot(object, 'smooth_window', check = FALSE) <- NA_real_
+		slot(object, 'smooth_alpha', check = FALSE) <- NA_real_
+	}
+	
 	object
 })
 
