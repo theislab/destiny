@@ -6,10 +6,10 @@
 #include <RcppEigen.h>
 #include <unsupported/Eigen/SparseExtra>
 
+#include "../src/exports.h"
+
 using namespace Rcpp;
 
-// have to replicate this here, as RcppExports isn’t a header
-List knn_asym(const NumericMatrix data, const size_t k, const std::string distance);
 
 void setup_packages() {
 	Environment base("package:base");
@@ -35,12 +35,12 @@ NumericMatrix load_guo() {
 }
 
 void save_tsv(NumericMatrix m, std::string filename) {
-	Eigen::IOFormat TSVFmt(Eigen::StreamPrecision, Eigen::DontAlignCols, "\t", "\n", "", "", "", "\n");
+	Eigen::IOFormat TSVFmt(Eigen::StreamPrecision, Eigen::DontAlignCols, "\t", "\n", "", "", "", "");
 	Eigen::MatrixXd me(Rcpp::as<Eigen::MatrixXd>(m));
 	
 	std::ofstream f;
 	f.open(filename);
-	f << me.format(TSVFmt);
+	f << me.format(TSVFmt) << std::endl;
 	f.close();
 }
 

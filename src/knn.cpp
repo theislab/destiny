@@ -3,6 +3,8 @@
 #include "Cover_Tree.h"
 #include "utils.h"
 
+#include "exports.h"
+
 using namespace Rcpp;
 
 
