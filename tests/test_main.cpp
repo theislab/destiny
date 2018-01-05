@@ -1,7 +1,10 @@
-#include <stdio.h>
+#include <iostream>
+#include <fstream>
 
 #include <Rembedded.h>
 #include <Rcpp.h>
+#include <RcppEigen.h>
+#include <unsupported/Eigen/SparseExtra>
 
 using namespace Rcpp;
 
@@ -31,13 +34,28 @@ NumericMatrix load_guo() {
 	return exprs(global["guo_norm"]);
 }
 
+void save_tsv(NumericMatrix m, std::string filename) {
+	Eigen::IOFormat TSVFmt(Eigen::StreamPrecision, Eigen::DontAlignCols, "\t", "\n", "", "", "", "\n");
+	Eigen::MatrixXd me(Rcpp::as<Eigen::MatrixXd>(m));
+	
+	std::ofstream f;
+	f.open(filename);
+	f << me.format(TSVFmt);
+	f.close();
+}
+
 void main_impl() {
 	setup_packages();
 	NumericMatrix guo = load_guo();
 	
 	List knns = knn_asym(guo, 5, "euclidean");
-	NumericMatrix dists = knns["dist"];
-	std::cout << dists << std::endl;
+	NumericMatrix index = knns["index"];
+	NumericMatrix dist = knns["dist"];
+	Eigen::SparseMatrix<double> dist_mat = knns["dist_mat"];
+	
+	save_tsv(index, "index.tsv");
+	save_tsv(dist, "dist.tsv");
+	Eigen::saveMarket(dist_mat, "dist_mat.mm");
 }
 
 int main(int argc, char* argv[]) {
