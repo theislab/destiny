@@ -21,16 +21,19 @@ NumericMatrix exprs(RObject exprset) {
 	return assay_data["exprs"];
 }
 
-void main_impl() {
-	setup_packages();
-	
+NumericMatrix load_guo() {
 	Environment global = Environment::global_env();
 	
 	Environment utils("package:utils");
 	Function load_data = utils["data"];
 	
 	load_data("guo_norm", Named("package", "destiny"));
-	NumericMatrix guo = exprs(global["guo_norm"]);
+	return exprs(global["guo_norm"]);
+}
+
+void main_impl() {
+	setup_packages();
+	NumericMatrix guo = load_guo();
 	
 	List knns = knn_asym(guo, 5, "euclidean");
 	NumericMatrix dists = knns["dist"];
