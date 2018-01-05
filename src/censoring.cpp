@@ -138,8 +138,8 @@ Eigen::SparseMatrix<double> censoring_impl(
 			
 			it.valueRef() = x;
 		}
-		if (idx_major%1000 == 0)
-			callback(idx_major+1);
+		if (idx_major%100 == 0) Rcpp::checkUserInterrupt();
+		if (idx_major%1000 == 0) callback(idx_major+1);
 	}
 	callback(n);
 	

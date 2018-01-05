@@ -99,6 +99,8 @@ List knn_cross_impl(const NumericMatrix data, const NumericMatrix query, const s
 			dists(s, n) = dist;
 			triplets.push_back(T(s, nn_idx, dist));
 		}
+		
+		if (s%100 == 0) Rcpp::checkUserInterrupt();
 	}
 	
 	Eigen::SparseMatrix<double> dist_mat(nsmp_query, nsmp_data);
