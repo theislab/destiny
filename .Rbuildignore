@@ -3,3 +3,7 @@
 ^\.Rproj\.user$
 ^ROADMAP$
 ^update_remotes\.sh$
+^CMakeLists.txt$
+^build/.*$
+^.*\.kdev4$
+^\.kdev4/*$
