@@ -10,6 +10,10 @@ set_palette <- function(v) {
 }
 
 .onLoad <- function(libname, pkgname) {
+	if (identical(palette(), gud_default_palette) ||
+			!identical(tryCatch(proxy::pr_DB$get_entry('rankcorrelation'), error = function(e) NULL), NULL)) {
+		return()
+	}
 	if (identical(palette(), bad_default_palette)) {
 		set_palette(gud_default_palette)
 	}

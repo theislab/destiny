@@ -32,13 +32,14 @@ NULL
 #' as.data.frame.DPT          as.data.frame,DPT-method          fortify.DPT
 #'     as.matrix.DPT              as.matrix,DPT-method
 #' 
-#' @importFrom methods canCoerce
+#' @importFrom methods canCoerce setAs
 #' @importFrom BiocGenerics as.data.frame
 #' @name coercions
 #' @include diffusionmap.r
 NULL
 
 
+#' @importFrom Biobase pData
 #' @name coercions
 #' @export
 setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optional = FALSE, ...) {
@@ -46,7 +47,11 @@ setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optiona
 	evdf <- as.data.frame(eigenvectors(x), row.names, optional, ...)
 	
 	if (canCoerce(dta, 'data.frame')) {
-		cbind(evdf, as.data.frame(dta, row.names, optional, ...))
+		df_dta <-  # The ExpressionSet conversion sucks
+			if (is(dta, 'ExpressionSet')) cbind(as.data.frame(t(exprs(dta)), row.names, optional, ...), pData(dta))
+			else as.data.frame(dta, row.names, optional, ...)
+		
+		cbind(evdf, df_dta)
 	} else evdf
 })
 
@@ -58,6 +63,7 @@ setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optiona
 #' @name coercions
 #' @export fortify.DiffusionMap
 fortify.DiffusionMap <- function(model, data, ...) as.data.frame(model, ...)
+setAs('DiffusionMap', 'data.frame', function(from) as.data.frame(from))
 
 
 #' @name coercions
@@ -78,6 +84,8 @@ setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE
 #' @name coercions
 #' @export fortify.DPT
 fortify.DPT <- function(model, data, ...) as.data.frame(model, ...)
+setAs('DPT', 'data.frame', function(from) as.data.frame(from))
+
 
 #' @name coercions
 #' @export
