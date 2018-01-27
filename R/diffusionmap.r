@@ -348,7 +348,7 @@ no_censoring <- function(dists, sigma, cb = invisible) {
 	} else {
 		# TODO: optimize local sigma no-censoring case
 		stopifnot(d2@uplo == 'U')
-		mask <- d2 != 0 & upper.tri(dists)
+		mask <- d2 != 0 & upper.tri.sparse(dists)
 		m <- function(mat) suppressMessages(as(mat, 'dsCMatrix')[mask])  # suppress warning about "inefficient .M.sub.i.logical"
 		
 		S1 <- m(tcrossprod(Matrix(sigma)))
