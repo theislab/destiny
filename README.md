@@ -3,6 +3,10 @@ destiny
 
 An R package for diffusion maps, with additional features for large-scale and single cell data.
 
+- [ICB project](https://www.helmholtz-muenchen.de/icb/destiny)
+- [Bioconductor package](http://bioconductor.org/packages/destiny)
+- [Bioinformatics paper](https://doi.org/10.1093/bioinformatics/btv715)
+
 builds
 ------
 
