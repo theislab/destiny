@@ -4,5 +4,5 @@ cache: packages
 addons:
   apt:
     packages:
-    	- jupyter-nbconvert
-    	- jupyter-notebook
+      - jupyter-nbconvert
+      - jupyter-notebook
