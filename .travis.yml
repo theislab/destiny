@@ -4,5 +4,6 @@ cache: packages
 addons:
   apt:
     packages:
-      - jupyter-nbconvert
-      - jupyter-notebook
+      - python3-pip
+before_install:
+  - pip3 install jupyter
