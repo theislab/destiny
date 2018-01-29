@@ -1,0 +1,21 @@
+language: r
+r: bioc-devel
+pandoc_version: 2.1.1  # nbconvert installs pandocfilters 1.4 which needs this
+cache: packages
+addons:
+  apt:
+    packages:
+      - python3-pip
+before_install:
+  - pip3 install --user -U pip
+  - pip3 install --user jupyter
+  - tlmgr install ly1
+  - tlmgr install mweights
+  - tlmgr install sourcesanspro
+  - tlmgr install sourcecodepro
+  - tlmgr install beebe
+before_script:  # build vignette in advance to get useful errors
+  - cd vignettes
+  - jupyter nbconvert --template destiny.tplx --to latex Diffusion-Maps.ipynb
+  - cd ..
+
