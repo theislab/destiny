@@ -2,6 +2,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^ROADMAP$
+^README\.md$
 ^update_remotes\.sh$
 ^CMakeLists\.txt$
 ^\.travis\.yml$

@@ -1,3 +1,8 @@
 language: r
 r: bioc-devel
 cache: packages
+addons:
+  apt:
+    packages:
+    	- jupyter-nbconvert
+    	- jupyter-notebook
