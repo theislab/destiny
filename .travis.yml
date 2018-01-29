@@ -5,6 +5,7 @@ addons:
   apt:
     packages:
       - python3-pip
+      - texlive-fonts-extra
 before_install:
   - pip3 install --user -U pip
   - pip3 install --user jupyter
