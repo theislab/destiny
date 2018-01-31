@@ -12,3 +12,7 @@ before_install:
   - tlmgr install mweights
   - tlmgr install sourcesanspro
   - tlmgr install sourcecodepro
+before_script:
+  - cd vignettes
+  - jupyter nbconvert --template destiny.tplx --to latex Diffusion-Maps.ipynb
+  - cd ..
