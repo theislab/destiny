@@ -11,3 +11,4 @@ before_install:
   - tlmgr install ly1
   - tlmgr install mweights
   - tlmgr install sourcesanspro
+  - tlmgr install sourcecodepro
