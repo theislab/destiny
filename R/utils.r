@@ -102,9 +102,9 @@ runs <- function(vec) {
 	inverse.rle(enc)
 }
 
-upper.tri.sparse<-function(x,diag=FALSE){
+upper.tri.sparse <- function(x,diag = FALSE){
 # Works just like upper.tri() but doesn't forcibly coerce large 'sparseMatrix' back to 'matrix'
 	if (diag)
-        row(x) <= col(x)
-    else row(x) < col(x)
+		row(x) <= col(x)
+	else row(x) < col(x)
 }
