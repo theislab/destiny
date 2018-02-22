@@ -1,17 +1,17 @@
 #' @include gene-relevance.r
 NULL
 
-#' Plot gene relevance or gradient map
+#' Plot gene relevance or differential map
 #' 
-#' \code{plot(gene_relevance, 'Gene')} plots the gradient map of this/these gene(s),
+#' \code{plot(gene_relevance, 'Gene')} plots the differential map of this/these gene(s),
 #' \code{plot(gene_relevance)} a relevance map of a selection of genes.
-#' Alternatively, you can use \code{plot_gradient_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
+#' Alternatively, you can use \code{plot_differential_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
 #' 
 #' @param x            \code{\link{GeneRelevance}} object.
-#' @param y,gene       Gene name(s) or index/indices to create gradient map for. (integer or character)
+#' @param y,gene       Gene name(s) or index/indices to create differential map for. (integer or character)
 #' @param coords       A \code{\link{DiffusionMap}}/\code{\link{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
 #' @param exprs        An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is a matrix.
-#' @param ...          Passed to \code{plot_gradient_map}/\code{plot_gene_relevance}.
+#' @param ...          Passed to \code{plot_differential_map}/\code{plot_gene_relevance}.
 #' @param iter_smooth  Number of label smoothing iterations to perform on relevance map.
 #'                     The higher the more homogenous and the less local structure.
 #' @param genes        Genes to based relevance map on or number of genes to use. (vector of strings or one number)
@@ -29,22 +29,22 @@ NULL
 #' dm <- DiffusionMap(guo_norm)
 #' gr <- gene_relevance(dm)
 #' plot(gr)          # or plot_gene_relevance(dm)
-#' plot(gr, 'Fgf4')  # or plot_gradient_map(dm, 'Fgf4')
+#' plot(gr, 'Fgf4')  # or plot_differential_map(dm, 'Fgf4')
 #' 
 #' guo_norm_mat <- t(Biobase::exprs(guo_norm))
 #' pca <- prcomp(guo_norm_mat)$x
 #' plot_gene_relevance(pca, guo_norm_mat, dims = 2:3)
-#' plot_gradient_map(pca, guo_norm_mat, gene = c('Fgf4', 'Nanog'))
+#' plot_differential_map(pca, guo_norm_mat, gene = c('Fgf4', 'Nanog'))
 #' 
 #' @aliases
 #'   plot.GeneRelevance
 #'   plot,GeneRelevance,character-method
 #'   plot,GeneRelevance,numeric-method
 #'   plot,GeneRelevance,missing-method
-#'   plot_gradient_map
-#'   plot_gradient_map,matrix,matrix-method
-#'   plot_gradient_map,DiffusionMap,missing-method
-#'   plot_gradient_map,GeneRelevance,missing-method
+#'   plot_differential_map
+#'   plot_differential_map,matrix,matrix-method
+#'   plot_differential_map,DiffusionMap,missing-method
+#'   plot_differential_map,GeneRelevance,missing-method
 #'   plot_gene_relevance
 #'   plot_gene_relevance,matrix,matrix-method
 #'   plot_gene_relevance,DiffusionMap,missing-method
@@ -52,43 +52,45 @@ NULL
 #' 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot', c('GeneRelevance', 'character'), function(x, y, ...) plot_gradient_map(x, gene = y, ...))
+setMethod('plot', c('GeneRelevance', 'character'), function(x, y, ...) plot_differential_map(x, gene = y, ...))
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot', c('GeneRelevance', 'numeric'),   function(x, y, ...) plot_gradient_map(x, gene = y, ...))
+setMethod('plot', c('GeneRelevance', 'numeric'),   function(x, y, ...) plot_differential_map(x, gene = y, ...))
 
 #' @name Gene Relevance plotting
 #' @export
 setMethod('plot', c('GeneRelevance', 'missing'), function(x, y, ...) plot_gene_relevance(x, ...))
 
 
-# plot_gradient_map -------------------------------------------------------------------------------------------------------
+# plot_differential_map -------------------------------------------------------------------------------------------------------
 
 
 #' @name Gene Relevance plotting
 #' @export
-setGeneric('plot_gradient_map', function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) standardGeneric('plot_gradient_map'))
-
-#' @name Gene Relevance plotting
-#' @export
-setMethod('plot_gradient_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
-	plot_gradient_map_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
+setGeneric('plot_differential_map', function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	standardGeneric('plot_differential_map')
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gradient_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
-	plot_gradient_map_impl(gene_relevance(coords, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
+setMethod('plot_differential_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_differential_map_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_gradient_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
-	plot_gradient_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
+setMethod('plot_differential_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_differential_map_impl(gene_relevance(coords, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
+})
+
+#' @name Gene Relevance plotting
+#' @export
+setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	plot_differential_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
 #' @importFrom ggplot2 ggplot aes aes_string geom_point geom_segment scale_colour_gradientn ggtitle facet_wrap
-plot_gradient_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
+plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
 	relevance_map <- updateObject(relevance_map)
 	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
 	if (is.function(pal)) pal <- pal(12)
@@ -111,7 +113,7 @@ plot_gradient_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter
 	partials_norms <- relevance_map@partials_norm[, genes, drop = FALSE]
 	nn_index <- cbind(seq_len(nrow(exprs)), relevance_map@nn_index)
 	
-	# Plot gradient vectors
+	# Plot differential vectors
 	scatters <- do.call(rbind, lapply(genes, function(g) {
 		cbind(
 			as.data.frame(coords),
@@ -213,7 +215,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 	})
 	
 	# Plot a single map with cells coloured by gene which has 
-	# the highest gradient norm of all genes considered.
+	# the highest differential norm of all genes considered.
 	
 	max_gene_idx <- apply(partials_norm[, gene_ids, drop = FALSE], 1L, which.max)
 	max_gene_idx[sapply(max_gene_idx, length) == 0] <- NA

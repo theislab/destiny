@@ -28,7 +28,7 @@ NULL
 #' @slot smooth_window  Smoothing window used (see \code{\link[smoother]{smth.gaussian}})
 #' @slot smooth_alpha   Smoothing kernel width used (see \code{\link[smoother]{smth.gaussian}})
 #' 
-#' @seealso \link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
+#' @seealso \link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_differential_map}/\code{plot_gene_relevance}
 #' 
 #' @examples
 #' data(guo_norm)
@@ -111,37 +111,37 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 		dim = c(n_cells, n_genes, n_dims),
 		dimnames = list(NULL, colnames(exprs), if (is.character(dims)) dims else colnames(coords_used)))
 	
-	# a very small value to subtract from the gradient
+	# a very small value to subtract from the differential
 	small <- min(exprs[exprs != 0]) / length(exprs[exprs == 0])
-	if (verbose) cat('Calculating expression gradient\n')
-	gene_grad <- function(expr_gene) {
+	if (verbose) cat('Calculating expression differential\n')
+	gene_differential <- function(expr_gene) {
 		# Compute change in expression
 		# Do not compute if reference is zero, could be drop-out
 		expr_masked <- expr_gene
 		expr_masked[expr_masked == 0] <- small
-		gradient_expr <- apply(nn_index, 2, function(nn) expr_gene[nn] - expr_masked)
-		gradient_expr[gradient_expr == 0] <- NA  # Cannot evaluate partial
-		#stopifnot(identical(dim(gradient_expr), c(n_cells, k)))
-		gradient_expr
+		differential_expr <- apply(nn_index, 2, function(nn) expr_gene[nn] - expr_masked)
+		differential_expr[differential_expr == 0] <- NA  # Cannot evaluate partial
+		#stopifnot(identical(dim(differential_expr), c(n_cells, k)))
+		differential_expr
 	}
-	gradient_exprs <- apply(exprs, 2L, gene_grad)
-	#stopifnot(identical(dim(gradient_exprs), c(n_cells * k, n_genes)))
+	differential_exprs <- apply(exprs, 2L, gene_differential)
+	#stopifnot(identical(dim(differential_exprs), c(n_cells * k, n_genes)))
 	# apply only handles returning vectors, so we have to reshape the return value
-	dim(gradient_exprs) <- c(n_cells, k, n_genes)
-	dimnames(gradient_exprs)[[3L]] <- colnames(exprs)
-	#stopifnot(identical(gene_grad(exprs[, 1L]), gradient_exprs[, , 1L]))
+	dim(differential_exprs) <- c(n_cells, k, n_genes)
+	dimnames(differential_exprs)[[3L]] <- colnames(exprs)
+	#stopifnot(identical(gene_differential(exprs[, 1L]), differential_exprs[, , 1L]))
 	
 	for (d in seq_len(n_dims)) {
 		# Compute partial derivatives in direction of current dimension
 		
 		if (verbose) cat('Calculating partial derivatives of dimension ', d, '/', n_dims, '\n')
 		# We could optionaly add normalization by max(coords_used[, d]) - min(coords_used[, d])
-		gradient_coord <- apply(nn_index, 2L, function(nn) coords_used[nn, d] - coords_used[, d])
+		differential_coord <- apply(nn_index, 2L, function(nn) coords_used[nn, d] - coords_used[, d])
 		
-		partials_unweighted <- apply(gradient_exprs, 3L, function(grad_gene_exprs) {
+		partials_unweighted <- apply(differential_exprs, 3L, function(grad_gene_exprs) {
 			# Compute median of difference quotients to NN
-			difference_quotients <- gradient_coord / grad_gene_exprs
-			# Only compute gradient if at least two observations are present!
+			difference_quotients <- differential_coord / grad_gene_exprs
+			# Only compute differential if at least two observations are present!
 			stable_cells <- rowSums(!is.na(difference_quotients)) >= 2L
 			ifelse(stable_cells, rowMedians(difference_quotients, na.rm = TRUE), NA)
 		})

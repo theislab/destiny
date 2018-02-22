@@ -7,15 +7,15 @@
 \alias{plot,GeneRelevance,character-method}
 \alias{plot,GeneRelevance,numeric-method}
 \alias{plot,GeneRelevance,missing-method}
-\alias{plot_gradient_map}
-\alias{plot_gradient_map,matrix,matrix-method}
-\alias{plot_gradient_map,DiffusionMap,missing-method}
-\alias{plot_gradient_map,GeneRelevance,missing-method}
+\alias{plot_differential_map}
+\alias{plot_differential_map,matrix,matrix-method}
+\alias{plot_differential_map,DiffusionMap,missing-method}
+\alias{plot_differential_map,GeneRelevance,missing-method}
 \alias{plot_gene_relevance}
 \alias{plot_gene_relevance,matrix,matrix-method}
 \alias{plot_gene_relevance,DiffusionMap,missing-method}
 \alias{plot_gene_relevance,GeneRelevance,missing-method}
-\title{Plot gene relevance or gradient map}
+\title{Plot gene relevance or differential map}
 \usage{
 \S4method{plot}{GeneRelevance,character}(x, y, ...)
 
@@ -23,17 +23,17 @@
 
 \S4method{plot}{GeneRelevance,missing}(x, y, ...)
 
-plot_gradient_map(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix,
-  faceter = facet_wrap(~Gene))
+plot_differential_map(coords, exprs, ..., gene, dims = 1:2,
+  pal = cube_helix, faceter = facet_wrap(~Gene))
 
-\S4method{plot_gradient_map}{matrix,matrix}(coords, exprs, ..., gene,
+\S4method{plot_differential_map}{matrix,matrix}(coords, exprs, ..., gene,
   dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
 
-\S4method{plot_gradient_map}{DiffusionMap,missing}(coords, exprs, ..., gene,
+\S4method{plot_differential_map}{DiffusionMap,missing}(coords, exprs, ..., gene,
   dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
 
-\S4method{plot_gradient_map}{GeneRelevance,missing}(coords, exprs, ..., gene,
-  dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
+\S4method{plot_differential_map}{GeneRelevance,missing}(coords, exprs, ...,
+  gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
 
 plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, genes = 5L,
   dims = 1:2, pal = palette())
@@ -50,9 +50,9 @@ plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, genes = 5L,
 \arguments{
 \item{x}{\code{\link{GeneRelevance}} object.}
 
-\item{y, gene}{Gene name(s) or index/indices to create gradient map for. (integer or character)}
+\item{y, gene}{Gene name(s) or index/indices to create differential map for. (integer or character)}
 
-\item{...}{Passed to \code{plot_gradient_map}/\code{plot_gene_relevance}.}
+\item{...}{Passed to \code{plot_differential_map}/\code{plot_gene_relevance}.}
 
 \item{coords}{A \code{\link{DiffusionMap}}/\code{\link{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.}
 
@@ -74,21 +74,21 @@ You can also pass an index into the gene names. (vector of numbers or logicals w
 ggplot2 plot, when plotting a relevance map with a list member \code{$ids} containing the gene IDs used.
 }
 \description{
-\code{plot(gene_relevance, 'Gene')} plots the gradient map of this/these gene(s),
+\code{plot(gene_relevance, 'Gene')} plots the differential map of this/these gene(s),
 \code{plot(gene_relevance)} a relevance map of a selection of genes.
-Alternatively, you can use \code{plot_gradient_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
+Alternatively, you can use \code{plot_differential_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
 }
 \examples{
 data(guo_norm)
 dm <- DiffusionMap(guo_norm)
 gr <- gene_relevance(dm)
 plot(gr)          # or plot_gene_relevance(dm)
-plot(gr, 'Fgf4')  # or plot_gradient_map(dm, 'Fgf4')
+plot(gr, 'Fgf4')  # or plot_differential_map(dm, 'Fgf4')
 
 guo_norm_mat <- t(Biobase::exprs(guo_norm))
 pca <- prcomp(guo_norm_mat)$x
 plot_gene_relevance(pca, guo_norm_mat, dims = 2:3)
-plot_gradient_map(pca, guo_norm_mat, gene = c('Fgf4', 'Nanog'))
+plot_differential_map(pca, guo_norm_mat, gene = c('Fgf4', 'Nanog'))
 
 }
 \seealso{

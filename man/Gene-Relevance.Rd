@@ -77,5 +77,5 @@ gr_pca <- gene_relevance(prcomp(m)$x, m)
 
 }
 \seealso{
-\link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_gradient_map}/\code{plot_gene_relevance}
+\link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_differential_map}/\code{plot_gene_relevance}
 }

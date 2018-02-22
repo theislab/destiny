@@ -112,8 +112,15 @@ optimal.sigma <- function(object) {
 }
 
 #' @name destiny-deprecated
-#' @export 
+#' @export
 lWhich <- function(idx, nms = seq_len(len), len = length(nms), useNames = TRUE) {
 	.Deprecated('l_which')
 	l_which(idx, nms, len, useNames)
+}
+
+#' @name destiny-deprecated
+#' @export
+plot_gradient_map <- function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+	.Deprecated('plot_differential_map')
+	plot_differential_map(coords, exprs, ..., gene = gene, dims = dims, pal = pal, faceter = faceter)
 }

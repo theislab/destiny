@@ -10,6 +10,7 @@
 \alias{find.sigmas}
 \alias{optimal.sigma}
 \alias{lWhich}
+\alias{plot_gradient_map}
 \title{Compatibility versions of functions for destiny 1.x scripts}
 \usage{
 DiffusionMapCompat(data, sigma = "global", k = find_dm_k(nrow(data) - 1L),
@@ -35,6 +36,9 @@ find.sigmas(data, step.size = 0.1, steps = 10L, start = NULL,
 optimal.sigma(object)
 
 lWhich(idx, nms = seq_len(len), len = length(nms), useNames = TRUE)
+
+plot_gradient_map(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix,
+  faceter = facet_wrap(~Gene))
 }
 \arguments{
 \item{data, n, n.eigs, start, censor.val, censor.range, missing.range, vars, verbose, ...}{Corresponding parameters in multiple functions}
