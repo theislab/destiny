@@ -106,7 +106,10 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 	k <- ncol(nn_index)
 	n_cells <- nrow(coords_used)
 	n_genes <- ncol(exprs)
-	partials <- array(NA, dim = c(n_cells, n_genes, n_dims))
+	partials <- array(
+		NA,
+		dim = c(n_cells, n_genes, n_dims),
+		dimnames = list(NULL, colnames(exprs), if (is.character(dims)) dims else colnames(coords_used)))
 	
 	if (verbose) cat('Calculating expression gradient\n')
 	gene_grad <- function(expr_gene) {
@@ -123,6 +126,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 	#stopifnot(identical(dim(gradient_exprs), c(n_cells * k, n_genes)))
 	# apply only handles returning vectors, so we have to reshape the return value
 	dim(gradient_exprs) <- c(n_cells, k, n_genes)
+	dimnames(gradient_exprs)[[3L]] <- colnames(exprs)
 	#stopifnot(identical(gene_grad(exprs[, 1L]), gradient_exprs[, , 1L]))
 	
 	for (d in seq_len(n_dims)) {
@@ -139,7 +143,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 			stable_cells <- rowSums(!is.na(difference_quotients)) >= 2L
 			ifelse(stable_cells, rowMedians(difference_quotients, na.rm = TRUE), NA)
 		})
-		#stopifnot(identical(c(n_cells, n_genes), dim(partials_unweighted)))
+		colnames(partials_unweighted) <- colnames(exprs)
 		
 		if (!any(is.na(smooth))) {
 			order_coor <- order(coords_used[, d])
@@ -149,7 +153,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 				smoothed <- smth.gaussian(ordered, smooth[[1L]], smooth[[2L]], tails = TRUE)
 				smoothed[order_orig]
 			})
-			stopifnot(identical(c(n_cells, n_genes), dim(partials_unweighted)))
+			colnames(partials_unweighted) <- colnames(exprs)
 		}
 		
 		partials[, , d] <- weights[[d]] * partials_unweighted
@@ -164,8 +168,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 	#partials_norm[, outliers] <- NA
 	
 	# Prepare output
-	colnames(partials_norm) <- colnames(partials) <- colnames(exprs)
-	dimnames(partials)[[3]] <- if (is.character(dims)) dims else colnames(coords_used)
+	colnames(partials_norm) <- colnames(partials)
 	new('GeneRelevance',
 		coords = coords,
 		exprs = exprs,
