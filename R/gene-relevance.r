@@ -111,12 +111,14 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 		dim = c(n_cells, n_genes, n_dims),
 		dimnames = list(NULL, colnames(exprs), if (is.character(dims)) dims else colnames(coords_used)))
 	
+	# a very small value to subtract from the gradient
+	small <- min(exprs[exprs != 0]) / length(exprs[exprs == 0])
 	if (verbose) cat('Calculating expression gradient\n')
 	gene_grad <- function(expr_gene) {
 		# Compute change in expression
 		# Do not compute if reference is zero, could be drop-out
 		expr_masked <- expr_gene
-		expr_masked[expr_masked == 0] <- NA
+		expr_masked[expr_masked == 0] <- small
 		gradient_expr <- apply(nn_index, 2, function(nn) expr_gene[nn] - expr_masked)
 		gradient_expr[gradient_expr == 0] <- NA  # Cannot evaluate partial
 		#stopifnot(identical(dim(gradient_expr), c(n_cells, k)))
