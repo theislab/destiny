@@ -1,8 +1,9 @@
+% !TEX TS-program = xelatex
 ((*- extends 'article.tplx' -*))
 
 ((* block packages *))
-	\usepackage[svgnames]{xcolor}
-	\usepackage[inline,shortlabels]{enumitem}
+	\PassOptionsToPackage{svgnames}{xcolor}
+	\PassOptionsToPackage{inline,shortlabels}{enumitem}
 	((( super() )))
 	\usepackage{authblk}
 	\usepackage{csquotes}
@@ -14,7 +15,7 @@
 	\AtBeginDocument{%
 		\def\PYZsq{\textquotesingle}%
 	}
-	
+
 	\usepackage[default]{sourcesanspro}
 	\usepackage{sourcecodepro}
 	
