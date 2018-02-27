@@ -5,8 +5,8 @@ test_that('knn works the same as in FNN', if (requireNamespace('FNN', quietly = 
 	r_destiny <- destiny::find_knn(e, 5L)
 	r_fnn <- FNN::get.knn(e, 5L)
 	
-	expect_identical(r_destiny$index, r_fnn$nn.index)
-	expect_identical(r_destiny$dist,  r_fnn$nn.dist)
+	expect_equal(r_destiny$index, r_fnn$nn.index)
+	expect_equal(r_destiny$dist,  r_fnn$nn.dist)
 })
 
 test_that('knnx works the same as in FNN', if (requireNamespace('FNN', quietly = TRUE)) {
@@ -17,6 +17,6 @@ test_that('knnx works the same as in FNN', if (requireNamespace('FNN', quietly =
 	r_destiny <- destiny::find_knn(e[nc != 32L,], 5L, query = e[nc == 32L,])
 	r_fnn <- FNN::get.knnx(e[nc != 32L,], e[nc == 32L,], 5L)
 	
-	expect_identical(r_destiny$index, r_fnn$nn.index)
-	expect_identical(r_destiny$dist,  r_fnn$nn.dist)
+	expect_equal(r_destiny$index, r_fnn$nn.index)
+	expect_equal(r_destiny$dist,  r_fnn$nn.dist)
 })
