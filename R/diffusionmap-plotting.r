@@ -30,6 +30,7 @@ NULL
 #' @param draw_legend  logical. If TRUE, draw color legend (default: TRUE if \code{col_by} is given or \code{col} is given and a vector to be mapped)
 #' @param consec_col   If \code{col} or \code{col_by} refers to an integer column, with gaps (e.g. \code{c(5,0,0,3)}) use the palette color consecutively (e.g. \code{c(3,1,1,2)})
 #' @param col_na       Color for \code{NA} in the data. specify \code{NA} to hide.
+#' @param legend_name  Name for the color legend.
 #' @param plot_more    Function that will be called while the plot margins are temporarily changed
 #'                     (its \code{p} argument is the rgl or scatterplot3d instance or NULL,
 #'                     its \code{rescale} argument is \code{NULL} or of the shape \code{list(from = c(a, b), to = c(c,d))}).
@@ -48,7 +49,7 @@ NULL
 #' @importFrom ggplot2 ggplot aes aes_string
 #' @importFrom ggplot2 geom_point
 #' @importFrom ggplot2 theme theme_minimal element_blank element_line element_text element_rect
-#' @importFrom ggplot2 scale_colour_identity scale_colour_manual scale_colour_gradientn scale_colour_identity
+#' @importFrom ggplot2 scale_fill_identity scale_fill_manual scale_fill_gradientn scale_fill_identity
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 guide_colourbar guide_legend
 #' @importFrom ggthemes geom_rangeframe extended_range_breaks
@@ -70,6 +71,7 @@ plot.DiffusionMap <- function(
 	interactive = FALSE,
 	draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
 	consec_col = TRUE, col_na = 'grey',
+	legend_name = col_by,
 	plot_more = function(p, ..., rescale = NULL) p
 ) {
 	dif <- x
@@ -118,24 +120,27 @@ plot.DiffusionMap <- function(
 		))
 	}
 	
-	is_one_colour <- length(unique(point_data$Colour)) == 1L
+	col_lvls <- na.omit(as.character(unique(point_data$Colour)))
+	is_one_colour <- length(col_lvls) == 1L
 	
 	if (length(dims) == 2) {
 		d1 <- names(point_data)[[1L]]
 		d2 <- names(point_data)[[2L]]
 		
-		a <-
-			if (is_one_colour) aes_string(d1, d2)
-			else if (is_projection) aes_string(d1, d2, colour = 'ColourExpl')
-			else aes_string(d1, d2, colour = 'Colour')
-		p <- ggplot(point_data, a) +
-			geom_point() +
+		p <- ggplot(point_data, aes_string(d1, d2)) +
 			theme_minimal() + theme(axis.text.x = element_blank(), axis.text.y = element_blank())
 		
+		# TODO: this logic might be off
+		if (is_projection || !is_one_colour) p <- p +
+			geom_point(
+				aes_string(fill = if (continuous || is_projection || !is.null(col_by)) 'Colour' else 'ColourExpl'),
+				colour = I('transparent'),
+				shape  = I(21))
+		
 		if (!is_one_colour) p <- p +
-			if (is_projection)   scale_colour_identity (name = 'Projection', guide = 'legend', labels = names(projection_guide), breaks = projection_guide)
-			else if (continuous) scale_colour_gradientn(name = col_by, colours = if (is.function(pal)) pal(100) else pal)
-			else                 scale_colour_manual   (name = col_by, values  = if (is.function(pal)) pal(length(unique(col))) else pal)
+			if (is_projection)   scale_fill_identity (name = 'Projection', guide = 'legend', labels = names(projection_guide), breaks = projection_guide, na.value = col_na)
+			else if (continuous) scale_fill_gradientn(name = legend_name, colours = if (is.function(pal)) pal(100) else pal, na.value = col_na)
+			else                 scale_fill_manual   (name = legend_name, values  = c(if (is.function(pal)) pal(length(col_lvls)) else pal[seq_along(col_lvls)], NA), labels = c(col_lvls, NA), na.value = col_na)
 		if (box)   p <- p + theme(panel.border = element_rect(fill = NA), axis.title.x = element_text(), axis.title.y = element_text())
 		if (ticks) p <- p + theme(axis.ticks = element_line(), axis.text.x  = element_text(), axis.text.y  = element_text())
 		if (axes)  p <- p + geom_rangeframe(colour = par('col'))

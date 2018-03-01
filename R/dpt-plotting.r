@@ -1,4 +1,4 @@
-#' @include dpt.r
+#' @include dpt.r utils.r
 NULL
 
 #' Plot DPT
@@ -36,6 +36,7 @@ NULL
 #' @importFrom methods is setMethod
 #' @importFrom scales colour_ramp rescale
 #' @importFrom utils capture.output
+#' @importFrom ggplot2 aes_string geom_path geom_point
 #' @export
 plot.DPT <- function(
 	x, root = NULL,
@@ -81,11 +82,11 @@ plot.DPT <- function(
 		for (b in seq_along(paths_to)) {
 			idx <- dpt@branch[, 1] %in% c(root, paths_to[[b]])
 			path <- average_path(pt_vec[idx], evs[idx, ], w_width)
-			plot_points(rescale_fun(path), type = 'l', col = col_path[[b]], ...)
+			p <- plot_points(p, rescale_fun(path), type = 'l', col = col_path[[b]], ...)
 		}
 		
 		tips <- evs[dpt_flat@tips[, 1], ]
-		plot_points(rescale_fun(tips), col = col_tip, ...)
+		plot_points(p, rescale_fun(tips), col = col_tip, ...)
 	}
 	
 	col <-
@@ -102,7 +103,7 @@ plot.DPT <- function(
 		dpt@dm, dcs,
 		plot_more = plot_paths,
 		legend_main = legend_main,
-		col = col,
+		col = col, legend_name = col_by,
 		...)
 	
 	if (!identical(Sys.getenv('LOG_LEVEL'), '')) message('Args:\n', paste(capture.output(print(args)), collapse = '\n'))
@@ -133,12 +134,21 @@ average_path <- function(pt, x, w_width = .1) {
 
 
 get_plot_fn <- function(p) {
-	if (is.null(p)) {  # 2d plot
-		points
+	if (is(p, 'ggplot')) {  # ggplot
+		function(p2, dat, type = 'p', col, ...) {
+			xy <- colnames(dat)
+			geom <- switch(type, p = geom_point, l = geom_path, stop)
+			p2 + geom(aes_string(xy[[1L]], xy[[2L]], colour = 'Path'), data.frame(dat, Path = col))
+		}
 	} else if (is.list(p) && 'points3d' %in% names(p)) {# scatterplot3d
-		p$points3d
+		function(p2, ...) {
+			p2$points3d(...)
+			p2
+		}
 	} else if (is(p, 'rglHighlevel')) {  # rgl
-		function(x, y = NULL, z = NULL, type = 'p', ...)
+		function(p2, x, y = NULL, z = NULL, type = 'p', ...) {
 			switch(type, p = rgl::points3d, l = rgl::lines3d, stop)(x, y, z, ...)
-	} else stop('unknown p passed to plot_more (class: ', class(p), ')')
+			p2
+		}
+	} else stop('unknown p passed to plot_more (class(es): ', paste(class(p), collapse = ', '), ')')
 }
