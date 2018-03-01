@@ -48,7 +48,7 @@ NULL
 #' @importFrom ggplot2 ggplot aes aes_string
 #' @importFrom ggplot2 geom_point
 #' @importFrom ggplot2 theme theme_minimal element_blank element_line element_text element_rect
-#' @importFrom ggplot2 scale_colour_identity scale_colour_manual scale_colour_gradientn
+#' @importFrom ggplot2 scale_colour_identity scale_colour_manual scale_colour_gradientn scale_colour_identity
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 guide_colourbar guide_legend
 #' @importFrom ggthemes geom_rangeframe extended_range_breaks
@@ -73,6 +73,8 @@ plot.DiffusionMap <- function(
 	plot_more = function(p, ..., rescale = NULL) p
 ) {
 	dif <- x
+	col_is_one <- is.null(col_by) && ((is.character(col) && length(col) == 1L) || is.null(col))
+	is_projection <- col_is_one && is.character(col_new) && length(col_new) == 1L
 	
 	if (interactive) {
 		if (!requireNamespace('rgl', quietly = TRUE))
@@ -83,8 +85,9 @@ plot.DiffusionMap <- function(
 	
 	if (!is.null(col) && !is.null(col_by)) stop('Only specify one of col or col_by')
 	if (!is.null(col_by)) col <- extract_col(dataset(dif), col_by)
-	if (is.null(col)) col <- ''  # just a single color
+	if (is.null(col)) col <- par('col')  # just a single color
 	continuous <- is.double(col)
+	projection_guide <- if (is_projection) c(old = col, new = col_new)
 	col_legend <- if (continuous && !is.null(col_limits)) col_limits else col
 	
 	# use a fitting default palette
@@ -123,14 +126,16 @@ plot.DiffusionMap <- function(
 		
 		a <-
 			if (is_one_colour) aes_string(d1, d2)
+			else if (is_projection) aes_string(d1, d2, colour = 'ColourExpl')
 			else aes_string(d1, d2, colour = 'Colour')
 		p <- ggplot(point_data, a) +
 			geom_point() +
 			theme_minimal() + theme(axis.text.x = element_blank(), axis.text.y = element_blank())
 		
 		if (!is_one_colour) p <- p +
-			if (continuous) scale_colour_gradientn(name = col_by, colours = if (is.function(pal)) pal(100) else pal)
-			else            scale_colour_manual   (name = col_by, values  = if (is.function(pal)) pal(length(unique(col))) else pal)
+			if (is_projection)   scale_colour_identity (name = 'Projection', guide = 'legend', labels = names(projection_guide), breaks = projection_guide)
+			else if (continuous) scale_colour_gradientn(name = col_by, colours = if (is.function(pal)) pal(100) else pal)
+			else                 scale_colour_manual   (name = col_by, values  = if (is.function(pal)) pal(length(unique(col))) else pal)
 		if (box)   p <- p + theme(panel.border = element_rect(fill = NA), axis.title.x = element_text(), axis.title.y = element_text())
 		if (ticks) p <- p + theme(axis.ticks = element_line(), axis.text.x  = element_text(), axis.text.y  = element_text())
 		if (axes)  p <- p + geom_rangeframe(colour = par('col'))
@@ -218,6 +223,7 @@ get_explicit_col <- function(col, pal, col_na, col_limits) {
 		col[is.na(col)] <- col_na
 	}
 	
+	# if the color wasn’t numeric, use as is
 	col
 }
 
