@@ -1,24 +1,3 @@
-#' @importFrom Biobase exprs
-extract_doublematrix <- function(data, vars = NULL) {
-	if (is.data.frame(data)) {
-		data <- as.matrix(data[, sapply(data, is.double)])
-	} else if (inherits(data, 'ExpressionSet')) {
-		data <- t(exprs(data))
-	} else if (!is.matrix(data)) {
-		stop('Data needs to be matrix, data.frame or ExpressionSet')
-	}
-	dupes <- duplicated(data)
-	if (any(dupes)) {
-		data <- data[!dupes, ]
-		warning('Duplicate rows removed from data. Consider explicitly using `df[!duplicated(df), ]`')
-	}
-	
-	if (!is.null(vars))
-		data <- data[, vars]
-	data
-}
-
-
 stopifsmall <- function(max_dist) {
 	if (max_dist < .Machine$double.eps)
 		stop(sprintf(
@@ -81,29 +60,15 @@ flipped_dcs <- function(d, dcs) {
 rescale_mat <- function(mat, ...) apply(mat, 2L, scales::rescale, ...)
 
 
-#' @importFrom Biobase sampleNames
-n_samples <- function(data, distances) {
-	if (is.null(data)) nrow(distances)
-	else if (is(data, 'ExpressionSet')) length(sampleNames(data))
-	else nrow(data)
-}
-
-
-#' @importFrom Biobase featureNames
-n_features <- function(data, distances = NULL) {
-	if (is.null(data)) ncol(distances)
-	else if (is(data, 'ExpressionSet')) length(featureNames(data))
-	else ncol(data)
-}
-
 runs <- function(vec) {
 	enc <- rle(vec)
 	enc$values <- make.unique(enc$values, '_')
 	inverse.rle(enc)
 }
 
-upper.tri.sparse <- function(x,diag = FALSE){
-# Works just like upper.tri() but doesn't forcibly coerce large 'sparseMatrix' back to 'matrix'
+
+upper.tri.sparse <- function(x, diag = FALSE) {
+	# Works just like upper.tri() but doesn't forcibly coerce large 'sparseMatrix' back to 'matrix'
 	if (diag)
 		row(x) <= col(x)
 	else row(x) < col(x)

@@ -3,7 +3,7 @@ NULL
 
 #' Convert object to \link[Biobase]{ExpressionSet} or read it from a file
 #' 
-#' These functions present quick waya to create \link[Biobase]{ExpressionSet} objects.
+#' These functions present quick way to create \link[Biobase]{ExpressionSet} objects.
 #' 
 #' They work by using all continuous (double) columns as expression data, and all others as sample annotations.
 #' 
