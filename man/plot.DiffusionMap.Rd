@@ -7,13 +7,14 @@
 \alias{plot,DiffusionMap,numeric-method}
 \title{3D or 2D plot of diffusion map}
 \usage{
-plot.DiffusionMap(x, dims = 1:3, new_dcs = NULL, new_data = NULL,
-  col = NULL, col_by = NULL, col_limits = NULL, col_new = "red",
-  pal = NULL, pal_new = NULL, ..., mar = NULL, ticks = FALSE,
-  axes = TRUE, box = FALSE, legend_main = col_by, legend_opts = list(),
-  interactive = FALSE, draw_legend = !is.null(col_by) || (length(col) > 1 &&
-  !is.character(col)), consec_col = TRUE, col_na = "grey",
-  plot_more = function(p, ..., rescale = NULL) NULL)
+plot.DiffusionMap(x, dims = 1:3, new_dcs = if (!is.null(new_data))
+  dm_predict(x, new_data), new_data = NULL, col = NULL, col_by = NULL,
+  col_limits = NULL, col_new = "red", pal = NULL, pal_new = NULL, ...,
+  ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
+  legend_opts = list(), interactive = FALSE,
+  draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
+  consec_col = TRUE, col_na = "grey", legend_name = col_by,
+  plot_more = function(p, ..., rescale = NULL) p)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 
@@ -43,8 +44,6 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{...}{Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})}
 
-\item{mar}{Bottom, left, top, and right margins (default: \code{par(mar)})}
-
 \item{ticks}{logical. If TRUE, show axis ticks (default: FALSE)}
 
 \item{axes}{logical. If TRUE, draw plot axes (default: Only if \code{ticks} is TRUE)}
@@ -63,9 +62,13 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{col_na}{Color for \code{NA} in the data. specify \code{NA} to hide.}
 
+\item{legend_name}{Name for the color legend.}
+
 \item{plot_more}{Function that will be called while the plot margins are temporarily changed
 (its \code{p} argument is the rgl or scatterplot3d instance or NULL,
-its \code{rescale} argument is \code{NULL} or of the shape \code{list(from = c(a, b), to = c(c,d))})}
+its \code{rescale} argument is \code{NULL}, a \code{list(from = c(a, b), to = c(c, d))}),
+or an array of shape \eqn{from|to \times dims \times min|max}, i.e. \eqn{2 \times length(dims) \times 2}.
+In case of 2d plotting, it should take and return a ggplot2 object.}
 }
 \value{
 The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.

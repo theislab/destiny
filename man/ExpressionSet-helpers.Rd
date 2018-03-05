@@ -31,7 +31,7 @@ read.ExpressionSet(file, header = TRUE, ...)
 an \link[Biobase]{ExpressionSet} object
 }
 \description{
-These functions present quick waya to create \link[Biobase]{ExpressionSet} objects.
+These functions present quick way to create \link[Biobase]{ExpressionSet} objects.
 }
 \details{
 They work by using all continuous (double) columns as expression data, and all others as sample annotations.
