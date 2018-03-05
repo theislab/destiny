@@ -57,7 +57,25 @@ flipped_dcs <- function(d, dcs) {
 }
 
 
-rescale_mat <- function(mat, ...) apply(mat, 2L, scales::rescale, ...)
+rescale_mat <- function(mat, rescale) {
+	if (is.list(rescale)) {
+		stopifnot(setequal(dimnames(rescale), c('from', 'to')))
+		rv <- apply(mat, 2L, scales::rescale, rescale$to, rescale$from)
+	} else if (is.array(rescale)) {
+		stopifnot(length(dim(rescale)) == 3L)
+		stopifnot(ncol(mat) == ncol(rescale))
+		stopifnot(dim(rescale)[[1L]] == 2L)
+		stopifnot(dim(rescale)[[3L]] == 2L)
+		
+		col_type <- get(typeof(mat))
+		rv <- vapply(seq_len(ncol(mat)), function(d) {
+			scales::rescale(mat[, d], rescale['to', d, ], rescale['from', d, ])
+		}, col_type(nrow(mat)))
+	}
+	stopifnot(all(dim(rv) == dim(mat)))
+	dimnames(rv) <- dimnames(mat)
+	rv
+}
 
 
 runs <- function(vec) {

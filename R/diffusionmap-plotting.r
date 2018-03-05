@@ -33,7 +33,8 @@ NULL
 #' @param legend_name  Name for the color legend.
 #' @param plot_more    Function that will be called while the plot margins are temporarily changed
 #'                     (its \code{p} argument is the rgl or scatterplot3d instance or NULL,
-#'                     its \code{rescale} argument is \code{NULL} or of the shape \code{list(from = c(a, b), to = c(c,d))}).
+#'                     its \code{rescale} argument is \code{NULL}, a \code{list(from = c(a, b), to = c(c, d))}),
+#'                     or an array of shape \eqn{from|to \times dims \times min|max}, i.e. \eqn{2 \times length(dims) \times 2}.
 #'                     In case of 2d plotting, it should take and return a ggplot2 object.
 #' 
 #' @return The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.
@@ -160,8 +161,14 @@ plot.DiffusionMap <- function(
 			plot_more(p, rescale = NULL)
 		} else {
 			rescale <- NULL
-			if (!ticks) for (d in seq_along(dims)) {  # -> scatterplot3d's pretty() should not mess things up
-					point_data[, d] <- scales::rescale(point_data[, d])
+			if (!ticks) {
+				rescale <- array(NA, c(2L, length(dims), 2L), list(c('from', 'to'), as.character(dims), c('min', 'max')))
+				for (d in seq_along(dims)) {  # -> scatterplot3d's pretty() should not mess things up
+					r <- range(point_data[, d])
+					point_data[, d] <- scales::rescale(point_data[, d], c(0, 1), r)
+					rescale['from', d, ] <- r
+					rescale['to', d, ] <- c(0, 1)
+				}
 			}
 			
 			mar <- list(...)$mar

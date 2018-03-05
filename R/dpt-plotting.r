@@ -77,7 +77,7 @@ plot.DPT <- function(
 		plot_points <- get_plot_fn(p)
 		rescale_fun <-
 			if (is.null(rescale)) identity
-			else function(x) rescale_mat(x, from = rescale$from, to = rescale$to)
+			else function(x) rescale_mat(x, rescale)
 		
 		for (b in seq_along(paths_to)) {
 			idx <- dpt@branch[, 1] %in% c(root, paths_to[[b]])
@@ -86,7 +86,13 @@ plot.DPT <- function(
 		}
 		
 		tips <- evs[dpt_flat@tips[, 1], ]
-		plot_points(p, rescale_fun(tips), col = col_tip, ...)
+		p <- plot_points(p, rescale_fun(tips), col = col_tip, ...)
+		
+		if (!is(p, 'ggplot')) p
+		else p + scale_colour_identity(
+			name = 'Path and Tips', guide = 'legend',
+			breaks = c(col_path[seq_along(paths_to)], col_tip),
+			labels = c(sprintf('Path to %s', paths_to), 'Tips'))
 	}
 	
 	col <-
