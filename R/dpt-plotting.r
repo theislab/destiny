@@ -36,7 +36,7 @@ NULL
 #' @importFrom methods is setMethod
 #' @importFrom scales colour_ramp rescale
 #' @importFrom utils capture.output
-#' @importFrom ggplot2 aes_string geom_path geom_point
+#' @importFrom ggplot2 aes_string geom_path geom_point scale_colour_identity
 #' @export
 plot.DPT <- function(
 	x, root = NULL,

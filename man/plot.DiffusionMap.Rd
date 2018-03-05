@@ -69,8 +69,6 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 its \code{rescale} argument is \code{NULL}, a \code{list(from = c(a, b), to = c(c, d))}),
 or an array of shape \eqn{from|to \times dims \times min|max}, i.e. \eqn{2 \times length(dims) \times 2}.
 In case of 2d plotting, it should take and return a ggplot2 object.}
-
-\item{mar}{Bottom, left, top, and right margins (default: \code{par(mar)})}
 }
 \value{
 The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object.
