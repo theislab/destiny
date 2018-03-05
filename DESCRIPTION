@@ -54,6 +54,7 @@ Collate:
     'colorlegend.r'
     'compat.r'
     'cube_helix.r'
+    'dataset-helpers.r'
     'destiny-package.r'
     's4-unions.r'
     'dist-matrix-coerce.r'
