@@ -3,7 +3,7 @@
 
 ((* block packages *))
 	\PassOptionsToPackage{svgnames}{xcolor}
-	\PassOptionsToPackage{inline,shortlabels}{enumitem}
+	\usepackage[inline,shortlabels]{enumitem}  % enumitem is only included in a newer upstream version
 	((( super() )))
 	\usepackage{authblk}
 	\usepackage{csquotes}
