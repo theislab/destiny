@@ -20,7 +20,7 @@ Find tips in a DiffusionMap object
 \examples{
 data(guo)
 dm <- DiffusionMap(guo)
-is_tip <- l_which(find_tips(dm), len = ncol(dataset(dm)))
+is_tip <- l_which(find_tips(dm), len = ncol(guo))
 plot(dm, col = factor(is_tip))
 
 }

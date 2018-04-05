@@ -5,7 +5,7 @@
 #' The data is normalized using the mean of two housekeeping genes.
 #' The difference between \code{guo} and \code{guo_norm} is the LoD being set to 10 in the former, making it usable with the \code{censor_val} parameter of \link{DiffusionMap}.
 #' 
-#' @return an \link[Biobase]{ExpressionSet} with 48 features and 428 samples containing qPCR Ct values and a "num.cells" sample annotation.
+#' @return an \link[Biobase]{ExpressionSet} with 48 features and 428 observations containing qPCR Ct values and a "num.cells" observation annotation.
 #' 
 #' @aliases data:guo data:guo_norm guo guo_norm
 #' @name guo
@@ -16,5 +16,5 @@
 #' @usage
 #' data(guo)
 #' data(guo_norm)
-#' @format An \link[Biobase]{ExpressionSet} with 48 features, 428 samples and 2 \link[Biobase]{phenoData} annotations.
+#' @format An \link[Biobase]{ExpressionSet} with 48 features, 428 observations and 2 \link[Biobase]{phenoData} annotations.
 NULL

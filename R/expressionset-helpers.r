@@ -5,7 +5,7 @@ NULL
 #' 
 #' These functions present quick way to create \link[Biobase]{ExpressionSet} objects.
 #' 
-#' They work by using all continuous (double) columns as expression data, and all others as sample annotations.
+#' They work by using all continuous (double) columns as expression data, and all others as observation annotations.
 #' 
 #' @param x  \link[base]{data.frame} to convert to an \link[Biobase]{ExpressionSet}.
 #' 

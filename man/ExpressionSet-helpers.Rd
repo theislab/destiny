@@ -34,7 +34,7 @@ an \link[Biobase]{ExpressionSet} object
 These functions present quick way to create \link[Biobase]{ExpressionSet} objects.
 }
 \details{
-They work by using all continuous (double) columns as expression data, and all others as sample annotations.
+They work by using all continuous (double) columns as expression data, and all others as observation annotations.
 }
 \examples{
 library(Biobase)

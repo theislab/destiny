@@ -86,7 +86,7 @@ plot.DiffusionMap <- function(
 	}
 	
 	if (!is.null(col) && !is.null(col_by)) stop('Only specify one of col or col_by')
-	if (!is.null(col_by)) col <- extract_col(dataset(dif), col_by)
+	if (!is.null(col_by)) col <- dataset_get_feature(dataset(dif), col_by)
 	if (is.null(col)) col <- par('col')  # just a single color
 	continuous <- is.double(col)
 	projection_guide <- if (is_projection) c(old = col, new = col_new)
@@ -237,18 +237,6 @@ get_explicit_col <- function(col, pal, col_na, col_limits) {
 	# if the color wasn’t numeric, use as is
 	col
 }
-
-#' @importFrom Biobase varLabels exprs
-extract_col <- function(annot_data, col_by) tryCatch({
-	if (inherits(annot_data, 'ExpressionSet')) {
-		if (col_by %in% varLabels(annot_data))
-			annot_data[[col_by]]
-		else
-			exprs(annot_data)[col_by, ]
-	} else {
-		annot_data[, col_by]
-	}
-}, error = function(e) stop(sprintf('Invalid `col_by`: No column, annotation, or feature found with name %s', dQuote(col_by))))
 
 # test:
 # layout(matrix(1:8, 2))

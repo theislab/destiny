@@ -26,9 +26,9 @@ NULL
 dm_predict <- function(dm, new_data, ..., verbose = FALSE) {
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be a DiffusionMap')
 	
-	data <- extract_doublematrix(dataset(dm), dm@vars)
-	new_data <- extract_doublematrix(new_data, dm@vars)
-	if (!n_features(data) == n_features(new_data))
+	data <- dataset_extract_doublematrix(dataset(dm), dm@vars)
+	new_data <- dataset_extract_doublematrix(new_data, dm@vars)
+	if (!dataset_n_features(data) == dataset_n_features(new_data))
 		stop('new data needs to have the same features as the one used to create the diffusion map')
 	
 	censor <- !is.null(dm@censor_val) || any(is.na(data)) || any(is.na(new_data))

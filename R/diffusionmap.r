@@ -127,8 +127,8 @@ setClass(
 DiffusionMap <- function(
 	data = stopifnot_distmatrix(distance),
 	sigma = 'local',
-	k = find_dm_k(n_samples(data, distance) - 1L),
-	n_eigs = min(20L, n_samples(data, distance) - 2L),
+	k = find_dm_k(dataset_n_observations(data, distance) - 1L),
+	n_eigs = min(20L, dataset_n_observations(data, distance) - 2L),
 	density_norm = TRUE,
 	...,
 	distance = c('euclidean', 'cosine', 'rankcor'),
@@ -172,7 +172,7 @@ DiffusionMap <- function(
 		distance <- match.arg(distance)
 		
 		data_env$data <- data
-		data <- extract_doublematrix(data, vars)
+		data <- dataset_extract_doublematrix(data, vars)
 		imputed_data <- data
 		if (any(is.na(imputed_data)))
 			imputed_data <- as.matrix(hotdeck(data, imp_var = FALSE))

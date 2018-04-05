@@ -75,7 +75,7 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 		!identical(relevance_map@smooth_alpha,  smooth[[2L]])
 	) {
 		coords <- eigenvectors(dm)
-		exprs <- extract_doublematrix(dataset(dm))
+		exprs <- dataset_extract_doublematrix(dataset(dm))
 		weights <- eigenvalues(dm)[dims]
 		if (is.null(distance)) distance <- dm@distance
 		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)

@@ -32,7 +32,7 @@ NULL
 #' as.data.frame.DPT          as.data.frame,DPT-method          fortify.DPT
 #'     as.matrix.DPT              as.matrix,DPT-method
 #' 
-#' @importFrom methods canCoerce setAs
+#' @importFrom methods setAs
 #' @importFrom BiocGenerics as.data.frame
 #' @name coercions
 #' @include diffusionmap.r
@@ -43,16 +43,13 @@ NULL
 #' @name coercions
 #' @export
 setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optional = FALSE, ...) {
-	dta <- dataset(x)
-	evdf <- as.data.frame(eigenvectors(x), row.names, optional, ...)
+	df_evec <- as.data.frame(eigenvectors(x), row.names, optional, ...)
+	df_data <- dataset_to_df(     dataset(x), row.names, optional, ...)
 	
-	if (canCoerce(dta, 'data.frame')) {
-		df_dta <-  # The ExpressionSet conversion sucks
-			if (is(dta, 'ExpressionSet')) cbind(as.data.frame(t(exprs(dta)), row.names, optional, ...), pData(dta))
-			else as.data.frame(dta, row.names, optional, ...)
-		
-		cbind(evdf, df_dta)
-	} else evdf
+	if (is.null(df_data))
+		df_evec
+	else
+		cbind(df_evec, df_data)
 })
 
 

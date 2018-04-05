@@ -72,7 +72,7 @@ setMethod('show', 'Sigmas', function(object) {
 #' The sigma with the maximum value in average dimensionality is close to the ideal one.
 #' Increasing step number gets this nearer to the ideal one.
 #' 
-#' @param data           Data set with \eqn{n} samples. Can be a \link[base]{data.frame}, \link[base]{matrix} or \link[Biobase]{ExpressionSet}.
+#' @param data           Data set with \eqn{n} observations. Can be a \link[base]{data.frame}, \link[base]{matrix} or \link[Biobase]{ExpressionSet}.
 #' @param step_size      Size of log-sigma steps
 #' @param steps          Number of steps/calculations
 #' @param start          Initial value to search from. (Optional. default: \eqn{\log_{10}(min(dist(data)))})
@@ -114,7 +114,7 @@ find_sigmas <- function(
 	verbose = TRUE
 ) {
 	stopifnot(length(list(...)) == 0L)
-	data <- extract_doublematrix(data, vars)
+	data <- dataset_extract_doublematrix(data, vars)
 	
 	if (any(is.na(data)))
 		data <- as.matrix(hotdeck(data, imp_var = FALSE))

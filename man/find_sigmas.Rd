@@ -10,7 +10,7 @@ find_sigmas(data, step_size = 0.1, steps = 10L, start = NULL,
   verbose = TRUE)
 }
 \arguments{
-\item{data}{Data set with \eqn{n} samples. Can be a \link[base]{data.frame}, \link[base]{matrix} or \link[Biobase]{ExpressionSet}.}
+\item{data}{Data set with \eqn{n} observations. Can be a \link[base]{data.frame}, \link[base]{matrix} or \link[Biobase]{ExpressionSet}.}
 
 \item{step_size}{Size of log-sigma steps}
 

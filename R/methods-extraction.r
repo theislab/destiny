@@ -31,13 +31,7 @@ NULL
 #' @name extractions
 #' @export
 setMethod('names', 'DiffusionMap', function(x) {
-	dta <- dataset(x)
-	data_names <- if (is(dta, 'ExpressionSet')) {
-		c(featureNames(dta), varLabels(dta))
-	} else {
-		colnames(dta)
-	}
-	c(colnames(eigenvectors(x)), data_names)
+	c(colnames(eigenvectors(x)), dataset_names(dataset(x)))
 })
 #' @name extractions
 #' @export
@@ -49,13 +43,10 @@ setMethod('names', 'DPT', function(x) c(paste0('DPT', seq_len(nrow(x))), 'Branch
 #' @name extractions
 #' @export
 setMethod('[[', c('DiffusionMap', 'character', 'missing'), function(x, i, j, ...) {
-	dta <- if (grepl('^DC\\d+$', i)) eigenvectors(x) else dataset(x)
-	if (is.matrix(dta)) {
-		dta[, i]
-	} else if (is(dta, 'ExpressionSet') && i %in% featureNames(dta)) {
-		exprs(dta)[i, ]
-	} else {  # data.frame or phenoData
-		dta[[i]]
+	if (grepl('^DC\\d+$', i)) {
+		eigenvectors(x)[, i]
+	} else {
+		dataset_get_feature(dataset(x), i)
 	}
 })
 #' @name extractions

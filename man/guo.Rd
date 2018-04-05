@@ -7,13 +7,13 @@
 \alias{data:guo_norm}
 \alias{guo_norm}
 \title{Guo at al. mouse embryonic stem cell qPCR data}
-\format{An \link[Biobase]{ExpressionSet} with 48 features, 428 samples and 2 \link[Biobase]{phenoData} annotations.}
+\format{An \link[Biobase]{ExpressionSet} with 48 features, 428 observations and 2 \link[Biobase]{phenoData} annotations.}
 \usage{
 data(guo)
 data(guo_norm)
 }
 \value{
-an \link[Biobase]{ExpressionSet} with 48 features and 428 samples containing qPCR Ct values and a "num.cells" sample annotation.
+an \link[Biobase]{ExpressionSet} with 48 features and 428 observations containing qPCR Ct values and a "num.cells" observation annotation.
 }
 \description{
 Gene expression data of 48 genes and an annotation column \code{$num_cells} containing the cell stage at which the embryos were harvested.
