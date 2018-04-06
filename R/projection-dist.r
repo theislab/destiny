@@ -4,7 +4,8 @@
 #' @param new_dcs   Diffusion component matrix of which to calculate the distance to the data.
 #' @param ...       Passed to \code{\link[proxy:dist]{proxy::dist}} if \code{new_data} was passed.
 #' @param new_data  New data points to project into the diffusion map.
-#'                  Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.
+#'                  Can be a \link[base]{matrix}, \link[base]{data.frame},
+#'                  an \link[Biobase]{ExpressionSet}, or a \link[SingleCellExperiment]{SingleCellExperiment}.
 #' @param verbose   If \code{\link{TRUE}}, log additional info to the console.
 #' 
 #' @examples

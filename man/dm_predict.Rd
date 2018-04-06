@@ -10,7 +10,8 @@ dm_predict(dm, new_data, ..., verbose = FALSE)
 \item{dm}{A \code{\link{DiffusionMap}} object.}
 
 \item{new_data}{New data points to project into the diffusion map.
-Can be a \link[base]{matrix}, \link[base]{data.frame}, or an \link[Biobase]{ExpressionSet}.}
+Can be a \link[base]{matrix}, \link[base]{data.frame},
+an \link[Biobase]{ExpressionSet}, or a \link[SingleCellExperiment]{SingleCellExperiment}.}
 
 \item{...}{Passed to \code{\link[proxy:dist]{proxy::dist}(new_data, data, dm@distance, ...)}.}
 

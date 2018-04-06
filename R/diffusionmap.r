@@ -10,7 +10,7 @@ sigma_msg <- function(sigma) sprintf(
 #' Create a diffusion map of cells
 #' 
 #' The provided data can be a double \link[base]{matrix} of expression data or a \link[base]{data.frame} with all non-integer (double) columns
-#' being treated as expression data features (and the others ignored), or an \link[Biobase]{ExpressionSet}.
+#' being treated as expression data features (and the others ignored), an \link[Biobase]{ExpressionSet}, or a \link[SingleCellExperiment]{SingleCellExperiment}.
 #' 
 #' @param data           Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns. If \code{distance} is a distance matrix, \code{data} has to be a \code{\link{data.frame}} with covariates only.
 #' @param sigma          Diffusion scale parameter of the Gaussian kernel. One of \code{'local'}, \code{'global'}, a (\link[base]{numeric}) global sigma or a \link{Sigmas} object.

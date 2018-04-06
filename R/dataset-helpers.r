@@ -1,4 +1,5 @@
 #' @importFrom Biobase exprs
+#' @importFrom SummarizedExperiment assay colData
 dataset_extract_doublematrix <- function(data, vars = NULL) {
 	if (is.data.frame(data)) {
 		if (is.null(vars)) {
@@ -10,8 +11,11 @@ dataset_extract_doublematrix <- function(data, vars = NULL) {
 		data <- as.matrix(data)
 	} else if (inherits(data, 'ExpressionSet')) {
 		data <- t(exprs(data))
+	} else if (inherits(data, 'SingleCellExperiment')) {
+		#TODO: allow other name?
+		data <- t(assay(data, 'logcounts'))
 	} else if (!is.matrix(data)) {
-		stop('Data needs to be matrix, data.frame or ExpressionSet')
+		stop('Data needs to be matrix, data.frame, ExpressionSet, or SingleCellExperiment')
 	}
 	dupes <- duplicated(data)
 	if (any(dupes)) {
@@ -29,6 +33,7 @@ dataset_extract_doublematrix <- function(data, vars = NULL) {
 dataset_n_observations <- function(data, distances) {
 	if (is.null(data)) nrow(distances)
 	else if (is(data, 'ExpressionSet')) length(sampleNames(data))
+	else if (is(data, 'SingleCellExperiment')) ncol(data)
 	else nrow(data)
 }
 
@@ -37,6 +42,7 @@ dataset_n_observations <- function(data, distances) {
 dataset_n_features <- function(data, distances = NULL, vars = NULL) {
 	if (is.null(data)) ncol(distances)
 	else if (is(data, 'ExpressionSet')) length(featureNames(data))
+	else if (is(data, 'SingleCellExperiment')) nrow(data)
 	else if (!is.null(vars)) ncol(data[, vars])
 	else if (is.data.frame(data)) ncol(data[, sapply(data, is.double)])
 	else ncol(data)
@@ -48,6 +54,11 @@ dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) {
 	# The ExpressionSet as.data.frame sucks
 	if (is(dta, 'ExpressionSet')) {
 		cbind(as.data.frame(t(exprs(dta)), row.names, optional, ...), pData(dta))
+	} else if (is(dta, 'SingleCellExperiment')) {
+		#TODO: allow other name?
+		cbind(
+			as.data.frame(t(assay(dta, 'logcounts')), row.names, optional, ...),
+			as.data.frame(colData(dta), row.names, optional, ...))
 	} else if (canCoerce(dta, 'data.frame')) {
 		as(dta, 'data.frame')
 	} else if (!is.null(getS3method('as.data.frame', class(data)[[1L]], optional = TRUE))) {
@@ -59,6 +70,8 @@ dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) {
 dataset_names <- function(dta) {
 	if (is(dta, 'ExpressionSet')) {
 		c(featureNames(dta), varLabels(dta))
+	} else if (is(dta, 'SingleCellExperiment')) {
+		c(rownames(dta), colnames(colData(dta)))
 	} else {
 		colnames(dta)
 	}
@@ -71,8 +84,11 @@ dataset_get_feature <- function(dta, f) {
 	tryCatch({
 		if (is(dta, 'ExpressionSet') && f %in% featureNames(dta)) {
 			exprs(dta)[f, ]
-		} else if (is(dta, 'ExpressionSet') || is.data.frame(dta)) {
-			# data.frame or phenoData
+		} else if (is(dta, 'SingleCellExperiment') && f %in% rownames(dta)) {
+			#TODO: allow other name?
+			assay(dta, 'logcounts')[f, ]
+		} else if (is(dta, 'ExpressionSet') || is(dta, 'SingleCellExperiment') || is.data.frame(dta)) {
+			# data.frame or phenoData/colData
 			dta[[f]]
 		} else {
 			dta[, f]

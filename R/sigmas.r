@@ -72,7 +72,8 @@ setMethod('show', 'Sigmas', function(object) {
 #' The sigma with the maximum value in average dimensionality is close to the ideal one.
 #' Increasing step number gets this nearer to the ideal one.
 #' 
-#' @param data           Data set with \eqn{n} observations. Can be a \link[base]{data.frame}, \link[base]{matrix} or \link[Biobase]{ExpressionSet}.
+#' @param data           Data set with \eqn{n} observations. Can be a \link[base]{data.frame},
+#'                       \link[base]{matrix}, \link[Biobase]{ExpressionSet} or \link[SingleCellExperiment]{SingleCellExperiment}.
 #' @param step_size      Size of log-sigma steps
 #' @param steps          Number of steps/calculations
 #' @param start          Initial value to search from. (Optional. default: \eqn{\log_{10}(min(dist(data)))})
