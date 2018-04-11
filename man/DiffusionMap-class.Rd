@@ -53,7 +53,7 @@ A DiffusionMap object:
 }
 \description{
 The provided data can be a double \link[base]{matrix} of expression data or a \link[base]{data.frame} with all non-integer (double) columns
-being treated as expression data features (and the others ignored), an \link[Biobase]{ExpressionSet}, or a \link[SingleCellExperiment]{SingleCellExperiment}.
+being treated as expression data features (and the others ignored), an \link[Biobase:class.ExpressionSet]{ExpressionSet}, or a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \section{Slots}{
 

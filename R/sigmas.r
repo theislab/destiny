@@ -73,7 +73,8 @@ setMethod('show', 'Sigmas', function(object) {
 #' Increasing step number gets this nearer to the ideal one.
 #' 
 #' @param data           Data set with \eqn{n} observations. Can be a \link[base]{data.frame},
-#'                       \link[base]{matrix}, \link[Biobase]{ExpressionSet} or \link[SingleCellExperiment]{SingleCellExperiment}.
+#'                       \link[base]{matrix}, \link[Biobase:class.ExpressionSet]{ExpressionSet}
+#'                       or \link[SingleCellExperiment]{SingleCellExperiment}.
 #' @param step_size      Size of log-sigma steps
 #' @param steps          Number of steps/calculations
 #' @param start          Initial value to search from. (Optional. default: \eqn{\log_{10}(min(dist(data)))})

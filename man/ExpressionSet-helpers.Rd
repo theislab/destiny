@@ -7,7 +7,7 @@
 \alias{as.ExpressionSet-method}
 \alias{as.ExpressionSet,data.frame-method}
 \alias{read.ExpressionSet}
-\title{Convert object to \link[Biobase]{ExpressionSet} or read it from a file}
+\title{Convert object to \link[Biobase:class.ExpressionSet]{ExpressionSet} or read it from a file}
 \usage{
 as.ExpressionSet(x, ...)
 
@@ -17,7 +17,7 @@ as.ExpressionSet(x, ...)
 read.ExpressionSet(file, header = TRUE, ...)
 }
 \arguments{
-\item{x}{\link[base]{data.frame} to convert to an \link[Biobase]{ExpressionSet}.}
+\item{x}{\link[base]{data.frame} to convert to an \link[Biobase:class.ExpressionSet]{ExpressionSet}.}
 
 \item{...}{Additional parameters to \link[utils]{read.table}}
 
@@ -28,10 +28,10 @@ read.ExpressionSet(file, header = TRUE, ...)
 \item{header}{Specifies if the file has a header row.}
 }
 \value{
-an \link[Biobase]{ExpressionSet} object
+an \link[Biobase:class.ExpressionSet]{ExpressionSet} object
 }
 \description{
-These functions present quick way to create \link[Biobase]{ExpressionSet} objects.
+These functions present quick way to create \link[Biobase:class.ExpressionSet]{ExpressionSet} objects.
 }
 \details{
 They work by using all continuous (double) columns as expression data, and all others as observation annotations.
@@ -47,5 +47,5 @@ phenoData(set)$Time == 1:3
 
 }
 \seealso{
-\link[utils]{read.table} on which \code{read.ExpressionSet} is based, and \link[Biobase]{ExpressionSet}.
+\link[utils]{read.table} on which \code{read.ExpressionSet} is based, and \link[Biobase:class.ExpressionSet]{ExpressionSet}.
 }

@@ -11,7 +11,8 @@ dm_predict(dm, new_data, ..., verbose = FALSE)
 
 \item{new_data}{New data points to project into the diffusion map.
 Can be a \link[base]{matrix}, \link[base]{data.frame},
-an \link[Biobase]{ExpressionSet}, or a \link[SingleCellExperiment]{SingleCellExperiment}.}
+\link[Biobase:class.ExpressionSet]{ExpressionSet},
+or \link[SingleCellExperiment]{SingleCellExperiment}.}
 
 \item{...}{Passed to \code{\link[proxy:dist]{proxy::dist}(new_data, data, dm@distance, ...)}.}
 

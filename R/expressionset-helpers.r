@@ -1,15 +1,15 @@
 #' @include utils.r
 NULL
 
-#' Convert object to \link[Biobase]{ExpressionSet} or read it from a file
+#' Convert object to \link[Biobase:class.ExpressionSet]{ExpressionSet} or read it from a file
 #' 
-#' These functions present quick way to create \link[Biobase]{ExpressionSet} objects.
+#' These functions present quick way to create \link[Biobase:class.ExpressionSet]{ExpressionSet} objects.
 #' 
 #' They work by using all continuous (double) columns as expression data, and all others as observation annotations.
 #' 
-#' @param x  \link[base]{data.frame} to convert to an \link[Biobase]{ExpressionSet}.
+#' @param x  \link[base]{data.frame} to convert to an \link[Biobase:class.ExpressionSet]{ExpressionSet}.
 #' 
-#' @return an \link[Biobase]{ExpressionSet} object
+#' @return an \link[Biobase:class.ExpressionSet]{ExpressionSet} object
 #' 
 #' @examples
 #' library(Biobase)
@@ -20,7 +20,7 @@ NULL
 #' rownames(exprs(set)) == c('Actb', 'Gapdh')
 #' phenoData(set)$Time == 1:3
 #' 
-#' @seealso \link[utils]{read.table} on which \code{read.ExpressionSet} is based, and \link[Biobase]{ExpressionSet}.
+#' @seealso \link[utils]{read.table} on which \code{read.ExpressionSet} is based, and \link[Biobase:class.ExpressionSet]{ExpressionSet}.
 #' 
 #' @aliases as.ExpressionSet as.ExpressionSet-method as.ExpressionSet,data.frame-method read.ExpressionSet
 #' 
