@@ -30,7 +30,7 @@ plot.DiffusionMap(x, dims = 1:3, new_dcs = if (!is.null(new_data))
 \item{new_data}{A data set in the same format as \code{x} that is used to create \code{new_dcs <- \link{dm_predict}(dif, new_data)}}
 
 \item{col}{Single color string or vector of discrete or categoric values to be mapped to colors.
-E.g. a column of the data matrix used for creation of the diffusion map. (default: \link{par}\code{('fg')})}
+E.g. a column of the data matrix used for creation of the diffusion map. (default: \code{\link[igraph]{cluster_louvain}})}
 
 \item{col_by}{Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color}
 

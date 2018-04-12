@@ -90,7 +90,8 @@ colorlegend <- function(
 	zmax <- zlim[[2]]
 	
 	if (is.double(col)) {
-		batches <- colorRampPalette(pal)(steps_color)
+		pal_fun <- if (is.function(pal)) pal else colorRampPalette(pal)
+		batches <- pal_fun(steps_color)
 		Y <- seq(ymin, ymax, length.out = length(batches) + 1)
 	} else {
 		idx_c <- seq(min(zval_num), max(zval_num))

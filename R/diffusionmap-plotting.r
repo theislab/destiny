@@ -13,7 +13,7 @@ NULL
 #' @param new_dcs      An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)
 #' @param new_data     A data set in the same format as \code{x} that is used to create \code{new_dcs <- \link{dm_predict}(dif, new_data)}
 #' @param col          Single color string or vector of discrete or categoric values to be mapped to colors.
-#'                     E.g. a column of the data matrix used for creation of the diffusion map. (default: \link{par}\code{('fg')})
+#'                     E.g. a column of the data matrix used for creation of the diffusion map. (default: \code{\link[igraph]{cluster_louvain}})
 #' @param col_by       Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color
 #' @param col_limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
 #' @param col_new      If \code{new_dcs} is given, it will take on this color. A vector is also possible. (default: red)
@@ -75,7 +75,7 @@ plot.DiffusionMap <- function(
 	plot_more = function(p, ..., rescale = NULL) p
 ) {
 	dif <- x
-	col_is_one <- is.null(col_by) && ((is.character(col) && length(col) == 1L) || is.null(col))
+	col_is_one <- is.null(col_by) && ((is.character(col) && length(col) == 1L))
 	is_projection <- col_is_one && is.character(col_new) && length(col_new) == 1L
 	
 	if (interactive) {
@@ -86,8 +86,12 @@ plot.DiffusionMap <- function(
 	}
 	
 	if (!is.null(col) && !is.null(col_by)) stop('Only specify one of col or col_by')
-	if (!is.null(col_by)) col <- dataset_get_feature(dataset(dif), col_by)
-	if (is.null(col)) col <- par('col')  # just a single color
+	if (!is.null(col_by)) {
+		col <- dataset_get_feature(dataset(dif), col_by)
+	} else if (is.null(col)) {
+		col <- get_louvain_clusters(dif@transitions)
+		col_by <- 'Louvain'
+	}
 	continuous <- is.double(col)
 	projection_guide <- if (is_projection) c(old = col, new = col_new)
 	col_legend <- if (continuous && !is.null(col_limits)) col_limits else col
@@ -109,7 +113,6 @@ plot.DiffusionMap <- function(
 		Colour     = col,
 		ColourExpl = get_explicit_col(col, pal, col_na, col_limits),
 		Projection = factor(rep('old', nrow(eigenvectors(dif))), c('old', 'new')))
-	rm(col)
 	
 	if (!is.null(new_dcs)) {
 		point_data <- rbind(point_data, cbind(
@@ -174,7 +177,6 @@ plot.DiffusionMap <- function(
 			if (is.null(mar)) mar <- par('mar')
 			old_mar <- mar; on.exit(par(mar = old_mar))
 			if (draw_legend) mar[[4]] <- mar[[4]] + 5
-			col <- if (is_one_colour) par('col') else point_data$ColourExpl
 			p <- scatterplot3d(
 				point_data[, 1:3], ..., color = col, mar = mar,
 				axis = axes || box || ticks, lty.axis = if (axes || box) 'solid' else 'blank',
