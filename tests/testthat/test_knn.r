@@ -1,4 +1,6 @@
-test_that('knn works the same as in FNN', if (requireNamespace('FNN', quietly = TRUE)) {
+test_that('knn works the same as in FNN', {
+	skip_if_not_installed('FNN')
+	
 	data(guo_norm, package = 'destiny')
 	e <- t(Biobase::exprs(guo_norm))
 	
@@ -9,7 +11,9 @@ test_that('knn works the same as in FNN', if (requireNamespace('FNN', quietly = 
 	expect_equal(r_destiny$dist,  r_fnn$nn.dist)
 })
 
-test_that('knnx works the same as in FNN', if (requireNamespace('FNN', quietly = TRUE)) {
+test_that('knnx works the same as in FNN', {
+	skip_if_not_installed('FNN')
+	
 	data(guo_norm, package = 'destiny')
 	e <- t(Biobase::exprs(guo_norm))
 	nc <- guo_norm$num_cells

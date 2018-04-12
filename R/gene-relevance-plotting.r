@@ -89,7 +89,11 @@ setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coord
 	plot_differential_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
-#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_segment scale_colour_gradientn ggtitle facet_wrap
+#' @importFrom ggplot2 ggplot aes aes_string
+#' @importFrom ggplot2 geom_point geom_segment
+#' @importFrom ggplot2 scale_colour_gradientn
+#' @importFrom ggplot2 ggtitle facet_wrap
+#' @importFrom grid arrow unit
 plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
 	relevance_map <- updateObject(relevance_map)
 	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
@@ -152,10 +156,13 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 	gg <- ggplot() +
 		geom_point(aes_string(d1, d2, colour = 'Expression'), scatters, alpha = 1) + 
 		scale_colour_gradientn(colours = pal) + 
-		geom_segment(aes_string(
-			x = 'D1start', xend = 'D1end',
-			y = 'D2start', yend = 'D2end',
-			alpha = 'PartialsNorm'), scatters_top)
+		geom_segment(
+			aes_string(
+				x = 'D1start', xend = 'D1end',
+				y = 'D2start', yend = 'D2end',
+				alpha = 'PartialsNorm'),
+			scatters_top,
+			arrow = arrow(length = unit(.01, 'npc')))
 	
 	if (length(genes) > 1) gg + faceter else gg + ggtitle(gene_names)
 }
@@ -185,7 +192,10 @@ setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords,
 	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, genes = genes, dims = dims, pal = pal)
 })
 
-#' @importFrom ggplot2 ggplot aes_string geom_point scale_color_manual ggtitle
+#' @importFrom ggplot2 ggplot aes_string
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 scale_color_manual
+#' @importFrom ggplot2 ggtitle
 #' @importFrom utils head
 plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dims, pal) {
 	relevance_map <- updateObject(relevance_map)
@@ -200,13 +210,14 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 		# gene with max norm for each cell
 		genes_max <- colnames(partials_norm)[apply(partials_norm, 1L, function(cell) which.max(cell))]
 		counts <- as.data.frame(table(genes_max), stringsAsFactors = FALSE)
+		genes <- min(genes, nrow(counts))
 		gene_ids <- counts[order(counts$Freq, decreasing = TRUE)[1:genes], 'genes_max']
 	} else {
 		gene_ids <- colnames(partials_norm)[genes]
 	}
 	if (is.function(pal)) pal <- pal(length(gene_ids))
 	
-	num_top <- 5L
+	num_top <- min(5L, length(genes))
 	top_n <- apply(partials_norm, 1L, function(cell) {
 		idxs <- head(order(cell, decreasing = TRUE), num_top)
 		names <- colnames(partials_norm)[idxs]
