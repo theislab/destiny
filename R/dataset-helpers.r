@@ -55,10 +55,24 @@ dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) {
 	if (is(dta, 'ExpressionSet')) {
 		cbind(as.data.frame(t(exprs(dta)), row.names, optional, ...), pData(dta))
 	} else if (is(dta, 'SingleCellExperiment')) {
+		smp_meta <- as.data.frame(colData(dta), row.names, optional, ...)
+		
 		#TODO: allow other name?
-		cbind(
-			as.data.frame(t(assay(dta, 'logcounts')), row.names, optional, ...),
-			as.data.frame(colData(dta), row.names, optional, ...))
+		mat <- assay(dta, 'logcounts')
+		if (is(mat, 'sparseMatrix')) {
+			n_genes_max <- getOption('destiny.genes.max', 5000L)
+			if (nrow(mat) > n_genes_max) {
+				warning(
+					'Data has too many genes to convert it to a data.frame (',
+					nrow(mat), ' > ', n_genes_max,
+					'). You can try setting options(destiny.genes.max = ...)')
+				return(smp_meta)
+			} else {
+				mat <- as.matrix(mat)
+			}
+		}
+		
+		cbind(as.data.frame(t(mat), row.names, optional, ...), smp_meta)
 	} else if (canCoerce(dta, 'data.frame')) {
 		as(dta, 'data.frame')
 	} else if (!is.null(getS3method('as.data.frame', class(data)[[1L]], optional = TRUE))) {
