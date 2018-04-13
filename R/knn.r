@@ -14,6 +14,10 @@
 #' @name knn
 #' @export
 find_knn <- function(data, k, ..., query = NULL, distance = c('euclidean', 'cosine', 'rankcor'), sym = TRUE) {
+	if (!is.double(data)) {
+		warning('find_knn does not yet support sparse matrices')
+		data <- as.matrix(data)
+	}
 	distance <- match.arg(distance)
 	stopifnot(length(list(...)) == 0L)
 	if (is.null(query)) {

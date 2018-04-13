@@ -98,3 +98,13 @@ get_louvain_clusters <- function(transitions) {
 	graph <- graph_from_adjacency_matrix(transitions, 'undirected', weighted = TRUE)
 	as.integer(unclass(membership(cluster_louvain(graph))))
 }
+
+
+#' @importFrom BiocGenerics duplicated
+setMethod('duplicated', 'Matrix', function(x, incomparables = FALSE, ...) {
+	# TODO
+	warning(
+		'Sparse Matrix support is not yet implemented properly. ',
+		'Later errors might occur because `duplicated.Matrix` does not return the truth.')
+	rep_len(FALSE, nrow(x))
+})
