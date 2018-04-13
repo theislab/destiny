@@ -33,7 +33,8 @@ gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL,
 \item{distance}{Distance measure to use for the nearest neighbor search.}
 
 \item{smooth}{Smoothing parameters \code{c(window, alpha)} (see \code{\link[smoother]{smth.gaussian}}).
-Alternatively \code{\link{TRUE}} to use the \link{smoother} \link[smoother:smth.options]{defaults} or \code{\link{FALSE}} to skip smoothing,}
+Alternatively \code{\link{TRUE}} to use the \link[smoother]{smoother} \link[smoother:smth.options]{defaults}
+or \code{\link{FALSE}} to skip smoothing,}
 
 \item{verbose}{If TRUE, log additional info to the console}
 }
@@ -46,7 +47,8 @@ The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 \section{Slots}{
 
 \describe{
-\item{\code{coords}}{A cells \eqn{\times} dims \code{\link{matrix}} of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}}
+\item{\code{coords}}{A cells \eqn{\times} dims \code{\link{matrix}} or \code{\link[Matrix:sparseMatrix-class]{sparseMatrix}}
+of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}}
 
 \item{\code{exprs}}{A cells \eqn{\times} genes matrix of expressions}
 

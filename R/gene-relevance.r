@@ -12,12 +12,14 @@ NULL
 #' @param dims      Index into columns of \code{coord}
 #' @param distance  Distance measure to use for the nearest neighbor search.
 #' @param smooth    Smoothing parameters \code{c(window, alpha)} (see \code{\link[smoother]{smth.gaussian}}).
-#'                  Alternatively \code{\link{TRUE}} to use the \link{smoother} \link[smoother:smth.options]{defaults} or \code{\link{FALSE}} to skip smoothing,
+#'                  Alternatively \code{\link{TRUE}} to use the \link[smoother]{smoother} \link[smoother:smth.options]{defaults}
+#'                  or \code{\link{FALSE}} to skip smoothing,
 #' @param verbose   If TRUE, log additional info to the console
 #' 
 #' @return A \code{GeneRelevance} object:
 #' 
-#' @slot coords         A cells \eqn{\times} dims \code{\link{matrix}} of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}
+#' @slot coords         A cells \eqn{\times} dims \code{\link{matrix}} or \code{\link[Matrix:sparseMatrix-class]{sparseMatrix}}
+#'                      of coordinates (e.g. diffusion components), reduced to the dimensions passed as \code{dims}
 #' @slot exprs          A cells \eqn{\times} genes matrix of expressions
 #' @slot partials       Array of partial derivatives wrt to considered dimensions in reduced space
 #'                      (genes \eqn{\times} cells \eqn{\times} dimensions)
@@ -48,7 +50,7 @@ NULL
 #' @export
 setClass('GeneRelevance', slots = c(
 	coords = 'matrix',
-	exprs = 'matrix',
+	exprs = 'dMatrixOrMatrix',
 	partials = 'array',
 	partials_norm = 'matrix',
 	nn_index = 'matrix',  # k = ncol(nn_index)
