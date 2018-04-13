@@ -74,7 +74,7 @@ plot.DiffusionMap <- function(
 	plot_more = function(p, ..., rescale = NULL) p
 ) {
 	dif <- x
-	is_projection <- is.character(col_new) && length(col_new) == 1L
+	is_projection <- !is.null(new_dcs) && is.character(col_new) && length(col_new) == 1L
 	
 	if (interactive) {
 		if (!requireNamespace('rgl', quietly = TRUE))
