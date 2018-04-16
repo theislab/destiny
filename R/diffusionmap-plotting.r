@@ -46,6 +46,7 @@ NULL
 #' @importFrom graphics par axis plot plot.new
 #' @importFrom stats setNames
 #' @importFrom grDevices palette
+#' @importFrom scatterplot3d scatterplot3d
 #' @importFrom ggplot2 ggplot aes aes_string
 #' @importFrom ggplot2 geom_point
 #' @importFrom ggplot2 theme theme_minimal element_blank element_line element_text element_rect

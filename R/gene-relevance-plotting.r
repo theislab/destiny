@@ -141,14 +141,13 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 			partials / max(abs(partials), na.rm = TRUE) * d_var * delta
 		})
 		
-		scatter <- subset(scatters, Gene == g)
+		scatter <- subset(scatters, scatters$Gene == g)
 		D1 <- scatter[norm_top, 1]
 		D2 <- scatter[norm_top, 2]
 		cbind(
 			scatter[norm_top, ],
 			D1start = D1 - partials[[1]], D1end = D1 + partials[[1]],
-			D2start = D2 - partials[[2]], D2end = D2 + partials[[2]],
-			Gene = g)
+			D2start = D2 - partials[[2]], D2end = D2 + partials[[2]])
 	}))
 	
 	d1 <- colnames(coords)[[1]]

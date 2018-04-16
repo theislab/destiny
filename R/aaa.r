@@ -19,12 +19,3 @@ set_palette <- function(v) {
 	}
 	proxy_add_rankcor_simil()
 }
-
-# work around scatterplot3d bug. use function from this package so `linepad` isn’t unset
-# #' @importFrom scatterplot3d scatterplot3d
-#' @importFrom grDevices xyz.coords
-#' @importFrom graphics lines mtext strheight strwidth title
-#' @importFrom stats coef
-linepad <- -.5
-scatterplot3d <- scatterplot3d::scatterplot3d
-environment(scatterplot3d) <- environment(set_palette)
