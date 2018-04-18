@@ -76,7 +76,7 @@ dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) {
 		cbind(as.data.frame(t(mat), row.names, optional, ...), smp_meta)
 	} else if (canCoerce(dta, 'data.frame')) {
 		as(dta, 'data.frame')
-	} else if (!is.null(getS3method('as.data.frame', class(data)[[1L]], optional = TRUE))) {
+	} else if (!is.null(getS3method('as.data.frame', class(dta)[[1L]], optional = TRUE))) {
 		as.data.frame(dta, row.names, optional, ...)
 	} else NULL
 }
