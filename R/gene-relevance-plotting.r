@@ -205,18 +205,18 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 		found <- sapply(genes, function(id) length(grep(id, colnames(partials_norm))) > 0)
 		gene_ids <- genes[found]
 	} else if (length(genes) == 1L) {
-		genes <- min(genes, ncol(relevance_map@exprs), na.rm = TRUE)
+		n_genes <- min(genes, ncol(relevance_map@exprs), na.rm = TRUE)
 		# gene with max norm for each cell
 		genes_max <- colnames(partials_norm)[apply(partials_norm, 1L, function(cell) which.max(cell))]
 		counts <- as.data.frame(table(genes_max), stringsAsFactors = FALSE)
-		genes <- min(genes, nrow(counts))
-		gene_ids <- counts[order(counts$Freq, decreasing = TRUE)[1:genes], 'genes_max']
+		n_genes <- min(n_genes, nrow(counts))
+		gene_ids <- counts[order(counts$Freq, decreasing = TRUE)[1:n_genes], 'genes_max']
 	} else {
 		gene_ids <- colnames(partials_norm)[genes]
 	}
 	if (is.function(pal)) pal <- pal(length(gene_ids))
 	
-	num_top <- min(5L, length(genes))
+	num_top <- min(5L, length(gene_ids))
 	top_n <- apply(partials_norm, 1L, function(cell) {
 		idxs <- head(order(cell, decreasing = TRUE), num_top)
 		names <- colnames(partials_norm)[idxs]
