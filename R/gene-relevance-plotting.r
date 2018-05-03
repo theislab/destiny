@@ -205,7 +205,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 		found <- sapply(genes, function(id) length(grep(id, colnames(partials_norm))) > 0)
 		gene_ids <- genes[found]
 	} else if (length(genes) == 1L) {
-		genes <- min(genes, ncol(relevance_map@exprs))
+		genes <- min(genes, ncol(relevance_map@exprs), na.rm = TRUE)
 		# gene with max norm for each cell
 		genes_max <- colnames(partials_norm)[apply(partials_norm, 1L, function(cell) which.max(cell))]
 		counts <- as.data.frame(table(genes_max), stringsAsFactors = FALSE)
