@@ -12,6 +12,8 @@ Authors@R: c(
 	person('Florian', 'Büttner', NULL, 'f.buettner@helmholtz-muenchen.de', 'ctb'))
 Description: Create and plot diffusion maps.
 License: GPL
+URL: https://github.com/theislab/destiny
+BugReports: https://github.com/theislab/destiny/issues
 Encoding: UTF-8
 Depends:
     R (>= 3.3.0)
