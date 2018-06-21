@@ -28,7 +28,7 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 
 \item{density_norm}{logical. If TRUE, use density normalisation}
 
-\item{...}{All parameter after this are optional and have to be specified by name}
+\item{...}{Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{DiffusionMap(data, distance = 'cosine')})}
 
 \item{distance}{Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}}
 

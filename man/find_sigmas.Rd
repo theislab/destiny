@@ -25,7 +25,7 @@ In the first case, only used if actually smaller than the number of available ro
 
 \item{early_exit}{logical. If TRUE, return if the first local maximum is found, else keep running}
 
-\item{...}{All parameter after this are optional and have to be specified by name}
+\item{...}{Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{find_sigmas(data, verbose = FALSE)})}
 
 \item{censor_val}{Value regarded as uncertain. Either a single value or one for every dimension}
 

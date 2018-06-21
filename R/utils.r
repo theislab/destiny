@@ -7,6 +7,15 @@ stopifsmall <- function(max_dist) {
 }
 
 
+stopifparams <- function(...) {
+	additional <- substitute(list(...))[-1]
+	if (length(additional) == 0) return()
+	nms <- if (is.null(names(additional))) rep('', length(additional)) else names(additional)
+	params <- mapply(function(n, p) if (nchar(n) == 0) p else sprintf('%s = %s', n, p), nms, as.character(additional))
+	stop('Unused argument(s) (', paste(params, collapse = ', '), ')')
+}
+
+
 #' @importFrom utils flush.console
 verbose_timing <- function(verbose, msg, expr) {
 	if (verbose) {

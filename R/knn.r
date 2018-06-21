@@ -5,7 +5,7 @@
 #' @param data      Data matrix
 #' @param query     Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical
 #' @param k         Number of nearest neighbors
-#' @param ...       All parameters after this have to be specified by name
+#' @param ...       Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{find_knn(data, k, distance = 'cosine')})
 #' @param distance  Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})
 #' @param sym       Return a symmetric matrix (as long as query is NULL)?
 #' 
@@ -14,12 +14,12 @@
 #' @name knn
 #' @export
 find_knn <- function(data, k, ..., query = NULL, distance = c('euclidean', 'cosine', 'rankcor'), sym = TRUE) {
+	stopifparams(...)
 	if (!is.double(data)) {
 		warning('find_knn does not yet support sparse matrices, converting data to a dense matrix.')
 		data <- as.matrix(data)
 	}
 	distance <- match.arg(distance)
-	stopifnot(length(list(...)) == 0L)
 	if (is.null(query)) {
 		knn <- knn_asym(data, k, distance)
 		if (sym) knn$dist_mat <- symmetricise(knn$dist_mat)

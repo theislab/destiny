@@ -13,7 +13,7 @@ find_knn(data, k, ..., query = NULL, distance = c("euclidean", "cosine",
 
 \item{k}{Number of nearest neighbors}
 
-\item{...}{All parameters after this have to be specified by name}
+\item{...}{Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{find_knn(data, k, distance = 'cosine')})}
 
 \item{query}{Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical}
 

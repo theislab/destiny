@@ -13,7 +13,7 @@ DPT(dm, tips = random_root(dm), ..., w_width = 0.1)
 
 \item{tips}{The cell index/indices from which to calculate the DPT(s) (integer of length 1-3)}
 
-\item{...}{All parameters after this have to be specified by name}
+\item{...}{Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{DPT(dm, w_width = 0.2)})}
 
 \item{w_width}{Window width to use for deciding the branch cutoff}
 }

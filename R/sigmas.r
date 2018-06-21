@@ -81,7 +81,7 @@ setMethod('show', 'Sigmas', function(object) {
 #' @param sample_rows    Number of random rows to use for sigma estimation or vector of row indices/names to use.
 #'                       In the first case, only used if actually smaller than the number of available rows (Optional. default: 500)
 #' @param early_exit     logical. If TRUE, return if the first local maximum is found, else keep running
-#' @param ...            All parameter after this are optional and have to be specified by name
+#' @param ...            Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{find_sigmas(data, verbose = FALSE)})
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension
 #' @param censor_range   Uncertainity range for censoring. A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
 #' @param missing_range  Whole data range for missing value model. Has to be specified if NAs are in the data
@@ -115,7 +115,7 @@ find_sigmas <- function(
 	vars = NULL,
 	verbose = TRUE
 ) {
-	stopifnot(length(list(...)) == 0L)
+	stopifparams(...)
 	data <- dataset_extract_doublematrix(data, vars)
 	
 	if (any(is.na(data)))

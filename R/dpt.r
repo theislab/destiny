@@ -6,7 +6,7 @@
 #' 
 #' @param dm       A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT
 #' @param tips     The cell index/indices from which to calculate the DPT(s) (integer of length 1-3)
-#' @param ...      All parameters after this have to be specified by name
+#' @param ...      Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{DPT(dm, w_width = 0.2)})
 #' @param w_width  Window width to use for deciding the branch cutoff
 #' 
 #' @return A \code{DPT} object:
@@ -39,7 +39,7 @@ setClass(
 #' @name DPT
 #' @export
 DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
-	stopifnot(length(list(...)) == 0L)
+	stopifparams(...)
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be of class DiffusionMap, not ', class(dm))
 	if (!length(tips) %in% 1:3) stop('you need to specify 1-3 tips, got ', length(tips))
 	

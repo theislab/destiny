@@ -19,7 +19,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @param k              Number of nearest neighbors to consider (default: a guess betweeen 100 and \eqn{n - 1}. See \code{\link{find_dm_k}}).
 #' @param n_eigs         Number of eigenvectors/values to return (default: 20)
 #' @param density_norm   logical. If TRUE, use density normalisation
-#' @param ...            All parameter after this are optional and have to be specified by name
+#' @param ...            Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{DiffusionMap(data, distance = 'cosine')})
 #' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}
 #' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma
 #' @param rotate         logical. If TRUE, rotate the eigenvalues to get a slimmer diffusion map
@@ -144,7 +144,7 @@ DiffusionMap <- function(
 	force(k)
 	force(n_eigs)
 	
-	stopifnot(length(list(...)) == 0L)
+	stopifparams(...)
 	
 	if (is.null(sigma) || !is(sigma, 'Sigmas') && isTRUE(is.na(sigma)))
 		sigma <- 'local'
