@@ -112,17 +112,28 @@ get_louvain_clusters <- function(transitions) {
 #' @importFrom BiocGenerics duplicated
 setMethod('duplicated', 'dgCMatrix', function(x, incomparables = FALSE, MARGIN = 1L, ...) {
 	MARGIN <- as.integer(MARGIN)
-	j <- rep(seq_len(ncol(x)), diff(x@p))
+	n <- nrow(x)
+	p <- ncol(x)
+	j <- rep(seq_len(p), diff(x@p))
 	i <- x@i + 1
 	v <- x@x
 	
-	splits <- if (MARGIN == 1L) {  # rows
+	if (MARGIN == 1L) {  # rows
 		names(v) <- j
-		split(v, factor(i, levels = seq_len(nrow(x))))
+		splits <- split(v, i)
+		is_empty <- setdiff(seq_len(n), i)
 	} else if (MARGIN == 2L) {  # columns
 		names(v) <- i
-		split(v, factor(j, levels = seq_len(ncol(x))))
+		splits <- split(v, j)
+		is_empty <- setdiff(seq_len(p), j)
 	} else stop('Invalid MARGIN ', MARGIN, ', matrices only have rows (1) and columns (2).')
 	
-	duplicated.default(splits)
+	result <- duplicated.default(splits)
+	if (!any(is_empty)) return(result)
+	
+	out <- logical(if (MARGIN == 1L) n else p)
+	out[-is_empty] <- result
+	if (length(is_empty) > 1)
+		out[is_empty[-1]] <- TRUE
+	out
 })
