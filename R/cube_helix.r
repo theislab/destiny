@@ -47,9 +47,9 @@ scale_cube_helix <- function(aesthetics, start, r, hue, gamma, light, dark, reve
 	f <- function(n) cube_helix(n, start, r, hue, gamma, light, dark, reverse)
 	
 	if (discrete) {
-		ggplot2::discrete_scale('colour', 'cube_helix', f, ..., guide = guide)
+		ggplot2::discrete_scale(aesthetics, 'cube_helix', f, ..., guide = guide)
 	} else {
-		ggplot2::continuous_scale('colour', 'cube_helix', scales::gradient_n_pal(f(100)), guide = guide, ...)
+		ggplot2::continuous_scale(aesthetics, 'cube_helix', scales::gradient_n_pal(f(100)), guide = guide, ...)
 	}
 }
 
