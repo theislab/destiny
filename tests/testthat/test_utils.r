@@ -11,5 +11,6 @@ test_that('duplicated.dgCMatrix works', {
 	expect_is(m, 'dgCMatrix')
 	
 	expect_identical(duplicated(m), c(FALSE, FALSE, FALSE, TRUE, TRUE))
-	expect_identical(duplicated(t(m)), c(FALSE, TRUE, FALSE))
+	expect_identical(duplicated(m, MARGIN = 2), c(FALSE, TRUE, FALSE))
+	expect_error(duplicated(m, MARGIN = 3), 'Invalid MARGIN 3')
 })
