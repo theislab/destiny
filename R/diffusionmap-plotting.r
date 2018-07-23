@@ -147,7 +147,7 @@ plot.DiffusionMap <- function(
 		if (!is_one_colour) p <- p +
 			if (is_projection)   scale_fill_identity (name = legend_main, guide = 'legend', labels = names(projection_guide), breaks = projection_guide, na.value = col_na)
 			else if (continuous) scale_fill_gradientn(name = legend_main, colours = if (is.function(pal)) pal(100) else pal, na.value = col_na)
-			else                 scale_fill_manual   (name = legend_main, values  = c(if (is.function(pal)) pal(length(col_lvls)) else pal[seq_along(col_lvls)], NA), labels = c(col_lvls, NA), na.value = col_na)
+			else                 scale_fill_manual   (name = legend_main, values  = if (is.function(pal)) pal(length(col_lvls)) else pal[seq_along(col_lvls)], breaks = col_lvls, labels = col_lvls, na.value = col_na)
 		if (box)   p <- p + theme(panel.border = element_rect(fill = NA), axis.title.x = element_text(), axis.title.y = element_text())
 		if (ticks) p <- p + theme(axis.ticks = element_line(), axis.text.x  = element_text(), axis.text.y  = element_text())
 		if (axes)  p <- p + geom_rangeframe(colour = par('col'))
