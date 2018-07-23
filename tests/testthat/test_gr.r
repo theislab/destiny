@@ -1,3 +1,5 @@
+context('gene relevance')
+
 smps <- 120L
 part <- 1/4
 test_data <- local({

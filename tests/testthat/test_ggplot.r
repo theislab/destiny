@@ -1,3 +1,5 @@
+context('ggplot')
+
 data(guo_norm)
 
 get_geom <- function(p, name) {

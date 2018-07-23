@@ -1,3 +1,5 @@
+context('dataset types')
+
 library(Biobase)
 library(SingleCellExperiment)
 

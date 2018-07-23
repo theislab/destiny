@@ -1,3 +1,5 @@
+context('kNN integrity')
+
 test_that('knn works the same as in FNN', {
 	skip_if_not_installed('FNN')
 	

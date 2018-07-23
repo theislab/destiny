@@ -1,3 +1,5 @@
+context('distance metrics')
+
 library(Matrix)
 
 full_t_p_local <- function(dat, sigma, dists) {

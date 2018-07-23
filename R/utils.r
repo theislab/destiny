@@ -110,10 +110,19 @@ get_louvain_clusters <- function(transitions) {
 
 
 #' @importFrom BiocGenerics duplicated
-setMethod('duplicated', 'Matrix', function(x, incomparables = FALSE, ...) {
-	# TODO
-	warning(
-		'Sparse Matrix support is not yet implemented properly. ',
-		'Later errors might occur because `duplicated.Matrix` does not return the truth.')
-	rep_len(FALSE, nrow(x))
+setMethod('duplicated', 'dgCMatrix', function(x, incomparables = FALSE, MARGIN = 1L, ...) {
+	MARGIN <- as.integer(MARGIN)
+	j <- rep(seq_len(ncol(x)), diff(x@p))
+	i <- x@i + 1
+	v <- x@x
+	
+	splits <- if (MARGIN == 1L) {  # rows
+		names(v) <- j
+		split(v, factor(i, levels = seq_len(nrow(x))))
+	} else if (MARGIN == 2L) {  # columns
+		names(v) <- i
+		split(v, factor(j, levels = seq_len(ncol(x))))
+	} else stop('Invalid MARGIN ', MARGIN, ', matrices only have rows (1) and columns (2).')
+	
+	duplicated.default(splits)
 })

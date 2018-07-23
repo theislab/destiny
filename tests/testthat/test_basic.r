@@ -1,3 +1,5 @@
+context('basic functionality')
+
 test_that('DiffusionMap works', {
 	data(guo_norm)
 	dm <- DiffusionMap(guo_norm)
