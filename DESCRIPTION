@@ -32,6 +32,7 @@ Imports:
     ggplot2,
     ggthemes,
     VIM,
+    deldir,
     proxy,
     igraph,
     smoother,
@@ -84,6 +85,7 @@ Collate:
     'gene-relevance.r'
     'gene-relevance-methods.r'
     'gene-relevance-plotting.r'
+    'geom-voronoi.r'
     'guo-data.r'
     'knn.r'
     'l_which.r'
