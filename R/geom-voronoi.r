@@ -71,7 +71,7 @@ geom_voronoi <- function(
 #' @importFrom ggplot2 ggproto Stat
 #' @export
 StatVoronoi <- ggproto('StatVoronoi', Stat,
-	compute_panel = function(data, scales, bound = NULL, eps = 1e-9, normalize = FALSE) {
+	compute_panel = function(data, scales, bound = NULL, eps = 1e-9, normalize = FALSE, crop = FALSE) {
 		data$group <- seq_len(nrow(data))
 		if (any(duplicated(data[, c('x', 'y')]))) {
 			warning('stat_voronoi: dropping duplicated points', call. = FALSE)
@@ -87,7 +87,7 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 			}
 		}
 		vor <- deldir(data$x, data$y, rw = bound, eps = eps, suppressMsge = TRUE)
-		tiles <- to_tile(vor)
+		tiles <- to_tile(vor, crop)
 		tiles$group <- vor$ind.orig[tiles$group]
 		data$x <- NULL
 		data$y <- NULL
@@ -106,35 +106,44 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 
 
 #' @importFrom deldir get.cnrind
-to_tile <- function(object) {
-	tiles <- rbind(
-		structure(object$dirsgs[, c(1:2, 5)], names = c('x', 'y', 'group')),
-		structure(object$dirsgs[, c(1:2, 6)], names = c('x', 'y', 'group')),
-		structure(object$dirsgs[, c(3:4, 5)], names = c('x', 'y', 'group')),
-		structure(object$dirsgs[, c(3:4, 6)], names = c('x', 'y', 'group')))
-	tiles <- unique(tiles)
-	tiles <- rbind(
+to_tile <- function(triang, crop = FALSE) {
+	boundary <- triang$dirsgs$bp1 | triang$dirsgs$bp2
+	edges <- triang$dirsgs#[!boundary, ]
+	tiles <- unique(rbind(
+		setNames(edges[, c('x1', 'y1', 'ind1')], c('x', 'y', 'group')),
+		setNames(edges[, c('x1', 'y1', 'ind2')], c('x', 'y', 'group')),
+		setNames(edges[, c('x2', 'y2', 'ind1')], c('x', 'y', 'group')),
+		setNames(edges[, c('x2', 'y2', 'ind2')], c('x', 'y', 'group'))))
+	
+	# add corners
+	if (!crop) tiles <- rbind(
 		tiles,
 		data.frame(
-			x = object$rw[c(1, 2, 2, 1)],
-			y = object$rw[c(3, 3, 4, 4)],
+			x = triang$rw[c(1, 2, 2, 1)],
+			y = triang$rw[c(3, 3, 4, 4)],
 			group = get.cnrind(
-				object$summary$x,
-				object$summary$y,
-				object$rw)))
+				triang$summary$x,
+				triang$summary$y,
+				triang$rw)))
+	
 	tiles$theta <- atan2(
-		tiles$y - object$summary$y[tiles$group],
-		tiles$x - object$summary$x[tiles$group])
+		tiles$y - triang$summary$y[tiles$group],
+		tiles$x - triang$summary$x[tiles$group])
 	tiles$theta <- ifelse(tiles$theta > 0, tiles$theta, tiles$theta + 2 * pi)
 	tiles[order(tiles$group, tiles$theta), ]
 }
 
-# 
-# dm_to_aes <- dm_scial %>% fortify() %>% transmute(x = DC1, y = DC2)
-# tiles <- StatVoronoi$compute_panel(dm_to_aes)
-# ggplot() +
-# 	geom_polygon(aes(x, y, group = group, fill = sample(group)), tiles) +
-# 	geom_point(aes(DC1, DC2), dm_scial) +
-# 	scale_fill_cube_helix(r = 5, discrete = FALSE, name = 'group')
-# 
-# ggplot(dm_scial, aes(DC1, DC2, fill = sample(ncol(scial)))) + geom_voronoi() + geom_point() + scale_fill_cube_helix(r = 5, discrete = FALSE)
+#if (FALSE) {
+	library(ggplot2)
+	library(dplyr)
+  library(deldir)
+	
+	dm_to_aes <- dm_scial %>% fortify() %>% transmute(x = DC1, y = DC2)
+	tiles <- StatVoronoi$compute_panel(dm_to_aes)
+	ggplot() +
+		geom_polygon(aes(x, y, group = group, fill = sample(group)), tiles) +
+		geom_point(aes(DC1, DC2), dm_scial, alpha =.1) +
+		scale_fill_cube_helix(r = 5, discrete = FALSE, name = 'group')
+	
+	#ggplot(dm_scial, aes(DC1, DC2, fill = sample(ncol(scial)))) + geom_voronoi() + geom_point() + scale_fill_cube_helix(r = 5, discrete = FALSE)
+#}
