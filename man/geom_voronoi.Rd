@@ -7,12 +7,12 @@
 \title{Voronoi tesselation}
 \format{An object of class \code{StatVoronoi} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 3.}
 \usage{
-StatVoronoi
-
 geom_voronoi(mapping = NULL, data = NULL, stat = "voronoi",
   position = "identity", na.rm = FALSE, bound = NULL, eps = 1e-09,
   normalize = FALSE, expand = 0, radius = 0, show.legend = NA,
   inherit.aes = TRUE, ...)
+
+StatVoronoi
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -95,11 +95,13 @@ Required aesthetics are in bold:
 
 \examples{
 ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
-  geom_voronoi(aes(fill = Species))
+  geom_voronoi(aes(fill = Species)) +
+  geom_point()
 
 # Difference of normalize = TRUE
 ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
-  geom_voronoi(aes(fill = Species), normalize = TRUE)
+  geom_voronoi(aes(fill = Species), normalize = TRUE) +
+  geom_point()
 }
 \author{
 Thomas Lin Pedersen

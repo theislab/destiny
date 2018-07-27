@@ -102,19 +102,27 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 # HELPERS -----------------------------------------------------------------
 
 
-#' @importFrom sf st_geometry st_as_sf
+#' @importFrom sf st_multipoint st_convex_hull st_collection_extract st_voronoi st_point st_intersects st_intersection
+#' @importFrom dplyr bind_rows %>%
 to_tile <- function(data) {
-	geom <- sf::st_geometry(sf::st_as_sf(data, coords = c('x', 'y')))
-	geom <- sf::st_union(geom)
-	hull <- sf::st_convex_hull(geom)
+	geom <- st_multipoint(as.matrix(data[, c('x', 'y')]))
+	hull <- st_convex_hull(geom)
 	# st_voronoi returns a GEOMETRYCOLLECTION containing only polygons,
 	# because a MULTIPOLYGON cannot have shared corner points.
-	polys <- sf::st_collection_extract(sf::st_voronoi(geom), 'POLYGON')
-	intersect <- lapply(polys, function(poly) {
-		poly <- sf::st_intersection(poly, hull)
+	polys <- st_collection_extract(st_voronoi(geom), 'POLYGON')
+	ord <- vapply(
+		seq_len(nrow(data)),
+		function(i) data[i, c('x', 'y'), drop = TRUE] %>%
+			as.double() %>%
+			st_point() %>%
+			st_intersects(polys) %>%
+			as.integer(),
+		integer(1L))
+	intersect <- lapply(polys[ord], function(poly) {
+		poly <- st_intersection(poly, hull)
 		setNames(as.data.frame(as.matrix(poly)), c('x', 'y'))
 	})
-	dplyr::bind_rows(intersect, .id = 'group')
+	bind_rows(intersect, .id = 'group')
 }
 
-# ggplot(dm_scial, aes(DC1, DC2, fill = sample(ncol(scial)))) + geom_voronoi() + geom_point() + scale_fill_cube_helix(r = 5, discrete = FALSE)
+# ggplot(dm_scial, aes(DC1, DC2, fill = seq_len(ncol(scial)))) + geom_voronoi() + geom_point(shape = 21, colour = 'transparent') + scale_fill_cube_helix(r = 5, discrete = FALSE, name = 'Point')
