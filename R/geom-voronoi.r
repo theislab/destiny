@@ -67,7 +67,6 @@ geom_voronoi <- function(
 
 #' @rdname geom_voronoi
 #' @importFrom scales rescale
-#' @importFrom deldir deldir
 #' @importFrom ggplot2 ggproto Stat
 #' @export
 StatVoronoi <- ggproto('StatVoronoi', Stat,
@@ -86,9 +85,7 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 				bound[3:4] <- rescale(bound[3:4], from = x_range)
 			}
 		}
-		vor <- deldir(data$x, data$y, rw = bound, eps = eps, suppressMsge = TRUE)
-		tiles <- to_tile(vor, crop)
-		tiles$group <- vor$ind.orig[tiles$group]
+		tiles <- to_tile(data)
 		data$x <- NULL
 		data$y <- NULL
 		data <- merge(data, tiles, all = TRUE)
@@ -105,51 +102,19 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 # HELPERS -----------------------------------------------------------------
 
 
-#' @importFrom deldir get.cnrind
-to_tile <- function(triang, crop = FALSE) {
-	# dirsgs[!(triang$dirsgs$bp1 | triang$dirsgs$bp2), ]
-	tiles <- edges_to_tiles(triang$dirsgs)  
-	
-	# add corners
-	if (!crop) tiles <- rbind(
-		tiles,
-		data.frame(
-			x = triang$rw[c(1, 2, 2, 1)],
-			y = triang$rw[c(3, 3, 4, 4)],
-			group = get.cnrind(
-				triang$summary$x,
-				triang$summary$y,
-				triang$rw)))
-	
-	tiles$theta <- atan2(
-		tiles$y - triang$summary$y[tiles$group],
-		tiles$x - triang$summary$x[tiles$group])
-	tiles$theta <- ifelse(tiles$theta > 0, tiles$theta, tiles$theta + 2 * pi)
-	tiles <- tiles[order(tiles$group, tiles$theta), ]
-	tiles$group <- triang$ind.orig[tiles$group]
-	tiles
+#' @importFrom sf st_geometry st_as_sf
+to_tile <- function(data) {
+	geom <- sf::st_geometry(sf::st_as_sf(data, coords = c('x', 'y')))
+	geom <- sf::st_union(geom)
+	hull <- sf::st_convex_hull(geom)
+	# st_voronoi returns a GEOMETRYCOLLECTION containing only polygons,
+	# because a MULTIPOLYGON cannot have shared corner points.
+	polys <- sf::st_collection_extract(sf::st_voronoi(geom), 'POLYGON')
+	intersect <- lapply(polys, function(poly) {
+		poly <- sf::st_intersection(poly, hull)
+		setNames(as.data.frame(as.matrix(poly)), c('x', 'y'))
+	})
+	dplyr::bind_rows(intersect, .id = 'group')
 }
 
-
-edges_to_tiles <- function(edges) {
-	unique(rbind(
-		setNames(edges[, c('x1', 'y1', 'ind1')], c('x', 'y', 'group')),
-		setNames(edges[, c('x1', 'y1', 'ind2')], c('x', 'y', 'group')),
-		setNames(edges[, c('x2', 'y2', 'ind1')], c('x', 'y', 'group')),
-		setNames(edges[, c('x2', 'y2', 'ind2')], c('x', 'y', 'group'))))
-}
-
-#if (FALSE) {
-	library(ggplot2)
-	library(dplyr)
-  library(deldir)
-	
-	dm_to_aes <- dm_scial %>% fortify() %>% transmute(x = DC1, y = DC2)
-	tiles <- StatVoronoi$compute_panel(dm_to_aes, crop = TRUE)
-	ggplot() +
-		geom_polygon(aes(x, y, group = group, fill = sample(group)), tiles) +
-		geom_point(aes(DC1, DC2), dm_scial, alpha =.1) +
-		scale_fill_cube_helix(r = 5, discrete = FALSE, name = 'group')
-	
-	#ggplot(dm_scial, aes(DC1, DC2, fill = sample(ncol(scial)))) + geom_voronoi() + geom_point() + scale_fill_cube_helix(r = 5, discrete = FALSE)
-#}
+# ggplot(dm_scial, aes(DC1, DC2, fill = sample(ncol(scial)))) + geom_voronoi() + geom_point() + scale_fill_cube_helix(r = 5, discrete = FALSE)
