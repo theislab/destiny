@@ -107,13 +107,8 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 
 #' @importFrom deldir get.cnrind
 to_tile <- function(triang, crop = FALSE) {
-	boundary <- triang$dirsgs$bp1 | triang$dirsgs$bp2
-	edges <- triang$dirsgs#[!boundary, ]
-	tiles <- unique(rbind(
-		setNames(edges[, c('x1', 'y1', 'ind1')], c('x', 'y', 'group')),
-		setNames(edges[, c('x1', 'y1', 'ind2')], c('x', 'y', 'group')),
-		setNames(edges[, c('x2', 'y2', 'ind1')], c('x', 'y', 'group')),
-		setNames(edges[, c('x2', 'y2', 'ind2')], c('x', 'y', 'group'))))
+	# dirsgs[!(triang$dirsgs$bp1 | triang$dirsgs$bp2), ]
+	tiles <- edges_to_tiles(triang$dirsgs)  
 	
 	# add corners
 	if (!crop) tiles <- rbind(
@@ -130,7 +125,18 @@ to_tile <- function(triang, crop = FALSE) {
 		tiles$y - triang$summary$y[tiles$group],
 		tiles$x - triang$summary$x[tiles$group])
 	tiles$theta <- ifelse(tiles$theta > 0, tiles$theta, tiles$theta + 2 * pi)
-	tiles[order(tiles$group, tiles$theta), ]
+	tiles <- tiles[order(tiles$group, tiles$theta), ]
+	tiles$group <- triang$ind.orig[tiles$group]
+	tiles
+}
+
+
+edges_to_tiles <- function(edges) {
+	unique(rbind(
+		setNames(edges[, c('x1', 'y1', 'ind1')], c('x', 'y', 'group')),
+		setNames(edges[, c('x1', 'y1', 'ind2')], c('x', 'y', 'group')),
+		setNames(edges[, c('x2', 'y2', 'ind1')], c('x', 'y', 'group')),
+		setNames(edges[, c('x2', 'y2', 'ind2')], c('x', 'y', 'group'))))
 }
 
 #if (FALSE) {
@@ -139,7 +145,7 @@ to_tile <- function(triang, crop = FALSE) {
   library(deldir)
 	
 	dm_to_aes <- dm_scial %>% fortify() %>% transmute(x = DC1, y = DC2)
-	tiles <- StatVoronoi$compute_panel(dm_to_aes)
+	tiles <- StatVoronoi$compute_panel(dm_to_aes, crop = TRUE)
 	ggplot() +
 		geom_polygon(aes(x, y, group = group, fill = sample(group)), tiles) +
 		geom_point(aes(DC1, DC2), dm_scial, alpha =.1) +
