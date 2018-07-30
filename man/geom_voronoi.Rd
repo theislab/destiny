@@ -94,6 +94,7 @@ Required aesthetics are in bold:
 }
 
 \examples{
+library(ggplot2)
 ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
   geom_voronoi(aes(fill = Species)) +
   geom_point()

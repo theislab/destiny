@@ -39,6 +39,7 @@
 #' @rdname geom_voronoi
 #'
 #' @examples
+#' library(ggplot2)
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
 #'   geom_voronoi(aes(fill = Species)) +
 #'   geom_point()
@@ -68,11 +69,12 @@ geom_voronoi <- function(
 #' @rdname geom_voronoi
 #' @importFrom scales rescale
 #' @importFrom ggplot2 ggproto Stat
+#' @importFrom dplyr %>% select
 #' @export
 StatVoronoi <- ggproto('StatVoronoi', Stat,
 	compute_panel = function(data, scales, bound = NULL, eps = 1e-9, normalize = FALSE, crop = FALSE) {
 		data$group <- seq_len(nrow(data))
-		if (any(duplicated(data[, c('x', 'y')]))) {
+		if (data %>% select('x', 'y') %>% duplicated() %>% any()) {
 			warning('stat_voronoi: dropping duplicated points', call. = FALSE)
 		}
 		if (normalize) {
@@ -103,13 +105,14 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 
 
 #' @importFrom sf st_multipoint st_sfc st_cast st_convex_hull st_collection_extract st_voronoi st_point st_intersects st_intersection
-#' @importFrom dplyr select bind_rows %>%
+#' @importFrom lwgeom st_make_valid
+#' @importFrom dplyr %>% select bind_rows
 to_tile <- function(data) {
 	points <- data %>% select('x', 'y') %>% as.matrix() %>% st_multipoint()
 	hull <- st_convex_hull(points)
 	# st_voronoi returns a GEOMETRYCOLLECTION containing only polygons,
 	# because a MULTIPOLYGON cannot have shared corner points.
-	polys <- st_collection_extract(st_voronoi(points), 'POLYGON')
+	polys <- st_voronoi(points) %>% st_collection_extract('POLYGON') %>% st_make_valid()
 	ord <- points %>% st_sfc() %>% st_cast('POINT') %>% st_intersects(polys) %>% unlist()
 	st_intersection(polys[ord], hull) %>%
 		lapply(function(poly) poly %>% as.matrix() %>% as.data.frame() %>% setNames(c('x', 'y'))) %>%
