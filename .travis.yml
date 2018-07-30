@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
       - python3-pip
+      - libudunits2-dev
 before_install:
   - pip3 install --user -U pip
   - pip3 install --user jupyter

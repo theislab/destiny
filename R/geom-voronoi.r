@@ -111,8 +111,8 @@ to_tile <- function(data) {
 	# because a MULTIPOLYGON cannot have shared corner points.
 	polys <- st_collection_extract(st_voronoi(points), 'POLYGON')
 	ord <- points %>% st_sfc() %>% st_cast('POINT') %>% st_intersects(polys) %>% unlist()
-	polys[ord] %>%
-		lapply(function(poly) st_intersection(poly, hull) %>% as.matrix() %>% as.data.frame() %>% setNames(c('x', 'y'))) %>%
+	st_intersection(polys[ord], hull) %>%
+		lapply(function(poly) poly %>% as.matrix() %>% as.data.frame() %>% setNames(c('x', 'y'))) %>%
 		bind_rows(.id = 'group')
 }
 
