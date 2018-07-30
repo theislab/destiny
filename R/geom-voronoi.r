@@ -102,27 +102,18 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 # HELPERS -----------------------------------------------------------------
 
 
-#' @importFrom sf st_multipoint st_convex_hull st_collection_extract st_voronoi st_point st_intersects st_intersection
-#' @importFrom dplyr bind_rows %>%
+#' @importFrom sf st_multipoint st_sfc st_cast st_convex_hull st_collection_extract st_voronoi st_point st_intersects st_intersection
+#' @importFrom dplyr select bind_rows %>%
 to_tile <- function(data) {
-	geom <- st_multipoint(as.matrix(data[, c('x', 'y')]))
-	hull <- st_convex_hull(geom)
+	points <- data %>% select('x', 'y') %>% as.matrix() %>% st_multipoint()
+	hull <- st_convex_hull(points)
 	# st_voronoi returns a GEOMETRYCOLLECTION containing only polygons,
 	# because a MULTIPOLYGON cannot have shared corner points.
-	polys <- st_collection_extract(st_voronoi(geom), 'POLYGON')
-	ord <- vapply(
-		seq_len(nrow(data)),
-		function(i) data[i, c('x', 'y'), drop = TRUE] %>%
-			as.double() %>%
-			st_point() %>%
-			st_intersects(polys) %>%
-			as.integer(),
-		integer(1L))
-	intersect <- lapply(polys[ord], function(poly) {
-		poly <- st_intersection(poly, hull)
-		setNames(as.data.frame(as.matrix(poly)), c('x', 'y'))
-	})
-	bind_rows(intersect, .id = 'group')
+	polys <- st_collection_extract(st_voronoi(points), 'POLYGON')
+	ord <- points %>% st_sfc() %>% st_cast('POINT') %>% st_intersects(polys) %>% unlist()
+	polys[ord] %>%
+		lapply(function(poly) st_intersection(poly, hull) %>% as.matrix() %>% as.data.frame() %>% setNames(c('x', 'y'))) %>%
+		bind_rows(.id = 'group')
 }
 
 # ggplot(dm_scial, aes(DC1, DC2, fill = seq_len(ncol(scial)))) + geom_voronoi() + geom_point(shape = 21, colour = 'transparent') + scale_fill_cube_helix(r = 5, discrete = FALSE, name = 'Point')
