@@ -128,6 +128,7 @@ plot.DiffusionMap <- function(
 	}
 	
 	col_lvls <- na.omit(as.character(unique(point_data$Colour)))
+	col_breaks <- point_data$ColourExpl[match(col_lvls, point_data$Colour)]
 	is_one_colour <- length(col_lvls) == 1L
 	
 	if (length(dims) == 2) {
@@ -137,17 +138,18 @@ plot.DiffusionMap <- function(
 		p <- ggplot(point_data, aes_string(d1, d2)) +
 			theme_minimal() + theme(axis.text.x = element_blank(), axis.text.y = element_blank())
 		
-		# TODO: this logic might be off
+		use_mapping <- continuous || is_projection || !is.null(col_by)
 		if (is_projection || !is_one_colour) p <- p +
 			geom_point(
-				aes_string(fill = if (continuous || is_projection || !is.null(col_by)) 'Colour' else 'ColourExpl'),
+				aes_string(fill = if (use_mapping) 'Colour' else 'ColourExpl'),
 				colour = I('transparent'),
 				shape  = I(21))
 		
 		if (!is_one_colour) p <- p +
-			if (is_projection)   scale_fill_identity (name = legend_main, guide = 'legend', labels = names(projection_guide), breaks = projection_guide, na.value = col_na)
-			else if (continuous) scale_fill_gradientn(name = legend_main, colours = if (is.function(pal)) pal(100) else pal, na.value = col_na)
-			else                 scale_fill_manual   (name = legend_main, values  = if (is.function(pal)) pal(length(col_lvls)) else pal[seq_along(col_lvls)], breaks = col_lvls, labels = col_lvls, na.value = col_na)
+			if (is_projection)     scale_fill_identity (name = legend_main, guide = 'legend', labels = names(projection_guide), breaks = projection_guide, na.value = col_na)
+			else if (!use_mapping) scale_fill_identity (name = legend_main, guide = 'legend', labels = col_lvls, breaks = col_breaks, na.value = col_na)
+			else if (continuous)   scale_fill_gradientn(name = legend_main, colours = if (is.function(pal)) pal(100) else pal, na.value = col_na)
+			else                   scale_fill_manual   (name = legend_main, values  = if (is.function(pal)) pal(length(col_lvls)) else pal[seq_along(col_lvls)], breaks = col_lvls, labels = col_lvls, na.value = col_na)
 		if (box)   p <- p + theme(panel.border = element_rect(fill = NA), axis.title.x = element_text(), axis.title.y = element_text())
 		if (ticks) p <- p + theme(axis.ticks = element_line(), axis.text.x  = element_text(), axis.text.y  = element_text())
 		if (axes)  p <- p + geom_rangeframe(colour = par('col'))
