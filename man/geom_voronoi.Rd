@@ -9,8 +9,7 @@
 \usage{
 geom_voronoi(mapping = NULL, data = NULL, stat = "voronoi",
   position = "identity", na.rm = FALSE, bound = NULL, eps = 1e-09,
-  normalize = FALSE, expand = 0, radius = 0, show.legend = NA,
-  inherit.aes = TRUE, ...)
+  normalize = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 
 StatVoronoi
 }
@@ -103,8 +102,5 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
 ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
   geom_voronoi(aes(fill = Species), normalize = TRUE) +
   geom_point()
-}
-\author{
-Thomas Lin Pedersen
 }
 \keyword{datasets}

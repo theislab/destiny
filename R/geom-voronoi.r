@@ -33,8 +33,6 @@
 #' \code{\link[ggplot2]{coord_fixed}()}. Normalization of coordinates solves this.
 #' The coordinates are transformed back after calculations.
 #'
-#' @author Thomas Lin Pedersen
-#'
 #' @name geom_voronoi
 #' @rdname geom_voronoi
 #'
@@ -58,7 +56,7 @@ NULL
 geom_voronoi <- function(
 	mapping = NULL, data = NULL, stat = 'voronoi',
 	position = 'identity', na.rm = FALSE, bound = NULL, eps = 1e-9, normalize = FALSE,
-	expand = 0, radius = 0, show.legend = NA, inherit.aes = TRUE, ...
+	show.legend = NA, inherit.aes = TRUE, ...
 ) layer(
 	data = data, mapping = mapping, stat = stat, geom = GeomPolygon,
 	position = position, show.legend = show.legend, inherit.aes = inherit.aes,
@@ -72,7 +70,7 @@ geom_voronoi <- function(
 #' @importFrom dplyr %>% select
 #' @export
 StatVoronoi <- ggproto('StatVoronoi', Stat,
-	compute_panel = function(data, scales, bound = NULL, eps = 1e-9, normalize = FALSE, crop = FALSE) {
+	compute_panel = function(data, scales, bound = NULL, eps = 1e-9, normalize = FALSE) {
 		data$group <- seq_len(nrow(data))
 		if (data %>% select('x', 'y') %>% duplicated() %>% any()) {
 			warning('stat_voronoi: dropping duplicated points', call. = FALSE)
