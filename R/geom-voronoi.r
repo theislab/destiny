@@ -1,47 +1,46 @@
 #' Voronoi tesselation
-#'
+#' 
 #' This stat and geom allows you to display voronoi tesselation as polygons.
 #' The computations are based on the \code{\link[deldir]{deldir}()} function.
-#'
+#' 
 #' @section Aesthetics:
 #' Understands the following aesthetics.
 #' Required aesthetics are in bold:
-#'
-#' - **x**
-#' - **y**
-#' - alpha
-#' - color
-#' - fill
-#' - linetype
-#' - size
-#'
+#' 
+#' \itemize{
+#' \item \strong{x}
+#' \item \strong{y}
+#' \item alpha
+#' \item color
+#' \item fill
+#' \item linetype
+#' \item size
+#' }
+#' 
 #' @inheritParams ggplot2::geom_polygon
-#'
-#' @param bound The bounding rectangle for the tesselation. Defaults to
-#' \code{NULL} which creates a rectangle expanded 10% in all directions. If
-#' supplied it should be a vector giving the bounds in the following order:
-#' xmin, xmax, ymin, ymax.
-#'
-#' @param eps A value of epsilon used in testing whether a quantity is zero,
-#' mainly in the context of whether points are collinear. If anomalous errors
-#' arise, it is possible that these may averted by adjusting the value of eps
-#' upward or downward.
-#'
-#' @param normalize Should coordinates be normalized prior to calculations. If
-#' \code{x} and \code{y} are in wildly different ranges it can lead to
-#' tesselation and triangulation that seems off when plotted without
-#' \code{\link[ggplot2]{coord_fixed}()}. Normalization of coordinates solves this.
-#' The coordinates are transformed back after calculations.
-#'
+#' 
+#' @param eps        A value of epsilon used in testing whether a quantity is zero,
+#'                   mainly in the context of whether points are collinear.
+#'                   If anomalous errors arise, it is possible that these may averted
+#'                   by adjusting the value of eps upward or downward.
+#' @param normalize  Should coordinates be normalized prior to calculations.
+#'                   If \code{x} and \code{y} are in wildly different ranges
+#'                   it can lead to tesselation and triangulation that seems off
+#'                   when plotted without \code{\link[ggplot2]{coord_fixed}()}.
+#'                   Normalization of coordinates solves this.
+#'                   The coordinates are transformed back after calculations.
+#' @param expand     How much to expand the convex hull around the points.
+#'                   Default: 0.1; \eqn{expand \times max(span(data$x), span(data$y))}
+#' 
 #' @name geom_voronoi
 #' @rdname geom_voronoi
-#'
+#' 
 #' @examples
 #' library(ggplot2)
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
 #'   geom_voronoi(aes(fill = Species)) +
 #'   geom_point()
-#'
+#' 
 #' # Difference of normalize = TRUE
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
 #'   geom_voronoi(aes(fill = Species), normalize = TRUE) +
@@ -55,12 +54,12 @@ NULL
 #' @export
 geom_voronoi <- function(
 	mapping = NULL, data = NULL, stat = 'voronoi',
-	position = 'identity', na.rm = FALSE, bound = NULL, eps = 1e-9, normalize = FALSE,
+	position = 'identity', na.rm = FALSE, eps = 1e-9, normalize = FALSE, expand = .1,
 	show.legend = NA, inherit.aes = TRUE, ...
 ) layer(
 	data = data, mapping = mapping, stat = stat, geom = GeomPolygon,
 	position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-	params = list(bound = bound, eps = eps, normalize = normalize, na.rm = na.rm, ...)
+	params = list(eps = eps, normalize = normalize, expand = expand, na.rm = na.rm, ...)
 )
 
 
@@ -70,7 +69,7 @@ geom_voronoi <- function(
 #' @importFrom dplyr %>% select
 #' @export
 StatVoronoi <- ggproto('StatVoronoi', Stat,
-	compute_panel = function(data, scales, bound = NULL, eps = 1e-9, normalize = FALSE) {
+	compute_panel = function(data, scales, eps = 1e-9, normalize = FALSE, expand = .1) {
 		data$group <- seq_len(nrow(data))
 		if (data %>% select('x', 'y') %>% duplicated() %>% any()) {
 			warning('stat_voronoi: dropping duplicated points', call. = FALSE)
@@ -80,12 +79,11 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 			y_range <- range(data$y, na.rm = TRUE, finite = TRUE)
 			data$x <- rescale(data$x, from = x_range)
 			data$y <- rescale(data$y, from = y_range)
-			if (!is.null(bound)) {
-				bound[1:2] <- rescale(bound[1:2], from = x_range)
-				bound[3:4] <- rescale(bound[3:4], from = x_range)
-			}
 		}
-		tiles <- to_tile(data)
+		margin <-
+			if (inherits(expand, 'units')) expand
+			else expand * max(diff(range(data$x)), diff(range(data$y)))
+		tiles <- to_tile(data, margin)
 		data$x <- NULL
 		data$y <- NULL
 		data <- merge(data, tiles, all = TRUE)
@@ -99,22 +97,22 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 )
 
 
-# HELPERS -----------------------------------------------------------------
-
-
-#' @importFrom sf st_multipoint st_sfc st_cast st_convex_hull st_collection_extract st_voronoi st_point st_intersects st_intersection
+#' @importFrom sf st_multipoint st_sfc st_cast st_convex_hull st_collection_extract st_voronoi st_point st_intersects st_intersection st_buffer
 #' @importFrom lwgeom st_make_valid
 #' @importFrom dplyr %>% select bind_rows
-to_tile <- function(data) {
+to_tile <- function(data, margin) {
 	points <- data %>% select('x', 'y') %>% as.matrix() %>% st_multipoint()
-	hull <- st_convex_hull(points)
+	hull <- st_convex_hull(points) %>% st_buffer(margin)
 	# st_voronoi returns a GEOMETRYCOLLECTION containing only polygons,
 	# because a MULTIPOLYGON cannot have shared corner points.
-	polys <- st_voronoi(points) %>% st_collection_extract('POLYGON') %>% st_make_valid()
+	polys <- st_voronoi(points, hull) %>% st_collection_extract('POLYGON') %>% st_make_valid()
 	ord <- points %>% st_sfc() %>% st_cast('POINT') %>% st_intersects(polys) %>% unlist()
 	st_intersection(polys[ord], hull) %>%
 		lapply(function(poly) poly %>% as.matrix() %>% as.data.frame() %>% setNames(c('x', 'y'))) %>%
 		bind_rows(.id = 'group')
 }
 
-# ggplot(dm_scial, aes(DC1, DC2, fill = seq_len(ncol(scial)))) + geom_voronoi() + geom_point(shape = 21, colour = 'transparent') + scale_fill_cube_helix(r = 5, discrete = FALSE, name = 'Point')
+# ggplot(dm_scial, aes(DC1, DC2, fill = seq_len(ncol(scial)))) +
+#   geom_voronoi() + geom_point(shape = 21, colour = 'transparent') +
+#   scale_fill_cube_helix(r = 5, discrete = FALSE, name = 'Point') +
+#   theme_minimal() + theme(panel.grid = element_blank(), axis.text = element_blank())

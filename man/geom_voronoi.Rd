@@ -8,8 +8,8 @@
 \format{An object of class \code{StatVoronoi} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 3.}
 \usage{
 geom_voronoi(mapping = NULL, data = NULL, stat = "voronoi",
-  position = "identity", na.rm = FALSE, bound = NULL, eps = 1e-09,
-  normalize = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
+  position = "identity", na.rm = FALSE, eps = 1e-09, normalize = FALSE,
+  expand = 0.1, show.legend = NA, inherit.aes = TRUE, ...)
 
 StatVoronoi
 }
@@ -42,21 +42,20 @@ a call to a position adjustment function.}
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
-\item{bound}{The bounding rectangle for the tesselation. Defaults to
-\code{NULL} which creates a rectangle expanded 10% in all directions. If
-supplied it should be a vector giving the bounds in the following order:
-xmin, xmax, ymin, ymax.}
-
 \item{eps}{A value of epsilon used in testing whether a quantity is zero,
-mainly in the context of whether points are collinear. If anomalous errors
-arise, it is possible that these may averted by adjusting the value of eps
-upward or downward.}
+mainly in the context of whether points are collinear.
+If anomalous errors arise, it is possible that these may averted
+by adjusting the value of eps upward or downward.}
 
-\item{normalize}{Should coordinates be normalized prior to calculations. If
-\code{x} and \code{y} are in wildly different ranges it can lead to
-tesselation and triangulation that seems off when plotted without
-\code{\link[ggplot2]{coord_fixed}()}. Normalization of coordinates solves this.
+\item{normalize}{Should coordinates be normalized prior to calculations.
+If \code{x} and \code{y} are in wildly different ranges
+it can lead to tesselation and triangulation that seems off
+when plotted without \code{\link[ggplot2]{coord_fixed}()}.
+Normalization of coordinates solves this.
 The coordinates are transformed back after calculations.}
+
+\item{expand}{How much to expand the convex hull around the points.
+Default: 0.1; \eqn{expand \times max(span(data$x), span(data$y))}}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -83,13 +82,15 @@ The computations are based on the \code{\link[deldir]{deldir}()} function.
 Understands the following aesthetics.
 Required aesthetics are in bold:
 
-- **x**
-- **y**
-- alpha
-- color
-- fill
-- linetype
-- size
+\itemize{
+\item \strong{x}
+\item \strong{y}
+\item alpha
+\item color
+\item fill
+\item linetype
+\item size
+}
 }
 
 \examples{
