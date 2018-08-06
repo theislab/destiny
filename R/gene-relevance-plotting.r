@@ -89,15 +89,9 @@ setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coord
 	plot_differential_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
-#' @importFrom ggplot2 ggplot aes aes_string
-#' @importFrom ggplot2 geom_point geom_segment
-#' @importFrom ggplot2 scale_colour_gradientn
-#' @importFrom ggplot2 ggtitle facet_wrap
-#' @importFrom grid arrow unit
-plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
+differential_map <- function(relevance_map, genes, dims) {
 	relevance_map <- updateObject(relevance_map)
 	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
-	if (is.function(pal)) pal <- pal(12)
 	
 	all_dims <- get_dim_range(relevance_map@partials, 3L, dims)
 	if (!all(dims %in% all_dims)) stop(
@@ -113,7 +107,6 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 	exprs <- relevance_map@exprs
 	coords <- get_coords(relevance_map, dims)
 	
-	gene_names <- if (is.character(genes)) genes else colnames(exprs)[genes]
 	partials_norms <- relevance_map@partials_norm[, genes, drop = FALSE]
 	nn_index <- cbind(seq_len(nrow(exprs)), relevance_map@nn_index)
 	
@@ -150,17 +143,31 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 			D2start = D2 - partials[[2]], D2end = D2 + partials[[2]])
 	}))
 	
+	list(scatters = scatters, scatters_top = scatters_top)
+}
+
+#' @importFrom ggplot2 ggplot aes aes_string
+#' @importFrom ggplot2 geom_point geom_segment
+#' @importFrom ggplot2 scale_colour_gradientn
+#' @importFrom ggplot2 ggtitle facet_wrap
+#' @importFrom grid arrow unit
+plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
+	if (is.function(pal)) pal <- pal(12)
+	dtm <- differential_map(relevance_map, genes, dims)
+	coords <- get_coords(relevance_map, dims)
+	gene_names <- if (is.character(genes)) genes else colnames(relevance_map@exprs)[genes]
+	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
 	gg <- ggplot() +
-		geom_point(aes_string(d1, d2, colour = 'Expression'), scatters, alpha = 1) + 
+		geom_point(aes_string(d1, d2, colour = 'Expression'), dtm$scatters, alpha = 1) + 
 		scale_colour_gradientn(colours = pal) + 
 		geom_segment(
 			aes_string(
 				x = 'D1start', xend = 'D1end',
 				y = 'D2start', yend = 'D2end',
 				alpha = 'PartialsNorm'),
-			scatters_top,
+			dtm$scatters_top,
 			arrow = arrow(length = unit(.01, 'npc')))
 	
 	if (length(genes) > 1) gg + faceter else gg + ggtitle(gene_names)
@@ -257,7 +264,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 get_coords <- function(relevance_map, dims) {
 	coords <- relevance_map@coords[, dims, drop = FALSE]
 	if (is.null(colnames(coords)))
-		colnames(coords) <- paste('Dimension', dims)
+		colnames(coords) <- paste0('Dim', dims)
 	coords
 }
 

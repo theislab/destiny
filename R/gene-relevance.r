@@ -142,7 +142,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 		
 		partials_unweighted <- apply(differential_exprs, 3L, function(grad_gene_exprs) {
 			# Compute median of difference quotients to NN
-			difference_quotients <- differential_coord / grad_gene_exprs
+			difference_quotients <- grad_gene_exprs / differential_coord
 			# Only compute differential if at least two observations are present!
 			stable_cells <- rowSums(!is.na(difference_quotients)) >= 2L
 			ifelse(stable_cells, rowMedians(difference_quotients, na.rm = TRUE), NA)
@@ -152,8 +152,9 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 		if (!any(is.na(smooth))) {
 			order_coor <- order(coords_used[, d])
 			order_orig <- order(order_coor)
-			partials_unweighted <- apply(partials_unweighted, 2L, function(gene_exprs) {
-				ordered <- gene_exprs[order_coor]
+			# Smooth the partials for each gene across all cells
+			partials_unweighted <- apply(partials_unweighted, 2L, function(partials_gene) {
+				ordered <- partials_gene[order_coor]
 				smoothed <- smth.gaussian(ordered, smooth[[1L]], smooth[[2L]], tails = TRUE)
 				smoothed[order_orig]
 			})
