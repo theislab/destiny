@@ -33,8 +33,6 @@ Imports:
     ggthemes,
     VIM,
     dplyr,
-    sf,
-    lwgeom,
     proxy,
     igraph,
     smoother,
@@ -49,6 +47,8 @@ Suggests:
     testthat,
     FNN,
     tidyr,
+    sf,
+    lwgeom,
     SingleCellExperiment
 VignetteBuilder: nbconvertR
 biocViews: CellBiology,

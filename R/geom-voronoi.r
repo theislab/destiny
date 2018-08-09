@@ -70,6 +70,10 @@ geom_voronoi <- function(
 #' @export
 StatVoronoi <- ggproto('StatVoronoi', Stat,
 	compute_panel = function(data, scales, eps = 1e-9, normalize = FALSE, expand = .1) {
+		if (!requireNamespace('sf', quietly = TRUE) || !requireNamespace('lwgeom', quietly = TRUE)) {
+			stop('The packages sf and lwgeom are needed for the voronoi stat and geom.')
+		}
+		
 		data$group <- seq_len(nrow(data))
 		if (data %>% select('x', 'y') %>% duplicated() %>% any()) {
 			warning('stat_voronoi: dropping duplicated points', call. = FALSE)
@@ -97,17 +101,15 @@ StatVoronoi <- ggproto('StatVoronoi', Stat,
 )
 
 
-#' @importFrom sf st_multipoint st_sfc st_cast st_convex_hull st_collection_extract st_voronoi st_point st_intersects st_intersection st_buffer
-#' @importFrom lwgeom st_make_valid
 #' @importFrom dplyr %>% select bind_rows
 to_tile <- function(data, margin) {
-	points <- data %>% select('x', 'y') %>% as.matrix() %>% st_multipoint()
-	hull <- st_convex_hull(points) %>% st_buffer(margin)
+	points <- data %>% select('x', 'y') %>% as.matrix() %>% sf::st_multipoint()
+	hull <- sf::st_convex_hull(points) %>% sf::st_buffer(margin)
 	# st_voronoi returns a GEOMETRYCOLLECTION containing only polygons,
 	# because a MULTIPOLYGON cannot have shared corner points.
-	polys <- st_voronoi(points, hull) %>% st_collection_extract('POLYGON') %>% st_make_valid()
-	ord <- points %>% st_sfc() %>% st_cast('POINT') %>% st_intersects(polys) %>% unlist()
-	st_intersection(polys[ord], hull) %>%
+	polys <- sf::st_voronoi(points, hull) %>% sf::st_collection_extract('POLYGON') %>% lwgeom::st_make_valid()
+	ord <- points %>% sf::st_sfc() %>% sf::st_cast('POINT') %>% sf::st_intersects(polys) %>% unlist()
+	sf::st_intersection(polys[ord], hull) %>%
 		lapply(function(poly) poly %>% as.matrix() %>% as.data.frame() %>% setNames(c('x', 'y'))) %>%
 		bind_rows(.id = 'group')
 }
