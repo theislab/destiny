@@ -9,7 +9,7 @@
 \usage{
 geom_voronoi(mapping = NULL, data = NULL, stat = "voronoi",
   position = "identity", na.rm = FALSE, eps = 1e-09,
-  normalize = FALSE, expand = 0.1, show.legend = NA,
+  normalize = FALSE, expand = 0, show.legend = NA,
   inherit.aes = TRUE, ...)
 
 StatVoronoi

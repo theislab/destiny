@@ -33,7 +33,6 @@
 #'                   Default: 0.1; \eqn{expand \times max(span(data$x), span(data$y))}
 #' 
 #' @name geom_voronoi
-#' @rdname geom_voronoi
 #' 
 #' @examples
 #' library(ggplot2)
@@ -48,13 +47,13 @@
 NULL
 
 
-#' @rdname geom_voronoi
+#' @name geom_voronoi
 #' @importFrom ggplot2 layer GeomPolygon
 #' @inheritParams ggplot2::geom_polygon
 #' @export
 geom_voronoi <- function(
 	mapping = NULL, data = NULL, stat = 'voronoi',
-	position = 'identity', na.rm = FALSE, eps = 1e-9, normalize = FALSE, expand = .1,
+	position = 'identity', na.rm = FALSE, eps = 1e-9, normalize = FALSE, expand = 0,
 	show.legend = NA, inherit.aes = TRUE, ...
 ) layer(
 	data = data, mapping = mapping, stat = stat, geom = GeomPolygon,
@@ -63,13 +62,13 @@ geom_voronoi <- function(
 )
 
 
-#' @rdname geom_voronoi
+#' @name geom_voronoi
 #' @importFrom scales rescale
 #' @importFrom ggplot2 ggproto Stat
 #' @importFrom dplyr %>% select
 #' @export
 StatVoronoi <- ggproto('StatVoronoi', Stat,
-	compute_panel = function(data, scales, eps = 1e-9, normalize = FALSE, expand = .1) {
+	compute_panel = function(data, scales, eps = 1e-9, normalize = FALSE, expand = 0) {
 		if (!requireNamespace('sf', quietly = TRUE) || !requireNamespace('lwgeom', quietly = TRUE)) {
 			stop('The packages sf and lwgeom are needed for the voronoi stat and geom.')
 		}
