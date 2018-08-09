@@ -11,7 +11,8 @@
 \usage{
 \S4method{featureNames}{GeneRelevance}(object)
 
-\S4method{featureNames}{GeneRelevance,characterOrFactor}(object) <- value
+
+  \S4method{featureNames}{GeneRelevance,characterOrFactor}(object) <- value
 
 \S4method{dataset}{GeneRelevance}(object)
 

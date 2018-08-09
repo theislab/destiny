@@ -10,17 +10,17 @@
 cube_helix(n = 6, start = 0, r = 0.4, hue = 0.8, gamma = 1,
   light = 0.85, dark = 0.15, reverse = FALSE)
 
-scale_colour_cube_helix(..., start = 0, r = 0.4, hue = 0.8, gamma = 1,
-  light = 0.85, dark = 0.15, reverse = FALSE, discrete = TRUE,
-  guide = if (discrete) "legend" else "colourbar")
+scale_colour_cube_helix(..., start = 0, r = 0.4, hue = 0.8,
+  gamma = 1, light = 0.85, dark = 0.15, reverse = FALSE,
+  discrete = TRUE, guide = if (discrete) "legend" else "colourbar")
 
-scale_color_cube_helix(..., start = 0, r = 0.4, hue = 0.8, gamma = 1,
-  light = 0.85, dark = 0.15, reverse = FALSE, discrete = TRUE,
-  guide = if (discrete) "legend" else "colourbar")
+scale_color_cube_helix(..., start = 0, r = 0.4, hue = 0.8,
+  gamma = 1, light = 0.85, dark = 0.15, reverse = FALSE,
+  discrete = TRUE, guide = if (discrete) "legend" else "colourbar")
 
-scale_fill_cube_helix(..., start = 0, r = 0.4, hue = 0.8, gamma = 1,
-  light = 0.85, dark = 0.15, reverse = FALSE, discrete = TRUE,
-  guide = if (discrete) "legend" else "colourbar")
+scale_fill_cube_helix(..., start = 0, r = 0.4, hue = 0.8,
+  gamma = 1, light = 0.85, dark = 0.15, reverse = FALSE,
+  discrete = TRUE, guide = if (discrete) "legend" else "colourbar")
 }
 \arguments{
 \item{n}{Number of colors to return (default: 6)}

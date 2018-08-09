@@ -8,13 +8,13 @@
 \title{3D or 2D plot of diffusion map}
 \usage{
 plot.DiffusionMap(x, dims = 1:3, new_dcs = if (!is.null(new_data))
-  dm_predict(x, new_data), new_data = NULL, col = NULL, col_by = NULL,
-  col_limits = NULL, col_new = "red", pal = NULL, pal_new = NULL, ...,
-  ticks = FALSE, axes = TRUE, box = FALSE, legend_main = col_by,
-  legend_opts = list(), interactive = FALSE,
-  draw_legend = !is.null(col_by) || (length(col) > 1 && !is.character(col)),
-  consec_col = TRUE, col_na = "grey", plot_more = function(p, ..., rescale
-  = NULL) p)
+  dm_predict(x, new_data), new_data = NULL, col = NULL,
+  col_by = NULL, col_limits = NULL, col_new = "red", pal = NULL,
+  pal_new = NULL, ..., ticks = FALSE, axes = TRUE, box = FALSE,
+  legend_main = col_by, legend_opts = list(), interactive = FALSE,
+  draw_legend = !is.null(col_by) || (length(col) > 1 &&
+  !is.character(col)), consec_col = TRUE, col_na = "grey",
+  plot_more = function(p, ..., rescale = NULL) p)
 
 \S4method{plot}{DiffusionMap,numeric}(x, y, ...)
 

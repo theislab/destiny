@@ -8,8 +8,9 @@
 \format{An object of class \code{StatVoronoi} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 3.}
 \usage{
 geom_voronoi(mapping = NULL, data = NULL, stat = "voronoi",
-  position = "identity", na.rm = FALSE, eps = 1e-09, normalize = FALSE,
-  expand = 0.1, show.legend = NA, inherit.aes = TRUE, ...)
+  position = "identity", na.rm = FALSE, eps = 1e-09,
+  normalize = FALSE, expand = 0.1, show.legend = NA,
+  inherit.aes = TRUE, ...)
 
 StatVoronoi
 }

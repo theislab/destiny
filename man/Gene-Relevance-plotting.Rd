@@ -29,8 +29,8 @@ plot_differential_map(coords, exprs, ..., gene, dims = 1:2,
 \S4method{plot_differential_map}{matrix,matrix}(coords, exprs, ..., gene,
   dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
 
-\S4method{plot_differential_map}{DiffusionMap,missing}(coords, exprs, ..., gene,
-  dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
+\S4method{plot_differential_map}{DiffusionMap,missing}(coords, exprs, ...,
+  gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
 
 \S4method{plot_differential_map}{GeneRelevance,missing}(coords, exprs, ...,
   gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))

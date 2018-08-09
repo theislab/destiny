@@ -10,11 +10,12 @@
 \alias{gene_relevance,DiffusionMap,missing-method}
 \title{Gene relevances for entire data set}
 \usage{
-gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL,
-  smooth = TRUE, verbose = FALSE)
+gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2,
+  distance = NULL, smooth = TRUE, verbose = FALSE)
 
-\S4method{gene_relevance}{DiffusionMap,missing}(coords, exprs, ..., k = 20L,
-  dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE)
+\S4method{gene_relevance}{DiffusionMap,missing}(coords, exprs, ...,
+  k = 20L, dims = 1:2, distance = NULL, smooth = TRUE,
+  verbose = FALSE)
 
 \S4method{gene_relevance}{matrix,matrix}(coords, exprs, ..., k = 20L,
   dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE)

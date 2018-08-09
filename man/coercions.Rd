@@ -18,7 +18,8 @@
 
 fortify.DiffusionMap(model, data, ...)
 
-\S4method{as.data.frame}{DPT}(x, row.names = NULL, optional = FALSE, ...)
+\S4method{as.data.frame}{DPT}(x, row.names = NULL, optional = FALSE,
+  ...)
 
 fortify.DPT(model, data, ...)
 

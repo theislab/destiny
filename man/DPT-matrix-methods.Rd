@@ -19,11 +19,14 @@
 \usage{
 \S4method{[}{DPT,index,index,logicalOrMissing}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{DPT,index,missing,logicalOrMissing}(x, i, j, ..., drop = TRUE)
+\S4method{[}{DPT,index,missing,logicalOrMissing}(x, i, j, ...,
+  drop = TRUE)
 
-\S4method{[}{DPT,missing,index,logicalOrMissing}(x, i, j, ..., drop = TRUE)
+\S4method{[}{DPT,missing,index,logicalOrMissing}(x, i, j, ...,
+  drop = TRUE)
 
-\S4method{[}{DPT,missing,missing,logicalOrMissing}(x, i, j, ..., drop = TRUE)
+\S4method{[}{DPT,missing,missing,logicalOrMissing}(x, i, j, ...,
+  drop = TRUE)
 
 \S4method{[[}{DPT,index,index}(x, i, j, ...)
 

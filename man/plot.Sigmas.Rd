@@ -7,8 +7,8 @@
 \title{Plot \link{Sigmas} object}
 \usage{
 \S4method{plot}{Sigmas,missing}(x, col = par("fg"),
-  col_highlight = "#E41A1C", col_line = "#999999", type = c("b", "b"),
-  pch = c(par("pch"), 4L), only_dim = FALSE, ..., xlab = NULL,
+  col_highlight = "#E41A1C", col_line = "#999999", type = c("b",
+  "b"), pch = c(par("pch"), 4L), only_dim = FALSE, ..., xlab = NULL,
   ylab = NULL, main = "")
 }
 \arguments{

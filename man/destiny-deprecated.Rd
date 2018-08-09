@@ -13,8 +13,8 @@
 \alias{plot_gradient_map}
 \title{Compatibility versions of functions for destiny 1.x scripts}
 \usage{
-DiffusionMapCompat(data, sigma = "global", k = find_dm_k(nrow(data) - 1L),
-  n.eigs = min(20L, nrow(data) - 2L), density.norm = TRUE, ...,
+DiffusionMapCompat(data, sigma = "global", k = find_dm_k(nrow(data) -
+  1L), n.eigs = min(20L, nrow(data) - 2L), density.norm = TRUE, ...,
   distance = c("euclidean", "cosine", "rankcor"), censor.val = NULL,
   censor.range = NULL, missing.range = NULL, vars = NULL,
   verbose = !is.null(censor.range))
@@ -37,8 +37,8 @@ optimal.sigma(object)
 
 lWhich(idx, nms = seq_len(len), len = length(nms), useNames = TRUE)
 
-plot_gradient_map(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix,
-  faceter = facet_wrap(~Gene))
+plot_gradient_map(coords, exprs, ..., gene, dims = 1:2,
+  pal = cube_helix, faceter = facet_wrap(~Gene))
 }
 \arguments{
 \item{data, n, n.eigs, start, censor.val, censor.range, missing.range, vars, verbose, ...}{Corresponding parameters in multiple functions}
