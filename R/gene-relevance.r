@@ -130,7 +130,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 	#stopifnot(identical(dim(differential_exprs), c(n_cells * k, n_genes)))
 	# apply only handles returning vectors, so we have to reshape the return value
 	dim(differential_exprs) <- c(n_cells, k, n_genes)
-	dimnames(differential_exprs)[[3L]] <- colnames(exprs)
+	dimnames(differential_exprs)[[3L]] <- if (length(colnames(exprs)) > 1L) colnames(exprs) else list(colnames(exprs))
 	#stopifnot(identical(gene_differential(exprs[, 1L]), differential_exprs[, , 1L]))
 	
 	for (d in seq_len(n_dims)) {
