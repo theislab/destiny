@@ -89,7 +89,7 @@ setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coord
 	plot_differential_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
-differential_map <- function(relevance_map, genes, dims) {
+differential_map <- function(relevance_map, genes, dims = 1:2, all = FALSE) {
 	relevance_map <- updateObject(relevance_map)
 	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
 	
@@ -120,10 +120,12 @@ differential_map <- function(relevance_map, genes, dims) {
 	}))
 	
 	scatters_top <- do.call(rbind, lapply(genes, function(g) {
-		# Select highest vectors in neighbourhoods
-		norm_top <- apply(nn_index, 1, function(cell) which.max(partials_norms[cell, g]) == 1)
-		norm_top[sapply(norm_top, length) == 0] <- FALSE
-		norm_top <- unlist(norm_top)
+		norm_top <- if (all) seq_len(nrow(exprs)) else {
+			# Select highest vectors in neighbourhoods
+			norm_top <- apply(nn_index, 1, function(cell) which.max(partials_norms[cell, g]) == 1)
+			norm_top[sapply(norm_top, length) == 0] <- FALSE
+			norm_top <- unlist(norm_top)
+		}
 		
 		d_var <- .05  # Fraction of overall dimension variability
 		partials <- lapply(seq_len(length(dims)), function(d) {
@@ -143,7 +145,8 @@ differential_map <- function(relevance_map, genes, dims) {
 			D2start = D2 - partials[[2]], D2end = D2 + partials[[2]])
 	}))
 	
-	list(scatters = scatters, scatters_top = scatters_top)
+	if (all) scatters_top
+	else list(scatters = scatters, scatters_top = scatters_top)
 }
 
 #' @importFrom ggplot2 ggplot aes aes_string
