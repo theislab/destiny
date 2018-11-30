@@ -89,9 +89,8 @@ setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coord
 	plot_differential_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
-differential_map <- function(relevance_map, genes, dims = 1:2, all = FALSE) {
+differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALSE) {
 	relevance_map <- updateObject(relevance_map)
-	if (missing(genes)) stop('You need to supply gene name(s) or index/indices')
 	
 	all_dims <- get_dim_range(relevance_map@partials, 3L, dims)
 	if (!all(dims %in% all_dims)) stop(
@@ -99,10 +98,13 @@ differential_map <- function(relevance_map, genes, dims = 1:2, all = FALSE) {
 		', not ', paste(setdiff(dims, all_dims), collapse = ', '))
 	
 	genes_existing <- colnames(relevance_map@partials_norm)
-	genes_missing <- is.na(match(genes, genes_existing))
-	if (any(genes_missing)) stop(
-		'The dataset used for the relevance map does not contain gene(s) ', paste(genes[genes_missing], collapse = ', '),
-		'. Did you mean ', paste(agrep(genes[genes_missing], genes_existing, value = TRUE), collapse = ', '), '?')
+	if (is.null(genes)) genes <- genes_existing
+	else {
+		genes_missing <- is.na(match(genes, genes_existing))
+		if (any(genes_missing)) stop(
+			'The dataset used for the relevance map does not contain gene(s) ', paste(genes[genes_missing], collapse = ', '),
+			'. Did you mean ', paste(agrep(genes[genes_missing], genes_existing, value = TRUE), collapse = ', '), '?')
+	}
 	
 	exprs <- relevance_map@exprs
 	coords <- get_coords(relevance_map, dims)
@@ -137,12 +139,11 @@ differential_map <- function(relevance_map, genes, dims = 1:2, all = FALSE) {
 		})
 		
 		scatter <- subset(scatters, scatters$Gene == g)
-		D1 <- scatter[norm_top, 1]
-		D2 <- scatter[norm_top, 2]
 		cbind(
 			scatter[norm_top, ],
-			D1start = D1 - partials[[1]], D1end = D1 + partials[[1]],
-			D2start = D2 - partials[[2]], D2end = D2 + partials[[2]])
+			Angle     = atan(partials[[2]]   / partials[[1]]  ),
+			Magnitude = sqrt(partials[[1]]^2 + partials[[2]]^2)
+		)
 	}))
 	
 	if (all) scatters_top
@@ -150,7 +151,7 @@ differential_map <- function(relevance_map, genes, dims = 1:2, all = FALSE) {
 }
 
 #' @importFrom ggplot2 ggplot aes aes_string
-#' @importFrom ggplot2 geom_point geom_segment
+#' @importFrom ggplot2 geom_point geom_spoke
 #' @importFrom ggplot2 scale_colour_gradientn
 #' @importFrom ggplot2 ggtitle facet_wrap
 #' @importFrom grid arrow unit
@@ -165,10 +166,10 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 	gg <- ggplot() +
 		geom_point(aes_string(d1, d2, colour = 'Expression'), dtm$scatters, alpha = 1) + 
 		scale_colour_gradientn(colours = pal) + 
-		geom_segment(
+		geom_spoke(
 			aes_string(
-				x = 'D1start', xend = 'D1end',
-				y = 'D2start', yend = 'D2end',
+				x = 'DC1', y = 'DC2',
+				angle = 'Angle', radius = 'Magnitude',
 				alpha = 'PartialsNorm'),
 			dtm$scatters_top,
 			arrow = arrow(length = unit(.01, 'npc')))
