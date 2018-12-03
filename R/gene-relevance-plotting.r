@@ -118,6 +118,7 @@ differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALS
 			as.data.frame(coords),
 			Expression = exprs[, g],
 			PartialsNorm = partials_norms[, g],
+			Cell = if (!is.null(rownames(exprs))) rownames(exprs) else seq_len(nrow(exprs)),
 			Gene = g)
 	}))
 	
