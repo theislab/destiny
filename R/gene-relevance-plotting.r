@@ -229,7 +229,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 	if (is.function(pal)) pal <- pal(length(gene_ids))
 	
 	num_top <- min(5L, length(gene_ids))
-	top_n <- apply(partials_norm, 1L, function(cell) {
+	top_n_cell_text <- apply(partials_norm, 1L, function(cell) {
 		idxs <- head(order(cell, decreasing = TRUE), num_top)
 		names <- colnames(partials_norm)[idxs]
 		txt <- sprintf('%s. %s (%.3f)', seq_len(num_top), names, cell[idxs])
@@ -252,7 +252,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 	}
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
-	rel_map_data <- cbind(as.data.frame(coords), Gene = factor(max_gene, levels = gene_ids), TopN = top_n)
+	rel_map_data <- cbind(as.data.frame(coords), Gene = factor(max_gene, levels = gene_ids), TopN = top_n_cell_text)
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
@@ -262,6 +262,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 		ggtitle(sprintf('Gene relevance map'))
 	
 	rel_map$ids <- gene_ids
+	rel_map$scores <- table(genes_max) / length(genes_max)
 	
 	rel_map
 }
