@@ -9,7 +9,16 @@
 #' @param distance  Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})
 #' @param sym       Return a symmetric matrix (as long as query is NULL)?
 #' 
-#' @return A \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} if \code{sym == TRUE}, else a \code{\link[Matrix:dsCMatrix-class]{dsCMatrix}} (\eqn{nrow(query) \times nrow(data)}).
+#' @return A \code{\link{list}} with the entries:
+#' \describe{
+#'   \item{\code{index}}{A \eqn{nrow(data) \times k} \link{integer} \link{matrix} containing the indices of the k nearest neighbors for each cell.}
+#'   \item{\code{dist}}{A \eqn{nrow(data) \times k} \link{double} \link{matrix} containing the distances to the k nearest neighbors for each cell.}
+#'   \item{\code{dist_mat}}{
+#'     A \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} if \code{sym == TRUE},
+#'     else a \code{\link[Matrix:dsCMatrix-class]{dsCMatrix}} (\eqn{nrow(query) \times nrow(data)}).
+#'     Any zero in the matrix (except for the diagonal) indicates that the cells in the corresponding pair are close neighbors.
+#'   }
+#' }
 #' 
 #' @name knn
 #' @export

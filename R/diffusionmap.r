@@ -12,7 +12,8 @@ sigma_msg <- function(sigma) sprintf(
 #' The provided data can be a double \link[base]{matrix} of expression data or a \link[base]{data.frame} with all non-integer (double) columns
 #' being treated as expression data features (and the others ignored), an \link[Biobase:class.ExpressionSet]{ExpressionSet}, or a \link[SingleCellExperiment]{SingleCellExperiment}.
 #' 
-#' @param data           Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns. If \code{distance} is a distance matrix, \code{data} has to be a \code{\link{data.frame}} with covariates only.
+#' @param data           Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns.
+#'                       If \code{distance} is a distance matrix, \code{data} has to be a \code{\link{data.frame}} with covariates only.
 #' @param sigma          Diffusion scale parameter of the Gaussian kernel. One of \code{'local'}, \code{'global'}, a (\link[base]{numeric}) global sigma or a \link{Sigmas} object.
 #'                       When choosing \code{'global'}, a global sigma will be calculated using \code{\link{find_sigmas}}. (Optional. default: \code{'local'})
 #'                       A larger sigma might be necessary if the eigenvalues can not be found because of a singularity in the matrix
@@ -20,7 +21,9 @@ sigma_msg <- function(sigma) sprintf(
 #' @param n_eigs         Number of eigenvectors/values to return (default: 20)
 #' @param density_norm   logical. If TRUE, use density normalisation
 #' @param ...            Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{DiffusionMap(data, distance = 'cosine')})
-#' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}
+#' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}.
+#'                       If this is a \code{\link[Matrix]{sparseMatrix}}, zeros are interpreted as "not a close neighbors",
+#'                       which allows the use of kNN-sparsified matrices (see the return value of \code{\link{find_knn}}.
 #' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma
 #' @param rotate         logical. If TRUE, rotate the eigenvalues to get a slimmer diffusion map
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)

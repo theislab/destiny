@@ -22,7 +22,16 @@ find_knn(data, k, ..., query = NULL, distance = c("euclidean",
 \item{sym}{Return a symmetric matrix (as long as query is NULL)?}
 }
 \value{
-A \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} if \code{sym == TRUE}, else a \code{\link[Matrix:dsCMatrix-class]{dsCMatrix}} (\eqn{nrow(query) \times nrow(data)}).
+A \code{\link{list}} with the entries:
+\describe{
+  \item{\code{index}}{A \eqn{nrow(data) \times k} \link{integer} \link{matrix} containing the indices of the k nearest neighbors for each cell.}
+  \item{\code{dist}}{A \eqn{nrow(data) \times k} \link{double} \link{matrix} containing the distances to the k nearest neighbors for each cell.}
+  \item{\code{dist_mat}}{
+    A \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} if \code{sym == TRUE},
+    else a \code{\link[Matrix:dsCMatrix-class]{dsCMatrix}} (\eqn{nrow(query) \times nrow(data)}).
+    Any zero in the matrix (except for the diagonal) indicates that the cells in the corresponding pair are close neighbors.
+  }
+}
 }
 \description{
 k nearest neighbor search with custom distance function.

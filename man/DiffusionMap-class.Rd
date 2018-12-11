@@ -17,7 +17,8 @@ DiffusionMap(data = stopifnot_distmatrix(distance), sigma = "local",
   verbose = !is.null(censor_range), suppress_dpt = FALSE)
 }
 \arguments{
-\item{data}{Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns. If \code{distance} is a distance matrix, \code{data} has to be a \code{\link{data.frame}} with covariates only.}
+\item{data}{Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns.
+If \code{distance} is a distance matrix, \code{data} has to be a \code{\link{data.frame}} with covariates only.}
 
 \item{sigma}{Diffusion scale parameter of the Gaussian kernel. One of \code{'local'}, \code{'global'}, a (\link[base]{numeric}) global sigma or a \link{Sigmas} object.
 When choosing \code{'global'}, a global sigma will be calculated using \code{\link{find_sigmas}}. (Optional. default: \code{'local'})
@@ -31,7 +32,9 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 
 \item{...}{Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{DiffusionMap(data, distance = 'cosine')})}
 
-\item{distance}{Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}}
+\item{distance}{Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}.
+If this is a \code{\link[Matrix]{sparseMatrix}}, zeros are interpreted as "not a close neighbors",
+which allows the use of kNN-sparsified matrices (see the return value of \code{\link{find_knn}}.}
 
 \item{n_local}{If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma}
 
