@@ -213,6 +213,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 	partials_norm <- relevance_map@partials_norm
 	coords <- get_coords(relevance_map, dims)
 	
+	scores <- NULL
 	if (is.character(genes)) {
 		found <- sapply(genes, function(id) length(grep(id, colnames(partials_norm))) > 0)
 		gene_ids <- genes[found]
@@ -221,8 +222,10 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 		# gene with max norm for each cell
 		genes_max <- colnames(partials_norm)[apply(partials_norm, 1L, function(cell) which.max(cell))]
 		counts <- as.data.frame(table(genes_max), stringsAsFactors = FALSE)
+		counts <- counts[order(counts$Freq, decreasing = TRUE), ]
 		n_genes <- min(n_genes, nrow(counts))
-		gene_ids <- counts[order(counts$Freq, decreasing = TRUE)[1:n_genes], 'genes_max']
+		gene_ids <- counts[seq_len(n_genes), 'genes_max']
+		scores   <- counts[seq_len(n_genes), 'Freq'] / sum(counts$Freq)
 	} else {
 		gene_ids <- colnames(partials_norm)[genes]
 	}
@@ -262,7 +265,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 		ggtitle(sprintf('Gene relevance map'))
 	
 	rel_map$ids <- gene_ids
-	rel_map$scores <- table(genes_max) / length(genes_max)
+	rel_map$scores <- scores
 	
 	rel_map
 }
