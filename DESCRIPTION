@@ -12,7 +12,7 @@ Authors@R: c(
 	person('Florian', 'Büttner', NULL, 'f.buettner@helmholtz-muenchen.de', 'ctb', comment = c(ORCID = '0000-0001-5587-6761')))
 Description: Create and plot diffusion maps.
 License: GPL
-URL: https://github.com/theislab/destiny
+URL: https://theislab.github.io/destiny/
 BugReports: https://github.com/theislab/destiny/issues
 Encoding: UTF-8
 Depends:
