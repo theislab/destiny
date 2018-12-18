@@ -168,7 +168,7 @@ dim(x)</pre>
 <span class='no'>dm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DiffusionMap-class.html'>DiffusionMap</a></span>(<span class='no'>guo_norm</span>)
 <span class='no'>dpt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DPT.html'>DPT</a></span>(<span class='no'>dm</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>dpt</span>[<span class='fu'><a href='random_root.html'>random_root</a></span>(<span class='no'>dpt</span>), ], <span class='fu'>exprs</span>(<span class='no'>guo_norm</span>)[<span class='st'>'DppaI'</span>, ])</div><div class='output co'>#&gt; <span class='error'>Error in exprs(guo_norm): konnte Funktion "exprs" nicht finden</span></div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>dpt</span>[<span class='fu'><a href='random_root.html'>random_root</a></span>(<span class='no'>dpt</span>), ], <span class='kw pkg'>Biobase</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/Biobase/topics/exprs'>exprs</a></span>(<span class='no'>guo_norm</span>)[<span class='st'>'DppaI'</span>, ])</div><div class='img'><img src='DPT-matrix-methods-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
