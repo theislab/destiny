@@ -48,6 +48,14 @@
 \description{
 Treat DPT object as a matrix of cell-by-cell DPT distances.
 }
+\examples{
+data(guo_norm)
+dm <- DiffusionMap(guo_norm)
+dpt <- DPT(dm)
+set.seed(1)
+plot(dpt[random_root(dpt), ], exprs(guo_norm)['DppaI', ])
+
+}
 \seealso{
 \code{\link{as.matrix.DPT}}
 }

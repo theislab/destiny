@@ -10,6 +10,13 @@ NULL
 #' @param ...   ignored
 #' @param drop  If \code{\link{TRUE}}, coerce result to a vector if it would otherwise have \code{1 \%in\% dim(result)}.
 #' 
+#' @examples
+#' data(guo_norm)
+#' dm <- DiffusionMap(guo_norm)
+#' dpt <- DPT(dm)
+#' set.seed(1)
+#' plot(dpt[random_root(dpt), ], exprs(guo_norm)['DppaI', ])
+#' 
 #' @aliases
 #'   [.DPT
 #'   [,DPT,index,index,logicalOrMissing-method

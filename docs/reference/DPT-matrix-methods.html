@@ -163,6 +163,13 @@ dim(x)</pre>
     <div class='dont-index'><p><code><a href='coercions.html'>as.matrix.DPT</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>guo_norm</span>)
+<span class='no'>dm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DiffusionMap-class.html'>DiffusionMap</a></span>(<span class='no'>guo_norm</span>)
+<span class='no'>dpt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DPT.html'>DPT</a></span>(<span class='no'>dm</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>dpt</span>[<span class='fu'><a href='random_root.html'>random_root</a></span>(<span class='no'>dpt</span>), ], <span class='fu'>exprs</span>(<span class='no'>guo_norm</span>)[<span class='st'>'DppaI'</span>, ])</div><div class='output co'>#&gt; <span class='error'>Error in exprs(guo_norm): konnte Funktion "exprs" nicht finden</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -170,7 +177,9 @@ dim(x)</pre>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
