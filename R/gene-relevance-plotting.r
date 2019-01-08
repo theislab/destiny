@@ -226,6 +226,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, genes, dim
 		n_genes <- min(n_genes, nrow(counts))
 		gene_ids <- counts[seq_len(n_genes), 'genes_max']
 		scores   <- counts[seq_len(n_genes), 'Freq'] / sum(counts$Freq)
+		names(scores) <- gene_ids
 	} else {
 		gene_ids <- colnames(partials_norm)[genes]
 	}
