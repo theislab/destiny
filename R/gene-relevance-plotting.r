@@ -151,12 +151,11 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
-	gg <- ggplot() +
-		geom_point(aes_string(d1, d2, colour = 'Expression'), dtm$scatters, alpha = 1) + 
+	gg <- ggplot(dtm$scatters, aes_string(d1, d2)) +
+		geom_point(aes_string(colour = 'Expression'), alpha = 1) + 
 		scale_colour_gradientn(colours = pal) + 
 		geom_spoke(
 			aes_string(
-				x = 'DC1', y = 'DC2',
 				angle = 'Angle', radius = 'Magnitude',
 				alpha = 'PartialsNorm'),
 			dtm$scatters_top,
