@@ -32,8 +32,14 @@ find_knn <- function(data, k, ..., query = NULL, distance = c('euclidean', 'cosi
 	if (is.null(query)) {
 		knn <- knn_asym(data, k, distance)
 		if (sym) knn$dist_mat <- symmetricise(knn$dist_mat)
-		knn
-	} else knn_cross(data, query, k, distance)
+		nms <- rownames(data)
+	} else {
+		knn <- knn_cross(data, query, k, distance)
+		nms <- rownames(query)
+	}
+	rownames(knn$dist_mat) <- rownames(knn$index) <- rownames(knn$dist) <- nms
+	colnames(knn$dist_mat) <- rownames(data)
+	knn
 }
 
 

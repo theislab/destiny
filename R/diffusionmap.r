@@ -166,6 +166,7 @@ DiffusionMap <- function(
 		if (!(is.data.frame(data) || is.null(data))) stop('If you provide a matrix for `distance`, `data` has to be NULL or a covariate `data.frame` is of class', class(data))
 		
 		data_env$data <- if (is.null(data)) distance else data  # put covariates or distance
+		if (!is.null(rownames(data_env$data))) rownames(distance) <- colnames(distance) <- rownames(data)
 		dists <- as(distance, 'symmetricMatrix')
 		distance <- 'custom'
 		imputed_data <- NULL
@@ -221,12 +222,19 @@ DiffusionMap <- function(
 	eig_transitions <- decomp_transitions(transitions, n_eigs, verbose)
 	
 	eig_vec <- eig_transitions$vectors
+	eig_val <- eig_transitions$values
 	if (rotate) eig_vec <- as.matrix(t(t(eig_vec) %*% d_rot))
-	colnames(eig_vec) <- paste0('DC', seq(0, n_eigs))
+	rownames(eig_vec) <-
+		rownames(transitions) <-
+		colnames(transitions) <-
+		rownames(if (!is.null(rownames(dists))) dists else data)
+	colnames(eig_vec) <-
+		names(eig_val) <-
+		paste0('DC', seq(0, n_eigs))
 	
 	new(
 		'DiffusionMap',
-		eigenvalues   = eig_transitions$values[-1],
+		eigenvalues   = eig_val[-1],
 		eigenvectors  = eig_vec[, -1, drop = FALSE],
 		sigmas        = sigmas,
 		data_env      = data_env,

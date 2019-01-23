@@ -111,7 +111,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 	partials <- array(
 		NA,
 		dim = c(n_cells, n_genes, n_dims),
-		dimnames = list(NULL, colnames(exprs), if (is.character(dims)) dims else colnames(coords_used)))
+		dimnames = list(rownames(exprs), colnames(exprs), if (is.character(dims)) dims else colnames(coords_used)))
 	
 	# a very small value to subtract from the differential
 	small <- min(exprs[exprs != 0]) / length(exprs[exprs == 0])
@@ -173,6 +173,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 	#partials_norm[, outliers] <- NA
 	
 	# Prepare output
+	rownames(partials_norm) <- rownames(partials)
 	colnames(partials_norm) <- colnames(partials)
 	new('GeneRelevance',
 		coords = coords,

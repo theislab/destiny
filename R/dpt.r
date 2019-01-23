@@ -52,6 +52,7 @@ DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
 	colnames(branches$branch) <- paste0('Branch', seq_len(ncol(branches$branch)))
 	colnames(branches$tips)   <- paste0('Tips',   seq_len(ncol(branches$tips)))
 	
+	rownames(branches$branch) <- rownames(branches$tips) <- rownames(dm@eigenvectors)
 	dpt@branch <- branches$branch
 	dpt@tips   <- branches$tips
 	dpt
