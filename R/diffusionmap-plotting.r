@@ -135,8 +135,7 @@ plot.DiffusionMap <- function(
 		d1 <- names(point_data)[[1L]]
 		d2 <- names(point_data)[[2L]]
 		
-		p <- ggplot(point_data, aes_string(d1, d2)) +
-			theme_minimal() + theme(axis.text.x = element_blank(), axis.text.y = element_blank())
+		p <- ggplot(point_data, aes_string(d1, d2)) + theme_really_minimal()
 		
 		use_mapping <- continuous || is_projection || !is.null(col_by)
 		if (is_projection || !is_one_colour) p <- p +
@@ -245,6 +244,8 @@ get_explicit_col <- function(col, pal, col_na, col_limits) {
 	# if the color wasn’t numeric, use as is
 	col
 }
+
+theme_really_minimal <- function(...) theme_minimal() + theme(axis.text.x = element_blank(), axis.text.y = element_blank(), ...)
 
 # test:
 # layout(matrix(1:8, 2))
