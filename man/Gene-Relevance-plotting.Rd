@@ -35,17 +35,20 @@ plot_differential_map(coords, exprs, ..., gene, dims = 1:2,
 \S4method{plot_differential_map}{GeneRelevance,missing}(coords, exprs, ...,
   gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
 
-plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, genes = 5L,
-  dims = 1:2, pal = palette())
+plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, n_top = 10L,
+  genes = 5L, dims = 1:2, pal = palette())
 
 \S4method{plot_gene_relevance}{matrix,matrix}(coords, exprs, ...,
-  iter_smooth = 2L, genes = 5L, dims = 1:2, pal = palette())
+  iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2,
+  pal = palette())
 
 \S4method{plot_gene_relevance}{DiffusionMap,missing}(coords, exprs, ...,
-  iter_smooth = 2L, genes = 5L, dims = 1:2, pal = palette())
+  iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2,
+  pal = palette())
 
 \S4method{plot_gene_relevance}{GeneRelevance,missing}(coords, exprs, ...,
-  iter_smooth = 2L, genes = 5L, dims = 1:2, pal = palette())
+  iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2,
+  pal = palette())
 }
 \arguments{
 \item{x}{\code{\link{GeneRelevance}} object.}
@@ -66,6 +69,8 @@ plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, genes = 5L,
 
 \item{iter_smooth}{Number of label smoothing iterations to perform on relevance map.
 The higher the more homogenous and the less local structure.}
+
+\item{n_top}{Number the top n genes per cell count towards the score defining which genes to return and plot in the relevance map.}
 
 \item{genes}{Genes to based relevance map on or number of genes to use. (vector of strings or one number)
 You can also pass an index into the gene names. (vector of numbers or logicals with length > 1)}
