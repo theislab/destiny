@@ -13,7 +13,7 @@ NULL
 #' @param new_dcs      An optional matrix also containing the rows specified with \code{y} and plotted. (default: no more points)
 #' @param new_data     A data set in the same format as \code{x} that is used to create \code{new_dcs <- \link{dm_predict}(dif, new_data)}
 #' @param col          Single color string or vector of discrete or categoric values to be mapped to colors.
-#'                     E.g. a column of the data matrix used for creation of the diffusion map. (default: \code{\link[igraph]{cluster_louvain}})
+#'                     E.g. a column of the data matrix used for creation of the diffusion map. (default: \code{\link[igraph]{cluster_louvain}} if igraph is installed)
 #' @param col_by       Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color
 #' @param col_limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
 #' @param col_new      If \code{new_dcs} is given, it will take on this color. A vector is also possible. (default: red)

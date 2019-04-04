@@ -2,22 +2,26 @@
 % Please edit documentation in R/eig_decomp.r
 \name{eig_decomp}
 \alias{eig_decomp}
-\title{Fast eigen decomposition using ARPACK}
+\title{Fast eigen decomposition using \code{\link[RSpectra]{eigs}}}
 \usage{
-eig_decomp(M, n_eigs, sym = isSymmetric(M))
+eig_decomp(M, n_eigs, sym, ..., opts = list())
 }
 \arguments{
-\item{M}{A matrix (e.g. from the Matrix package)}
+\item{M}{A matrix (e.g. from the Matrix package) or
+a function (see \code{\link[RSpectra]{eigs}}).}
 
-\item{n_eigs}{Number of eigenvectors to return}
+\item{n_eigs}{Number of eigenvectors to return.}
 
-\item{sym}{TRUE if M is symmetric}
+\item{sym}{defunct and ignored.}
+
+\item{...}{Passed to \code{\link[RSpectra]{eigs}}.}
 }
 \value{
-n eigenvectors of the transition matrix
+see \code{\link[RSpectra]{eigs}}.
 }
 \description{
-Fast eigen decomposition using ARPACK
+By default uses a random initialization vector that you can make deterministic using
+\code{\link[base]{set.seed}} or override by specifying \code{opts = list(initvec = ...)}.
 }
 \examples{
 eig_decomp(cbind(c(1,-1), c(-1,1)), 2)

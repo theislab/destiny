@@ -219,7 +219,7 @@ DiffusionMap <- function(
 	transitions <- as(d_rot %*% norm_p %*% d_rot, 'symmetricMatrix')
 	rm(norm_p)  # free memory
 	
-	eig_transitions <- decomp_transitions(transitions, n_eigs, verbose)
+	eig_transitions <- decomp_transitions(transitions, n_eigs + 1L, verbose)
 	
 	eig_vec <- eig_transitions$vectors
 	eig_val <- eig_transitions$values
