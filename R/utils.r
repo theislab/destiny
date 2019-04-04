@@ -102,10 +102,9 @@ upper.tri.sparse <- function(x, diag = FALSE) {
 }
 
 
-#' @importFrom igraph graph_from_adjacency_matrix membership cluster_louvain
 get_louvain_clusters <- function(transitions) {
-	graph <- graph_from_adjacency_matrix(transitions, 'undirected', weighted = TRUE)
-	as.integer(unclass(membership(cluster_louvain(graph))))
+	graph <- igraph::graph_from_adjacency_matrix(transitions, 'undirected', weighted = TRUE)
+	as.integer(unclass(igraph::membership(igraph::cluster_louvain(graph))))
 }
 
 
