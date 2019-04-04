@@ -6,6 +6,7 @@
 *.tar.gz
 .ipynb_checkpoints
 .Rproj.user
+*.Rcheck
 /.Rhistory
 /.RData
 /*.kdev4
