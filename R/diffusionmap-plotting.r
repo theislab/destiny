@@ -139,18 +139,19 @@ plot.DiffusionMap <- function(
 		d1 <- names(point_data)[[1L]]
 		d2 <- names(point_data)[[2L]]
 		
-		p <- ggplot(point_data, aes_string(d1, d2)) + theme_really_minimal()
-		
 		use_mapping <- continuous || is_projection || !is.null(col_by)
-		if (is_projection || !is_one_colour) p <- p +
+		p <-
+			ggplot(point_data, aes_string(d1, d2)) +
+			theme_really_minimal() +
 			geom_point(
 				aes_string(fill = if (use_mapping) 'Colour' else 'ColourExpl'),
 				colour = I('transparent'),
 				shape  = I(21))
 		
-		if (!is_one_colour) p <- p +
+		nomap_guide <- if (is_one_colour) 'none' else 'legend'
+		p <- p +
 			if (is_projection)     scale_fill_identity (name = legend_main, guide = 'legend', labels = names(projection_guide), breaks = projection_guide, na.value = col_na)
-			else if (!use_mapping) scale_fill_identity (name = legend_main, guide = 'legend', labels = col_lvls, breaks = col_breaks, na.value = col_na)
+			else if (!use_mapping) scale_fill_identity (name = legend_main, guide = nomap_guide, labels = col_lvls, breaks = col_breaks, na.value = col_na)
 			else if (continuous)   scale_fill_gradientn(name = legend_main, colours = if (is.function(pal)) pal(100) else pal, na.value = col_na)
 			else                   scale_fill_manual   (name = legend_main, values  = if (is.function(pal)) pal(length(col_lvls)) else pal[seq_along(col_lvls)], breaks = col_lvls, labels = col_lvls, na.value = col_na)
 		if (box)   p <- p + theme(panel.border = element_rect(fill = NA), axis.title.x = element_text(), axis.title.y = element_text())
