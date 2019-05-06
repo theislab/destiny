@@ -16,6 +16,7 @@
 #' 
 #' @importFrom Matrix isSymmetric
 #' @importFrom RSpectra eigs eigs_sym
+#' @importFrom stats runif
 #' @export
 eig_decomp <- function(M, n_eigs, sym, ..., opts = list()) {
 	if (!('initvec' %in% names(opts)))
