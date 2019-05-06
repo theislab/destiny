@@ -87,9 +87,13 @@ plot.DiffusionMap <- function(
 	if (!is.null(col) && !is.null(col_by)) stop('Only specify one of col or col_by')
 	if (!is.null(col_by)) {
 		col <- dataset_get_feature(dataset(dif), col_by)
-	} else if (is.null(col) && requireNamespace('igraph', quietly = TRUE)) {
-		col <- get_louvain_clusters(dif@transitions)
-		col_by <- legend_main <- 'Louvain'
+	} else if (is.null(col)) {
+		if (requireNamespace('igraph', quietly = TRUE)) {
+			col <- get_louvain_clusters(dif@transitions)
+			col_by <- legend_main <- 'Louvain'
+		} else {
+			col <- par('col')
+		}
 	}
 	continuous <- is.double(col)
 	if (is_projection) {
