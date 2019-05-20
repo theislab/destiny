@@ -38,7 +38,6 @@ Imports:
     ggplot2,
     ggthemes,
     VIM,
-    dplyr,
     proxy,
     smoother,
     scales,
@@ -53,8 +52,6 @@ Suggests:
     testthat,
     FNN,
     tidyr,
-    sf,
-    lwgeom,
     SingleCellExperiment
 VignetteBuilder: nbconvertR
 biocViews: CellBiology,
@@ -95,7 +92,6 @@ Collate:
     'gene-relevance-plotting-differential-map.r'
     'gene-relevance-plotting-gr-map.r'
     'gene-relevance-plotting.r'
-    'geom-voronoi.r'
     'guo-data.r'
     'knn.r'
     'l_which.r'
