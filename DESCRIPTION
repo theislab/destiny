@@ -92,6 +92,8 @@ Collate:
     'find_dm_k.r'
     'gene-relevance.r'
     'gene-relevance-methods.r'
+    'gene-relevance-plotting-differential-map.r'
+    'gene-relevance-plotting-gr-map.r'
     'gene-relevance-plotting.r'
     'geom-voronoi.r'
     'guo-data.r'
