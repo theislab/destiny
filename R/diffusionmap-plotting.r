@@ -17,7 +17,7 @@ NULL
 #' @param col_by       Specify a \code{dataset(x)} or \code{phenoData(dataset(x))} column to use as color
 #' @param col_limits   If \code{col} is a continuous (=double) vector, this can be overridden to map the color range differently than from min to max (e.g. specify \code{c(0, 1)})
 #' @param col_new      If \code{new_dcs} is given, it will take on this color. A vector is also possible. (default: red)
-#' @param pal          Palette used to map the \code{col} vector to colors. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)
+#' @param pal          Palette used to map the \code{col} vector to colors. (default: use \code{\link{hcl.colors}} for continuous and \code{\link{palette}()} for discrete data)
 #' @param pal_new      Palette used to map the \code{col_new} vector to colors. (default: see \code{pal} argument)
 #' @param ...          Parameters passed to \link{plot}, \link[scatterplot3d]{scatterplot3d}, or \link[rgl]{plot3d} (if \code{interactive == TRUE})
 #' @param ticks        logical. If TRUE, show axis ticks (default: FALSE)
@@ -104,7 +104,7 @@ plot.DiffusionMap <- function(
 	
 	# use a fitting default palette
 	if (is.null(pal)) {
-		pal <- if (is.double(col)) cube_helix
+		pal <- if (is.double(col)) hcl.colors
 		else palette()
 	}
 	

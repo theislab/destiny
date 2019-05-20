@@ -50,6 +50,7 @@ A \code{character} vector of hex colors with length \code{n}
 }
 \description{
 Creates a perceptually monotonously decreasing (or increasing) lightness color palette with different tones.
+This was necessary in pre-viridis times, by now you can probably just use \code{\link[grDevices]{hcl.colors}}
 }
 \examples{
 palette(cube_helix())

@@ -38,7 +38,7 @@ optimal.sigma(object)
 lWhich(idx, nms = seq_len(len), len = length(nms), useNames = TRUE)
 
 plot_gradient_map(coords, exprs, ..., gene, dims = 1:2,
-  pal = cube_helix, faceter = facet_wrap(~Gene))
+  pal = hcl.colors, faceter = facet_wrap(~Gene))
 }
 \arguments{
 \item{data, n, n.eigs, start, censor.val, censor.range, missing.range, vars, verbose, ...}{Corresponding parameters in multiple functions}

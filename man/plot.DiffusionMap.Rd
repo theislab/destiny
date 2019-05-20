@@ -38,7 +38,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
 
 \item{col_new}{If \code{new_dcs} is given, it will take on this color. A vector is also possible. (default: red)}
 
-\item{pal}{Palette used to map the \code{col} vector to colors. (default: use \code{\link{cube_helix}} for continuous and \code{\link{palette}()} for discrete data)}
+\item{pal}{Palette used to map the \code{col} vector to colors. (default: use \code{\link{hcl.colors}} for continuous and \code{\link{palette}()} for discrete data)}
 
 \item{pal_new}{Palette used to map the \code{col_new} vector to colors. (default: see \code{pal} argument)}
 

@@ -1,6 +1,7 @@
 #' Sequential color palette using the cube helix system
 #' 
 #' Creates a perceptually monotonously decreasing (or increasing) lightness color palette with different tones.
+#' This was necessary in pre-viridis times, by now you can probably just use \code{\link[grDevices]{hcl.colors}}
 #' 
 #' @param n        Number of colors to return (default: 6)
 #' @param start    Hue to start helix at (\eqn{\textrm{start} \in [0,3]}, default: 0)

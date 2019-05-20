@@ -7,16 +7,16 @@
 \title{Plot gene relevance or differential map}
 \usage{
 plot_differential_map(coords, exprs, ..., gene, dims = 1:2,
-  pal = cube_helix, faceter = facet_wrap(~Gene))
+  pal = hcl.colors, faceter = facet_wrap(~Gene))
 
 \S4method{plot_differential_map}{matrix,matrix}(coords, exprs, ..., gene,
-  dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
+  dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
 
 \S4method{plot_differential_map}{DiffusionMap,missing}(coords, exprs, ...,
-  gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
+  gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
 
 \S4method{plot_differential_map}{GeneRelevance,missing}(coords, exprs, ...,
-  gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~Gene))
+  gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
 
 plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, n_top = 10L,
   genes = 5L, dims = 1:2, pal = palette())

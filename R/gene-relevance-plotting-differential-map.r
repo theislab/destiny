@@ -1,24 +1,24 @@
 #' @name Gene Relevance plotting
 #' @export
-setGeneric('plot_differential_map', function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+setGeneric('plot_differential_map', function(coords, exprs, ..., gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
 	standardGeneric('plot_differential_map')
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_differential_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+setMethod('plot_differential_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
 	plot_differential_map_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_differential_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+setMethod('plot_differential_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
 	plot_differential_map_impl(gene_relevance(coords, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
 #' @name Gene Relevance plotting
 #' @export
-setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = cube_helix, faceter = facet_wrap(~ Gene)) {
+setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
 	plot_differential_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
 })
 
