@@ -7,19 +7,19 @@ setGeneric('plot_differential_map', function(coords, exprs, ..., gene, dims = 1:
 #' @name Gene Relevance plotting
 #' @export
 setMethod('plot_differential_map', c('matrix', 'matrix'), function(coords, exprs, ..., gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
-	plot_differential_map_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
+	plot_differential_map_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter, ...)
 })
 
 #' @name Gene Relevance plotting
 #' @export
 setMethod('plot_differential_map', c('DiffusionMap', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
-	plot_differential_map_impl(gene_relevance(coords, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter)
+	plot_differential_map_impl(gene_relevance(coords, dims = seq_len(max(dims))), genes = gene, dims = dims, pal = pal, faceter = faceter, ...)
 })
 
 #' @name Gene Relevance plotting
 #' @export
 setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coords, exprs, ..., gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
-	plot_differential_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter)
+	plot_differential_map_impl(coords, genes = gene, dims = dims, pal = pal, faceter = faceter, ...)
 })
 
 differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALSE) {
@@ -90,6 +90,7 @@ differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALS
 #' @importFrom ggplot2 ggtitle facet_wrap
 #' @importFrom grid arrow unit
 plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
+	stopifparams(...)
 	if (is.function(pal)) pal <- pal(12)
 	dtm <- differential_map(relevance_map, genes, dims)
 	coords <- get_coords(relevance_map, dims)
