@@ -73,14 +73,18 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	# Plot a single map with cells coloured by gene which has 
 	# the highest differential norm of all genes considered.
 	
-	max_gene_idx <- apply(partials_norm[, gene_ids, drop = FALSE], 1L, which.max)
-	max_gene_idx[sapply(max_gene_idx, length) == 0] <- NA
-	max_gene <- gene_ids[unlist(max_gene_idx)]
+	max_gene <-
+		if (n_top > 1L) genes_ord[, 1]
+		else gene_ids[apply(partials_norm[, gene_ids, drop = FALSE], 1L, function(cell) which.max(cell))]
 	# Label smoothing through graph structure
 	for (i in seq_len(iter_smooth)) {
-		max_gene <- apply(relevance_map@nn_index, 1, function(cell) {
-			max_genes_nn <- unique(max_gene[cell])
-			max_genes_nn_hist <- sapply(max_genes_nn, function(gene) sum(gene == max_gene[cell], na.rm = TRUE))
+		f <-  # for the first smoothing, we can use the full n_top genes
+			if (i == 1 && n_top > 1) function(idx) genes_ord[idx, ]
+			else function(idx) max_gene[idx]
+		max_gene <- apply(relevance_map@nn_index, 1, function(idx_neighbors) {
+			max_genes_nn <- unique(f(idx_neighbors))
+			max_genes_nn_hist <- sapply(max_genes_nn, function(gene) sum(gene == f(idx_neighbors), na.rm = TRUE))
+			print(as.table(max_genes_nn_hist))
 			names(max_genes_nn_hist)[which.max(max_genes_nn_hist)]
 		})
 	}
