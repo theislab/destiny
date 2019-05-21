@@ -83,7 +83,7 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)
 		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, distance = distance, smooth = smooth, verbose = verbose, weights = weights)
 		dm@data_env$relevance_map <- relevance_map
-	}
+	} else stopifparams(...)
 	relevance_map
 })
 
@@ -95,6 +95,7 @@ setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., 
 
 #' @importFrom Biobase rowMedians
 gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, verbose, weights = rep(1, n_dims)) {
+	stopifparams(...)
 	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor'))
 	coords_used <- coords[, dims, drop = FALSE]
 	n_dims <- ncol(coords_used) # has to be defined early for `weights` default argument.

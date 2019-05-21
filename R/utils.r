@@ -8,11 +8,11 @@ stopifsmall <- function(max_dist) {
 
 
 stopifparams <- function(...) {
-	additional <- substitute(list(...))[-1]
-	if (length(additional) == 0) return()
-	nms <- if (is.null(names(additional))) rep('', length(additional)) else names(additional)
-	params <- mapply(function(n, p) if (nchar(n) == 0) p else sprintf('%s = %s', n, p), nms, as.character(additional))
-	stop('Unused argument(s) (', paste(params, collapse = ', '), ')')
+	if (...length() == 0) return(invisible())
+	args <- substitute(...())  # Unevaluated arguments
+	nms <- if (is.null(names(args))) rep_len('', length(args)) else names(args)
+	args_str <- paste0(nms, ifelse(nms == '', '', ' = '), sapply(args, deparse))
+	stop('Unused argument(s) (', paste(args_str, collapse = ', '), ')', call. = FALSE)
 }
 
 
