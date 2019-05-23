@@ -21,24 +21,19 @@ NULL
 #' dataset(dm)
 #' optimal_sigma(dm)
 #' 
-#' @aliases
-#'   eigenvalues,DiffusionMap-method   eigenvectors,DiffusionMap-method   sigmas,DiffusionMap-method
-#' eigenvalues<-,DiffusionMap-method eigenvectors<-,DiffusionMap-method sigmas<-,DiffusionMap-method
-#'   dataset,DiffusionMap-method   distance,DiffusionMap-method   optimal_sigma,DiffusionMap-method
-#' dataset<-,DiffusionMap-method distance<-,DiffusionMap-method
-#' 
 #' @importFrom methods is setGeneric
-#' @name DiffusionMap accessors
+#' @name DiffusionMap accession methods
+#' @rdname DiffusionMap-accessors
 #' @include sigmas.r
 #' @include diffusionmap.r
 NULL
 
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('eigenvalues', 'DiffusionMap', function(object) object@eigenvalues)
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('eigenvalues<-', 'DiffusionMap', function(object, value) {
 	object@eigenvalues <- value
@@ -46,11 +41,11 @@ setMethod('eigenvalues<-', 'DiffusionMap', function(object, value) {
 })
 
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('eigenvectors', 'DiffusionMap', function(object) object@eigenvectors)
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('eigenvectors<-', 'DiffusionMap', function(object, value) {
 	object@eigenvectors <- value
@@ -59,11 +54,11 @@ setMethod('eigenvectors<-', 'DiffusionMap', function(object, value) {
 })
 
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('sigmas', 'DiffusionMap', function(object) object@sigmas)
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('sigmas<-', 'DiffusionMap', function(object, value) {
 	object@sigmas <- value
@@ -72,11 +67,11 @@ setMethod('sigmas<-', 'DiffusionMap', function(object, value) {
 })
 
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('dataset', 'DiffusionMap', function(object) object@data_env$data)
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('dataset<-', 'DiffusionMap', function(object, value) {
 	object@data_env$data <- value
@@ -85,11 +80,11 @@ setMethod('dataset<-', 'DiffusionMap', function(object, value) {
 })
 
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('distance', 'DiffusionMap', function(object) object@distance)
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('distance<-', 'DiffusionMap', function(object, value) {
 	object@distance <- value
@@ -98,6 +93,6 @@ setMethod('distance<-', 'DiffusionMap', function(object, value) {
 })
 
 
-#' @name DiffusionMap accessors
+#' @rdname DiffusionMap-accessors
 #' @export
 setMethod('optimal_sigma', 'DiffusionMap', function(object) optimal_sigma(sigmas(object)))

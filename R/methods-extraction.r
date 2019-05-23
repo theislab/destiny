@@ -20,27 +20,30 @@
 #' dm$Branch
 #' dm$DPT1
 #' 
-#' @name extractions
-#' @aliases names.DPT names,DPT-method          $,DPT-method          [[,DPT,character,missing-method
-#' names.DiffusionMap names,DiffusionMap-method $,DiffusionMap-method [[,DiffusionMap,character,missing-method
+#' @name Extraction methods
+#' @rdname extractions
+#' @aliases
+#'   names.DPT names.DiffusionMap
+#'      [[.DPT    [[.DiffusionMap
+#'       $.DPT     $.DiffusionMap
 NULL
 
 
 #' @importFrom methods is
 #' @importFrom Biobase featureNames varLabels
-#' @name extractions
+#' @rdname extractions
 #' @export
 setMethod('names', 'DiffusionMap', function(x) {
 	c(colnames(eigenvectors(x)), dataset_names(dataset(x)))
 })
-#' @name extractions
+#' @rdname extractions
 #' @export
 setMethod('names', 'DPT', function(x) c(paste0('DPT', seq_len(nrow(x))), 'Branch', names(x@dm)))
 
 
 #' @importFrom methods is
 #' @importFrom Biobase exprs featureNames
-#' @name extractions
+#' @rdname extractions
 #' @export
 setMethod('[[', c('DiffusionMap', 'character', 'missing'), function(x, i, j, ...) {
 	if (grepl('^DC\\d+$', i)) {
@@ -49,7 +52,7 @@ setMethod('[[', c('DiffusionMap', 'character', 'missing'), function(x, i, j, ...
 		dataset_get_feature(dataset(x), i)
 	}
 })
-#' @name extractions
+#' @rdname extractions
 #' @export
 setMethod('[[', c('DPT', 'character', 'missing'), function(x, i, j, ...) {
 	if (identical(i, 'dpt')) return(dpt_for_branch(x, 1L))  #TODO
@@ -64,9 +67,9 @@ setMethod('[[', c('DPT', 'character', 'missing'), function(x, i, j, ...) {
 })
 
 
-#' @name extractions
+#' @rdname extractions
 #' @export
 setMethod('$', 'DiffusionMap', function(x, name) x[[name]])
-#' @name extractions
+#' @rdname extractions
 #' @export
 setMethod('$', 'DPT', function(x, name) x[[name]])

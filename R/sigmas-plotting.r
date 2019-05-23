@@ -26,10 +26,8 @@ angles <- list(langle = langle, rangle = rangle)
 #' sigs <- find_sigmas(guo)
 #' plot(sigs)
 #' 
-#' @aliases plot.Sigmas plot,Sigmas,missing-method
-#' 
 #' @importFrom graphics plot plot.window par text dotchart layout
-#' @name plot.Sigmas
+#' @rdname plot.Sigmas
 #' @export
 setMethod('plot', c(x = 'Sigmas', y = 'missing'), function(
 	x,

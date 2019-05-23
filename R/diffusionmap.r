@@ -64,10 +64,8 @@ sigma_msg <- function(sigma) sprintf(
 #' dists <- dist(matrix(rnorm(100*10), 100))
 #' DiffusionMap(covars, distance = dists)
 #' 
-#' @aliases DiffusionMap DiffusionMap-class
-#' 
 #' @importFrom methods setClass validObject
-#' @name DiffusionMap class
+#' @rdname DiffusionMap-class
 #' @export
 setClass(
 	'DiffusionMap',
@@ -125,7 +123,7 @@ setClass(
 #' @importFrom methods new as is
 #' @importFrom Matrix Diagonal colSums rowSums t
 #' @importFrom VIM hotdeck
-#' @name DiffusionMap class
+#' @rdname DiffusionMap-class
 #' @export
 DiffusionMap <- function(
 	data = stopifnot_distmatrix(distance),

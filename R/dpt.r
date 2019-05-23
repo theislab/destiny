@@ -15,8 +15,6 @@
 #' @slot tips    \code{\link[base]{matrix}} (of \code{\link[base]{logical}}) indicating if a cell (row) is a tip of the corresponding banch level (col)
 #' @slot dm      \code{\link{DiffusionMap}} used to create this DPT object
 #' 
-#' @aliases DPT-class
-#' 
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
@@ -24,7 +22,7 @@
 #' str(dpt)
 #' 
 #' @importFrom methods setClass
-#' @name DPT
+#' @rdname DPT
 #' @export
 setClass(
 	'DPT',
@@ -36,7 +34,7 @@ setClass(
 		TRUE  # TODO
 	})
 
-#' @name DPT
+#' @rdname DPT
 #' @export
 DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
 	stopifparams(...)

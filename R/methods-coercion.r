@@ -28,19 +28,20 @@ NULL
 #' stopifnot(all(classes[   varLabels(guo) ] == c('factor', 'integer')))
 #' 
 #' @aliases
-#' as.data.frame.DiffusionMap as.data.frame,DiffusionMap-method fortify.DiffusionMap
-#' as.data.frame.DPT          as.data.frame,DPT-method          fortify.DPT
-#'     as.matrix.DPT              as.matrix,DPT-method
+#' as.data.frame.DiffusionMap fortify.DiffusionMap
+#' as.data.frame.DPT          fortify.DPT
+#'     as.matrix.DPT
 #' 
 #' @importFrom methods setAs
 #' @importFrom BiocGenerics as.data.frame
-#' @name coercions
+#' @name Coercion Methods
+#' @rdname coercions
 #' @include diffusionmap.r
 NULL
 
 
 #' @importFrom Biobase pData
-#' @name coercions
+#' @rdname coercions
 #' @export
 setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optional = FALSE, ...) {
 	df_evec <- as.data.frame(eigenvectors(x), row.names, optional, ...)
@@ -57,13 +58,13 @@ setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optiona
 #' 
 #' @importFrom BiocGenerics as.data.frame
 #' @importFrom Biobase as.data.frame.ExpressionSet
-#' @name coercions
+#' @rdname coercions
 #' @export fortify.DiffusionMap
 fortify.DiffusionMap <- function(model, data, ...) as.data.frame(model, ...)
 setAs('DiffusionMap', 'data.frame', function(from) as.data.frame(from))
 
 
-#' @name coercions
+#' @rdname coercions
 #' @export
 setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE, ...) {
 	dpt <- as.matrix(x)
@@ -78,12 +79,12 @@ setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE
 #' 
 #' @importFrom BiocGenerics as.data.frame
 #' @importFrom Biobase as.data.frame.ExpressionSet
-#' @name coercions
+#' @rdname coercions
 #' @export fortify.DPT
 fortify.DPT <- function(model, data, ...) as.data.frame(model, ...)
 setAs('DPT', 'data.frame', function(from) as.data.frame(from))
 
 
-#' @name coercions
+#' @rdname coercions
 #' @export
 setMethod('as.matrix', 'DPT', function(x, ...) x[])

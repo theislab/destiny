@@ -19,10 +19,13 @@ NULL
 #' 
 #' @seealso \link{plot.DPT} uses \code{branch_divide} for its \code{divide} argument.
 #' 
-#' @aliases
-#'   dataset,DPT-method dataset<-,DPT-method
-#' @importFrom stats na.omit
+#' @aliases dataset.DPT
 #' @name DPT methods
+#' @rdname DPT-methods
+NULL
+
+#' @importFrom stats na.omit
+#' @rdname DPT-methods
 #' @export
 branch_divide <- function(dpt, divide = integer(0L)) {
 	check_dpt(dpt)
@@ -49,7 +52,7 @@ branch_divide <- function(dpt, divide = integer(0L)) {
 	dpt
 }
 
-#' @name DPT methods
+#' @rdname DPT-methods
 #' @export
 tips <- function(dpt) {
 	check_dpt(dpt)
@@ -58,11 +61,11 @@ tips <- function(dpt) {
 	which(tip_idx)[branch_order]
 }
 
-#' @name DPT methods
+#' @rdname DPT-methods
 #' @export
 setMethod('dataset', 'DPT', function(object) dataset(object@dm))
 
-#' @name DPT methods
+#' @rdname DPT-methods
 #' @export
 setMethod('dataset<-', 'DPT', function(object, value) {
 	dataset(object@dm) <- value

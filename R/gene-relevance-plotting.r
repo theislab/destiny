@@ -37,13 +37,13 @@ NULL
 #' plot_gene_relevance(pca, guo_norm_mat, dims = 2:3)
 #' plot_differential_map(pca, guo_norm_mat, gene = c('Fgf4', 'Nanog'))
 #' 
-#' @name Gene Relevance plotting
+#' @rdname Gene-Relevance-plotting
 #' @export
 setMethod('plot', c('GeneRelevance', 'character'), function(x, y, ...) plot_differential_map(x, gene = y, ...))
-#' @name Gene Relevance plotting
+#' @rdname Gene-Relevance-plotting
 #' @export
 setMethod('plot', c('GeneRelevance', 'numeric'),   function(x, y, ...) plot_differential_map(x, gene = y, ...))
 
-#' @name Gene Relevance plotting
+#' @rdname Gene-Relevance-plotting
 #' @export
 setMethod('plot', c('GeneRelevance', 'missing'), function(x, y, ...) plot_gene_relevance(x, ...))

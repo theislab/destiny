@@ -3,16 +3,16 @@
 \name{destiny generics}
 \alias{destiny generics}
 \alias{eigenvalues}
-\alias{eigenvectors}
-\alias{sigmas}
-\alias{dataset}
-\alias{distance}
-\alias{optimal_sigma}
 \alias{eigenvalues<-}
+\alias{eigenvectors}
 \alias{eigenvectors<-}
+\alias{sigmas}
 \alias{sigmas<-}
+\alias{dataset}
 \alias{dataset<-}
+\alias{distance}
 \alias{distance<-}
+\alias{optimal_sigma}
 \title{destiny generics}
 \usage{
 eigenvalues(object)

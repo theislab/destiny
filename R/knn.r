@@ -20,7 +20,7 @@
 #'   }
 #' }
 #' 
-#' @name knn
+#' @rdname knn
 #' @export
 find_knn <- function(data, k, ..., query = NULL, distance = c('euclidean', 'cosine', 'rankcor'), sym = TRUE) {
 	stopifparams(...)

@@ -3,8 +3,8 @@
 \docType{methods}
 \name{plot.DiffusionMap}
 \alias{plot.DiffusionMap}
-\alias{plot,DiffusionMap,missing-method}
 \alias{plot,DiffusionMap,numeric-method}
+\alias{plot,DiffusionMap,missing-method}
 \title{3D or 2D plot of diffusion map}
 \usage{
 plot.DiffusionMap(x, dims = 1:3, new_dcs = if (!is.null(new_data))

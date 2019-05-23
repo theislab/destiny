@@ -1,22 +1,22 @@
-#' @name Gene Relevance plotting
+#' @rdname Gene-Relevance-plotting
 #' @export
 setGeneric('plot_gene_relevance', function(coords, exprs, ..., iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2, pal = palette()) {
 	standardGeneric('plot_gene_relevance')
 })
 
-#' @name Gene Relevance plotting
+#' @rdname Gene-Relevance-plotting
 #' @export
 setMethod('plot_gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2, pal = palette()) {
 	plot_gene_relevance_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, ...)
 })
 
-#' @name Gene Relevance plotting
+#' @rdname Gene-Relevance-plotting
 #' @export
 setMethod('plot_gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2, pal = palette()) {
 	plot_gene_relevance_impl(gene_relevance(coords, dims = seq_len(max(dims))), iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, ...)
 })
 
-#' @name Gene Relevance plotting
+#' @rdname Gene-Relevance-plotting
 #' @export
 setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords, exprs, ..., iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2, pal = palette()) {
 	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, ...)

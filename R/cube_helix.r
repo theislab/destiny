@@ -54,7 +54,7 @@ scale_cube_helix <- function(aesthetics, start, r, hue, gamma, light, dark, reve
 	}
 }
 
-#' @name cube_helix
+#' @rdname cube_helix
 #' @export
 scale_colour_cube_helix <- function(...,
 	start = 0, r = .4, hue = .8, gamma = 1, light = .85, dark = .15, reverse = FALSE,
@@ -62,11 +62,11 @@ scale_colour_cube_helix <- function(...,
 ) {
 	scale_cube_helix('colour', start, r, hue, gamma, light, dark, reverse, discrete, guide, ...)
 }
-#' @name cube_helix
+#' @rdname cube_helix
 #' @export
 scale_color_cube_helix <- scale_colour_cube_helix
 
-#' @name cube_helix
+#' @rdname cube_helix
 #' @export
 scale_fill_cube_helix <- function(...,
 	start = 0, r = .4, hue = .8, gamma = 1, light = .85, dark = .15, reverse = FALSE,

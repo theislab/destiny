@@ -6,7 +6,6 @@
 #' demo(destiny, ask = FALSE)
 #' 
 #' @docType package
-#' @aliases destiny-package
 #' @name destiny
 #' 
 ## Make sure Rcpp and RcppEigen are loaded

@@ -14,15 +14,14 @@
 #' print(dm)
 #' show(dm)
 #' 
-#' @aliases DiffusionMap-methods
-#' print.DiffusionMap        show.DiffusionMap       
-#' print,DiffusionMap-method show,DiffusionMap-method
+#' @aliases print.DiffusionMap show.DiffusionMap
 #' @name DiffusionMap methods
+#' @rdname DiffusionMap-methods
 NULL
 
 #' @importFrom utils str
 #' 
-#' @name DiffusionMap methods
+#' @rdname DiffusionMap-methods
 #' @export
 setMethod('print', 'DiffusionMap', function(x) {
 	cat(sprintf('DiffusionMap (%s Diffusion components and %s observations)\n', length(eigenvalues(x)), nrow(eigenvectors(x))))
@@ -36,7 +35,7 @@ setMethod('print', 'DiffusionMap', function(x) {
 
 #' @importFrom methods show
 #' 
-#' @name DiffusionMap methods
+#' @rdname DiffusionMap-methods
 #' @export
 setMethod('show', 'DiffusionMap', function(object) {
 	print(object)

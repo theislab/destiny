@@ -41,12 +41,7 @@ NULL
 #' gr_pca <- gene_relevance(prcomp(m)$x, m)
 #' # now plot them!
 #' 
-#' @aliases
-#'   GeneRelevance GeneRelevance-class
-#'   gene_relevance
-#'   gene_relevance,matrix,matrix-method
-#'   gene_relevance,DiffusionMap,missing-method
-#' @name Gene Relevance
+#' @rdname Gene-Relevance
 #' @export
 setClass('GeneRelevance', slots = c(
 	coords = 'matrix',
@@ -59,12 +54,12 @@ setClass('GeneRelevance', slots = c(
 	smooth_window = 'numeric',
 	smooth_alpha = 'numeric'))
 
-#' @name Gene Relevance
+#' @rdname Gene-Relevance
 #' @export
 setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) standardGeneric('gene_relevance'))
 
 #' @importFrom Biobase updateObject
-#' @name Gene Relevance
+#' @rdname Gene-Relevance
 #' @export
 setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) {
 	dm <- coords
@@ -87,7 +82,7 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 	relevance_map
 })
 
-#' @name Gene Relevance
+#' @rdname Gene-Relevance
 #' @export
 setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) {
 	gene_relevance_impl(coords, exprs, ..., k = k, distance = distance, smooth = smooth, dims = dims, verbose = verbose)

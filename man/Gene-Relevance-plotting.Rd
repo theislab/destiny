@@ -2,8 +2,18 @@
 % Please edit documentation in R/gene-relevance-plotting-differential-map.r,
 %   R/gene-relevance-plotting-gr-map.r, R/gene-relevance-plotting.r
 \docType{methods}
-\name{Gene Relevance plotting}
-\alias{Gene Relevance plotting}
+\name{plot_differential_map}
+\alias{plot_differential_map}
+\alias{plot_differential_map,matrix,matrix-method}
+\alias{plot_differential_map,DiffusionMap,missing-method}
+\alias{plot_differential_map,GeneRelevance,missing-method}
+\alias{plot_gene_relevance}
+\alias{plot_gene_relevance,matrix,matrix-method}
+\alias{plot_gene_relevance,DiffusionMap,missing-method}
+\alias{plot_gene_relevance,GeneRelevance,missing-method}
+\alias{plot,GeneRelevance,character-method}
+\alias{plot,GeneRelevance,numeric-method}
+\alias{plot,GeneRelevance,missing-method}
 \title{Plot gene relevance or differential map}
 \usage{
 plot_differential_map(coords, exprs, ..., gene, dims = 1:2,

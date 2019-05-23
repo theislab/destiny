@@ -22,17 +22,19 @@ NULL
 #' 
 #' @seealso \link[utils]{read.table} on which \code{read.ExpressionSet} is based, and \link[Biobase:class.ExpressionSet]{ExpressionSet}.
 #' 
-#' @aliases as.ExpressionSet as.ExpressionSet-method as.ExpressionSet,data.frame-method read.ExpressionSet
-#' 
+#' @name ExpressionSet helper methods
+#' @rdname ExpressionSet-helpers
+NULL
+
 #' @importFrom methods setGeneric .valueClassTest
-#' @name ExpressionSet helpers
+#' @rdname ExpressionSet-helpers
 #' @export
 setGeneric('as.ExpressionSet', function(x, ...) standardGeneric('as.ExpressionSet'), valueClass = 'ExpressionSet')
 
 #' @param annotation_cols  The data.frame columns used as annotations. All others are used as expressions. (Logical, character or numerical index array)
 #' 
 #' @importFrom Biobase ExpressionSet AnnotatedDataFrame phenoData
-#' @name ExpressionSet helpers
+#' @rdname ExpressionSet-helpers
 #' @export
 setMethod('as.ExpressionSet', 'data.frame', function(x, annotation_cols = !sapply(x, is.double)) {
 	if (!is.logical(annotation_cols))
@@ -49,7 +51,7 @@ setMethod('as.ExpressionSet', 'data.frame', function(x, annotation_cols = !sappl
 #' @param ...     Additional parameters to \link[utils]{read.table}
 #' 
 #' @importFrom utils read.table
-#' @name ExpressionSet helpers
+#' @rdname ExpressionSet-helpers
 #' @export
 read.ExpressionSet <- function(file, header = TRUE, ...) {
 	as.ExpressionSet(read.table(file, header, ...))

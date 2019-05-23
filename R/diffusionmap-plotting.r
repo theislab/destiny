@@ -41,7 +41,7 @@ NULL
 #' data(guo)
 #' plot(DiffusionMap(guo))
 #' 
-#' @aliases plot.DiffusionMap plot,DiffusionMap,missing-method plot,DiffusionMap,numeric-method
+#' @aliases plot.DiffusionMap
 #' 
 #' @importFrom graphics par axis plot plot.new
 #' @importFrom stats setNames
@@ -55,7 +55,7 @@ NULL
 #' @importFrom ggplot2 guide_colourbar guide_legend
 #' @importFrom ggthemes geom_rangeframe extended_range_breaks
 #' 
-#' @name plot.DiffusionMap
+#' @rdname plot.DiffusionMap
 #' @export
 plot.DiffusionMap <- function(
 	x, dims = 1:3,
@@ -257,10 +257,10 @@ theme_really_minimal <- function(...) theme_minimal() + theme(axis.text.x = elem
 # mapply(function(t, a, b) plot(dif, ticks = t, axes = a, box = b, main = sprintf('t=%s a=%s b=%s', t, a, b)),
 #        c(T,T,T,T,F,F,F,F), c(T,F,T,F,T,F,T,F), c(T,T,F,F,T,T,F,F))
 
-#' @name plot.DiffusionMap
+#' @rdname plot.DiffusionMap
 #' @export
 setMethod('plot', c(x = 'DiffusionMap', y = 'numeric'), function(x, y, ...) plot.DiffusionMap(x, y, ...))
 
-#' @name plot.DiffusionMap
+#' @rdname plot.DiffusionMap
 #' @export
 setMethod('plot', c(x = 'DiffusionMap', y = 'missing'), function(x, y, ...) plot(x, seq_len(min(3L, ncol(eigenvectors(x)))), ...))

@@ -3,10 +3,11 @@
 \docType{methods}
 \name{DPT methods}
 \alias{DPT methods}
+\alias{dataset.DPT}
 \alias{branch_divide}
+\alias{tips}
 \alias{dataset,DPT-method}
 \alias{dataset<-,DPT-method}
-\alias{tips}
 \title{DPT methods}
 \usage{
 branch_divide(dpt, divide = integer(0L))

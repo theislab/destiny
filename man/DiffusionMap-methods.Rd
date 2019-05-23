@@ -3,7 +3,6 @@
 \docType{methods}
 \name{DiffusionMap methods}
 \alias{DiffusionMap methods}
-\alias{DiffusionMap-methods}
 \alias{print.DiffusionMap}
 \alias{show.DiffusionMap}
 \alias{print,DiffusionMap-method}

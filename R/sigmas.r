@@ -33,10 +33,10 @@ NULL
 #' 
 #' @seealso \code{\link{find_sigmas}}, the function to determine a locally optimal sigma and returning this class
 #' 
-#' @aliases Sigmas Sigmas-class Sigmas-methods print,Sigmas-method show,Sigmas-method optimal_sigma,Sigmas-method
+#' @aliases Sigmas-methods
 #' 
 #' @importFrom methods setClass
-#' @name Sigmas class
+#' @rdname Sigmas-class
 #' @export Sigmas
 #' @exportClass Sigmas
 Sigmas <- setClass('Sigmas', slots = c(
@@ -47,11 +47,11 @@ Sigmas <- setClass('Sigmas', slots = c(
 	avrd_norms    = 'numericOrNULL'))
 
 #' @return \code{optimal_sigma} retrieves the numeric value of the optimal sigma or local sigmas
-#' @name Sigmas class
+#' @rdname Sigmas-class
 #' @export
 setMethod('optimal_sigma', 'Sigmas', function(object) object@optimal_sigma)
 
-#' @name Sigmas class
+#' @rdname Sigmas-class
 #' @export
 setMethod('print', 'Sigmas', function(x) {
 	cat(sprintf('Sigmas (%s Steps performed)\noptimal_sigma: ', length(x@log_sigmas)))
@@ -60,7 +60,7 @@ setMethod('print', 'Sigmas', function(x) {
 })
 
 #' @importFrom graphics plot
-#' @name Sigmas class
+#' @rdname Sigmas-class
 #' @export
 setMethod('show', 'Sigmas', function(object) {
 	plot(object)

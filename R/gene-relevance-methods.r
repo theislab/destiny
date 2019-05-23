@@ -18,16 +18,12 @@ NULL
 #' featureNames(gr)[[37]] <- 'Id2 (suppresses differentiation)'
 #' # now plot it with the changed gene name(s)
 #' 
-#' @aliases
-#' featureNames,GeneRelevance-method
-#' featureNames<-,GeneRelevance,characterOrFactor-method
-#' dataset,GeneRelevance-method
-#' dataset<-,GeneRelevance-method
-#' @name Gene Relevance methods
+#' @aliases featureNames.GeneRelevance dataset.GeneRelevance
+#' @rdname Gene-Relevance-methods
 #' @export
 setMethod('featureNames', 'GeneRelevance', function(object) colnames(object@exprs))
 
-#' @name Gene Relevance methods
+#' @rdname Gene-Relevance-methods
 #' @export
 setMethod('featureNames<-', c('GeneRelevance', 'characterOrFactor'), function(object, value) {
 	object <- updateObject(object)
@@ -38,11 +34,11 @@ setMethod('featureNames<-', c('GeneRelevance', 'characterOrFactor'), function(ob
 	object
 })
 
-#' @name Gene Relevance methods
+#' @rdname Gene-Relevance-methods
 #' @export
 setMethod('dataset', 'GeneRelevance', function(object) object@exprs)
 
-#' @name Gene Relevance methods
+#' @rdname Gene-Relevance-methods
 #' @export
 setMethod('dataset<-', 'GeneRelevance', function(object, value) {
 	object <- updateObject(object)
