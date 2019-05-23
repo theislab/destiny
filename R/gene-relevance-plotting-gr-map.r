@@ -73,24 +73,28 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	# Plot a single map with cells coloured by gene which has 
 	# the highest differential norm of all genes considered.
 	
-	max_gene <-
-		if (n_top > 1L) genes_ord[, 1]
-		else gene_ids[apply(partials_norm[, gene_ids, drop = FALSE], 1L, function(cell) which.max(cell))]
+	# matrix cells by n_top. might contain NAs later
+	max_genes <-
+		if (n_top > 1L) genes_ord
+		else matrix(gene_ids[apply(partials_norm[, gene_ids, drop = FALSE], 1L, which.max)], ncol = 1)
 	# Label smoothing through graph structure
 	for (i in seq_len(iter_smooth)) {
-		f <-  # for the first smoothing, we can use the full n_top genes
-			if (i == 1 && n_top > 1) function(idx) genes_ord[idx, ]
-			else function(idx) max_gene[idx]
-		max_gene <- apply(relevance_map@nn_index, 1, function(idx_neighbors) {
-			max_genes_nn <- unique(f(idx_neighbors))
-			max_genes_nn_hist <- sapply(max_genes_nn, function(gene) sum(gene == f(idx_neighbors), na.rm = TRUE))
-			print(as.table(max_genes_nn_hist))
-			names(max_genes_nn_hist)[which.max(max_genes_nn_hist)]
+		max_genes <- apply(relevance_map@nn_index, 1, function(idx_neighbors) {
+			# treating the matrix as vector yields the first column first, i.e. the closest neighbors ...
+			max_genes_nn <- unique(as.vector(max_genes[idx_neighbors, ]))
+			max_genes_nn_hist <- vapply(max_genes_nn, function(gene) sum(gene == max_genes[idx_neighbors, ], na.rm = TRUE), integer(1L))
+			# ... therefore if e.g. all genes only appear once, the first neighbors stay first
+			sorted <- sort(max_genes_nn_hist, decreasing = TRUE)
+			names(sorted)[seq_len(n_top)]
 		})
+		# Make inconsistent `apply` result into a cells by n_top matrix
+		max_genes <-
+			if (n_top > 1) t(max_genes)
+			else matrix(max_genes, ncol = 1)
 	}
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
-	rel_map_data <- cbind(as.data.frame(coords), Gene = factor(max_gene, levels = gene_ids), TopN = top_n_cell_text)
+	rel_map_data <- cbind(as.data.frame(coords), Gene = factor(max_genes[, 1], levels = gene_ids), TopN = top_n_cell_text)
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
