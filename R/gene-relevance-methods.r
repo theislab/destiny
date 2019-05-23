@@ -19,6 +19,10 @@ NULL
 #' # now plot it with the changed gene name(s)
 #' 
 #' @aliases featureNames.GeneRelevance dataset.GeneRelevance
+#' @name Gene Relevance methods
+#' @rdname Gene-Relevance-methods
+NULL
+
 #' @rdname Gene-Relevance-methods
 #' @export
 setMethod('featureNames', 'GeneRelevance', function(object) colnames(object@exprs))

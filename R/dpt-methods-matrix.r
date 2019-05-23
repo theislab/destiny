@@ -17,10 +17,14 @@ NULL
 #' set.seed(1)
 #' plot(dpt[random_root(dpt), ], Biobase::exprs(guo_norm)['DppaI', ])
 #' 
-#' @aliases [.DPT nrow.DPT ncol.DPT dim.DPT
-#' @rdname DPT-matrix-methods
-#' 
 #' @seealso \code{\link{as.matrix.DPT}}
+## Not [[.DPT, that is in the extraction methods
+#' @aliases [.DPT nrow.DPT ncol.DPT dim.DPT
+#' @name DPT matrix methods
+#' @rdname DPT-matrix-methods
+NULL
+
+#' @rdname DPT-matrix-methods
 #' @export
 setMethod('[', c('DPT', 'index', 'index', 'logicalOrMissing'), function(x, i, j, ..., drop = TRUE) {
 	stopifnot(length(list(...)) == 0L)

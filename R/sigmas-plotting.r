@@ -27,6 +27,11 @@ angles <- list(langle = langle, rangle = rangle)
 #' plot(sigs)
 #' 
 #' @importFrom graphics plot plot.window par text dotchart layout
+#' @name plot.Sigmas
+#' @rdname plot.Sigmas
+NULL
+
+#' @importFrom graphics plot plot.window par text dotchart layout
 #' @rdname plot.Sigmas
 #' @export
 setMethod('plot', c(x = 'Sigmas', y = 'missing'), function(

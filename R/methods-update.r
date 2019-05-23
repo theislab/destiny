@@ -11,12 +11,15 @@ NULL
 #' 
 #' @return A \link{DiffusionMap} or \link{Sigmas} object that is valid when used with the current destiny release
 #' 
-#' @aliases updateObject.DiffusionMap
-#' 
+#' @aliases updateObject.DiffusionMap updateObject.Sigmas updateObject.GeneRelevance
+#' @name updateObject methods
+#' @rdname updateObject-methods
+NULL
+
 #' @importFrom methods setMethod validObject .hasSlot slot slot<- 
 #' @importFrom Matrix Matrix
 #' @importFrom BiocGenerics updateObject
-#' @rdname updateObject-method
+#' @rdname updateObject-methods
 #' @export
 setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE) {
 	if (verbose) 
@@ -46,7 +49,7 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 })
 
 
-#' @rdname updateObject-method
+#' @rdname updateObject-methods
 #' @export
 setMethod('updateObject', 'Sigmas', function(object, ..., verbose = FALSE) {
 	if (verbose) 
@@ -58,7 +61,7 @@ setMethod('updateObject', 'Sigmas', function(object, ..., verbose = FALSE) {
 })
 
 
-#' @rdname updateObject-method
+#' @rdname updateObject-methods
 #' @export
 setMethod('updateObject', 'GeneRelevance', function(object, ..., verbose = FALSE) {
 	if (verbose) 
