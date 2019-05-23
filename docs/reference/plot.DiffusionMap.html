@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.15.0</span>
       </span>
     </div>
 
@@ -147,7 +147,7 @@
     <tr>
       <th>col</th>
       <td><p>Single color string or vector of discrete or categoric values to be mapped to colors.
-E.g. a column of the data matrix used for creation of the diffusion map. (default: <code><a href='https://www.rdocumentation.org/packages/igraph/topics/cluster_louvain'>cluster_louvain</a></code>)</p></td>
+E.g. a column of the data matrix used for creation of the diffusion map. (default: <code><a href='https://www.rdocumentation.org/packages/igraph/topics/cluster_louvain'>cluster_louvain</a></code> if igraph is installed)</p></td>
     </tr>
     <tr>
       <th>col_by</th>
@@ -163,7 +163,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
     </tr>
     <tr>
       <th>pal</th>
-      <td><p>Palette used to map the <code>col</code> vector to colors. (default: use <code><a href='cube_helix.html'>cube_helix</a></code> for continuous and <code><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a>()</code> for discrete data)</p></td>
+      <td><p>Palette used to map the <code>col</code> vector to colors. (default: use <code><a href='https://www.rdocumentation.org/packages/grDevices/topics/palettes'>hcl.colors</a></code> for continuous and <code><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a>()</code> for discrete data)</p></td>
     </tr>
     <tr>
       <th>pal_new</th>
@@ -171,7 +171,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Parameters passed to <a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a>, <a href='https://www.rdocumentation.org/packages/scatterplot3d/topics/scatterplot3d'>scatterplot3d</a>, or plot3d (if <code>interactive == TRUE</code>)</p></td>
+      <td><p>Parameters passed to <a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a>, <a href='https://www.rdocumentation.org/packages/scatterplot3d/topics/scatterplot3d'>scatterplot3d</a>, or <a href='https://www.rdocumentation.org/packages/rgl/topics/plot3d'>plot3d</a> (if <code>interactive == TRUE</code>)</p></td>
     </tr>
     <tr>
       <th>ticks</th>
@@ -195,7 +195,7 @@ E.g. a column of the data matrix used for creation of the diffusion map. (defaul
     </tr>
     <tr>
       <th>interactive</th>
-      <td><p>Use plot3d to plot instead of <a href='https://www.rdocumentation.org/packages/scatterplot3d/topics/scatterplot3d'>scatterplot3d</a>?</p></td>
+      <td><p>Use <a href='https://www.rdocumentation.org/packages/rgl/topics/plot3d'>plot3d</a> to plot instead of <a href='https://www.rdocumentation.org/packages/scatterplot3d/topics/scatterplot3d'>scatterplot3d</a>?</p></td>
     </tr>
     <tr>
       <th>draw_legend</th>

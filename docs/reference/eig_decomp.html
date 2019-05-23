@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast eigen decomposition using ARPACK — eig_decomp • destiny</title>
+<title>Fast eigen decomposition using <code><a href='https://www.rdocumentation.org/packages/RSpectra/topics/eigs'>eigs</a></code> — eig_decomp • destiny</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Fast eigen decomposition using ARPACK — eig_decomp" />
+<meta property="og:title" content="Fast eigen decomposition using <code><a href='https://www.rdocumentation.org/packages/RSpectra/topics/eigs'>eigs</a></code> — eig_decomp" />
 
-<meta property="og:description" content="Fast eigen decomposition using ARPACK" />
+<meta property="og:description" content="By default uses a random initialization vector that you can make deterministic using
+set.seed or override by specifying opts = list(initvec = ...)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +64,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.15.0</span>
       </span>
     </div>
 
@@ -99,112 +100,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fast eigen decomposition using ARPACK</h1>
+    <h1>Fast eigen decomposition using <code><a href='https://www.rdocumentation.org/packages/RSpectra/topics/eigs'>eigs</a></code></h1>
     <small class="dont-index">Source: <a href='https://github.com/theislab/destiny/blob/master/R/eig_decomp.r'><code>R/eig_decomp.r</code></a></small>
     <div class="hidden name"><code>eig_decomp.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Fast eigen decomposition using ARPACK</p>
+    <p>By default uses a random initialization vector that you can make deterministic using
+<code><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></code> or override by specifying <code>opts = list(initvec = ...)</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>eig_decomp</span>(<span class='no'>M</span>, <span class='no'>n_eigs</span>, <span class='kw'>sym</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/isSymmetric'>isSymmetric</a></span>(<span class='no'>M</span>))</pre>
+    <pre class="usage"><span class='fu'>eig_decomp</span>(<span class='no'>M</span>, <span class='no'>n_eigs</span>, <span class='no'>sym</span>, <span class='no'>...</span>, <span class='kw'>opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>M</th>
-      <td><p>A matrix (e.g. from the Matrix package)</p></td>
+      <td><p>A matrix (e.g. from the Matrix package) or
+a function (see <code><a href='https://www.rdocumentation.org/packages/RSpectra/topics/eigs'>eigs</a></code>).</p></td>
     </tr>
     <tr>
       <th>n_eigs</th>
-      <td><p>Number of eigenvectors to return</p></td>
+      <td><p>Number of eigenvectors to return.</p></td>
     </tr>
     <tr>
       <th>sym</th>
-      <td><p>TRUE if M is symmetric</p></td>
+      <td><p>defunct and ignored.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Passed to <code><a href='https://www.rdocumentation.org/packages/RSpectra/topics/eigs'>eigs</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>n eigenvectors of the transition matrix</p>
+    <p>see <code><a href='https://www.rdocumentation.org/packages/RSpectra/topics/eigs'>eigs</a></code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>eig_decomp</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='fl'>2</span>)</div><div class='output co'>#&gt; $values
-#&gt; [1] 2 0
-#&gt; 
-#&gt; $vectors
-#&gt;      [,1] [,2]
-#&gt; [1,]    1   -1
-#&gt; [2,]   -1   -1
-#&gt; 
-#&gt; $options
-#&gt; $options$bmat
-#&gt; [1] "I"
-#&gt; 
-#&gt; $options$n
-#&gt; [1] 2
-#&gt; 
-#&gt; $options$which
-#&gt; [1] "LA"
-#&gt; 
-#&gt; $options$nev
-#&gt; [1] 3
-#&gt; 
-#&gt; $options$tol
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$ncv
-#&gt; [1] 2
-#&gt; 
-#&gt; $options$ldv
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$ishift
-#&gt; [1] 1
-#&gt; 
-#&gt; $options$maxiter
-#&gt; [1] 1000
-#&gt; 
-#&gt; $options$nb
-#&gt; [1] 1
-#&gt; 
-#&gt; $options$mode
-#&gt; [1] 1
-#&gt; 
-#&gt; $options$start
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$sigma
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$sigmai
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$info
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$iter
-#&gt; [1] 1000
-#&gt; 
-#&gt; $options$nconv
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$numop
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$numopb
-#&gt; [1] 0
-#&gt; 
-#&gt; $options$numreo
-#&gt; [1] 0
-#&gt; 
-#&gt; </div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>eig_decomp</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eigs_real_sym(A, nrow(A), k, which, sigma, opts, mattype = "sym_matrix",     extra_args = list(use_lower = TRUE)): dimension of 'A' must be at least 3</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

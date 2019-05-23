@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a diffusion map of cells — DiffusionMap class • destiny</title>
+<title>Create a diffusion map of cells — DiffusionMap-class • destiny</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Create a diffusion map of cells — DiffusionMap class" />
+<meta property="og:title" content="Create a diffusion map of cells — DiffusionMap-class" />
 
 <meta property="og:description" content="The provided data can be a double matrix of expression data or a data.frame with all non-integer (double) columns
 being treated as expression data features (and the others ignored), an ExpressionSet, or a SingleCellExperiment." />
@@ -64,7 +64,7 @@ being treated as expression data features (and the others ignored), an Expressio
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.15.0</span>
       </span>
     </div>
 
@@ -220,33 +220,31 @@ which allows the use of kNN-sparsified matrices (see the return value of <code><
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='DiffusionMap-methods.html'>DiffusionMap-methods</a> to get and set the slots. <code><a href='find_sigmas.html'>find_sigmas</a></code> to pre-calculate a fitting global <code>sigma</code> parameter</p></div>
+    <div class='dont-index'><p>DiffusionMap-methods to get and set the slots. <code><a href='find_sigmas.html'>find_sigmas</a></code> to pre-calculate a fitting global <code>sigma</code> parameter</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>guo</span>)
 <span class='fu'>DiffusionMap</span>(<span class='no'>guo</span>)</div><div class='output co'>#&gt; DiffusionMap (20 Diffusion components and 428 observations)
-#&gt; eigenvalues:    num [1:20] 0.953 0.837 0.77 0.753 0.679 ...
+#&gt; eigenvalues:    Named num [1:20] 0.953 0.837 0.77 0.753 0.679 ...
+#&gt;  - attr(*, "names")= chr [1:20] "DC1" "DC2" "DC3" "DC4" ...
 #&gt; eigenvectors:   num [1:428, 1:20] 0.0506 0.0503 0.0427 0.0468 0.0497 ...
 #&gt;   ..colnames:   chr [1:20] "DC1" "DC2" "DC3" "DC4" ...
-#&gt; optimal_sigma:  num [1:428] 7.69 7.63 9.19 6.76 6.35 ...
-#&gt; distance:       chr "euclidean"</div><div class='input'><span class='fu'>DiffusionMap</span>(<span class='no'>guo</span>, <span class='fl'>13</span>, <span class='kw'>censor_val</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>censor_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>15</span>, <span class='fl'>40</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; finding knns......done. Time: 0.29s
-#&gt; Calculating transition probabilities...  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%...done. Time: 0.10s
+#&gt; optimal_sigma:  Named num [1:428] 7.69 7.63 9.19 6.76 6.35 ...
+#&gt;  - attr(*, "names")= chr [1:428] "10" "11" "12" "13" ...
+#&gt; distance:       chr "euclidean"</div><div class='input'><span class='fu'>DiffusionMap</span>(<span class='no'>guo</span>, <span class='fl'>13</span>, <span class='kw'>censor_val</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>censor_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>15</span>, <span class='fl'>40</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; finding knns......done. Time: 0.46s
+#&gt; Calculating transition probabilities...  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%...done. Time: 0.11s
 #&gt; 
 #&gt; performing eigen decomposition......done. Time: 0.05s</div><div class='output co'>#&gt; DiffusionMap (20 Diffusion components and 428 observations)
-#&gt; eigenvalues:    num [1:20] 0.586 0.303 0.261 0.201 0.191 ...
+#&gt; eigenvalues:    Named num [1:20] 0.586 0.303 0.261 0.201 0.191 ...
+#&gt;  - attr(*, "names")= chr [1:20] "DC1" "DC2" "DC3" "DC4" ...
 #&gt; eigenvectors:   num [1:428, 1:20] -0.0491 -0.0512 -0.0422 -0.0403 -0.0462 ...
 #&gt;   ..colnames:   chr [1:20] "DC1" "DC2" "DC3" "DC4" ...
 #&gt; optimal_sigma:  num 13
 #&gt; distance:       chr "euclidean"</div><div class='input'>
 <span class='no'>covars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>covar1</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>100</span>])
 <span class='no'>dists</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>100</span>*<span class='fl'>10</span>), <span class='fl'>100</span>))
-<span class='fu'>DiffusionMap</span>(<span class='no'>covars</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='no'>dists</span>)</div><div class='output co'>#&gt; DiffusionMap (20 Diffusion components and 100 observations)
-#&gt; eigenvalues:    num [1:20] 0.503 0.426 0.395 0.39 0.373 ...
-#&gt; eigenvectors:   num [1:100, 1:20] -0.0571 0.0023 -0.2251 0.051 0.1052 ...
-#&gt;   ..colnames:   chr [1:20] "DC1" "DC2" "DC3" "DC4" ...
-#&gt; optimal_sigma:  num [1:100] 1.57 1.62 1.52 1.69 1.23 ...
-#&gt; distance:       chr "custom"</div><div class='input'>
+<span class='fu'>DiffusionMap</span>(<span class='no'>covars</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='no'>dists</span>)</div><div class='output co'>#&gt; <span class='error'>Error in `dimnames&lt;-.dist`(`*tmp*`, value = dn): dimension of 'x' and length of 'value' do not conform</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

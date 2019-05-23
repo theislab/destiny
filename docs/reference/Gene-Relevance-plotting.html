@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot gene relevance or differential map — Gene Relevance plotting • destiny</title>
+<title>Plot gene relevance or differential map — plot_differential_map • destiny</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Plot gene relevance or differential map — Gene Relevance plotting" />
+<meta property="og:title" content="Plot gene relevance or differential map — plot_differential_map" />
 
 <meta property="og:description" content="plot(gene_relevance, 'Gene') plots the differential map of this/these gene(s),
 plot(gene_relevance) a relevance map of a selection of genes.
@@ -65,7 +65,7 @@ Alternatively, you can use plot_differential_map or plot_gene_relevance on a Gen
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.15.0</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@ Alternatively, you can use plot_differential_map or plot_gene_relevance on a Gen
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot gene relevance or differential map</h1>
-    <small class="dont-index">Source: <a href='https://github.com/theislab/destiny/blob/master/R/gene-relevance-plotting.r'><code>R/gene-relevance-plotting.r</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/theislab/destiny/blob/master/R/gene-relevance-plotting-differential-map.r'><code>R/gene-relevance-plotting-differential-map.r</code></a>, <a href='https://github.com/theislab/destiny/blob/master/R/gene-relevance-plotting-gr-map.r'><code>R/gene-relevance-plotting-gr-map.r</code></a>, <a href='https://github.com/theislab/destiny/blob/master/R/gene-relevance-plotting.r'><code>R/gene-relevance-plotting.r</code></a></small>
     <div class="hidden name"><code>Gene-Relevance-plotting.Rd</code></div>
     </div>
 
@@ -110,75 +110,70 @@ Alternatively, you can use plot_differential_map or plot_gene_relevance on a Gen
     
     <p><code><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot(gene_relevance, 'Gene')</a></code> plots the differential map of this/these gene(s),
 <code><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot(gene_relevance)</a></code> a relevance map of a selection of genes.
-Alternatively, you can use <code>plot_differential_map</code> or <code>plot_gene_relevance</code> on a <code><a href='Gene-Relevance.html'>GeneRelevance</a></code> or <code><a href='DiffusionMap-class.html'>DiffusionMap</a></code> object, or with two matrices.</p>
+Alternatively, you can use <code>plot_differential_map</code> or <code>plot_gene_relevance</code> on a <code>GeneRelevance</code> or <code><a href='DiffusionMap-class.html'>DiffusionMap</a></code> object, or with two matrices.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for GeneRelevance,character</span>
+    <pre class="usage"><span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='no'>gene</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+
+<span class='co'># S4 method for matrix,matrix</span>
+<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='no'>gene</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+
+<span class='co'># S4 method for DiffusionMap,missing</span>
+<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
+  <span class='no'>gene</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+
+<span class='co'># S4 method for GeneRelevance,missing</span>
+<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
+  <span class='no'>gene</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+
+<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>genes</span> <span class='kw'>=</span> <span class='fl'>5L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a></span>())
+
+<span class='co'># S4 method for matrix,matrix</span>
+<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
+  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='fl'>5L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a></span>())
+
+<span class='co'># S4 method for DiffusionMap,missing</span>
+<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
+  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='fl'>5L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a></span>())
+
+<span class='co'># S4 method for GeneRelevance,missing</span>
+<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
+  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='fl'>5L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a></span>())
+
+<span class='co'># S4 method for GeneRelevance,character</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for GeneRelevance,numeric</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for GeneRelevance,missing</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
-
-<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='no'>gene</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>cube_helix</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
-
-<span class='co'># S4 method for matrix,matrix</span>
-<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='no'>gene</span>,
-  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>cube_helix</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
-
-<span class='co'># S4 method for DiffusionMap,missing</span>
-<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='no'>gene</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>cube_helix</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
-
-<span class='co'># S4 method for GeneRelevance,missing</span>
-<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='no'>gene</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>cube_helix</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
-
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='fl'>5L</span>,
-  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a></span>())
-
-<span class='co'># S4 method for matrix,matrix</span>
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='fl'>5L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a></span>())
-
-<span class='co'># S4 method for DiffusionMap,missing</span>
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='fl'>5L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a></span>())
-
-<span class='co'># S4 method for GeneRelevance,missing</span>
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='fl'>5L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palette'>palette</a></span>())</pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p><code><a href='Gene-Relevance.html'>GeneRelevance</a></code> object.</p></td>
-    </tr>
-    <tr>
-      <th>y, gene</th>
-      <td><p>Gene name(s) or index/indices to create differential map for. (integer or character)</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Passed to <code>plot_differential_map</code>/<code>plot_gene_relevance</code>.</p></td>
-    </tr>
-    <tr>
       <th>coords</th>
-      <td><p>A <code><a href='DiffusionMap-class.html'>DiffusionMap</a></code>/<code><a href='Gene-Relevance.html'>GeneRelevance</a></code> object or a cells \(\times\) dims <code><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></code>.</p></td>
+      <td><p>A <code><a href='DiffusionMap-class.html'>DiffusionMap</a></code>/<code>GeneRelevance</code> object or a cells \(\times\) dims <code><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></code>.</p></td>
     </tr>
     <tr>
       <th>exprs</th>
       <td><p>An cells \(\times\) genes <code><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></code>. Only provide if <code>coords</code> is a matrix.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Passed to <code>plot_differential_map</code>/<code>plot_gene_relevance</code>.</p></td>
+    </tr>
+    <tr>
       <th>dims</th>
-      <td><p>Names or indices of dimensions to plot. When not plotting a <code><a href='Gene-Relevance.html'>GeneRelevance</a></code> object, the relevance for the dimensions <code>1:max(dims)</code> will be calculated.</p></td>
+      <td><p>Names or indices of dimensions to plot. When not plotting a <code>GeneRelevance</code> object, the relevance for the dimensions <code>1:max(dims)</code> will be calculated.</p></td>
     </tr>
     <tr>
       <th>pal</th>
@@ -186,7 +181,7 @@ Alternatively, you can use <code>plot_differential_map</code> or <code>plot_gene
     </tr>
     <tr>
       <th>faceter</th>
-      <td><p>A ggplot faceter like <code><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a>(~ Gene)</code>.</p></td>
+      <td><p>A ggplot faceter like <code><a href='https://www.rdocumentation.org/packages/ggplot2/topics/facet_wrap'>facet_wrap</a>(~ Gene)</code>.</p></td>
     </tr>
     <tr>
       <th>iter_smooth</th>
@@ -194,9 +189,21 @@ Alternatively, you can use <code>plot_differential_map</code> or <code>plot_gene
 The higher the more homogenous and the less local structure.</p></td>
     </tr>
     <tr>
+      <th>n_top</th>
+      <td><p>Number the top n genes per cell count towards the score defining which genes to return and plot in the relevance map.</p></td>
+    </tr>
+    <tr>
       <th>genes</th>
       <td><p>Genes to based relevance map on or number of genes to use. (vector of strings or one number)
 You can also pass an index into the gene names. (vector of numbers or logicals with length &gt; 1)</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p><code>GeneRelevance</code> object.</p></td>
+    </tr>
+    <tr>
+      <th>y, gene</th>
+      <td><p>Gene name(s) or index/indices to create differential map for. (integer or character)</p></td>
     </tr>
     </table>
     
@@ -213,10 +220,10 @@ You can also pass an index into the gene names. (vector of numbers or logicals w
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>guo_norm</span>)
 <span class='no'>dm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DiffusionMap-class.html'>DiffusionMap</a></span>(<span class='no'>guo_norm</span>)
 <span class='no'>gr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Gene-Relevance.html'>gene_relevance</a></span>(<span class='no'>dm</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>gr</span>)          <span class='co'># or plot_gene_relevance(dm)</span></div><div class='img'><img src='Gene-Relevance-plotting-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>gr</span>, <span class='st'>'Fgf4'</span>)  <span class='co'># or plot_differential_map(dm, 'Fgf4')</span></div><div class='img'><img src='Gene-Relevance-plotting-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>gr</span>)          <span class='co'># or plot_gene_relevance(dm)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 227 rows containing missing values (geom_point).</span></div><div class='img'><img src='Gene-Relevance-plotting-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>gr</span>, <span class='st'>'Fgf4'</span>)  <span class='co'># or plot_differential_map(dm, 'Fgf4')</span></div><div class='img'><img src='Gene-Relevance-plotting-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='no'>guo_norm_mat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='kw pkg'>Biobase</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/Biobase/topics/exprs'>exprs</a></span>(<span class='no'>guo_norm</span>))
 <span class='no'>pca</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/prcomp'>prcomp</a></span>(<span class='no'>guo_norm_mat</span>)$<span class='no'>x</span>
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>pca</span>, <span class='no'>guo_norm_mat</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>3</span>)</div><div class='img'><img src='Gene-Relevance-plotting-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>plot_differential_map</span>(<span class='no'>pca</span>, <span class='no'>guo_norm_mat</span>, <span class='kw'>gene</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'Fgf4'</span>, <span class='st'>'Nanog'</span>))</div><div class='output co'>#&gt; <span class='error'>Error in FUN(X[[i]], ...): Objekt 'DC1' nicht gefunden</span></div><div class='img'><img src='Gene-Relevance-plotting-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plot_gene_relevance</span>(<span class='no'>pca</span>, <span class='no'>guo_norm_mat</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 134 rows containing missing values (geom_point).</span></div><div class='img'><img src='Gene-Relevance-plotting-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>plot_differential_map</span>(<span class='no'>pca</span>, <span class='no'>guo_norm_mat</span>, <span class='kw'>gene</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'Fgf4'</span>, <span class='st'>'Nanog'</span>))</div><div class='img'><img src='Gene-Relevance-plotting-4.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Guo at al. mouse embryonic stem cell qPCR data — guo • destiny</title>
+<title>Update old destiny objects to a newer version. — updateObject methods • destiny</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Guo at al. mouse embryonic stem cell qPCR data — guo" />
+<meta property="og:title" content="Update old destiny objects to a newer version. — updateObject methods" />
 
-<meta property="og:description" content="Gene expression data of 48 genes and an annotation column $num_cells containing the cell stage at which the embryos were harvested." />
+<meta property="og:description" content="Handles DiffusionMap, Sigmas, and GeneRelevance." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -99,54 +99,57 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Guo at al. mouse embryonic stem cell qPCR data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/theislab/destiny/blob/master/R/guo-data.r'><code>R/guo-data.r</code></a></small>
-    <div class="hidden name"><code>guo.Rd</code></div>
+    <h1>Update old destiny objects to a newer version.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/theislab/destiny/blob/master/R/methods-update.r'><code>R/methods-update.r</code></a></small>
+    <div class="hidden name"><code>updateObject-methods.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Gene expression data of 48 genes and an annotation column <code>$num_cells</code> containing the cell stage at which the embryos were harvested.</p>
+    <p>Handles <a href='DiffusionMap-class.html'>DiffusionMap</a>, <a href='Sigmas-class.html'>Sigmas</a>, and GeneRelevance.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>guo</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>guo_norm</span>)</pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <pre class="usage"><span class='co'># S4 method for DiffusionMap</span>
+<span class='fu'>updateObject</span>(<span class='no'>object</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-    <p>An ExpressionSet with 48 features, 428 observations and 2 <a href='https://www.rdocumentation.org/packages/Biobase/topics/phenoData'>phenoData</a> annotations.</p>
+<span class='co'># S4 method for Sigmas</span>
+<span class='fu'>updateObject</span>(<span class='no'>object</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='co'># S4 method for GeneRelevance</span>
+<span class='fu'>updateObject</span>(<span class='no'>object</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>object</th>
+      <td><p>An object created with an older destiny release</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>tells what is being updated</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an ExpressionSet with 48 features and 428 observations containing qPCR Ct values and a "num.cells" observation annotation.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The data is normalized using the mean of two housekeeping genes.
-The difference between <code>guo</code> and <code>guo_norm</code> is the LoD being set to 10 in the former, making it usable with the <code>censor_val</code> parameter of <a href='DiffusionMap-class.html'>DiffusionMap</a>.</p>
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><a href='http://www.sciencedirect.com/science/article/pii/S1534580710001103'>http://www.sciencedirect.com/science/article/pii/S1534580710001103</a></p>
+    <p>A <a href='DiffusionMap-class.html'>DiffusionMap</a> or <a href='Sigmas-class.html'>Sigmas</a> object that is valid when used with the current destiny release</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#format">Format</a></li>
-
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#references">References</a></li>
           </ul>
 
-    <h2>Author</h2>
-    <p>Guoji Guo, Mikael Huss, Guo Qing Tong, Chaoyang Wang, Li Li Sun, Neil D. Clarke, Paul Robson <a href='mailto:robsonp@gis.a-star.edu.sg'>robsonp@gis.a-star.edu.sg</a></p>
   </div>
 </div>
 
