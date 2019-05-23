@@ -136,3 +136,6 @@ setMethod('duplicated', 'dgCMatrix', function(x, incomparables = FALSE, MARGIN =
 		out[is_empty[-1]] <- TRUE
 	out
 })
+
+hcl.colors <- viridisLite::viridis
+
