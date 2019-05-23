@@ -8,8 +8,8 @@ stopifsmall <- function(max_dist) {
 
 
 stopifparams <- function(...) {
-	if (...length() == 0) return(invisible())
 	args <- substitute(...())  # Unevaluated arguments
+	if (length(args) == 0) return(invisible())
 	nms <- if (is.null(names(args))) rep_len('', length(args)) else names(args)
 	args_str <- paste0(nms, ifelse(nms == '', '', ' = '), sapply(args, deparse))
 	stop('Unused argument(s) (', paste(args_str, collapse = ', '), ')', call. = FALSE)
@@ -137,5 +137,18 @@ setMethod('duplicated', 'dgCMatrix', function(x, incomparables = FALSE, MARGIN =
 	out
 })
 
-hcl.colors <- viridisLite::viridis
+if (!exists('hcl.colors', 'package:grDevices'))
+	hcl.colors <- function(
+		n,
+		palette = 'viridis',
+		alpha = NULL,
+		rev = FALSE,
+		fixup = TRUE
+	) {
+		option <- switch(
+			palette,
+			magma = 'A', inferno = 'B', plasma = 'C', viridis = 'D',
+			stop('You are using an old R version and the hcl.colors replacement will not work'))
+		viridisLite::viridis(n, alpha, direction = if (rev) -1 else 1, option = option)
+	}
 
