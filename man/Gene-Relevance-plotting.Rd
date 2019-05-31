@@ -12,23 +12,26 @@
 \alias{plot_gene_relevance,matrix,matrix-method}
 \alias{plot_gene_relevance,DiffusionMap,missing-method}
 \alias{plot_gene_relevance,GeneRelevance,missing-method}
-\alias{plot_rank_bin}
+\alias{plot_gene_relevance_rank}
+\alias{plot_gene_relevance_rank,matrix,matrix-method}
+\alias{plot_gene_relevance_rank,DiffusionMap,missing-method}
+\alias{plot_gene_relevance_rank,GeneRelevance,missing-method}
 \alias{plot,GeneRelevance,character-method}
 \alias{plot,GeneRelevance,numeric-method}
 \alias{plot,GeneRelevance,missing-method}
 \title{Plot gene relevance or differential map}
 \usage{
-plot_differential_map(coords, exprs, ..., gene, dims = 1:2,
+plot_differential_map(coords, exprs, ..., genes, dims = 1:2,
   pal = hcl.colors, faceter = facet_wrap(~Gene))
 
-\S4method{plot_differential_map}{matrix,matrix}(coords, exprs, ..., gene,
+\S4method{plot_differential_map}{matrix,matrix}(coords, exprs, ..., genes,
   dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
 
 \S4method{plot_differential_map}{DiffusionMap,missing}(coords, exprs, ...,
-  gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
+  genes, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
 
 \S4method{plot_differential_map}{GeneRelevance,missing}(coords, exprs, ...,
-  gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
+  genes, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
 
 plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, n_top = 10L,
   genes = 5L, dims = 1:2, pal = palette())
@@ -45,7 +48,21 @@ plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, n_top = 10L,
   iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2,
   pal = palette())
 
-plot_rank_bin(gr, gene)
+plot_gene_relevance_rank(coords, exprs, ..., genes, dims = 1:2,
+  n_top = 10L, pal = c("#3B99B1", "#F5191C"), bins = 10L,
+  faceter = facet_wrap(~Gene))
+
+\S4method{plot_gene_relevance_rank}{matrix,matrix}(coords, exprs, ...,
+  genes, dims = 1:2, n_top = 10L, pal = c("#3B99B1", "#F5191C"),
+  bins = 10L, faceter = facet_wrap(~Gene))
+
+\S4method{plot_gene_relevance_rank}{DiffusionMap,missing}(coords, exprs,
+  ..., genes, dims = 1:2, n_top = 10L, pal = c("#3B99B1", "#F5191C"),
+  bins = 10L, faceter = facet_wrap(~Gene))
+
+\S4method{plot_gene_relevance_rank}{GeneRelevance,missing}(coords, exprs,
+  ..., genes, dims = 1:2, n_top = 10L, pal = c("#3B99B1", "#F5191C"),
+  bins = 10L, faceter = facet_wrap(~Gene))
 
 \S4method{plot}{GeneRelevance,character}(x, y, ...)
 
@@ -60,6 +77,9 @@ plot_rank_bin(gr, gene)
 
 \item{...}{Passed to \code{plot_differential_map}/\code{plot_gene_relevance}.}
 
+\item{genes}{Genes to based relevance map on or number of genes to use. (vector of strings or one number)
+You can also pass an index into the gene names. (vector of numbers or logicals with length > 1)}
+
 \item{dims}{Names or indices of dimensions to plot. When not plotting a \code{\link{GeneRelevance}} object, the relevance for the dimensions \code{1:max(dims)} will be calculated.}
 
 \item{pal}{Palette. Either A colormap function or a list of colors.}
@@ -70,9 +90,6 @@ plot_rank_bin(gr, gene)
 The higher the more homogenous and the less local structure.}
 
 \item{n_top}{Number the top n genes per cell count towards the score defining which genes to return and plot in the relevance map.}
-
-\item{genes}{Genes to based relevance map on or number of genes to use. (vector of strings or one number)
-You can also pass an index into the gene names. (vector of numbers or logicals with length > 1)}
 
 \item{x}{\code{\link{GeneRelevance}} object.}
 
