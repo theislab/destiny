@@ -6,6 +6,7 @@
 #' @rdname Gene-Relevance-plotting
 #' @export
 plot_rank_bin <- function(gr, gene, ..., n_top = 10L, low = "#3B99B1", high = "#F5191C", bins = 10L) {
+	stopifparams(...)
 	genes_missing <- setdiff(gene, colnames(gr@partials_norm))
 	if (length(genes_missing) > 0) {
 		genes_close <- lapply(genes_missing, agrep, colnames(gr@partials_norm))
