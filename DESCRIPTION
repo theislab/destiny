@@ -36,6 +36,8 @@ Imports:
     BiocGenerics,
     SummarizedExperiment,
     ggplot2,
+    ggplot.multistats,
+    tidyr,
     ggthemes,
     VIM,
     proxy,
@@ -91,6 +93,7 @@ Collate:
     'gene-relevance-methods.r'
     'gene-relevance-plotting-differential-map.r'
     'gene-relevance-plotting-gr-map.r'
+    'gene-relevance-plotting-rank.r'
     'gene-relevance-plotting.r'
     'guo-data.r'
     'knn.r'
