@@ -92,9 +92,12 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 			if (n_top > 1) t(max_genes)
 			else matrix(max_genes, ncol = 1)
 	}
+	# use [1] so in case of an empty row we just get an NA.
+	gene_labels <- factor(apply(max_genes, 1, function(cell) na.omit(match(cell, gene_ids))[1]), labels = gene_ids)
+
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
-	rel_map_data <- cbind(as.data.frame(coords), Gene = factor(max_genes[, 1], levels = gene_ids), TopN = top_n_cell_text)
+	rel_map_data <- cbind(as.data.frame(coords), Gene = gene_labels, TopN = top_n_cell_text)
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
