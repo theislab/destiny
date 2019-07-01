@@ -122,5 +122,5 @@ lWhich <- function(idx, nms = seq_len(len), len = length(nms), useNames = TRUE) 
 #' @export
 plot_gradient_map <- function(coords, exprs, ..., gene, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
 	.Deprecated('plot_differential_map')
-	plot_differential_map(coords, exprs, ..., gene = gene, dims = dims, pal = pal, faceter = faceter)
+	plot_differential_map(coords, exprs, ..., genes = gene, dims = dims, pal = pal, faceter = faceter)
 }

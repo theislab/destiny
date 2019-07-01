@@ -35,14 +35,14 @@ NULL
 #' guo_norm_mat <- t(Biobase::exprs(guo_norm))
 #' pca <- prcomp(guo_norm_mat)$x
 #' plot_gene_relevance(pca, guo_norm_mat, dims = 2:3)
-#' plot_differential_map(pca, guo_norm_mat, gene = c('Fgf4', 'Nanog'))
+#' plot_differential_map(pca, guo_norm_mat, genes = c('Fgf4', 'Nanog'))
 #' 
 #' @rdname Gene-Relevance-plotting
 #' @export
-setMethod('plot', c('GeneRelevance', 'character'), function(x, y, ...) plot_differential_map(x, gene = y, ...))
+setMethod('plot', c('GeneRelevance', 'character'), function(x, y, ...) plot_differential_map(x, genes = y, ...))
 #' @rdname Gene-Relevance-plotting
 #' @export
-setMethod('plot', c('GeneRelevance', 'numeric'),   function(x, y, ...) plot_differential_map(x, gene = y, ...))
+setMethod('plot', c('GeneRelevance', 'numeric'),   function(x, y, ...) plot_differential_map(x, genes = y, ...))
 
 #' @rdname Gene-Relevance-plotting
 #' @export
