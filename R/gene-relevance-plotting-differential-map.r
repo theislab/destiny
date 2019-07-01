@@ -59,7 +59,7 @@ differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALS
 			Expression = exprs[, g],
 			PartialsNorm = partials_norms[, g],
 			Cell = if (!is.null(rownames(exprs))) rownames(exprs) else seq_len(nrow(exprs)),
-			Gene = g,
+			Gene = factor(g, levels = genes),
 			Angle     = atan(partials[[2]]   / partials[[1]]  ),
 			Magnitude = sqrt(partials[[1]]^2 + partials[[2]]^2))
 	}))
