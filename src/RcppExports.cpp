@@ -39,33 +39,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// knn_cross
-List knn_cross(const NumericMatrix data, const NumericMatrix query, const size_t k, const std::string distance);
-RcppExport SEXP _destiny_knn_cross(SEXP dataSEXP, SEXP querySEXP, SEXP kSEXP, SEXP distanceSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix >::type query(querySEXP);
-    Rcpp::traits::input_parameter< const size_t >::type k(kSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type distance(distanceSEXP);
-    rcpp_result_gen = Rcpp::wrap(knn_cross(data, query, k, distance));
-    return rcpp_result_gen;
-END_RCPP
-}
-// knn_asym
-List knn_asym(const NumericMatrix data, const size_t k, const std::string distance);
-RcppExport SEXP _destiny_knn_asym(SEXP dataSEXP, SEXP kSEXP, SEXP distanceSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< const size_t >::type k(kSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type distance(distanceSEXP);
-    rcpp_result_gen = Rcpp::wrap(knn_asym(data, k, distance));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rank_mat
 NumericMatrix rank_mat(const NumericMatrix x);
 RcppExport SEXP _destiny_rank_mat(SEXP xSEXP) {
@@ -81,8 +54,6 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_destiny_censoring_impl", (DL_FUNC) &_destiny_censoring_impl, 7},
     {"_destiny_predict_censoring_impl", (DL_FUNC) &_destiny_predict_censoring_impl, 6},
-    {"_destiny_knn_cross", (DL_FUNC) &_destiny_knn_cross, 4},
-    {"_destiny_knn_asym", (DL_FUNC) &_destiny_knn_asym, 3},
     {"_destiny_rank_mat", (DL_FUNC) &_destiny_rank_mat, 1},
     {NULL, NULL, 0}
 };

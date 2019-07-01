@@ -21,24 +21,45 @@
 #' }
 #' 
 #' @rdname knn
+#' @importFrom RcppHNSW hnsw_build hnsw_knn hnsw_search
 #' @export
-find_knn <- function(data, k, ..., query = NULL, distance = c('euclidean', 'cosine', 'rankcor'), sym = TRUE) {
+find_knn <- function(
+	data, k,
+	...,
+	query = NULL,
+	distance = c('euclidean', 'cosine', 'rankcor', 'l2'),
+	sym = TRUE,
+	verbose = FALSE
+) {
 	stopifparams(...)
-	if (!is.double(data)) {
-		warning('find_knn does not yet support sparse matrices, converting data to a dense matrix.')
-		data <- as.matrix(data)
-	}
 	distance <- match.arg(distance)
-	if (is.null(query)) {
-		knn <- knn_asym(data, k, distance)
-		if (sym) knn$dist_mat <- symmetricise(knn$dist_mat)
-		nms <- rownames(data)
-	} else {
-		knn <- knn_cross(data, query, k, distance)
-		nms <- rownames(query)
+	#if (is.null(query)) {
+	#	knn <- knn_asym(data, k, distance)
+	#	if (sym) knn$dist_mat <- symmetricise(knn$dist_mat)
+	#	nms <- rownames(data)
+	#} else {
+	#	knn <- knn_cross(data, query, k, distance)
+	#	nms <- rownames(query)
+	#}
+	#rownames(knn$dist_mat) <- rownames(knn$index) <- rownames(knn$dist) <- nms
+	#colnames(knn$dist_mat) <- rownames(data)
+	#knn
+	
+	if (distance == 'rankcor') {
+		# TODO: rank_mat only works on dense matrices
+		distance <- 'cosine'
+		data <- rank_mat(data)
+		if (!is.null(query)) query <- rank_mat(query)
 	}
-	rownames(knn$dist_mat) <- rownames(knn$index) <- rownames(knn$dist) <- nms
-	colnames(knn$dist_mat) <- rownames(data)
+	
+	if (is.null(query)) {
+		knn <- hnsw_knn(data, k, distance, verbose = verbose)
+	} else {
+		index <- hnsw_build(data, distance, verbose = verbose)
+		knn <- hnsw_search(query, index, k, verbose = verbose)
+	}
+	names(knn)[[1L]] <- 'index'  # idx -> index
+	knn$dist_mat <- sparseMatrix()
 	knn
 }
 

@@ -91,7 +91,7 @@ setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., 
 #' @importFrom Biobase rowMedians
 gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, verbose, weights = rep(1, n_dims)) {
 	stopifparams(...)
-	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor'))
+	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor', 'l2'))
 	coords_used <- coords[, dims, drop = FALSE]
 	n_dims <- ncol(coords_used) # has to be defined early for `weights` default argument.
 	smooth <- get_smoothing(smooth)

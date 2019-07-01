@@ -106,8 +106,8 @@ setClass(
 			'density_norm must be TRUE or FALSE'
 		else if (length(object@rotate) != 1)
 			'rotate must be TRUE or FALSE'
-		else if (!(object@distance %in% c('euclidean', 'cosine', 'rankcor', 'custom')))
-			'distance must be "euclidean", "cosine" or "rankcor"'
+		else if (!(object@distance %in% c('euclidean', 'cosine', 'rankcor', 'l2', 'custom')))
+			'distance must be "euclidean", "cosine", "rankcor", or "l2"'
 		else if (is.null(object@censor_val) != is.null(object@censor_range))
 			'Both censor_val and censor_range either need to be NULL or not'
 		else if (!is.null(object@censor_val) && length(object@censor_val) != 1)
@@ -132,7 +132,7 @@ DiffusionMap <- function(
 	n_eigs = min(20L, dataset_n_observations(data, distance) - 2L),
 	density_norm = TRUE,
 	...,
-	distance = c('euclidean', 'cosine', 'rankcor'),
+	distance = c('euclidean', 'cosine', 'rankcor', 'l2'),
 	n_local = seq(to = min(k, 7L), length.out = min(k, 3L)),
 	rotate = FALSE,
 	censor_val = NULL, censor_range = NULL,
