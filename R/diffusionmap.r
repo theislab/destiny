@@ -355,14 +355,14 @@ no_censoring <- function(dists, sigma, cb = invisible) {
 	t_p <- if (length(sigma) == 1L) {
 		exp(-d2@x / (2 * sigma ^ 2))
 	} else {
-		# TODO: optimize local sigma no-censoring case
 		stopifnot(d2@uplo == 'U')
-		mask <- d2 != 0 & upper.tri.sparse(dists)
-		m <- function(mat) suppressMessages(as(mat, 'dsCMatrix')[mask])  # suppress warning about "inefficient .M.sub.i.logical"
+		coords <- as(d2, 'dsTMatrix')
+		i <- coords@i + 1L
+		j <- coords@j + 1L
+		sig2 <- sigma^2
 		
-		S1 <- m(tcrossprod(Matrix(sigma)))
-		S2 <- m(outer(sigma ^ 2, sigma ^ 2, '+'))
-		
+		S1 <- sigma[i] * sigma[j]
+		S2 <- sig2[i] + sig2[j]
 		sqrt(2 * S1 / S2) * exp(-d2@x / S2)
 	}
 	
