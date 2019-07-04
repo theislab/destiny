@@ -34,19 +34,20 @@ plot_differential_map(coords, exprs, ..., genes, dims = 1:2,
   genes, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
 
 plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, n_top = 10L,
-  genes = 5L, dims = 1:2, pal = palette())
+  genes = NULL, dims = 1:2, pal = palette(), col_na = "grey",
+  limit = TRUE)
 
 \S4method{plot_gene_relevance}{matrix,matrix}(coords, exprs, ...,
-  iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2,
-  pal = palette())
+  iter_smooth = 2L, n_top = 10L, genes = NULL, dims = 1:2,
+  pal = palette(), col_na = "grey", limit = TRUE)
 
 \S4method{plot_gene_relevance}{DiffusionMap,missing}(coords, exprs, ...,
-  iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2,
-  pal = palette())
+  iter_smooth = 2L, n_top = 10L, genes = NULL, dims = 1:2,
+  pal = palette(), col_na = "grey", limit = TRUE)
 
 \S4method{plot_gene_relevance}{GeneRelevance,missing}(coords, exprs, ...,
-  iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2,
-  pal = palette())
+  iter_smooth = 2L, n_top = 10L, genes = NULL, dims = 1:2,
+  pal = palette(), col_na = "grey", limit = TRUE)
 
 plot_gene_relevance_rank(coords, exprs, ..., genes, dims = 1:2,
   n_top = 10L, pal = c("#3B99B1", "#F5191C"), bins = 10L,
@@ -77,8 +78,9 @@ plot_gene_relevance_rank(coords, exprs, ..., genes, dims = 1:2,
 
 \item{...}{Passed to \code{plot_differential_map}/\code{plot_gene_relevance}.}
 
-\item{genes}{Genes to based relevance map on or number of genes to use. (vector of strings or one number)
-You can also pass an index into the gene names. (vector of numbers or logicals with length > 1)}
+\item{genes}{Genes to base relevance map on (vector of strings).
+You can also pass an index into the gene names (vector of numbers or logicals with length > 1).
+The default NULL means all genes.}
 
 \item{dims}{Names or indices of dimensions to plot. When not plotting a \code{\link{GeneRelevance}} object, the relevance for the dimensions \code{1:max(dims)} will be calculated.}
 
@@ -91,9 +93,13 @@ The higher the more homogenous and the less local structure.}
 
 \item{n_top}{Number the top n genes per cell count towards the score defining which genes to return and plot in the relevance map.}
 
+\item{col_na}{Color for cells that end up with no most relevant gene.}
+
+\item{limit}{Limit the amount of displayed gene labels to the amount of available colors in \code{pal}?}
+
 \item{x}{\code{\link{GeneRelevance}} object.}
 
-\item{y, gene}{Gene name(s) or index/indices to create differential map for. (integer or character)}
+\item{y}{Gene name(s) or index/indices to create differential map for. (integer or character)}
 }
 \value{
 ggplot2 plot, when plotting a relevance map with a list member \code{$ids} containing the gene IDs used.
@@ -113,7 +119,7 @@ plot(gr, 'Fgf4')  # or plot_differential_map(dm, 'Fgf4')
 guo_norm_mat <- t(Biobase::exprs(guo_norm))
 pca <- prcomp(guo_norm_mat)$x
 plot_gene_relevance(pca, guo_norm_mat, dims = 2:3)
-plot_differential_map(pca, guo_norm_mat, gene = c('Fgf4', 'Nanog'))
+plot_differential_map(pca, guo_norm_mat, genes = c('Fgf4', 'Nanog'))
 
 }
 \seealso{

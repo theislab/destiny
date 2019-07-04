@@ -1,25 +1,25 @@
 #' @rdname Gene-Relevance-plotting
 #' @export
-setGeneric('plot_gene_relevance', function(coords, exprs, ..., iter_smooth = 2L, n_top = 10L, genes = 5L, dims = 1:2, pal = palette()) {
+setGeneric('plot_gene_relevance', function(coords, exprs, ..., iter_smooth = 2L, n_top = 10L, genes = NULL, dims = 1:2, pal = palette(), col_na = 'grey', limit = TRUE) {
 	standardGeneric('plot_gene_relevance')
 })
 
 #' @rdname Gene-Relevance-plotting
 #' @export
-setMethod('plot_gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., iter_smooth, n_top, genes, dims, pal) {
-	plot_gene_relevance_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, ...)
+setMethod('plot_gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., iter_smooth, n_top, genes, dims, pal, col_na, limit) {
+	plot_gene_relevance_impl(gene_relevance(coords, exprs, dims = seq_len(max(dims))), iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, col_na = col_na, limit = limit, ...)
 })
 
 #' @rdname Gene-Relevance-plotting
 #' @export
-setMethod('plot_gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., iter_smooth, n_top, genes, dims, pal) {
-	plot_gene_relevance_impl(gene_relevance(coords, dims = seq_len(max(dims))), iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, ...)
+setMethod('plot_gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., iter_smooth, n_top, genes, dims, pal, col_na, limit) {
+	plot_gene_relevance_impl(gene_relevance(coords, dims = seq_len(max(dims))), iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, col_na = col_na, limit = limit, ...)
 })
 
 #' @rdname Gene-Relevance-plotting
 #' @export
-setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords, exprs, ..., iter_smooth, n_top, genes, dims, pal) {
-	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, ...)
+setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords, exprs, ..., iter_smooth, n_top, genes, dims, pal, col_na, limit) {
+	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, col_na = col_na, limit = limit, ...)
 })
 
 #' @importFrom ggplot2 ggplot aes_string
@@ -27,7 +27,7 @@ setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords,
 #' @importFrom ggplot2 scale_color_manual
 #' @importFrom ggplot2 ggtitle
 #' @importFrom utils head
-plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, genes, dims, pal) {
+plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, genes, dims, pal, col_na, limit) {
 	stopifparams(...)
 	relevance_map <- updateObject(relevance_map)
 	partials_norm <- relevance_map@partials_norm
@@ -39,8 +39,8 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	if (is.character(genes)) {
 		found <- sapply(genes, function(id) length(grep(id, colnames(partials_norm))) > 0)
 		gene_ids <- genes[found]
-	} else if (length(genes) == 1L) {
-		n_genes <- min(genes, ncol(relevance_map@exprs), na.rm = TRUE)
+		gene_ids_extended <- c(gene_ids, setdiff(colnames(partials_norm), gene_ids))
+	} else if (is.null(genes)) {
 		# gene with top n norm for each cell
 		genes_max <- if (n_top == 1L) {
 			colnames(partials_norm)[apply(partials_norm, 1L, function(cell) which.max(cell))]
@@ -53,14 +53,13 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 		}
 		counts <- as.data.frame(table(genes_max), stringsAsFactors = FALSE)
 		counts <- counts[order(counts$Freq, decreasing = TRUE), ]
-		n_genes <- min(n_genes, nrow(counts))
-		gene_ids <- counts[seq_len(n_genes), 'genes_max']
-		scores   <- counts[seq_len(n_genes), 'Freq'] / sum(counts$Freq)
+		gene_ids <- gene_ids_extended <- counts[, 'genes_max']
+		scores   <- counts[, 'Freq'] / sum(counts$Freq)
 		names(scores) <- gene_ids
 	} else {
 		gene_ids <- colnames(partials_norm)[genes]
+		gene_ids_extended <- c(gene_ids, setdiff(colnames(partials_norm), gene_ids))
 	}
-	if (is.function(pal)) pal <- pal(length(gene_ids))
 	
 	num_top <- min(5L, length(gene_ids))
 	top_n_cell_text <- apply(partials_norm, 1L, function(cell) {
@@ -75,7 +74,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	
 	# matrix cells by n_top. might contain NAs later
 	max_genes <-
-		if (n_top > 1L) genes_ord
+		if (is.null(genes) && n_top > 1L) genes_ord
 		else matrix(gene_ids[apply(partials_norm[, gene_ids, drop = FALSE], 1L, which.max)], ncol = 1)
 	# Label smoothing through graph structure
 	for (i in seq_len(iter_smooth)) {
@@ -93,11 +92,14 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 			else matrix(max_genes, ncol = 1)
 	}
 	# use [1] so in case of an empty row we just get an NA.
-	gene_labels <- structure(
-		apply(max_genes, 1, function(cell) na.omit(match(cell, gene_ids))[1]),
-		levels = gene_ids,
+	gene_labels <- droplevels(structure(
+		apply(max_genes, 1, function(cell) na.omit(match(cell, gene_ids_extended))[1]),
+		levels = gene_ids_extended,
 		class = 'factor'
-	)
+	))
+	# Try creating a palette of the required length
+	if (is.function(pal)) pal <- pal(length(unique(gene_labels)))
+	if (limit) gene_labels[as.integer(gene_labels) > length(pal)] <- NA
 
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
@@ -108,7 +110,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	rel_map <- ggplot(rel_map_data, aes_string(x = d1, y = d2, colour = 'Gene', text = 'TopN')) +
 		geom_point(alpha = .8) +
 		geom_rangeframe(colour = par('col')) +
-		scale_color_manual(values = pal) +
+		scale_color_manual(values = pal, na.value = col_na) +
 		ggtitle(sprintf('Gene relevance map')) +
 		theme_really_minimal()
 	
