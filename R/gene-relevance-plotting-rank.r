@@ -27,22 +27,22 @@ setMethod('plot_gene_relevance_rank', c('GeneRelevance', 'missing'), function(co
 #' @importFrom ggplot2 ggplot aes_string stat
 #' @importFrom ggplot2 scale_fill_gradientn scale_alpha_continuous
 #' @importFrom ggplot.multistats stat_summaries_hex
-plot_gene_relevance_rank_impl <- function(gr, ..., genes, dims, n_top, pal, bins, faceter) {
+plot_gene_relevance_rank_impl <- function(relevance_map, ..., genes, dims, n_top, pal, bins, faceter) {
 	stopifparams(...)
 	if (is.function(pal)) pal <- pal(12)
 	coords <- get_coords(relevance_map, dims)
 	gene_names <- if (is.character(genes)) genes else colnames(relevance_map@exprs)[genes]
 	
-	genes_missing <- setdiff(genes, colnames(gr@partials_norm))
+	genes_missing <- setdiff(genes, colnames(relevance_map@partials_norm))
 	if (length(genes_missing) > 0) {
-		genes_close <- lapply(genes_missing, agrep, colnames(gr@partials_norm), value = TRUE)
+		genes_close <- lapply(genes_missing, agrep, colnames(relevance_map@partials_norm), value = TRUE)
 		stop('Missing genes: ', paste(genes_missing, collapse = ', '), '. ',
 				 'Closest available: ', paste(unlist(genes_close), collapse = ', '))
 	}
 	
 	top10 <- function(x) sum(x <= 10) / length(x)
 	
-	partials <- as.data.frame(t(apply(-gr@partials_norm, 1, rank)[genes, , drop = FALSE]))
+	partials <- as.data.frame(t(apply(-relevance_map@partials_norm, 1, rank)[genes, , drop = FALSE]))
 	d <- gather(cbind(partials, as.data.frame(coords)), 'Gene', 'Rank', !!gene_names)
 	
 	d1 <- colnames(coords)[[1]]
