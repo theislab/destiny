@@ -23,6 +23,7 @@ setMethod('plot_gene_relevance_rank', c('GeneRelevance', 'missing'), function(co
 })
 
 #' @importFrom tidyr gather
+#' @importFrom tidyselect one_of
 #' @importFrom scales percent
 #' @importFrom ggplot2 ggplot aes_string stat
 #' @importFrom ggplot2 scale_fill_gradientn scale_alpha_continuous
@@ -43,7 +44,8 @@ plot_gene_relevance_rank_impl <- function(relevance_map, ..., genes, dims, n_top
 	top10 <- function(x) sum(x <= 10) / length(x)
 	
 	partials <- as.data.frame(t(apply(-relevance_map@partials_norm, 1, rank)[genes, , drop = FALSE]))
-	d <- gather(cbind(partials, as.data.frame(coords)), 'Gene', 'Rank', !!gene_names)
+	d <- gather(cbind(partials, as.data.frame(coords)), 'Gene', 'Rank', one_of(gene_names))
+	d$Gene <- factor(d$Gene, gene_names)
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]

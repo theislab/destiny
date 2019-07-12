@@ -38,6 +38,7 @@ Imports:
     ggplot2,
     ggplot.multistats,
     tidyr,
+    tidyselect,
     ggthemes,
     VIM,
     proxy,
