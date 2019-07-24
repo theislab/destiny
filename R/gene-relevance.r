@@ -56,12 +56,12 @@ setClass('GeneRelevance', slots = c(
 
 #' @rdname Gene-Relevance
 #' @export
-setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) standardGeneric('gene_relevance'))
+setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, remove_outliers = FALSE, verbose = FALSE) standardGeneric('gene_relevance'))
 
 #' @importFrom Biobase updateObject
 #' @rdname Gene-Relevance
 #' @export
-setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) {
+setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose) {
 	dm <- coords
 	relevance_map <- updateObject(dm@data_env$relevance_map)
 	smooth <- get_smoothing(smooth)
@@ -76,7 +76,7 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 		weights <- eigenvalues(dm)[dims]
 		if (is.null(distance)) distance <- dm@distance
 		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)
-		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, distance = distance, smooth = smooth, verbose = verbose, weights = weights)
+		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, distance = distance, smooth = smooth, remove_outliers = remove_outliers, verbose = verbose, weights = weights)
 		dm@data_env$relevance_map <- relevance_map
 	} else stopifparams(...)
 	relevance_map
@@ -84,16 +84,17 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 
 #' @rdname Gene-Relevance
 #' @export
-setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE) {
-	gene_relevance_impl(coords, exprs, ..., k = k, distance = distance, smooth = smooth, dims = dims, verbose = verbose)
+setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose) {
+	gene_relevance_impl(coords, exprs, ..., k = k, distance = distance, smooth = smooth, dims = dims, remove_outliers = remove_outliers, verbose = verbose)
 })
 
 #' @importFrom Biobase rowMedians
-gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, verbose, weights = rep(1, n_dims)) {
+gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose, weights = 1) {
 	stopifparams(...)
 	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor'))
 	coords_used <- coords[, dims, drop = FALSE]
-	n_dims <- ncol(coords_used) # has to be defined early for `weights` default argument.
+	n_dims <- ncol(coords_used)
+	if (length(weights) == 1L) weights <- rep(weights, n_dims)
 	smooth <- get_smoothing(smooth)
 	
 	if (is.null(colnames(exprs))) stop('The expression matrix columns need to be named but are NULL')
@@ -162,11 +163,14 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, v
 	
 	# Compute norm over partial derivates: Frobenius
 	partials_norm <- apply(partials, c(1, 2), function(z) sqrt(sum(z^2, na.rm = TRUE)))
+	colnames(partials_norm) <- colnames(partials)
 	
 	# Find outlier cells: Not in NN of more than 1 other cell
 	# Remove these as they tend to receive very large norms
-	#outliers <- sapply(seq_len(n_cells), function(cell) sum(nn_index == cell) > 1)
-	#partials_norm[, outliers] <- NA
+	if (remove_outliers) {
+		outliers <- sapply(seq_len(n_cells), function(cell) sum(nn_index == cell) > 1)
+		partials_norm[, outliers] <- NA
+	}
 	
 	# Prepare output
 	rownames(partials_norm) <- rownames(partials)
