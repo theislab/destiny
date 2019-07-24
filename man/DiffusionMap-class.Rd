@@ -10,8 +10,8 @@ DiffusionMap(data = stopifnot_distmatrix(distance), sigma = "local",
   k = find_dm_k(dataset_n_observations(data, distance) - 1L),
   n_eigs = min(20L, dataset_n_observations(data, distance) - 2L),
   density_norm = TRUE, ..., distance = c("euclidean", "cosine",
-  "rankcor"), n_local = seq(to = min(k, 7L), length.out = min(k, 3L)),
-  rotate = FALSE, censor_val = NULL, censor_range = NULL,
+  "rankcor", "l2"), n_local = seq(to = min(k, 7L), length.out = min(k,
+  3L)), rotate = FALSE, censor_val = NULL, censor_range = NULL,
   missing_range = NULL, vars = NULL,
   verbose = !is.null(censor_range), suppress_dpt = FALSE)
 }
