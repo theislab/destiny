@@ -96,7 +96,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	# use [1] so in case of an empty row we just get an NA.
 	gene_labels <- droplevels(structure(
 		apply(max_genes, 1, function(cell) na.omit(match(cell, gene_ids))[1]),
-		levels = rev(gene_ids),
+		levels = gene_ids,
 		class = 'factor'
 	))
 	# Try creating a palette of the required length
