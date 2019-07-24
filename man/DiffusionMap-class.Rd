@@ -96,6 +96,8 @@ being treated as expression data features (and the others ignored), an \link[Bio
 \item{\code{missing_range}}{Whole data range for missing value model}
 
 \item{\code{vars}}{Vars parameter used to extract the part of the data used for diffusion map creation}
+
+\item{\code{knn_params}}{Parameters passed to \code{\link{find_knn}}}
 }}
 
 \examples{

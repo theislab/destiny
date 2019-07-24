@@ -40,6 +40,9 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 	if (!hasattr(object, 'rotate'))
 		slot(object, 'rotate', check = FALSE) <- TRUE  # old ones were rotated by default
 	
+	if (!hasattr(object, 'knn_params'))
+		slot(object, 'knn_params', check = FALSE) <- list()
+	
 	object <- update_slot_names(object, c('data.env', 'd.norm', 'density.norm', 'censor.val', 'censor.range', 'missing.range'))
 	
 	slot(object, 'sigmas', check = FALSE) <- updateObject(object@sigmas)

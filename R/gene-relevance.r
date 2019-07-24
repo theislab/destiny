@@ -7,7 +7,8 @@ NULL
 #' 
 #' @param coords    A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
 #' @param exprs     An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.
-#' @param ...       If no \code{\link{DiffusionMap}} is provided, a vector of \code{weights} (of the same length as \code{dims}) can be provided.
+#' @param ...       If no \code{\link{DiffusionMap}} is provided, a vector of \code{weights} (of the same length as \code{dims}) and/or
+#'                  a \code{\link{list}} of \code{knn_params} for \code{\link{find_knn}} can be provided.
 #' @param k         Number of nearest neighbors to use
 #' @param dims      Index into columns of \code{coord}
 #' @param distance  Distance measure to use for the nearest neighbor search.
@@ -62,7 +63,7 @@ setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, d
 #' @rdname Gene-Relevance
 #' @export
 setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose) {
-	dm <- coords
+	dm <- updateObject(coords)
 	relevance_map <- updateObject(dm@data_env$relevance_map)
 	smooth <- get_smoothing(smooth)
 	if (is.null(relevance_map) ||
@@ -76,7 +77,7 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 		weights <- eigenvalues(dm)[dims]
 		if (is.null(distance)) distance <- dm@distance
 		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)
-		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, distance = distance, smooth = smooth, remove_outliers = remove_outliers, verbose = verbose, weights = weights)
+		relevance_map <- gene_relevance_impl(coords, exprs, ..., k = k, dims = dims, distance = distance, smooth = smooth, remove_outliers = remove_outliers, verbose = verbose, knn_params = dm@knn_params, weights = weights)
 		dm@data_env$relevance_map <- relevance_map
 	} else stopifparams(...)
 	relevance_map
@@ -89,7 +90,7 @@ setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., 
 })
 
 #' @importFrom Biobase rowMedians
-gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose, weights = 1) {
+gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose, knn_params = list(), weights = 1) {
 	stopifparams(...)
 	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor', 'l2'))
 	coords_used <- coords[, dims, drop = FALSE]
@@ -100,7 +101,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, r
 	if (is.null(colnames(exprs))) stop('The expression matrix columns need to be named but are NULL')
 	if (n_dims != length(weights)) stop(n_dims, ' dimensions, but ', length(weights), ' weights were provided')
 	
-	nn_index <- find_knn(exprs, k, distance = distance)$index
+	nn_index <- do.call(find_knn, c(list(exprs, k, distance = distance), knn_params))$index
 	
 	k <- ncol(nn_index)
 	n_cells <- nrow(coords_used)

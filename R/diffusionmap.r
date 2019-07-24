@@ -53,6 +53,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot censor_range   Censoring range
 #' @slot missing_range  Whole data range for missing value model
 #' @slot vars           Vars parameter used to extract the part of the data used for diffusion map creation
+#' @slot knn_params     Parameters passed to \code{\link{find_knn}}
 #' 
 #' @seealso \link{DiffusionMap-methods} to get and set the slots. \code{\link{find_sigmas}} to pre-calculate a fitting global \code{sigma} parameter
 #' 
@@ -87,7 +88,8 @@ setClass(
 		censor_val    = 'numericOrNULL',
 		censor_range  = 'numericOrNULL',
 		missing_range = 'numericOrNULL',
-		vars          = 'characterOrnumericOrNULL'),
+		vars          = 'characterOrnumericOrNULL',
+		knn_params    = 'list'),
 	validity = function(object) {
 		# don't use getters as thisfunction is used in them!
 		if (!is.vector(object@eigenvalues) || !is.numeric(object@eigenvalues))
@@ -249,7 +251,8 @@ DiffusionMap <- function(
 		distance      = distance,
 		censor_val    = censor_val,
 		censor_range  = censor_range,
-		missing_range = missing_range)
+		missing_range = missing_range,
+		knn_params    = knn_params)
 }
 
 

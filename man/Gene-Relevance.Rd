@@ -25,7 +25,8 @@ gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2,
 
 \item{exprs}{An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.}
 
-\item{...}{If no \code{\link{DiffusionMap}} is provided, a vector of \code{weights} (of the same length as \code{dims}) can be provided.}
+\item{...}{If no \code{\link{DiffusionMap}} is provided, a vector of \code{weights} (of the same length as \code{dims}) and/or
+a \code{\link{list}} of \code{knn_params} for \code{\link{find_knn}} can be provided.}
 
 \item{k}{Number of nearest neighbors to use}
 

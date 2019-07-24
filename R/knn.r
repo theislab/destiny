@@ -58,7 +58,8 @@ find_knn <- function(
 	knn$dist_mat <- sparseMatrix(
 		rep(seq_len(nrow(knn$index)), k),
 		as.vector(knn$index),
-		x = as.vector(knn$dist)
+		x = as.vector(knn$dist),
+		dims = c(nrow(if (is.null(query)) data else query), nrow(data))
 	)
 	if (is.null(query)) {
 		if (sym) knn$dist_mat <- symmetricise(knn$dist_mat)
