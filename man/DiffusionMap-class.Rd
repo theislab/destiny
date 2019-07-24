@@ -12,7 +12,7 @@ DiffusionMap(data = stopifnot_distmatrix(distance), sigma = "local",
   density_norm = TRUE, ..., distance = c("euclidean", "cosine",
   "rankcor", "l2"), n_local = seq(to = min(k, 7L), length.out = min(k,
   3L)), rotate = FALSE, censor_val = NULL, censor_range = NULL,
-  missing_range = NULL, vars = NULL,
+  missing_range = NULL, vars = NULL, knn_params = list(),
   verbose = !is.null(censor_range), suppress_dpt = FALSE)
 }
 \arguments{
@@ -46,6 +46,8 @@ which allows the use of kNN-sparsified matrices (see the return value of \code{\
 \item{missing_range}{Whole data range for missing value model. Has to be specified if NAs are in the data}
 
 \item{vars}{Variables (columns) of the data to use. Specifying NULL will select all columns (default: All floating point value columns)}
+
+\item{knn_params}{Parameters passed to \code{\link{find_knn}}}
 
 \item{verbose}{Show a progressbar and other progress information (default: do it if censoring is enabled)}
 

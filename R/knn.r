@@ -5,7 +5,7 @@
 #' @param data      Data matrix
 #' @param query     Query matrix. Leave it out to use \code{data} as query
 #' @param k         Number of nearest neighbors
-#' @param ...       Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{find_knn(data, k, distance = 'cosine')})
+#' @param ...       Parameters passed to \code{\link[RcppHNSW]{hnsw_knn}}
 #' @param distance  Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})
 #' @param sym       Return a symmetric matrix (as long as query is NULL)?
 #' 
@@ -31,7 +31,7 @@ find_knn <- function(
 	sym = TRUE,
 	verbose = FALSE
 ) {
-	stopifparams(...)
+	p <- utils::modifyList(formals(RcppHNSW::hnsw_knn), list(...))
 	if (!is.double(data)) {
 		warning('find_knn does not yet support sparse matrices, converting data to a dense matrix.')
 		data <- as.matrix(data)
@@ -46,12 +46,12 @@ find_knn <- function(
 	}
 	
 	if (is.null(query)) {
-		knn <- hnsw_knn(data, k + 1L, distance, verbose = verbose)
+		knn <- hnsw_knn(data, k + 1L, distance, M = p$M, ef_construction = p$ef_construction, ef = p$ef, verbose = verbose)
 		knn$idx  <- knn$idx[ , -1, drop = FALSE]
 		knn$dist <- knn$dist[, -1, drop = FALSE]
 	} else {
-		index <- hnsw_build(data, distance, verbose = verbose)
-		knn <- hnsw_search(query, index, k, verbose = verbose)
+		index <- hnsw_build(data, distance, M = p$M, ef = p$ef_construction, verbose = verbose)
+		knn <- hnsw_search(query, index, k, ef = p$ef, verbose = verbose)
 	}
 	names(knn)[[1L]] <- 'index'  # idx -> index
 	# R matrices are column-major, so as.vector(m) == c(m[, 1], m[, 2], ...)

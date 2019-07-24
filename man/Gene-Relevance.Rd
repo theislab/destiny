@@ -9,14 +9,16 @@
 \title{Gene relevances for entire data set}
 \usage{
 gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2,
-  distance = NULL, smooth = TRUE, verbose = FALSE)
+  distance = NULL, smooth = TRUE, remove_outliers = FALSE,
+  verbose = FALSE)
 
 \S4method{gene_relevance}{DiffusionMap,missing}(coords, exprs, ...,
   k = 20L, dims = 1:2, distance = NULL, smooth = TRUE,
-  verbose = FALSE)
+  remove_outliers = FALSE, verbose = FALSE)
 
 \S4method{gene_relevance}{matrix,matrix}(coords, exprs, ..., k = 20L,
-  dims = 1:2, distance = NULL, smooth = TRUE, verbose = FALSE)
+  dims = 1:2, distance = NULL, smooth = TRUE,
+  remove_outliers = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{coords}{A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.}

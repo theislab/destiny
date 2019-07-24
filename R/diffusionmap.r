@@ -30,6 +30,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @param censor_range   Uncertainity range for censoring (Optional, default: none). A length-2-vector of certainty range start and end. TODO: also allow \eqn{2\times G} matrix
 #' @param missing_range  Whole data range for missing value model. Has to be specified if NAs are in the data
 #' @param vars           Variables (columns) of the data to use. Specifying NULL will select all columns (default: All floating point value columns)
+#' @param knn_params     Parameters passed to \code{\link{find_knn}}
 #' @param verbose        Show a progressbar and other progress information (default: do it if censoring is enabled)
 #' @param suppress_dpt   Specify TRUE to skip calculation of necessary (but spacious) information for \code{\link{DPT}} in the returned object (default: FALSE)
 #' 
@@ -138,6 +139,7 @@ DiffusionMap <- function(
 	censor_val = NULL, censor_range = NULL,
 	missing_range = NULL,
 	vars = NULL,
+	knn_params = list(),
 	verbose = !is.null(censor_range),
 	suppress_dpt = FALSE
 ) {
@@ -196,7 +198,7 @@ DiffusionMap <- function(
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
-	knn <- get_knn(imputed_data, dists, k, distance, verbose)  # use dists if given, else compute from data
+	knn <- get_knn(imputed_data, dists, k, distance, knn_params, verbose)  # use dists if given, else compute from data
 	
 	sigmas <- get_sigmas(imputed_data, knn$dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
@@ -303,15 +305,15 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 }
 
 
-get_knn <- function(imputed_data, dists, k, distance = 'euclidean', verbose = FALSE) {
+get_knn <- function(imputed_data, dists, k, distance = 'euclidean', knn_params = list(), verbose = FALSE) {
 	stopifnot(is.null(imputed_data) != is.null(dists))
 	
 	if (!is.null(dists)) {
 		nn_dist <- t(apply(dists, 1, function(row) sort(row)[2:k]))
 		list(dist = nn_dist, dist_mat = dists)
-	} else {
-		verbose_timing(verbose, 'finding knns', find_knn(imputed_data, k, distance = distance))
-	}
+	} else tryCatch({
+		verbose_timing(verbose, 'finding knns', do.call(find_knn, c(list(imputed_data, k, distance = distance), knn_params)))
+	}, error = function(e) stop('Could not call find_knn. Consider specifying `knn_params = list(M = <larger number>)`. Original error:\n', e$message, call. = FALSE))
 }
 
 

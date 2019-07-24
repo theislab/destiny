@@ -12,7 +12,7 @@ find_knn(data, k, ..., query = NULL, distance = c("euclidean",
 
 \item{k}{Number of nearest neighbors}
 
-\item{...}{Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{find_knn(data, k, distance = 'cosine')})}
+\item{...}{Parameters passed to \code{\link[RcppHNSW]{hnsw_knn}}}
 
 \item{query}{Query matrix. Leave it out to use \code{data} as query}
 
