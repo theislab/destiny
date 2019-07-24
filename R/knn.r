@@ -1,9 +1,9 @@
 #' kNN search
 #' 
-#' k nearest neighbor search with custom distance function.
+#' Approximate k nearest neighbor search with flexible distance function.
 #' 
 #' @param data      Data matrix
-#' @param query     Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical
+#' @param query     Query matrix. Leave it out to use \code{data} as query
 #' @param k         Number of nearest neighbors
 #' @param ...       Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{find_knn(data, k, distance = 'cosine')})
 #' @param distance  Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})
@@ -21,20 +21,49 @@
 #' }
 #' 
 #' @rdname knn
+#' @importFrom RcppHNSW hnsw_build hnsw_knn hnsw_search
 #' @export
-find_knn <- function(data, k, ..., query = NULL, distance = c('euclidean', 'cosine', 'rankcor'), sym = TRUE) {
+find_knn <- function(
+	data, k,
+	...,
+	query = NULL,
+	distance = c('euclidean', 'cosine', 'rankcor', 'l2'),
+	sym = TRUE,
+	verbose = FALSE
+) {
 	stopifparams(...)
 	if (!is.double(data)) {
 		warning('find_knn does not yet support sparse matrices, converting data to a dense matrix.')
 		data <- as.matrix(data)
 	}
 	distance <- match.arg(distance)
+	
+	if (distance == 'rankcor') {
+		# TODO: rank_mat only works on dense matrices
+		distance <- 'cosine'
+		data <- rank_mat(data)
+		if (!is.null(query)) query <- rank_mat(query)
+	}
+	
 	if (is.null(query)) {
-		knn <- knn_asym(data, k, distance)
+		knn <- hnsw_knn(data, k + 1L, distance, verbose = verbose)
+		knn$idx  <- knn$idx[ , -1, drop = FALSE]
+		knn$dist <- knn$dist[, -1, drop = FALSE]
+	} else {
+		index <- hnsw_build(data, distance, verbose = verbose)
+		knn <- hnsw_search(query, index, k, verbose = verbose)
+	}
+	names(knn)[[1L]] <- 'index'  # idx -> index
+	# R matrices are column-major, so as.vector(m) == c(m[, 1], m[, 2], ...)
+	knn$dist_mat <- sparseMatrix(
+		rep(seq_len(nrow(knn$index)), k),
+		as.vector(knn$index),
+		x = as.vector(knn$dist)
+	)
+	if (is.null(query)) {
 		if (sym) knn$dist_mat <- symmetricise(knn$dist_mat)
 		nms <- rownames(data)
 	} else {
-		knn <- knn_cross(data, query, k, distance)
 		nms <- rownames(query)
 	}
 	rownames(knn$dist_mat) <- rownames(knn$index) <- rownames(knn$dist) <- nms

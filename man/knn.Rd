@@ -5,7 +5,7 @@
 \title{kNN search}
 \usage{
 find_knn(data, k, ..., query = NULL, distance = c("euclidean",
-  "cosine", "rankcor"), sym = TRUE)
+  "cosine", "rankcor", "l2"), sym = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{data}{Data matrix}
@@ -14,7 +14,7 @@ find_knn(data, k, ..., query = NULL, distance = c("euclidean",
 
 \item{...}{Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{find_knn(data, k, distance = 'cosine')})}
 
-\item{query}{Query matrix. In \code{knn} and \code{knn_asym}, query and data are identical}
+\item{query}{Query matrix. Leave it out to use \code{data} as query}
 
 \item{distance}{Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})}
 
@@ -33,5 +33,5 @@ A \code{\link{list}} with the entries:
 }
 }
 \description{
-k nearest neighbor search with custom distance function.
+Approximate k nearest neighbor search with flexible distance function.
 }

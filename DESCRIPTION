@@ -42,6 +42,7 @@ Imports:
     ggthemes,
     VIM,
     proxy,
+    RcppHNSW,
     smoother,
     scales,
     scatterplot3d
