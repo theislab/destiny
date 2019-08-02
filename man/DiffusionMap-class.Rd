@@ -10,10 +10,11 @@ DiffusionMap(data = stopifnot_distmatrix(distance), sigma = "local",
   k = find_dm_k(dataset_n_observations(data, distance) - 1L),
   n_eigs = min(20L, dataset_n_observations(data, distance) - 2L),
   density_norm = TRUE, ..., distance = c("euclidean", "cosine",
-  "rankcor", "l2"), n_local = seq(to = min(k, 7L), length.out = min(k,
-  3L)), rotate = FALSE, censor_val = NULL, censor_range = NULL,
-  missing_range = NULL, vars = NULL, knn_params = list(),
-  verbose = !is.null(censor_range), suppress_dpt = FALSE)
+  "rankcor", "l2"), n_pcs = NULL, n_local = seq(to = min(k, 7L),
+  length.out = min(k, 3L)), rotate = FALSE, censor_val = NULL,
+  censor_range = NULL, missing_range = NULL, vars = NULL,
+  knn_params = list(), verbose = !is.null(censor_range),
+  suppress_dpt = FALSE)
 }
 \arguments{
 \item{data}{Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns.
@@ -34,6 +35,9 @@ A larger sigma might be necessary if the eigenvalues can not be found because of
 \item{distance}{Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}.
 If this is a \code{\link[Matrix]{sparseMatrix}}, zeros are interpreted as "not a close neighbors",
 which allows the use of kNN-sparsified matrices (see the return value of \code{\link{find_knn}}.}
+
+\item{n_pcs}{Number of principal components to compute to base calculations on. Using e.g. 50 DCs results in more regular looking diffusion maps.
+The default NULL will not compute principal components, but use \code{reducedDims(data, 'pca')} if present. Set to NA to suppress using PCs.}
 
 \item{n_local}{If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma}
 
@@ -80,6 +84,8 @@ being treated as expression data features (and the others ignored), an \link[Bio
 \item{\code{d_norm}}{Density vector of normalized transition probability matrix}
 
 \item{\code{k}}{The k parameter for kNN}
+
+\item{\code{n_pcs}}{Number of principal components}
 
 \item{\code{n_local}}{The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density}
 

@@ -24,6 +24,8 @@ sigma_msg <- function(sigma) sprintf(
 #' @param distance       Distance measurement method applied to \code{data} or a distance matrix/\code{\link[stats]{dist}}. For the allowed values, see \code{\link{find_knn}}.
 #'                       If this is a \code{\link[Matrix]{sparseMatrix}}, zeros are interpreted as "not a close neighbors",
 #'                       which allows the use of kNN-sparsified matrices (see the return value of \code{\link{find_knn}}.
+#' @param n_pcs          Number of principal components to compute to base calculations on. Using e.g. 50 DCs results in more regular looking diffusion maps.
+#'                       The default NULL will not compute principal components, but use \code{reducedDims(data, 'pca')} if present. Set to NA to suppress using PCs.
 #' @param n_local        If \code{sigma == 'local'}, the \code{n_local}th nearest neighbor(s) determine(s) the local sigma
 #' @param rotate         logical. If TRUE, rotate the eigenvalues to get a slimmer diffusion map
 #' @param censor_val     Value regarded as uncertain. Either a single value or one for every dimension (Optional, default: censor_val)
@@ -45,6 +47,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot d              Density vector of transition probability matrix
 #' @slot d_norm         Density vector of normalized transition probability matrix
 #' @slot k              The k parameter for kNN
+#' @slot n_pcs          Number of principal components
 #' @slot n_local        The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density
 #' @slot density_norm   Was density normalization used?
 #' @slot rotate         Were the eigenvectors rotated?
@@ -81,6 +84,7 @@ setClass(
 		d             = 'numeric',
 		d_norm        = 'numeric',
 		k             = 'numeric',
+		n_pcs         = 'numericOrNULL',
 		n_local       = 'numeric',
 		density_norm  = 'logical',
 		rotate        = 'logical',
@@ -126,6 +130,7 @@ setClass(
 #' @importFrom methods new as is
 #' @importFrom Matrix Diagonal colSums rowSums t
 #' @importFrom VIM hotdeck
+#' @importFrom SingleCellExperiment reducedDimNames reducedDim<-
 #' @rdname DiffusionMap-class
 #' @export
 DiffusionMap <- function(
@@ -136,6 +141,7 @@ DiffusionMap <- function(
 	density_norm = TRUE,
 	...,
 	distance = c('euclidean', 'cosine', 'rankcor', 'l2'),
+	n_pcs = NULL,
 	n_local = seq(to = min(k, 7L), length.out = min(k, 3L)),
 	rotate = FALSE,
 	censor_val = NULL, censor_range = NULL,
@@ -162,16 +168,15 @@ DiffusionMap <- function(
 	# store away data and continue using imputed, unified version
 	data_env <- new.env(parent = .GlobalEnv)
 	
-	#TODO: SVD
-	
 	if (is_distmatrix(distance)) {
 		if (!(is.data.frame(data) || is.null(data))) stop('If you provide a matrix for `distance`, `data` has to be NULL or a covariate `data.frame` is of class', class(data))
+		if (!is.null(n_pcs)) stop('If you provide a matrix for `distance`, `n_pcs` has to be NULL')
 		
 		data_env$data <- if (is.null(data)) distance else data  # put covariates or distance
 		if (!is.null(rownames(data_env$data))) rownames(distance) <- colnames(distance) <- rownames(data)
 		dists <- as(distance, 'symmetricMatrix')
 		distance <- 'custom'
-		imputed_data <- NULL
+		imputed_data <- data_or_pca <- NULL
 		n <- nrow(dists)
 	} else {
 		dists <- NULL
@@ -182,7 +187,17 @@ DiffusionMap <- function(
 		imputed_data <- data
 		if (any(is.na(imputed_data)))
 			imputed_data <- as.matrix(hotdeck(data, imp_var = FALSE))
-		
+		pca <- dataset_maybe_extract_pca(data_env$data, n_pcs, verbose)
+		if (is.null(pca) && ncol(imputed_data) > 500L) {
+			warning('You have ', ncol(imputed_data), ' genes. Consider passing e.g. n_pcs = 50 to speed up computation.')
+		}
+		data_or_pca <-
+			if (is.null(pca)) imputed_data
+			# Update PCA in SCE if there was none
+			else if (inherits(data_env$data, 'SingleCellExperiment') && !('pca' %in% reducedDimNames(data_env$data))) {
+				n_pcs <- ncol(pca)
+				reducedDim(data_env$data, 'pca') <- pca
+			} else pca
 		n <- nrow(imputed_data)
 	}
 	
@@ -200,7 +215,7 @@ DiffusionMap <- function(
 	
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
 	
-	knn <- get_knn(imputed_data, dists, k, distance, knn_params, verbose)  # use dists if given, else compute from data
+	knn <- get_knn(data_or_pca, dists, k, distance, knn_params, verbose)  # use dists if given, else compute from pca if available, else from data
 	
 	sigmas <- get_sigmas(imputed_data, knn$dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
@@ -245,6 +260,7 @@ DiffusionMap <- function(
 		d             = d,
 		d_norm        = d_norm,
 		k             = k,
+		n_pcs         = n_pcs,
 		n_local       = n_local,
 		rotate        = rotate,
 		density_norm  = density_norm,

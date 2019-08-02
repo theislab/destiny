@@ -29,6 +29,34 @@ dataset_extract_doublematrix <- function(data, vars = NULL) {
 }
 
 
+#' @importFrom SingleCellExperiment reducedDimNames reducedDim
+#' @importFrom pcaMethods pca scores
+dataset_maybe_extract_pca <- function(data, n_pcs, verbose = FALSE) {
+	stopifnot(is.null(n_pcs) || length(n_pcs) == 1L)
+	# Suppress PCA computation
+	if (is.na(n_pcs)) return(NULL)
+	# If n_pcs is NULL, data needs to be a SCE
+	if (is.null(n_pcs) && !inherits(data, 'SingleCellExperiment')) return(NULL)
+	# get PCs from SCE if possible
+	if (inherits(data, 'SingleCellExperiment') && 'pca' %in% reducedDimNames(data)) {
+		pcs <- reducedDim(data, 'pca')
+		if (is.null(n_pcs) || n_pcs == ncol(pcs)) {
+			if (verbose) cat('Using reducedDim(data, "pca") to compute distances\n')
+			return(pcs)
+		} else if (n_pcs < ncol(pcs)) {
+			warning('Specified n_pcs < ncol(reducedDim(data, "pca")), using subset')
+			return(pcs[, seq_len(n_pcs), drop = FALSE])
+		} else {# n_pcs > ncol(pcs)
+			warning('Specified n_pcs > ncol(reducedDim(data, "pca")), recalculating PCA')
+			rm(pcs)
+		}
+	}
+	data_mat <- dataset_extract_doublematrix(data)
+	if (ncol(data_mat) < n_pcs) stop('Cannot compute ', n_pcs, ' PCs from data with ', ncol(data_mat), ' columns.')
+	scores(pca(data_mat, nPcs = n_pcs))
+}
+
+
 #' @importFrom Biobase sampleNames
 dataset_n_observations <- function(data, distances) {
 	if (is.null(data)) nrow(distances)

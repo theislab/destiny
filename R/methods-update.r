@@ -34,6 +34,9 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 	if (!hasattr(object, 'd.norm'))  # upgrade only nonexistence, name later
 		slot(object, 'd.norm', check = FALSE) <- rep(NA_real_, length(object@d))
 	
+	if (!hasattr(object, 'n_pcs'))
+		slot(object, 'n_pcs', check = FALSE) <- NULL
+	
 	if (!hasattr(object, 'n_local'))
 		slot(object, 'n_local', check = FALSE) <- 5L
 	

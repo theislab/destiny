@@ -32,9 +32,11 @@ Imports:
     Rcpp (>= 0.10.3),
     RcppEigen,
     RSpectra (>= 0.14-0),
+    pcaMethods,
     Biobase,
     BiocGenerics,
     SummarizedExperiment,
+    SingleCellExperiment,
     ggplot2,
     ggplot.multistats,
     tidyr,
@@ -55,8 +57,7 @@ Suggests:
     igraph,
     testthat,
     FNN,
-    tidyr,
-    SingleCellExperiment
+    tidyr
 VignetteBuilder: nbconvertR
 biocViews: CellBiology,
     CellBasedAssays,
