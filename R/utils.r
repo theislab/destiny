@@ -1,3 +1,15 @@
+# There is currently a problem on windows which can't display chars in th
+# text/plain output, which are not available in the current locale.
+# See https://github.com/IRkernel/repr/issues/28#issuecomment-208574856
+#' @importFrom utils capture.output
+char_fallback <- function(char, default) {
+	real_len <- nchar(char)
+	r_len <- nchar(capture.output(cat(char)))
+	if (real_len == r_len) char else default
+}
+sym_times <- char_fallback('\u00D7', 'x')
+
+
 stopifsmall <- function(max_dist) {
 	if (max_dist < .Machine$double.eps)
 		stop(sprintf(

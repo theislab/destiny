@@ -47,7 +47,7 @@
 The assigned or retrieved value
 }
 \description{
-Get and set eigenvalues, eigenvectors, and sigma(s) of a \link{DiffusionMap} object or print information about a DiffusionMap
+Get and set eigenvalues, eigenvectors, and sigma(s) of a \link{DiffusionMap} object.
 }
 \examples{
 data(guo)

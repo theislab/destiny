@@ -5,12 +5,20 @@
 \alias{Gene Relevance methods}
 \alias{featureNames.GeneRelevance}
 \alias{dataset.GeneRelevance}
+\alias{print,GeneRelevance-method}
+\alias{show,GeneRelevance-method}
 \alias{featureNames,GeneRelevance-method}
 \alias{featureNames<-,GeneRelevance,characterOrFactor-method}
 \alias{dataset,GeneRelevance-method}
 \alias{dataset<-,GeneRelevance-method}
+\alias{distance,GeneRelevance-method}
+\alias{distance<-,GeneRelevance-method}
 \title{Gene Relevance methods}
 \usage{
+\S4method{print}{GeneRelevance}(x)
+
+\S4method{show}{GeneRelevance}(object)
+
 \S4method{featureNames}{GeneRelevance}(object)
 
 
@@ -19,19 +27,32 @@
 \S4method{dataset}{GeneRelevance}(object)
 
 \S4method{dataset}{GeneRelevance}(object) <- value
+
+\S4method{distance}{GeneRelevance}(object)
+
+\S4method{distance}{GeneRelevance}(object) <- value
 }
 \arguments{
-\item{object}{\code{\link{GeneRelevance}} object}
+\item{x, object}{\code{GeneRelevance} object}
 
 \item{value}{A text vector (\code{\link{character}} or \code{\link{factor}})}
 }
+\value{
+\code{dataset}, \code{distance}, and \code{featureNames} return the stored properties.
+The other methods return a \code{GeneRelevance} object (\code{print}, \code{... <- ...}),
+or NULL (\code{show}), invisibly
+}
 \description{
-\code{featureNames <- ...} Can be used to set the gene names used for plotting
-(e.g. if the data contains hardly readably gene or transcript IDs)
+\code{featureNames <- ...} can be used to set the gene names used for plotting
+(e.g. if the data contains hardly readably gene or transcript IDs).
+\code{dataset} gets the expressions used for the gene relevance calculations,
+and \code{distance} the distance measure.
 }
 \examples{
 data(guo_norm)
-gr <- gene_relevance(DiffusionMap(guo_norm))
+dm <- DiffusionMap(guo_norm)
+gr <- gene_relevance(dm)
+stopifnot(distance(gr) == distance(dm))
 featureNames(gr)[[37]] <- 'Id2 (suppresses differentiation)'
 # now plot it with the changed gene name(s)
 

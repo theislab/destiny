@@ -3,7 +3,7 @@ NULL
 
 #' DiffusionMap accession methods
 #' 
-#' Get and set eigenvalues, eigenvectors, and sigma(s) of a \link{DiffusionMap} object or print information about a DiffusionMap
+#' Get and set eigenvalues, eigenvectors, and sigma(s) of a \link{DiffusionMap} object.
 #' 
 #' @param object  A DiffusionMap
 #' @param value   Vector of eigenvalues or matrix of eigenvectors to get/set

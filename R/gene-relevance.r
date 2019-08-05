@@ -121,7 +121,8 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, r
 		dimnames = list(rownames(exprs), colnames(exprs), if (is.character(dims)) dims else colnames(coords_used)))
 	
 	# a very small value to subtract from the differential
-	small <- min(exprs[exprs != 0]) / length(exprs[exprs == 0])
+	values <- if (inherits(exprs, 'Matrix')) exprs@x else exprs
+	small <- min(values[values != 0]) / (length(exprs) - nnzero(exprs))
 	if (verbose) cat('Calculating expression differential\n')
 	gene_differential <- function(expr_gene) {
 		# Compute change in expression
