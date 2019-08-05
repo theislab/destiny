@@ -35,10 +35,11 @@ dataset_maybe_extract_pca <- function(data, n_pcs, verbose = FALSE) {
 	stopifnot(is.null(n_pcs) || length(n_pcs) == 1L)
 	# Suppress PCA computation
 	if (!is.null(n_pcs) && is.na(n_pcs)) return(NULL)
-	# If n_pcs is NULL, data needs to be a SCE
-	if (is.null(n_pcs) && !inherits(data, 'SingleCellExperiment')) return(NULL)
+	# If n_pcs is NULL, data needs to have a PCA
+	has_pca <- inherits(data, 'SingleCellExperiment') && 'pca' %in% reducedDimNames(data)
+	if (is.null(n_pcs) && !has_pca) return(NULL)
 	# get PCs from SCE if possible
-	if (inherits(data, 'SingleCellExperiment') && 'pca' %in% reducedDimNames(data)) {
+	if (has_pca) {
 		pcs <- reducedDim(data, 'pca')
 		if (is.null(n_pcs) || n_pcs == ncol(pcs)) {
 			if (verbose) cat('Using reducedDim(data, "pca") to compute distances\n')
@@ -51,6 +52,7 @@ dataset_maybe_extract_pca <- function(data, n_pcs, verbose = FALSE) {
 			rm(pcs)
 		}
 	}
+	# No PCA in data or requested more PCs
 	data_mat <- dataset_extract_doublematrix(data)
 	if (ncol(data_mat) < n_pcs) stop('Cannot compute ', n_pcs, ' PCs from data with ', ncol(data_mat), ' columns.')
 	scores(pca(data_mat, nPcs = n_pcs))
