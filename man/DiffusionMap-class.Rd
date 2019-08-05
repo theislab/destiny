@@ -85,7 +85,7 @@ being treated as expression data features (and the others ignored), an \link[Bio
 
 \item{\code{k}}{The k parameter for kNN}
 
-\item{\code{n_pcs}}{Number of principal components}
+\item{\code{n_pcs}}{Number of principal components used in kNN computation (NA if raw data was used)}
 
 \item{\code{n_local}}{The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density}
 

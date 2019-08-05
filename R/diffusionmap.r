@@ -47,7 +47,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot d              Density vector of transition probability matrix
 #' @slot d_norm         Density vector of normalized transition probability matrix
 #' @slot k              The k parameter for kNN
-#' @slot n_pcs          Number of principal components
+#' @slot n_pcs          Number of principal components used in kNN computation (NA if raw data was used)
 #' @slot n_local        The \code{n_local}th nearest neighbor(s) is/are used to determine local kernel density
 #' @slot density_norm   Was density normalization used?
 #' @slot rotate         Were the eigenvectors rotated?
@@ -84,7 +84,7 @@ setClass(
 		d             = 'numeric',
 		d_norm        = 'numeric',
 		k             = 'numeric',
-		n_pcs         = 'numericOrNULL',
+		n_pcs         = 'numeric',
 		n_local       = 'numeric',
 		density_norm  = 'logical',
 		rotate        = 'logical',
@@ -187,18 +187,23 @@ DiffusionMap <- function(
 		imputed_data <- data
 		if (any(is.na(imputed_data)))
 			imputed_data <- as.matrix(hotdeck(data, imp_var = FALSE))
+		n <- nrow(imputed_data)
+		
+		# PCA
 		pca <- dataset_maybe_extract_pca(data_env$data, n_pcs, verbose)
 		if (is.null(pca) && ncol(imputed_data) > 500L) {
 			warning('You have ', ncol(imputed_data), ' genes. Consider passing e.g. n_pcs = 50 to speed up computation.')
 		}
-		data_or_pca <-
-			if (is.null(pca)) imputed_data
+		if (is.null(pca)) {
+			n_pcs <- NA
+			data_or_pca <- imputed_data
+		} else {
+			n_pcs <- ncol(pca)
+			data_or_pca <- pca
 			# Update PCA in SCE if there was none
-			else if (inherits(data_env$data, 'SingleCellExperiment') && !('pca' %in% reducedDimNames(data_env$data))) {
-				n_pcs <- ncol(pca)
+			if (inherits(data_env$data, 'SingleCellExperiment') && !('pca' %in% reducedDimNames(data_env$data)))
 				reducedDim(data_env$data, 'pca') <- pca
-			} else pca
-		n <- nrow(imputed_data)
+		}
 	}
 	
 	# arg validation

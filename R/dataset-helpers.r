@@ -34,7 +34,7 @@ dataset_extract_doublematrix <- function(data, vars = NULL) {
 dataset_maybe_extract_pca <- function(data, n_pcs, verbose = FALSE) {
 	stopifnot(is.null(n_pcs) || length(n_pcs) == 1L)
 	# Suppress PCA computation
-	if (is.na(n_pcs)) return(NULL)
+	if (!is.null(n_pcs) && is.na(n_pcs)) return(NULL)
 	# If n_pcs is NULL, data needs to be a SCE
 	if (is.null(n_pcs) && !inherits(data, 'SingleCellExperiment')) return(NULL)
 	# get PCs from SCE if possible
