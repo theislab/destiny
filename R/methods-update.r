@@ -35,7 +35,7 @@ setMethod('updateObject', 'DiffusionMap', function(object, ..., verbose = FALSE)
 		slot(object, 'd.norm', check = FALSE) <- rep(NA_real_, length(object@d))
 	
 	if (!hasattr(object, 'n_pcs'))
-		slot(object, 'n_pcs', check = FALSE) <- NULL
+		slot(object, 'n_pcs', check = FALSE) <- NA_integer_
 	
 	if (!hasattr(object, 'n_local'))
 		slot(object, 'n_local', check = FALSE) <- 5L

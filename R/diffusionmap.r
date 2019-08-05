@@ -83,9 +83,9 @@ setClass(
 		transitions   = 'dMatrixOrNULL',
 		d             = 'numeric',
 		d_norm        = 'numeric',
-		k             = 'numeric',
-		n_pcs         = 'numeric',
-		n_local       = 'numeric',
+		k             = 'integer',
+		n_pcs         = 'integer',
+		n_local       = 'integer',
 		density_norm  = 'logical',
 		rotate        = 'logical',
 		distance      = 'character',
@@ -195,7 +195,7 @@ DiffusionMap <- function(
 			warning('You have ', ncol(imputed_data), ' genes. Consider passing e.g. n_pcs = 50 to speed up computation.')
 		}
 		if (is.null(pca)) {
-			n_pcs <- NA
+			n_pcs <- NA_integer_
 			data_or_pca <- imputed_data
 		} else {
 			n_pcs <- ncol(pca)
@@ -264,9 +264,9 @@ DiffusionMap <- function(
 		transitions   = if (suppress_dpt) NULL else transitions,
 		d             = d,
 		d_norm        = d_norm,
-		k             = k,
-		n_pcs         = n_pcs,
-		n_local       = n_local,
+		k             = as.integer(k),
+		n_pcs         = as.integer(n_pcs),
+		n_local       = as.integer(n_local),
 		rotate        = rotate,
 		density_norm  = density_norm,
 		distance      = distance,
