@@ -78,7 +78,7 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 	) {
 		coords <- eigenvectors(dm)
 		exprs <- dataset_extract_doublematrix(dataset(dm))
-		pcs <- dataset_maybe_extract_pca(dataset(dm), dm@n_pcs, verbose)
+		pcs <- get_pca(exprs, dataset(dm), dm@n_pcs, verbose)
 		weights <- eigenvalues(dm)[dims]
 		if (is.null(distance)) distance <- dm@distance
 		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)
@@ -99,6 +99,7 @@ setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., 
 })
 
 #' @importFrom Biobase rowMedians
+#' @importFrom Matrix nnzero
 gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose, pcs = NULL, knn_params = list(), weights = 1) {
 	stopifparams(...)
 	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor', 'l2'))

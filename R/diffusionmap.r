@@ -185,12 +185,12 @@ DiffusionMap <- function(
 		data_env$data <- data
 		data <- dataset_extract_doublematrix(data, vars)
 		imputed_data <- data
-		if (any(is.na(imputed_data)))
+		if (anyNA(imputed_data))
 			imputed_data <- as.matrix(hotdeck(data, imp_var = FALSE))
 		n <- nrow(imputed_data)
 		
 		# PCA
-		pca <- dataset_maybe_extract_pca(data_env$data, n_pcs, verbose)
+		pca <- get_pca(imputed_data, data_env$data, n_pcs, verbose)
 		if (is.null(pca) && ncol(imputed_data) > 500L) {
 			warning('You have ', ncol(imputed_data), ' genes. Consider passing e.g. n_pcs = 50 to speed up computation.')
 		}
@@ -326,6 +326,37 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 	} else {
 		stop(sigma_msg(sigma))
 	}
+}
+
+
+#' @importFrom methods hasMethod
+#' @importFrom SingleCellExperiment reducedDimNames reducedDim
+get_pca <- function(data_mat, data_raw, n_pcs, verbose = FALSE) {
+	stopifnot(is.null(n_pcs) || length(n_pcs) == 1L)
+	# If we suppress PCA computation, return NULL
+	if (isTRUE(is.na(n_pcs))) return(NULL)
+	
+	# get PCs from SingleCellExperiment if possible
+	existing_pca <- if (hasMethod('reducedDim', class(data_raw))) reducedDim(data_raw, 'pca')
+	if (!is.null(existing_pca)) {
+		if (is.null(n_pcs) || n_pcs == ncol(existing_pca)) {
+			if (verbose) cat('Using reducedDim(data, "pca") to compute distances\n')
+			return(existing_pca)
+		} else if (n_pcs < ncol(existing_pca)) {
+			warning('Specified n_pcs < ncol(reducedDim(data, "pca")), using subset')
+			return(existing_pca[, seq_len(n_pcs), drop = FALSE])
+		} else {# n_pcs > ncol(pcs)
+			warning('Specified n_pcs > ncol(reducedDim(data, "pca")), recalculating PCA')
+			rm(pcs)
+		}
+	} else if (is.null(n_pcs)) {
+		# If n_pcs is NULL, data would need to have a PCA
+		return(NULL)
+	}
+
+	# No PCA in data or requested more PCs
+	if (ncol(data_mat) < n_pcs) stop('Cannot compute ', n_pcs, ' PCs from data with ', ncol(data_mat), ' columns.')
+	pca_scores(data_mat, n_pcs)
 }
 
 

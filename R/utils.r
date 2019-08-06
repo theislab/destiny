@@ -99,6 +99,21 @@ rescale_mat <- function(mat, rescale) {
 }
 
 
+# irlba supports sparse data, pcaMethods supports NAs.
+#' @importFrom pcaMethods pca scores
+#' @importFrom irlba prcomp_irlba
+pca_scores <- function(x, n_pcs, center = TRUE, scale = FALSE) {
+	# prcomp_irlba supports unit vector (uv) scaling
+	if (inherits(x, 'sparseMatrix')) {
+		pcs <- prcomp_irlba(x, n_pcs, center = center, scale. = scale)$x
+		rownames(pcs) <- rownames(x)
+		pcs
+	} else {
+		scores(pca(x, nPcs = n_pcs, center = center, scale = if (scale) 'uv' else 'none'))
+	}
+}
+
+
 runs <- function(vec) {
 	enc <- rle(vec)
 	enc$values <- make.unique(enc$values, '_')

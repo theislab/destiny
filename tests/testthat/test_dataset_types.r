@@ -10,15 +10,18 @@ test_obss <- paste0('c', seq_len(test_nobss))
 test_feat <- paste0('g', seq_len(test_nfeat))
 
 test_matrix <- matrix(runif(test_nobss * test_nfeat), test_nobss, test_nfeat, dimnames = list(test_obss, test_feat))
+test_matrix[test_matrix < mean(test_matrix)] <- 0
 test_df     <- data.frame(test_matrix, cm1 = LETTERS[seq_len(test_nobss)], stringsAsFactors = FALSE)
 test_es     <- ExpressionSet(
 	t(test_matrix),
 	AnnotatedDataFrame(data.frame(cm1 = LETTERS[seq_len(test_nobss)], row.names = test_obss, stringsAsFactors = FALSE)),
 	AnnotatedDataFrame(data.frame(gm1 = letters[seq_len(test_nfeat)], row.names = test_feat, stringsAsFactors = FALSE)))
-test_se     <- SingleCellExperiment(
+test_se <- SingleCellExperiment(
 	assays = list(logcounts = t(test_matrix)),
 	colData = DataFrame(cm1 = LETTERS[seq_len(test_nobss)]),
 	rowData = DataFrame(gm1 = letters[seq_len(test_nfeat)]))
+test_se_sparse <- test_se
+assay(test_se_sparse) <- as(assay(test_se_sparse), 'sparseMatrix')
 
 
 test_that('The helpers work with matrix data', {
@@ -38,7 +41,7 @@ test_that('The helpers work with data.frame data', {
 	expect_identical(dataset_to_df               (test_df), test_df)
 	expect_identical(dataset_names               (test_df), c(test_feat, 'cm1'))
 	expect_identical(dataset_get_feature   (test_df, 'g3'), test_df$g3)
-	expect_identical(dataset_get_feature   (test_df, 'cm1'), test_df$cm1)
+	expect_identical(dataset_get_feature  (test_df, 'cm1'), test_df$cm1)
 })
 
 
@@ -49,7 +52,7 @@ test_that('The helpers work with ExpressionSet data', {
 	expect_identical(dataset_to_df               (test_es), test_df)
 	expect_identical(dataset_names               (test_es), c(test_feat, 'cm1'))
 	expect_identical(dataset_get_feature   (test_es, 'g1'), exprs(test_es)['g1', ])
-	expect_identical(dataset_get_feature   (test_es, 'cm1'), test_es$cm1)
+	expect_identical(dataset_get_feature  (test_es, 'cm1'), test_es$cm1)
 })
 
 
@@ -60,5 +63,16 @@ test_that('The helpers work with SingleCellExperiment data', {
 	expect_identical(dataset_to_df               (test_se), test_df)
 	expect_identical(dataset_names               (test_se), c(test_feat, 'cm1'))
 	expect_identical(dataset_get_feature   (test_se, 'g1'), assay(test_se, 'logcounts')['g1', ])
-	expect_identical(dataset_get_feature   (test_se, 'cm1'), test_se$cm1)
+	expect_identical(dataset_get_feature  (test_se, 'cm1'), test_se$cm1)
+})
+
+
+test_that('The helpers work with sparse SingleCellExperiment data', {
+	expect_identical(dataset_extract_doublematrix(test_se_sparse), as(test_matrix, 'sparseMatrix'))
+	expect_identical(dataset_n_observations      (test_se_sparse), test_nobss)
+	expect_identical(dataset_n_features          (test_se_sparse), test_nfeat)
+	expect_identical(dataset_to_df               (test_se_sparse), test_df)
+	expect_identical(dataset_names               (test_se_sparse), c(test_feat, 'cm1'))
+	expect_identical(dataset_get_feature   (test_se_sparse, 'g1'), assay(test_se_sparse, 'logcounts')['g1', ])
+	expect_identical(dataset_get_feature  (test_se_sparse, 'cm1'), test_se_sparse$cm1)
 })

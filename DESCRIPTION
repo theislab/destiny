@@ -32,6 +32,7 @@ Imports:
     Rcpp (>= 0.10.3),
     RcppEigen,
     RSpectra (>= 0.14-0),
+    irlba,
     pcaMethods,
     Biobase,
     BiocGenerics,
