@@ -37,7 +37,7 @@ setClass(
 #' @rdname DPT
 #' @export
 DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
-	stopifparams(...)
+	chkDots(...)
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be of class DiffusionMap, not ', class(dm))
 	if (!length(tips) %in% 1:3) stop('you need to specify 1-3 tips, got ', length(tips))
 	

@@ -115,7 +115,7 @@ find_sigmas <- function(
 	vars = NULL,
 	verbose = TRUE
 ) {
-	stopifparams(...)
+	chkDots(...)
 	data <- dataset_extract_doublematrix(data, vars)
 	
 	if (any(is.na(data)))

@@ -29,7 +29,7 @@ setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords,
 #' @importFrom Biobase featureNames
 #' @importFrom utils head
 plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, genes, dims, pal, col_na, limit) {
-	stopifparams(...)
+	chkDots(...)
 	relevance_map <- updateObject(relevance_map)
 	partials_norm <- relevance_map@partials_norm
 	coords <- get_coords(relevance_map, dims)

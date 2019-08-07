@@ -29,7 +29,7 @@ setMethod('plot_gene_relevance_rank', c('GeneRelevance', 'missing'), function(co
 #' @importFrom ggplot2 scale_fill_gradientn scale_alpha_continuous
 #' @importFrom ggplot.multistats stat_summaries_hex
 plot_gene_relevance_rank_impl <- function(relevance_map, ..., genes, dims, n_top, pal, bins, faceter) {
-	stopifparams(...)
+	chkDots(...)
 	if (is.function(pal)) pal <- pal(12)
 	coords <- get_coords(relevance_map, dims)
 	gene_names <- if (is.character(genes)) genes else colnames(relevance_map@exprs)[genes]

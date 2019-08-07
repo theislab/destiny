@@ -19,15 +19,6 @@ stopifsmall <- function(max_dist) {
 }
 
 
-stopifparams <- function(...) {
-	args <- substitute(...())  # Unevaluated arguments
-	if (length(args) == 0) return(invisible())
-	nms <- if (is.null(names(args))) rep_len('', length(args)) else names(args)
-	args_str <- paste0(nms, ifelse(nms == '', '', ' = '), sapply(args, deparse))
-	stop('Unused argument(s) (', paste(args_str, collapse = ', '), ')', call. = FALSE)
-}
-
-
 #' @importFrom utils flush.console
 verbose_timing <- function(verbose, msg, expr) {
 	if (verbose) {

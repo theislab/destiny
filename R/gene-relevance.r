@@ -88,7 +88,7 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 			pcs = pcs, knn_params = dm@knn_params, weights = weights
 		)
 		dm@data_env$relevance_map <- relevance_map
-	} else stopifparams(...)
+	} else chkDots(...)
 	relevance_map
 })
 
@@ -101,7 +101,7 @@ setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., 
 #' @importFrom Biobase rowMedians
 #' @importFrom Matrix nnzero
 gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose, pcs = NULL, knn_params = list(), weights = 1) {
-	stopifparams(...)
+	chkDots(...)
 	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor', 'l2'))
 	coords_used <- coords[, dims, drop = FALSE]
 	n_dims <- ncol(coords_used)

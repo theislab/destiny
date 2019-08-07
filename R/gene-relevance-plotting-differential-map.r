@@ -71,7 +71,7 @@ differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALS
 #' @importFrom ggplot2 ggtitle facet_wrap
 #' @importFrom grid arrow unit
 plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, faceter) {
-	stopifparams(...)
+	chkDots(...)
 	if (is.function(pal)) pal <- pal(12)
 	dtm <- differential_map(relevance_map, genes, dims)
 	coords <- get_coords(relevance_map, dims)

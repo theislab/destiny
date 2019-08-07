@@ -155,7 +155,7 @@ DiffusionMap <- function(
 	force(k)
 	force(n_eigs)
 	
-	stopifparams(...)
+	chkDots(...)
 	
 	if (is.null(sigma) || !is(sigma, 'Sigmas') && isTRUE(is.na(sigma)))
 		sigma <- 'local'
