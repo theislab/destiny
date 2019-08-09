@@ -61,12 +61,18 @@ setClass('GeneRelevance', slots = c(
 
 #' @rdname Gene-Relevance
 #' @export
-setGeneric('gene_relevance', function(coords, exprs, ..., k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, remove_outliers = FALSE, verbose = FALSE) standardGeneric('gene_relevance'))
+setGeneric('gene_relevance', function(
+	coords, exprs, ...,
+	k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, remove_outliers = FALSE, verbose = FALSE
+) standardGeneric('gene_relevance'))
 
 #' @importFrom Biobase updateObject
 #' @rdname Gene-Relevance
 #' @export
-setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose) {
+setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(
+	coords, exprs, ..., k,
+	dims, distance, smooth, remove_outliers, verbose
+) {
 	dm <- updateObject(coords)
 	relevance_map <- updateObject(dm@data_env$relevance_map)
 	smooth <- get_smoothing(smooth)
@@ -77,12 +83,13 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 		!identical(relevance_map@smooth_alpha,  smooth[[2L]])
 	) {
 		coords <- eigenvectors(dm)
+		if (dm@distance == 'custom') stop('Gene relevance cannot be computed from a diffusion map with a custom distance matrix.')
 		exprs <- dataset_extract_doublematrix(dataset(dm))
 		pcs <- get_pca(exprs, dataset(dm), dm@n_pcs, verbose)
 		weights <- eigenvalues(dm)[dims]
 		if (is.null(distance)) distance <- dm@distance
 		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)
-		relevance_map <- gene_relevance_impl(
+		relevance_map <- gene_relevance(
 			coords, exprs, ...,
 			k = k, dims = dims, distance = distance, smooth = smooth, remove_outliers = remove_outliers, verbose = verbose,
 			pcs = pcs, knn_params = dm@knn_params, weights = weights
@@ -92,15 +99,16 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function(coords, exprs
 	relevance_map
 })
 
-#' @rdname Gene-Relevance
-#' @export
-setMethod('gene_relevance', c('matrix', 'matrix'), function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose) {
-	gene_relevance_impl(coords, exprs, ..., k = k, distance = distance, smooth = smooth, dims = dims, remove_outliers = remove_outliers, verbose = verbose)
-})
-
+#' @importFrom methods is
 #' @importFrom Biobase rowMedians
 #' @importFrom Matrix nnzero
-gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, remove_outliers, verbose, pcs = NULL, knn_params = list(), weights = 1) {
+#' @rdname Gene-Relevance
+#' @export
+setMethod('gene_relevance', c('matrix', 'dMatrixOrMatrix'), function(
+	coords, exprs, ...,
+	pcs = NULL, knn_params = list(), weights = 1,
+	k, dims, distance, smooth, remove_outliers, verbose
+) {
 	chkDots(...)
 	distance <- match.arg(distance, c('euclidean', 'cosine', 'rankcor', 'l2'))
 	coords_used <- coords[, dims, drop = FALSE]
@@ -122,7 +130,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, r
 		dimnames = list(rownames(exprs), colnames(exprs), if (is.character(dims)) dims else colnames(coords_used)))
 	
 	# a very small value to subtract from the differential
-	values <- if (inherits(exprs, 'Matrix')) exprs@x else exprs
+	values <- if (is(exprs, 'Matrix')) exprs@x else exprs
 	small <- min(values[values != 0]) / (length(exprs) - nnzero(exprs))
 	if (verbose) cat('Calculating expression differential\n')
 	gene_differential <- function(expr_gene) {
@@ -197,7 +205,7 @@ gene_relevance_impl <- function(coords, exprs, ..., k, dims, distance, smooth, r
 		smooth_window = smooth[[1L]],
 		smooth_alpha  = smooth[[2L]],
 		distance = distance)
-}
+})
 
 get_smoothing <- function(smooth) {
 	if (isTRUE(smooth)) c(getOption('smoother.window'), getOption('smoother.gaussianwindow.alpha'))

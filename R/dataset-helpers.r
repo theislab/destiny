@@ -1,3 +1,4 @@
+#' @importFrom methods is
 #' @importFrom Biobase exprs
 #' @importFrom SummarizedExperiment assay colData
 dataset_extract_doublematrix <- function(data, vars = NULL) {
@@ -9,9 +10,9 @@ dataset_extract_doublematrix <- function(data, vars = NULL) {
 			vars <- NULL
 		}
 		data <- as.matrix(data)
-	} else if (inherits(data, 'ExpressionSet')) {
+	} else if (is(data, 'ExpressionSet')) {
 		data <- t(exprs(data))
-	} else if (inherits(data, 'SingleCellExperiment')) {
+	} else if (is(data, 'SingleCellExperiment')) {
 		#TODO: allow other name?
 		data <- t(assay(data, 'logcounts'))
 	} else if (!is.matrix(data)) {

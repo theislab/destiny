@@ -58,6 +58,7 @@ Suggests:
     igraph,
     testthat,
     FNN,
+    knn.covertree,
     tidyr
 VignetteBuilder: nbconvertR
 biocViews: CellBiology,

@@ -5,7 +5,8 @@ setClassUnion('ColIndex', members = c('character', 'numeric', 'logical'))
 setClassUnion('numericOrNULL', members = c('numeric', 'NULL'))
 setClassUnion('integerOrNULL', members = c('integer', 'NULL'))
 setClassUnion('dMatrixOrNULL', members = c('dMatrix', 'NULL'))
-setClassUnion('dMatrixOrMatrix', members = c('dMatrix', 'matrix'))
+# Added dsparseMatrix directly because of https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17596
+setClassUnion('dMatrixOrMatrix', members = c('dMatrix', 'dsparseMatrix', 'matrix'))
 
 setClassUnion('logicalOrMissing', members = c('logical', 'missing'))
 setClassUnion('characterOrFactor', c('character', 'factor'))

@@ -33,6 +33,7 @@ NULL
 NULL
 
 
+#' @importFrom methods is
 #' @importFrom utils str
 #' 
 #' @rdname Gene-Relevance-methods
@@ -40,8 +41,8 @@ NULL
 setMethod('print', 'GeneRelevance', function(x) {
 	d <- dataset(x)
 	cat(sprintf('GeneRelevance (%s genes, %s reduced dimensions, and %s observations)\n', ncol(x@exprs), ncol(x@coords), nrow(x@exprs)))
-	cat('dataset:      ')
-	if (inherits(d, 'Matrix')) cat(sprintf('%s%s%s %s (%s)\n', nrow(d), sym_times, ncol(d), class(d)[[1L]], mode(d@x)))
+	cat('is:      ')
+	if (is(d, 'Matrix')) cat(sprintf('%s%s%s %s (%s)\n', nrow(d), sym_times, ncol(d), class(d)[[1L]], mode(d@x)))
 	else str(structure(d, dimnames = NULL))
 	cat('featureNames: '); str(featureNames(x))
 	invisible(x)

@@ -201,7 +201,7 @@ DiffusionMap <- function(
 			n_pcs <- ncol(pca)
 			data_or_pca <- pca
 			# Update PCA in SCE if there was none
-			if (inherits(data_env$data, 'SingleCellExperiment') && !('pca' %in% reducedDimNames(data_env$data)))
+			if (is(data_env$data, 'SingleCellExperiment') && !('pca' %in% reducedDimNames(data_env$data)))
 				reducedDim(data_env$data, 'pca') <- pca
 		}
 	}
