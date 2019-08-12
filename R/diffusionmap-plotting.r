@@ -131,7 +131,8 @@ plot.DiffusionMap <- function(
 		col_legend
 	}
 	
-	col_lvls <- na.omit(as.character(unique(point_data$Colour)))
+	lvl_fn <- if (is.factor(point_data$Colour)) levels else unique
+	col_lvls <- na.omit(as.character(lvl_fn(point_data$Colour)))
 	col_breaks <- point_data$ColourExpl[match(col_lvls, point_data$Colour)]
 	is_one_colour <- length(col_lvls) == 1L
 	
