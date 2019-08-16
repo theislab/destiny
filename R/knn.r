@@ -7,7 +7,7 @@
 #' @param k         Number of nearest neighbors
 #' @param ...       Parameters passed to \code{\link[RcppHNSW]{hnsw_knn}}
 #' @param distance  Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})
-#' @param method    Method to use. HNSW is tunable with \code{...} but generally less exact than cover-tree (default: 'hnsw')
+#' @param method    Method to use. \code{'hnsw'} is tunable with \code{...} but generally less exact than \code{'covertree'} (default: 'covertree')
 #' @param sym       Return a symmetric matrix (as long as query is NULL)?
 #' @param verbose   Show a progressbar? (default: FALSE)
 #' 
@@ -30,7 +30,7 @@ find_knn <- function(
 	...,
 	query = NULL,
 	distance = c('euclidean', 'cosine', 'rankcor', 'l2'),
-	method = c('hnsw', 'covertree'),
+	method = c('covertree', 'hnsw'),
 	sym = TRUE,
 	verbose = FALSE
 ) {
@@ -42,8 +42,6 @@ find_knn <- function(
 		data <- as.matrix(data)
 	}
 	if (method == 'covertree') {
-		if (!requireNamespace('knn.covertree', quietly = TRUE))
-			stop('Trying to get exact nearest neighborts but knn.covertree is not installed')
 		return(knn.covertree::find_knn(data, k, query = query, distance = distance, sym = sym))
 	}
 	

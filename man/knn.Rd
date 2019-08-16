@@ -5,7 +5,8 @@
 \title{kNN search}
 \usage{
 find_knn(data, k, ..., query = NULL, distance = c("euclidean",
-  "cosine", "rankcor", "l2"), sym = TRUE, verbose = FALSE)
+  "cosine", "rankcor", "l2"), method = c("covertree", "hnsw"),
+  sym = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{data}{Data matrix}
@@ -18,7 +19,11 @@ find_knn(data, k, ..., query = NULL, distance = c("euclidean",
 
 \item{distance}{Distance metric to use. Allowed measures: Euclidean distance (default), cosine distance (\eqn{1-corr(c_1, c_2)}) or rank correlation distance (\eqn{1-corr(rank(c_1), rank(c_2))})}
 
+\item{method}{Method to use. \code{'hnsw'} is tunable with \code{...} but generally less exact than \code{'covertree'} (default: 'covertree')}
+
 \item{sym}{Return a symmetric matrix (as long as query is NULL)?}
+
+\item{verbose}{Show a progressbar? (default: FALSE)}
 }
 \value{
 A \code{\link{list}} with the entries:

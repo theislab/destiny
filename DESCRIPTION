@@ -44,6 +44,7 @@ Imports:
     tidyselect,
     ggthemes,
     VIM,
+    knn.covertree,
     proxy,
     RcppHNSW,
     smoother,
@@ -58,7 +59,6 @@ Suggests:
     igraph,
     testthat,
     FNN,
-    knn.covertree,
     tidyr
 VignetteBuilder: nbconvertR
 biocViews: CellBiology,

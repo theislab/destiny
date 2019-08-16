@@ -5,7 +5,7 @@
 \alias{GeneRelevance-class}
 \alias{gene_relevance}
 \alias{gene_relevance,DiffusionMap,missing-method}
-\alias{gene_relevance,matrix,matrix-method}
+\alias{gene_relevance,matrix,dMatrixOrMatrix-method}
 \title{Gene relevances for entire data set}
 \usage{
 gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2,
@@ -16,9 +16,9 @@ gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2,
   k = 20L, dims = 1:2, distance = NULL, smooth = TRUE,
   remove_outliers = FALSE, verbose = FALSE)
 
-\S4method{gene_relevance}{matrix,matrix}(coords, exprs, ..., k = 20L,
-  dims = 1:2, distance = NULL, smooth = TRUE,
-  remove_outliers = FALSE, verbose = FALSE)
+\S4method{gene_relevance}{matrix,dMatrixOrMatrix}(coords, exprs, ...,
+  pcs = NULL, knn_params = list(), weights = 1, k, dims, distance,
+  smooth, remove_outliers, verbose)
 }
 \arguments{
 \item{coords}{A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.}
