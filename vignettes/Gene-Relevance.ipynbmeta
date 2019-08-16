@@ -1,0 +1,4 @@
+%\VignetteIndexEntry{detecting relevant genes with destiny 3}
+%\VignetteEngine{nbconvertR::nbconvert}
+%\VignetteTemplate{latex}{destiny-bib.tplx}
+%\VignettePreprocessors{latex}{destiny_processors.LatexTracPreprocessor}
