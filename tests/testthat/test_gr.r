@@ -42,5 +42,6 @@ test_that('Gene Relevance returns the right genes', {
 		print(plot(dm, 1:2, col_by = 'Type'))
 		print(gr_plot)
 	}
+	skip('Not yet stable')
 	expect_identical(gr_plot$ids[1:2], c('D', 'C'))
 })
