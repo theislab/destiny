@@ -1,5 +1,5 @@
 % !TEX TS-program = xelatex
-((*- extends 'article.tplx' -*))
+((* extends 'article.tplx' -*))
 
 ((* block packages *))
 	\PassOptionsToPackage{svgnames}{xcolor}
@@ -9,7 +9,6 @@
 	\usepackage{csquotes}
 	\usepackage{textcomp}
 	\usepackage{etoolbox}
-	\usepackage[authoryear,round]{natbib}
 	\usepackage{parskip}
 	\usepackage{upquote}
 	\AtBeginDocument{%
