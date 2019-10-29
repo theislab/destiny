@@ -1,4 +1,4 @@
-authors      <- eval(parse(text = packageDescription('destiny', fields = 'Authors@R')))
+authors      <- eval(parse(text = meta$`Authors@R`))
 year         <- 2015L
 title        <- 'destiny: diffusion maps for large-scale single-cell data in R'
 organization <- 'Helmholtz-Zentrum München'
