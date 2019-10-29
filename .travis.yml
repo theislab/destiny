@@ -18,6 +18,7 @@ before_install:
   - tlmgr install sourcecodepro
   - tlmgr install beebe
   - tlmgr install tcolorbox
+  - tlmgr install newunicodechar
 before_script:  # build vignette in advance to get useful errors
   - cd vignettes
   - jupyter nbconvert --template destiny.tplx --to latex Diffusion-Maps.ipynb
