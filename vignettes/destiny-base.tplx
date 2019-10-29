@@ -11,6 +11,7 @@
 	\usepackage{etoolbox}
 	\usepackage{parskip}
 	\usepackage{upquote}
+	\usepackage{underscore} % make sure faulty repr output causes no problems
 	\AtBeginDocument{%
 		\def\PYZsq{\textquotesingle}%
 	}
