@@ -9,8 +9,8 @@ addons:
       - libudunits2-dev
       - libgdal1-dev
 before_install:
-  - pip3 install --user -U pip
-  - pip3 install --user jupyter
+  - python3 -m pip install --user -U pip
+  - python3 -m pip install --user jupyter
   - tlmgr install ly1
   - tlmgr install mweights
   - tlmgr install sourcesanspro
