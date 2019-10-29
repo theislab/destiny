@@ -17,6 +17,7 @@ before_install:
   - tlmgr install sourcesanspro
   - tlmgr install sourcecodepro
   - tlmgr install beebe
+  - tlmgr install tcolorbox
 before_script:  # build vignette in advance to get useful errors
   - cd vignettes
   - jupyter nbconvert --template destiny.tplx --to latex Diffusion-Maps.ipynb
