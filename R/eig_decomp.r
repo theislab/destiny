@@ -8,6 +8,7 @@
 #' @param n_eigs  Number of eigenvectors to return.
 #' @param sym     defunct and ignored.
 #' @param ...     Passed to \code{\link[RSpectra]{eigs}}.
+#' @param opts    Passed to \code{\link[RSpectra]{eigs}}.
 #' 
 #' @return see \code{\link[RSpectra]{eigs}}.
 #' 

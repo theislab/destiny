@@ -97,6 +97,8 @@ The higher the more homogenous and the less local structure.}
 
 \item{limit}{Limit the amount of displayed gene labels to the amount of available colors in \code{pal}?}
 
+\item{bins}{Number of hexagonal bins for \code{plot_gene_relevance_rank}.}
+
 \item{x}{\code{\link{GeneRelevance}} object.}
 
 \item{y}{Gene name(s) or index/indices to create differential map for. (integer or character)}

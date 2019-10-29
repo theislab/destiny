@@ -15,6 +15,8 @@ a function (see \code{\link[RSpectra]{eigs}}).}
 \item{sym}{defunct and ignored.}
 
 \item{...}{Passed to \code{\link[RSpectra]{eigs}}.}
+
+\item{opts}{Passed to \code{\link[RSpectra]{eigs}}.}
 }
 \value{
 see \code{\link[RSpectra]{eigs}}.

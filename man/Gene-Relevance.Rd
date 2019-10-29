@@ -25,12 +25,7 @@ gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2,
 
 \item{exprs}{An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.}
 
-\item{...}{If no \code{\link{DiffusionMap}} is provided, you can optionally provide
-\describe{
-\item{\code{weights}}{a vector of the same length as \code{dims}}
-\item{\code{pcs}}{A cell \eqn{\times} \code{n_pcs} matrix of principal components to use for the distances}
-\item{\code{knn_params}}{a \code{\link{list}} of parameters for \code{\link{find_knn}}}
-}}
+\item{...}{Unused. All parameters to the right of the \code{...} have to be specified by name.}
 
 \item{k}{Number of nearest neighbors to use}
 
@@ -42,7 +37,15 @@ gene_relevance(coords, exprs, ..., k = 20L, dims = 1:2,
 Alternatively \code{\link{TRUE}} to use the \link[smoother]{smoother} \link[smoother:smth.options]{defaults}
 or \code{\link{FALSE}} to skip smoothing,}
 
+\item{remove_outliers}{Remove cells that are only within one other cell's nearest neighbor, as they tend to get large norms.}
+
 \item{verbose}{If TRUE, log additional info to the console}
+
+\item{pcs}{A cell \eqn{\times} \code{n_pcs} matrix of principal components to use for the distances.}
+
+\item{knn_params}{A \code{\link{list}} of parameters for \code{\link{find_knn}}.}
+
+\item{weights}{Weights for the partial derivatives. A vector of the same length as \code{dims}.}
 }
 \value{
 A \code{GeneRelevance} object:

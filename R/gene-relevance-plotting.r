@@ -21,6 +21,7 @@ NULL
 #' @param dims         Names or indices of dimensions to plot. When not plotting a \code{\link{GeneRelevance}} object, the relevance for the dimensions \code{1:max(dims)} will be calculated.
 #' @param pal          Palette. Either A colormap function or a list of colors.
 #' @param col_na       Color for cells that end up with no most relevant gene.
+#' @param bins         Number of hexagonal bins for \code{plot_gene_relevance_rank}.
 #' @param limit        Limit the amount of displayed gene labels to the amount of available colors in \code{pal}?
 #' @param faceter      A ggplot faceter like \code{\link[ggplot2]{facet_wrap}(~ Gene)}.
 #' 
