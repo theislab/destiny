@@ -1,4 +1,3 @@
-authors      <- eval(parse(text = meta$`Authors@R`))
 year         <- 2015L
 title        <- 'destiny: diffusion maps for large-scale single-cell data in R'
 organization <- 'Helmholtz-Zentrum München'
@@ -6,7 +5,7 @@ url          <- 'http://bioinformatics.oxfordjournals.org/content/32/8/1241'
 
 bibentry('Article', sprintf(
 		'%s %s et al. (%s): %s. %s. URL: <%s>.',
-		authors[[1]]$given, authors[[1]]$family, year,
+		meta$Authors[[1]]$given, meta$Authors[[1]]$family, year,
 		title, organization, url),
 	title        = title,
 	volume       = 32L,
@@ -14,7 +13,7 @@ bibentry('Article', sprintf(
 	url          = url,
 	doi          = '10.1093/bioinformatics/btv715',
 	journal      = 'Bioinformatics',
-	author       = authors,
+	author       = meta$Authors,
 	pages        = 1241:1243,
 	organization = organization,
 	address      = 'Ingolstädter Landstraße 1, Neuherberg, Germany',
