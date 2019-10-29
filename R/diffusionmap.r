@@ -173,8 +173,8 @@ DiffusionMap <- function(
 		if (!is.null(n_pcs)) stop('If you provide a matrix for `distance`, `n_pcs` has to be NULL')
 		
 		data_env$data <- if (is.null(data)) distance else data  # put covariates or distance
-		if (!is.null(rownames(data_env$data))) rownames(distance) <- colnames(distance) <- rownames(data)
 		dists <- as(distance, 'symmetricMatrix')
+		if (!is.null(rownames(data_env$data))) rownames(dists) <- colnames(dists) <- rownames(data)
 		distance <- 'custom'
 		imputed_data <- data_or_pca <- NULL
 		n <- nrow(dists)

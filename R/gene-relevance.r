@@ -5,21 +5,20 @@ NULL
 #' 
 #' The relevance map is cached insided of the \code{\link{DiffusionMap}}.
 #' 
-#' @param coords    A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
-#' @param exprs     An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.
-#' @param ...       If no \code{\link{DiffusionMap}} is provided, you can optionally provide
-#'                  \describe{
-#'                  \item{\code{weights}}{a vector of the same length as \code{dims}}
-#'                  \item{\code{pcs}}{A cell \eqn{\times} \code{n_pcs} matrix of principal components to use for the distances}
-#'                  \item{\code{knn_params}}{a \code{\link{list}} of parameters for \code{\link{find_knn}}}
-#'                  }
-#' @param k         Number of nearest neighbors to use
-#' @param dims      Index into columns of \code{coord}
-#' @param distance  Distance measure to use for the nearest neighbor search.
-#' @param smooth    Smoothing parameters \code{c(window, alpha)} (see \code{\link[smoother]{smth.gaussian}}).
-#'                  Alternatively \code{\link{TRUE}} to use the \link[smoother]{smoother} \link[smoother:smth.options]{defaults}
-#'                  or \code{\link{FALSE}} to skip smoothing,
-#' @param verbose   If TRUE, log additional info to the console
+#' @param coords           A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
+#' @param exprs            An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.
+#' @param ...              Unused. All parameters to the right of the \code{...} have to be specified by name.
+#' @param k                Number of nearest neighbors to use
+#' @param dims             Index into columns of \code{coord}
+#' @param distance         Distance measure to use for the nearest neighbor search.
+#' @param smooth           Smoothing parameters \code{c(window, alpha)} (see \code{\link[smoother]{smth.gaussian}}).
+#'                         Alternatively \code{\link{TRUE}} to use the \link[smoother]{smoother} \link[smoother:smth.options]{defaults}
+#'                         or \code{\link{FALSE}} to skip smoothing,
+#' @param remove_outliers  Remove cells that are only within one other cell's nearest neighbor, as they tend to get large norms.
+#' @param pcs              A cell \eqn{\times} \code{n_pcs} matrix of principal components to use for the distances.
+#' @param knn_params       A \code{\link{list}} of parameters for \code{\link{find_knn}}.
+#' @param weights          Weights for the partial derivatives. A vector of the same length as \code{dims}.
+#' @param verbose          If TRUE, log additional info to the console
 #' 
 #' @return A \code{GeneRelevance} object:
 #' 

@@ -5,11 +5,15 @@
 	\PassOptionsToPackage{svgnames}{xcolor}
 	\PassOptionsToPackage{inline,shortlabels}{enumitem}
 	((( super() )))
+	\usepackage[utf8]{inputenc}
 	\usepackage{authblk}
 	\usepackage{csquotes}
 	\usepackage{textcomp}
 	\usepackage{etoolbox}
 	\usepackage{parskip}
+	\usepackage{newunicodechar}
+	\newunicodechar{σ}{\ensuremath{\sigma}}
+	\newunicodechar{⋮}{\vdots}
 	\usepackage{upquote}
 	\AtBeginDocument{%
 		\def\PYZsq{\textquotesingle}%
