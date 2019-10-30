@@ -13,7 +13,7 @@
 #' @return see \code{\link[RSpectra]{eigs}}.
 #' 
 #' @examples
-#' eig_decomp(cbind(c(1,-1), c(-1,1)), 2)
+#' eig_decomp(cbind(c(1,0,-1), c(0,1,0), c(-1,0,1)), 2)
 #' 
 #' @importFrom Matrix isSymmetric
 #' @importFrom RSpectra eigs eigs_sym
