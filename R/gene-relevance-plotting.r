@@ -5,11 +5,11 @@ NULL
 #' 
 #' \code{plot(gene_relevance, 'Gene')} plots the differential map of this/these gene(s),
 #' \code{plot(gene_relevance)} a relevance map of a selection of genes.
-#' Alternatively, you can use \code{plot_differential_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
+#' Alternatively, you can use \code{plot_differential_map} or \code{plot_gene_relevance} on a \code{\link[=gene_relevance]{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
 #' 
-#' @param x            \code{\link{GeneRelevance}} object.
+#' @param x            \code{\link[=gene_relevance]{GeneRelevance}} object.
 #' @param y            Gene name(s) or index/indices to create differential map for. (integer or character)
-#' @param coords       A \code{\link{DiffusionMap}}/\code{\link{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
+#' @param coords       A \code{\link{DiffusionMap}}/\code{\link[=gene_relevance]{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
 #' @param exprs        An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is a matrix.
 #' @param ...          Passed to \code{plot_differential_map}/\code{plot_gene_relevance}.
 #' @param iter_smooth  Number of label smoothing iterations to perform on relevance map.
@@ -18,7 +18,7 @@ NULL
 #' @param genes        Genes to base relevance map on (vector of strings).
 #'                     You can also pass an index into the gene names (vector of numbers or logicals with length > 1).
 #'                     The default NULL means all genes.
-#' @param dims         Names or indices of dimensions to plot. When not plotting a \code{\link{GeneRelevance}} object, the relevance for the dimensions \code{1:max(dims)} will be calculated.
+#' @param dims         Names or indices of dimensions to plot. When not plotting a \code{\link[=gene_relevance]{GeneRelevance}} object, the relevance for the dimensions \code{1:max(dims)} will be calculated.
 #' @param pal          Palette. Either A colormap function or a list of colors.
 #' @param col_na       Color for cells that end up with no most relevant gene.
 #' @param bins         Number of hexagonal bins for \code{plot_gene_relevance_rank}.
@@ -41,6 +41,10 @@ NULL
 #' plot_gene_relevance(pca, guo_norm_mat, dims = 2:3)
 #' plot_differential_map(pca, guo_norm_mat, genes = c('Fgf4', 'Nanog'))
 #' 
+#' @name Gene Relevance plotting
+#' @rdname Gene-Relevance-plotting
+NULL
+
 #' @rdname Gene-Relevance-plotting
 #' @export
 setMethod('plot', c('GeneRelevance', 'character'), function(x, y, ...) plot_differential_map(x, genes = y, ...))

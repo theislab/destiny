@@ -117,5 +117,5 @@ DiffusionMap(covars, distance = dists)
 
 }
 \seealso{
-\link{DiffusionMap-methods} to get and set the slots. \code{\link{find_sigmas}} to pre-calculate a fitting global \code{sigma} parameter
+\link{DiffusionMap methods} to get and set the slots. \code{\link{find_sigmas}} to pre-calculate a fitting global \code{sigma} parameter
 }

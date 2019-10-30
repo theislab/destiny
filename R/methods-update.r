@@ -3,7 +3,7 @@ NULL
 
 #' Update old destiny objects to a newer version.
 #' 
-#' Handles \link{DiffusionMap}, \link{Sigmas}, and \link{GeneRelevance}.
+#' Handles \link{DiffusionMap}, \link{Sigmas}, and \link[=gene_relevance]{GeneRelevance}.
 #' 
 #' @param object  An object created with an older destiny release
 #' @param ...     ignored

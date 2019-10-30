@@ -6,7 +6,7 @@
 #' 
 #' @return The \code{DiffusionMap} object (\code{print}), or NULL (\code{show}), invisibly
 #' 
-#' @seealso \link{DiffusionMap accessors}, \link{extractions}, \link{coercions} for more methods
+#' @seealso \link{DiffusionMap accession methods}, \link{Extraction methods}, \link{Coercion methods} for more
 #' 
 #' @examples
 #' data(guo)

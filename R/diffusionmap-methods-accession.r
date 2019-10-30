@@ -10,7 +10,7 @@ NULL
 #' 
 #' @return The assigned or retrieved value
 #' 
-#' @seealso \link{extractions}, \link{DiffusionMap methods}, \link{coercions} for more methods
+#' @seealso \link{Extraction methods}, \link{DiffusionMap methods}, \link{Coercion methods} for more
 #' 
 #' @examples
 #' data(guo)

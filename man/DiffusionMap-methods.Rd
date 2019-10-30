@@ -30,5 +30,5 @@ show(dm)
 
 }
 \seealso{
-\link{DiffusionMap accessors}, \link{extractions}, \link{coercions} for more methods
+\link{DiffusionMap accession methods}, \link{Extraction methods}, \link{Coercion methods} for more
 }

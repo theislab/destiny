@@ -26,6 +26,6 @@ By default uses a random initialization vector that you can make deterministic u
 \code{\link[base]{set.seed}} or override by specifying \code{opts = list(initvec = ...)}.
 }
 \examples{
-eig_decomp(cbind(c(1,-1), c(-1,1)), 2)
+eig_decomp(cbind(c(1,0,-1), c(0,1,0), c(-1,0,1)), 2)
 
 }

@@ -58,7 +58,7 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot vars           Vars parameter used to extract the part of the data used for diffusion map creation
 #' @slot knn_params     Parameters passed to \code{\link{find_knn}}
 #' 
-#' @seealso \link{DiffusionMap-methods} to get and set the slots. \code{\link{find_sigmas}} to pre-calculate a fitting global \code{sigma} parameter
+#' @seealso \link{DiffusionMap methods} to get and set the slots. \code{\link{find_sigmas}} to pre-calculate a fitting global \code{sigma} parameter
 #' 
 #' @examples
 #' data(guo)
