@@ -16,7 +16,7 @@ NULL
 #' 
 #' @return An object of the desired class
 #' 
-#' @seealso \link{DiffusionMap accessors}, \link{extractions}, \link{DiffusionMap methods} for more methods
+#' @seealso \link{DiffusionMap accession methods}, \link{Extraction methods}, \link{DiffusionMap methods} for more
 #' 
 #' @examples
 #' library(Biobase)
@@ -34,7 +34,7 @@ NULL
 #' 
 #' @importFrom methods setAs
 #' @importFrom BiocGenerics as.data.frame
-#' @name Coercion Methods
+#' @name Coercion methods
 #' @rdname coercions
 #' @include diffusionmap.r
 NULL

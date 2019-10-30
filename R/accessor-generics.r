@@ -15,7 +15,7 @@
 #' dataset(dm)
 #' distance(dm)
 #' 
-#' @seealso \link{DiffusionMap methods} and \link{Sigmas class} for implementations
+#' @seealso \link{DiffusionMap methods} and \link{Sigmas} class for implementations
 #' 
 #' @importFrom methods setGeneric
 #' @name destiny generics

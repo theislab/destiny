@@ -70,5 +70,5 @@ distance(dm)
 
 }
 \seealso{
-\link{DiffusionMap methods} and \link{Sigmas class} for implementations
+\link{DiffusionMap methods} and \link{Sigmas} class for implementations
 }

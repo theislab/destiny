@@ -28,5 +28,5 @@
 A \link{DiffusionMap} or \link{Sigmas} object that is valid when used with the current destiny release
 }
 \description{
-Handles \link{DiffusionMap}, \link{Sigmas}, and \link{GeneRelevance}.
+Handles \link{DiffusionMap}, \link{Sigmas}, and \link[=gene_relevance]{GeneRelevance}.
 }

@@ -16,6 +16,7 @@
 \alias{plot_gene_relevance_rank,matrix,matrix-method}
 \alias{plot_gene_relevance_rank,DiffusionMap,missing-method}
 \alias{plot_gene_relevance_rank,GeneRelevance,missing-method}
+\alias{Gene Relevance plotting}
 \alias{plot,GeneRelevance,character-method}
 \alias{plot,GeneRelevance,numeric-method}
 \alias{plot,GeneRelevance,missing-method}
@@ -72,7 +73,7 @@ plot_gene_relevance_rank(coords, exprs, ..., genes, dims = 1:2,
 \S4method{plot}{GeneRelevance,missing}(x, y, ...)
 }
 \arguments{
-\item{coords}{A \code{\link{DiffusionMap}}/\code{\link{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.}
+\item{coords}{A \code{\link{DiffusionMap}}/\code{\link[=gene_relevance]{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.}
 
 \item{exprs}{An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is a matrix.}
 
@@ -82,7 +83,7 @@ plot_gene_relevance_rank(coords, exprs, ..., genes, dims = 1:2,
 You can also pass an index into the gene names (vector of numbers or logicals with length > 1).
 The default NULL means all genes.}
 
-\item{dims}{Names or indices of dimensions to plot. When not plotting a \code{\link{GeneRelevance}} object, the relevance for the dimensions \code{1:max(dims)} will be calculated.}
+\item{dims}{Names or indices of dimensions to plot. When not plotting a \code{\link[=gene_relevance]{GeneRelevance}} object, the relevance for the dimensions \code{1:max(dims)} will be calculated.}
 
 \item{pal}{Palette. Either A colormap function or a list of colors.}
 
@@ -99,7 +100,7 @@ The higher the more homogenous and the less local structure.}
 
 \item{bins}{Number of hexagonal bins for \code{plot_gene_relevance_rank}.}
 
-\item{x}{\code{\link{GeneRelevance}} object.}
+\item{x}{\code{\link[=gene_relevance]{GeneRelevance}} object.}
 
 \item{y}{Gene name(s) or index/indices to create differential map for. (integer or character)}
 }
@@ -109,7 +110,7 @@ ggplot2 plot, when plotting a relevance map with a list member \code{$ids} conta
 \description{
 \code{plot(gene_relevance, 'Gene')} plots the differential map of this/these gene(s),
 \code{plot(gene_relevance)} a relevance map of a selection of genes.
-Alternatively, you can use \code{plot_differential_map} or \code{plot_gene_relevance} on a \code{\link{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
+Alternatively, you can use \code{plot_differential_map} or \code{plot_gene_relevance} on a \code{\link[=gene_relevance]{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
 }
 \examples{
 data(guo_norm)
