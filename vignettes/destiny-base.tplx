@@ -5,7 +5,14 @@
 	\PassOptionsToPackage{svgnames}{xcolor}
 	\PassOptionsToPackage{inline,shortlabels}{enumitem}
 	((( super() )))
-	\usepackage[utf8]{inputenc}
+	% load inputenc if not already loaded
+	% LaTeX 2018+ should have loaded this by default
+	% nbconvert <5.6 should have loaded utf8x
+	\makeatletter
+	\@ifpackageloaded{inputenc}{}{
+		\usepackage[utf8]{inputenc}
+	}
+	\makeatother
 	\usepackage{authblk}
 	\usepackage{csquotes}
 	\usepackage{textcomp}
