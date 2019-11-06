@@ -7,5 +7,6 @@
 ^CMakeLists\.txt$
 ^\.travis\.yml$
 ^build/.*$
+^playground/.*$
 ^.*\.kdev4$
 ^\.kdev4/*$
