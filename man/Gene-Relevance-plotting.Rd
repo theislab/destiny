@@ -2,7 +2,6 @@
 % Please edit documentation in R/gene-relevance-plotting-differential-map.r,
 %   R/gene-relevance-plotting-gr-map.r, R/gene-relevance-plotting-rank.r,
 %   R/gene-relevance-plotting.r
-\docType{methods}
 \name{plot_differential_map}
 \alias{plot_differential_map}
 \alias{plot_differential_map,matrix,matrix-method}
@@ -22,49 +21,145 @@
 \alias{plot,GeneRelevance,missing-method}
 \title{Plot gene relevance or differential map}
 \usage{
-plot_differential_map(coords, exprs, ..., genes, dims = 1:2,
-  pal = hcl.colors, faceter = facet_wrap(~Gene))
+plot_differential_map(
+  coords,
+  exprs,
+  ...,
+  genes,
+  dims = 1:2,
+  pal = hcl.colors,
+  faceter = facet_wrap(~Gene)
+)
 
-\S4method{plot_differential_map}{matrix,matrix}(coords, exprs, ..., genes,
-  dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
+\S4method{plot_differential_map}{matrix,matrix}(
+  coords,
+  exprs,
+  ...,
+  genes,
+  dims = 1:2,
+  pal = hcl.colors,
+  faceter = facet_wrap(~Gene)
+)
 
-\S4method{plot_differential_map}{DiffusionMap,missing}(coords, exprs, ...,
-  genes, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
+\S4method{plot_differential_map}{DiffusionMap,missing}(
+  coords,
+  exprs,
+  ...,
+  genes,
+  dims = 1:2,
+  pal = hcl.colors,
+  faceter = facet_wrap(~Gene)
+)
 
-\S4method{plot_differential_map}{GeneRelevance,missing}(coords, exprs, ...,
-  genes, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~Gene))
+\S4method{plot_differential_map}{GeneRelevance,missing}(
+  coords,
+  exprs,
+  ...,
+  genes,
+  dims = 1:2,
+  pal = hcl.colors,
+  faceter = facet_wrap(~Gene)
+)
 
-plot_gene_relevance(coords, exprs, ..., iter_smooth = 2L, n_top = 10L,
-  genes = NULL, dims = 1:2, pal = palette(), col_na = "grey",
-  limit = TRUE)
+plot_gene_relevance(
+  coords,
+  exprs,
+  ...,
+  iter_smooth = 2L,
+  n_top = 10L,
+  genes = NULL,
+  dims = 1:2,
+  pal = palette(),
+  col_na = "grey",
+  limit = TRUE
+)
 
-\S4method{plot_gene_relevance}{matrix,matrix}(coords, exprs, ...,
-  iter_smooth = 2L, n_top = 10L, genes = NULL, dims = 1:2,
-  pal = palette(), col_na = "grey", limit = TRUE)
+\S4method{plot_gene_relevance}{matrix,matrix}(
+  coords,
+  exprs,
+  ...,
+  iter_smooth = 2L,
+  n_top = 10L,
+  genes = NULL,
+  dims = 1:2,
+  pal = palette(),
+  col_na = "grey",
+  limit = TRUE
+)
 
-\S4method{plot_gene_relevance}{DiffusionMap,missing}(coords, exprs, ...,
-  iter_smooth = 2L, n_top = 10L, genes = NULL, dims = 1:2,
-  pal = palette(), col_na = "grey", limit = TRUE)
+\S4method{plot_gene_relevance}{DiffusionMap,missing}(
+  coords,
+  exprs,
+  ...,
+  iter_smooth = 2L,
+  n_top = 10L,
+  genes = NULL,
+  dims = 1:2,
+  pal = palette(),
+  col_na = "grey",
+  limit = TRUE
+)
 
-\S4method{plot_gene_relevance}{GeneRelevance,missing}(coords, exprs, ...,
-  iter_smooth = 2L, n_top = 10L, genes = NULL, dims = 1:2,
-  pal = palette(), col_na = "grey", limit = TRUE)
+\S4method{plot_gene_relevance}{GeneRelevance,missing}(
+  coords,
+  exprs,
+  ...,
+  iter_smooth = 2L,
+  n_top = 10L,
+  genes = NULL,
+  dims = 1:2,
+  pal = palette(),
+  col_na = "grey",
+  limit = TRUE
+)
 
-plot_gene_relevance_rank(coords, exprs, ..., genes, dims = 1:2,
-  n_top = 10L, pal = c("#3B99B1", "#F5191C"), bins = 10L,
-  faceter = facet_wrap(~Gene))
+plot_gene_relevance_rank(
+  coords,
+  exprs,
+  ...,
+  genes,
+  dims = 1:2,
+  n_top = 10L,
+  pal = c("#3B99B1", "#F5191C"),
+  bins = 10L,
+  faceter = facet_wrap(~Gene)
+)
 
-\S4method{plot_gene_relevance_rank}{matrix,matrix}(coords, exprs, ...,
-  genes, dims = 1:2, n_top = 10L, pal = c("#3B99B1", "#F5191C"),
-  bins = 10L, faceter = facet_wrap(~Gene))
+\S4method{plot_gene_relevance_rank}{matrix,matrix}(
+  coords,
+  exprs,
+  ...,
+  genes,
+  dims = 1:2,
+  n_top = 10L,
+  pal = c("#3B99B1", "#F5191C"),
+  bins = 10L,
+  faceter = facet_wrap(~Gene)
+)
 
-\S4method{plot_gene_relevance_rank}{DiffusionMap,missing}(coords, exprs,
-  ..., genes, dims = 1:2, n_top = 10L, pal = c("#3B99B1", "#F5191C"),
-  bins = 10L, faceter = facet_wrap(~Gene))
+\S4method{plot_gene_relevance_rank}{DiffusionMap,missing}(
+  coords,
+  exprs,
+  ...,
+  genes,
+  dims = 1:2,
+  n_top = 10L,
+  pal = c("#3B99B1", "#F5191C"),
+  bins = 10L,
+  faceter = facet_wrap(~Gene)
+)
 
-\S4method{plot_gene_relevance_rank}{GeneRelevance,missing}(coords, exprs,
-  ..., genes, dims = 1:2, n_top = 10L, pal = c("#3B99B1", "#F5191C"),
-  bins = 10L, faceter = facet_wrap(~Gene))
+\S4method{plot_gene_relevance_rank}{GeneRelevance,missing}(
+  coords,
+  exprs,
+  ...,
+  genes,
+  dims = 1:2,
+  n_top = 10L,
+  pal = c("#3B99B1", "#F5191C"),
+  bins = 10L,
+  faceter = facet_wrap(~Gene)
+)
 
 \S4method{plot}{GeneRelevance,character}(x, y, ...)
 

@@ -4,10 +4,20 @@
 \alias{find_sigmas}
 \title{Calculate the average dimensionality for m different gaussian kernel widths (\eqn{\sigma}).}
 \usage{
-find_sigmas(data, step_size = 0.1, steps = 10L, start = NULL,
-  sample_rows = 500L, early_exit = FALSE, ..., censor_val = NULL,
-  censor_range = NULL, missing_range = NULL, vars = NULL,
-  verbose = TRUE)
+find_sigmas(
+  data,
+  step_size = 0.1,
+  steps = 10L,
+  start = NULL,
+  sample_rows = 500L,
+  early_exit = FALSE,
+  ...,
+  censor_val = NULL,
+  censor_range = NULL,
+  missing_range = NULL,
+  vars = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{data}{Data set with \eqn{n} observations. Can be a \link[base]{data.frame},

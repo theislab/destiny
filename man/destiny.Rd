@@ -3,7 +3,6 @@
 \docType{package}
 \name{destiny}
 \alias{destiny}
-\alias{destiny-package}
 \title{Create and plot diffusion maps}
 \description{
 The main function is \code{\link{DiffusionMap}}, which returns an object you can \code{\link{plot}} (\code{\link{plot.DiffusionMap}} is then called).

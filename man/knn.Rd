@@ -4,9 +4,16 @@
 \alias{find_knn}
 \title{kNN search}
 \usage{
-find_knn(data, k, ..., query = NULL, distance = c("euclidean",
-  "cosine", "rankcor", "l2"), method = c("covertree", "hnsw"),
-  sym = TRUE, verbose = FALSE)
+find_knn(
+  data,
+  k,
+  ...,
+  query = NULL,
+  distance = c("euclidean", "cosine", "rankcor", "l2"),
+  method = c("covertree", "hnsw"),
+  sym = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{data}{Data matrix}

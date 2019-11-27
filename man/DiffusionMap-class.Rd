@@ -6,15 +6,25 @@
 \alias{DiffusionMap}
 \title{Create a diffusion map of cells}
 \usage{
-DiffusionMap(data = stopifnot_distmatrix(distance), sigma = "local",
+DiffusionMap(
+  data = stopifnot_distmatrix(distance),
+  sigma = "local",
   k = find_dm_k(dataset_n_observations(data, distance) - 1L),
   n_eigs = min(20L, dataset_n_observations(data, distance) - 2L),
-  density_norm = TRUE, ..., distance = c("euclidean", "cosine",
-  "rankcor", "l2"), n_pcs = NULL, n_local = seq(to = min(k, 7L),
-  length.out = min(k, 3L)), rotate = FALSE, censor_val = NULL,
-  censor_range = NULL, missing_range = NULL, vars = NULL,
-  knn_params = list(), verbose = !is.null(censor_range),
-  suppress_dpt = FALSE)
+  density_norm = TRUE,
+  ...,
+  distance = c("euclidean", "cosine", "rankcor", "l2"),
+  n_pcs = NULL,
+  n_local = seq(to = min(k, 7L), length.out = min(k, 3L)),
+  rotate = FALSE,
+  censor_val = NULL,
+  censor_range = NULL,
+  missing_range = NULL,
+  vars = NULL,
+  knn_params = list(),
+  verbose = !is.null(censor_range),
+  suppress_dpt = FALSE
+)
 }
 \arguments{
 \item{data}{Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns.
