@@ -51,11 +51,11 @@ Imports:
     scales,
     scatterplot3d
 LinkingTo: Rcpp, RcppEigen, grDevices
-SystemRequirements: C++11
+SystemRequirements: C++11, jupyter nbconvert (see nbconvertR’s INSTALL file)
 NeedsCompilation: yes
 Enhances: rgl, SingleCellExperiment
 Suggests:
-    nbconvertR,
+    nbconvertR (>= 1.3.2),
     igraph,
     testthat,
     FNN,
