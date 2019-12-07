@@ -1,7 +1,13 @@
 #' Extraction methods
 #' 
+#' Extract common information from objects.
+#' Apart from the input data's branches,
+#' you can extract diffusion components via \code{$DCx}.
+#' From \code{\link{DPT}} objects, you can also extract the branch label via \code{$Branch},
+#' or the diffusion pseudo time for a numbered cell via \code{$DPTx}.
+#' 
 #' @param x       \code{\link{DiffusionMap}} or \code{\link{DPT}}  object
-#' @param i,name  Name of a diffusion component 'DCx', 'DPTx', 'Branch' or column from the data
+#' @param i,name  Name of a diffusion component \code{'DCx'}, \code{'DPTx'}, \code{'Branch'} or column from the data
 #' @param j       N/A
 #' @param ...     ignored
 #' 

@@ -31,7 +31,7 @@
 \arguments{
 \item{x}{\code{\link{DiffusionMap}} or \code{\link{DPT}}  object}
 
-\item{i, name}{Name of a diffusion component 'DCx', 'DPTx', 'Branch' or column from the data}
+\item{i, name}{Name of a diffusion component \code{'DCx'}, \code{'DPTx'}, \code{'Branch'} or column from the data}
 
 \item{j}{N/A}
 
@@ -41,7 +41,11 @@
 The names or data row, see respective generics.
 }
 \description{
-Extraction methods
+Extract common information from objects.
+Apart from the input data's branches,
+you can extract diffusion components via \code{$DCx}.
+From \code{\link{DPT}} objects, you can also extract the branch label via \code{$Branch},
+or the diffusion pseudo time for a numbered cell via \code{$DPTx}.
 }
 \examples{
 data(guo)
