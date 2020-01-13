@@ -146,7 +146,7 @@ plot.DiffusionMap <- function(
 			theme_really_minimal() +
 			geom_point(
 				aes_string(fill = if (use_mapping) 'Colour' else 'ColourExpl'),
-				colour = I('transparent'),
+				colour = I('#00000000'),
 				shape  = I(21))
 		
 		nomap_guide <- if (is_one_colour) 'none' else 'legend'
