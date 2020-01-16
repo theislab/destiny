@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
       </span>
     </div>
 
@@ -114,10 +114,20 @@
     <p>Plots diffusion components from a Diffusion Map and the accompanying Diffusion Pseudo Time (<code><a href='DPT.html'>DPT</a></code>)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot.DPT</span>(<span class='no'>x</span>, <span class='kw'>root</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>paths_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0L</span>), <span class='kw'>dcs</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-  <span class='kw'>divide</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0L</span>), <span class='kw'>w_width</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='st'>"dpt"</span>,
-  <span class='kw'>col_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>()), <span class='kw'>col_tip</span> <span class='kw'>=</span> <span class='st'>"red"</span>, <span class='no'>...</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>legend_main</span> <span class='kw'>=</span> <span class='no'>col_by</span>)
+    <pre class="usage"><span class='fu'>plot.DPT</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>root</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>paths_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0L</span>),
+  <span class='kw'>dcs</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>divide</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0L</span>),
+  <span class='kw'>w_width</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='st'>"dpt"</span>,
+  <span class='kw'>col_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>()),
+  <span class='kw'>col_tip</span> <span class='kw'>=</span> <span class='st'>"red"</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>legend_main</span> <span class='kw'>=</span> <span class='no'>col_by</span>
+)
 
 <span class='co'># S4 method for DPT,numeric</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
