@@ -71,7 +71,7 @@ Alternatively, you can use plot_differential_map or plot_gene_relevance on a Gen
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
       </span>
     </div>
 
@@ -118,58 +118,154 @@ Alternatively, you can use plot_differential_map or plot_gene_relevance on a Gen
 Alternatively, you can use <code>plot_differential_map</code> or <code>plot_gene_relevance</code> on a <code><a href='Gene-Relevance.html'>GeneRelevance</a></code> or <code><a href='DiffusionMap-class.html'>DiffusionMap</a></code> object, or with two matrices.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='no'>genes</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+    <pre class="usage"><span class='fu'>plot_differential_map</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>,
+  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>)
+)
 
 <span class='co'># S4 method for matrix,matrix</span>
-<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='no'>genes</span>,
-  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+<span class='fu'>plot_differential_map</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>,
+  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>)
+)
 
 <span class='co'># S4 method for DiffusionMap,missing</span>
-<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='no'>genes</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+<span class='fu'>plot_differential_map</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>,
+  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>)
+)
 
 <span class='co'># S4 method for GeneRelevance,missing</span>
-<span class='fu'>plot_differential_map</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='no'>genes</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+<span class='fu'>plot_differential_map</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>hcl.colors</span>,
+  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>)
+)
 
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-  <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(), <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>,
-  <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>plot_gene_relevance</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>,
+  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(),
+  <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>,
+  <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
 <span class='co'># S4 method for matrix,matrix</span>
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(), <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>, <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>plot_gene_relevance</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>,
+  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(),
+  <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>,
+  <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
 <span class='co'># S4 method for DiffusionMap,missing</span>
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(), <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>, <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>plot_gene_relevance</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>,
+  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(),
+  <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>,
+  <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
 <span class='co'># S4 method for GeneRelevance,missing</span>
-<span class='fu'>plot_gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(), <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>, <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>plot_gene_relevance</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>iter_smooth</span> <span class='kw'>=</span> <span class='fl'>2L</span>,
+  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(),
+  <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>,
+  <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
-<span class='fu'>plot_gene_relevance_rank</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='no'>genes</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#3B99B1"</span>, <span class='st'>"#F5191C"</span>), <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+<span class='fu'>plot_gene_relevance_rank</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#3B99B1"</span>, <span class='st'>"#F5191C"</span>),
+  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>)
+)
 
 <span class='co'># S4 method for matrix,matrix</span>
-<span class='fu'>plot_gene_relevance_rank</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='no'>genes</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#3B99B1"</span>, <span class='st'>"#F5191C"</span>),
-  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+<span class='fu'>plot_gene_relevance_rank</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#3B99B1"</span>, <span class='st'>"#F5191C"</span>),
+  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>)
+)
 
 <span class='co'># S4 method for DiffusionMap,missing</span>
-<span class='fu'>plot_gene_relevance_rank</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>,
-  <span class='no'>...</span>, <span class='no'>genes</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#3B99B1"</span>, <span class='st'>"#F5191C"</span>),
-  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+<span class='fu'>plot_gene_relevance_rank</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#3B99B1"</span>, <span class='st'>"#F5191C"</span>),
+  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>)
+)
 
 <span class='co'># S4 method for GeneRelevance,missing</span>
-<span class='fu'>plot_gene_relevance_rank</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>,
-  <span class='no'>...</span>, <span class='no'>genes</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#3B99B1"</span>, <span class='st'>"#F5191C"</span>),
-  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>))
+<span class='fu'>plot_gene_relevance_rank</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='no'>genes</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>n_top</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#3B99B1"</span>, <span class='st'>"#F5191C"</span>),
+  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
+  <span class='kw'>faceter</span> <span class='kw'>=</span> <span class='fu'>facet_wrap</span>(~<span class='no'>Gene</span>)
+)
 
 <span class='co'># S4 method for GeneRelevance,character</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)

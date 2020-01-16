@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
       </span>
     </div>
 
@@ -114,19 +114,46 @@
     <p>The relevance map is cached insided of the <code><a href='DiffusionMap-class.html'>DiffusionMap</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>20L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-  <span class='kw'>distance</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>smooth</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>remove_outliers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>gene_relevance</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>20L</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>distance</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>smooth</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>remove_outliers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
 <span class='co'># S4 method for DiffusionMap,missing</span>
-<span class='fu'>gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>20L</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>smooth</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>remove_outliers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>gene_relevance</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>20L</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>distance</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>smooth</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>remove_outliers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
 <span class='co'># S4 method for matrix,dMatrixOrMatrix</span>
-<span class='fu'>gene_relevance</span>(<span class='no'>coords</span>, <span class='no'>exprs</span>, <span class='no'>...</span>,
-  <span class='kw'>pcs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>knn_params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>weights</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>k</span>, <span class='no'>dims</span>, <span class='no'>distance</span>,
-  <span class='no'>smooth</span>, <span class='no'>remove_outliers</span>, <span class='no'>verbose</span>)</pre>
+<span class='fu'>gene_relevance</span>(
+  <span class='no'>coords</span>,
+  <span class='no'>exprs</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>pcs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>knn_params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>weights</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='no'>k</span>,
+  <span class='no'>dims</span>,
+  <span class='no'>distance</span>,
+  <span class='no'>smooth</span>,
+  <span class='no'>remove_outliers</span>,
+  <span class='no'>verbose</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

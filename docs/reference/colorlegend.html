@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
       </span>
     </div>
 
@@ -114,12 +114,27 @@
     <p>Creates a color legend for a vector used to color a plot. It will use the current <code><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a>()</code> or the specified <code>pal</code> as reference.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>colorlegend</span>(<span class='no'>col</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(), <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>posx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.9</span>, <span class='fl'>0.93</span>),
-  <span class='kw'>posy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.9</span>), <span class='kw'>main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cex_main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"cex.sub"</span>),
-  <span class='kw'>cex_axis</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"cex.axis"</span>), <span class='kw'>col_main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"col.sub"</span>),
-  <span class='kw'>col_lab</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"col.lab"</span>), <span class='kw'>steps</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>steps_color</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>digit</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>cex.main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cex.axis</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>col.main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>col.lab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>colorlegend</span>(
+  <span class='no'>col</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(),
+  <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>posx</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.9</span>, <span class='fl'>0.93</span>),
+  <span class='kw'>posy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.05</span>, <span class='fl'>0.9</span>),
+  <span class='kw'>main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cex_main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"cex.sub"</span>),
+  <span class='kw'>cex_axis</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"cex.axis"</span>),
+  <span class='kw'>col_main</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"col.sub"</span>),
+  <span class='kw'>col_lab</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"col.lab"</span>),
+  <span class='kw'>steps</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+  <span class='kw'>steps_color</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+  <span class='kw'>digit</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>cex.main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cex.axis</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col.main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col.lab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
