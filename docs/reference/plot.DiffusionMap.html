@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
       </span>
     </div>
 
@@ -114,14 +114,29 @@
     <p>If you want to plot the eigenvalues, simply <code><a href='https://rdrr.io/r/graphics/plot.html'>plot(eigenvalues(dm)[start:end], ...)</a></code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot.DiffusionMap</span>(<span class='no'>x</span>, <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>new_dcs</span> <span class='kw'>=</span> <span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>new_data</span>))
-  <span class='fu'><a href='dm_predict.html'>dm_predict</a></span>(<span class='no'>x</span>, <span class='no'>new_data</span>), <span class='kw'>new_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>col_limits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>col_new</span> <span class='kw'>=</span> <span class='st'>"red"</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pal_new</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>ticks</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>box</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>legend_main</span> <span class='kw'>=</span> <span class='no'>col_by</span>, <span class='kw'>legend_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>interactive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>draw_legend</span> <span class='kw'>=</span> !<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>col_by</span>) <span class='kw'>||</span> (<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>col</span>) <span class='kw'>&gt;</span> <span class='fl'>1</span> <span class='kw'>&amp;&amp;</span>
-  !<span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span>(<span class='no'>col</span>)), <span class='kw'>consec_col</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>,
-  <span class='kw'>plot_more</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>p</span>, <span class='no'>...</span>, <span class='no'>rescale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>) <span class='no'>p</span>)
+    <pre class="usage"><span class='fu'>plot.DiffusionMap</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>dims</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>,
+  <span class='kw'>new_dcs</span> <span class='kw'>=</span> <span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>new_data</span>)) <span class='fu'><a href='dm_predict.html'>dm_predict</a></span>(<span class='no'>x</span>, <span class='no'>new_data</span>),
+  <span class='kw'>new_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_limits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_new</span> <span class='kw'>=</span> <span class='st'>"red"</span>,
+  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pal_new</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>ticks</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>box</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>legend_main</span> <span class='kw'>=</span> <span class='no'>col_by</span>,
+  <span class='kw'>legend_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>interactive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>draw_legend</span> <span class='kw'>=</span> !<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>col_by</span>) <span class='kw'>||</span> (<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>col</span>) <span class='kw'>&gt;</span> <span class='fl'>1</span> <span class='kw'>&amp;&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span>(<span class='no'>col</span>)),
+  <span class='kw'>consec_col</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>col_na</span> <span class='kw'>=</span> <span class='st'>"grey"</span>,
+  <span class='kw'>plot_more</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>p</span>, <span class='no'>...</span>, <span class='no'>rescale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>) <span class='no'>p</span>
+)
 
 <span class='co'># S4 method for DiffusionMap,numeric</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)

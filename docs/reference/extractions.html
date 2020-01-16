@@ -36,7 +36,11 @@
 
 
 <meta property="og:title" content="Extraction methods — Extraction methods" />
-<meta property="og:description" content="Extraction methods" />
+<meta property="og:description" content="Extract common information from objects.
+Apart from the input data's branches,
+you can extract diffusion components via $DCx.
+From DPT objects, you can also extract the branch label via $Branch,
+or the diffusion pseudo time for a numbered cell via $DPTx." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -69,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
       </span>
     </div>
 
@@ -111,7 +115,11 @@
     </div>
 
     <div class="ref-description">
-    <p>Extraction methods</p>
+    <p>Extract common information from objects.
+Apart from the input data's branches,
+you can extract diffusion components via <code>$DCx</code>.
+From <code><a href='DPT.html'>DPT</a></code> objects, you can also extract the branch label via <code>$Branch</code>,
+or the diffusion pseudo time for a numbered cell via <code>$DPTx</code>.</p>
     </div>
 
     <pre class="usage"># S4 method for DiffusionMap
@@ -141,7 +149,7 @@ $(x, name)</pre>
     </tr>
     <tr>
       <th>i, name</th>
-      <td><p>Name of a diffusion component 'DCx', 'DPTx', 'Branch' or column from the data</p></td>
+      <td><p>Name of a diffusion component <code>'DCx'</code>, <code>'DPTx'</code>, <code>'Branch'</code> or column from the data</p></td>
     </tr>
     <tr>
       <th>j</th>

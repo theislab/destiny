@@ -70,7 +70,7 @@ This was necessary in pre-viridis times, by now you can probably just use hcl.co
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
       </span>
     </div>
 
@@ -116,20 +116,55 @@ This was necessary in pre-viridis times, by now you can probably just use hcl.co
 This was necessary in pre-viridis times, by now you can probably just use <code><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>cube_helix</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.4</span>, <span class='kw'>hue</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>light</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>dark</span> <span class='kw'>=</span> <span class='fl'>0.15</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>cube_helix</span>(
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>6</span>,
+  <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.4</span>,
+  <span class='kw'>hue</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
+  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>light</span> <span class='kw'>=</span> <span class='fl'>0.85</span>,
+  <span class='kw'>dark</span> <span class='kw'>=</span> <span class='fl'>0.15</span>,
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
-<span class='fu'>scale_colour_cube_helix</span>(<span class='no'>...</span>, <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.4</span>, <span class='kw'>hue</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>light</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>dark</span> <span class='kw'>=</span> <span class='fl'>0.15</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>discrete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='no'>discrete</span>) <span class='st'>"legend"</span> <span class='kw'>else</span> <span class='st'>"colourbar"</span>)
+<span class='fu'>scale_colour_cube_helix</span>(
+  <span class='no'>...</span>,
+  <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.4</span>,
+  <span class='kw'>hue</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
+  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>light</span> <span class='kw'>=</span> <span class='fl'>0.85</span>,
+  <span class='kw'>dark</span> <span class='kw'>=</span> <span class='fl'>0.15</span>,
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>discrete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='no'>discrete</span>) <span class='st'>"legend"</span> <span class='kw'>else</span> <span class='st'>"colourbar"</span>
+)
 
-<span class='fu'>scale_color_cube_helix</span>(<span class='no'>...</span>, <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.4</span>, <span class='kw'>hue</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>light</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>dark</span> <span class='kw'>=</span> <span class='fl'>0.15</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>discrete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='no'>discrete</span>) <span class='st'>"legend"</span> <span class='kw'>else</span> <span class='st'>"colourbar"</span>)
+<span class='fu'>scale_color_cube_helix</span>(
+  <span class='no'>...</span>,
+  <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.4</span>,
+  <span class='kw'>hue</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
+  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>light</span> <span class='kw'>=</span> <span class='fl'>0.85</span>,
+  <span class='kw'>dark</span> <span class='kw'>=</span> <span class='fl'>0.15</span>,
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>discrete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='no'>discrete</span>) <span class='st'>"legend"</span> <span class='kw'>else</span> <span class='st'>"colourbar"</span>
+)
 
-<span class='fu'>scale_fill_cube_helix</span>(<span class='no'>...</span>, <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.4</span>, <span class='kw'>hue</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>light</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>dark</span> <span class='kw'>=</span> <span class='fl'>0.15</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>discrete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='no'>discrete</span>) <span class='st'>"legend"</span> <span class='kw'>else</span> <span class='st'>"colourbar"</span>)</pre>
+<span class='fu'>scale_fill_cube_helix</span>(
+  <span class='no'>...</span>,
+  <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.4</span>,
+  <span class='kw'>hue</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
+  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>light</span> <span class='kw'>=</span> <span class='fl'>0.85</span>,
+  <span class='kw'>dark</span> <span class='kw'>=</span> <span class='fl'>0.15</span>,
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>discrete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='no'>discrete</span>) <span class='st'>"legend"</span> <span class='kw'>else</span> <span class='st'>"colourbar"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

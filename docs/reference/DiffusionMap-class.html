@@ -70,7 +70,7 @@ being treated as expression data features (and the others ignored), an Expressio
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">destiny</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
       </span>
     </div>
 
@@ -116,15 +116,25 @@ being treated as expression data features (and the others ignored), an Expressio
 being treated as expression data features (and the others ignored), an ExpressionSet, or a <a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>DiffusionMap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>stopifnot_distmatrix</span>(<span class='no'>distance</span>), <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='st'>"local"</span>,
+    <pre class="usage"><span class='fu'>DiffusionMap</span>(
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>stopifnot_distmatrix</span>(<span class='no'>distance</span>),
+  <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='st'>"local"</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='find_dm_k.html'>find_dm_k</a></span>(<span class='fu'>dataset_n_observations</span>(<span class='no'>data</span>, <span class='no'>distance</span>) - <span class='fl'>1L</span>),
   <span class='kw'>n_eigs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span>(<span class='fl'>20L</span>, <span class='fu'>dataset_n_observations</span>(<span class='no'>data</span>, <span class='no'>distance</span>) - <span class='fl'>2L</span>),
-  <span class='kw'>density_norm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"euclidean"</span>, <span class='st'>"cosine"</span>,
-  <span class='st'>"rankcor"</span>, <span class='st'>"l2"</span>), <span class='kw'>n_pcs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_local</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span>(<span class='no'>k</span>, <span class='fl'>7L</span>),
-  <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span>(<span class='no'>k</span>, <span class='fl'>3L</span>)), <span class='kw'>rotate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>censor_val</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>censor_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>missing_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>knn_params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> !<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>censor_range</span>),
-  <span class='kw'>suppress_dpt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>density_norm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"euclidean"</span>, <span class='st'>"cosine"</span>, <span class='st'>"rankcor"</span>, <span class='st'>"l2"</span>),
+  <span class='kw'>n_pcs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>n_local</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span>(<span class='no'>k</span>, <span class='fl'>7L</span>), <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span>(<span class='no'>k</span>, <span class='fl'>3L</span>)),
+  <span class='kw'>rotate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>censor_val</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>censor_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>missing_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>knn_params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> !<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>censor_range</span>),
+  <span class='kw'>suppress_dpt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -265,10 +275,10 @@ The default NULL will not compute principal components, but use <code>reducedDim
 #&gt;   ..colnames:   chr [1:20] "DC1" "DC2" "DC3" "DC4" ...
 #&gt; optimal_sigma:  Named num [1:428] 7.69 7.63 9.19 6.76 6.35 ...
 #&gt;  - attr(*, "names")= chr [1:428] "10" "11" "12" "13" ...
-#&gt; distance:       chr "euclidean"</div><div class='input'><span class='fu'>DiffusionMap</span>(<span class='no'>guo</span>, <span class='fl'>13</span>, <span class='kw'>censor_val</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>censor_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>15</span>, <span class='fl'>40</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; finding knns......done. Time: 0.31s
-#&gt; Calculating transition probabilities...  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%...done. Time: 0.08s
+#&gt; distance:       chr "euclidean"</div><div class='input'><span class='fu'>DiffusionMap</span>(<span class='no'>guo</span>, <span class='fl'>13</span>, <span class='kw'>censor_val</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>censor_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>15</span>, <span class='fl'>40</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; finding knns......done. Time: 0.50s
+#&gt; Calculating transition probabilities...  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%...done. Time: 0.21s
 #&gt; 
-#&gt; performing eigen decomposition......done. Time: 0.02s</div><div class='output co'>#&gt; DiffusionMap (20 Diffusion components and 428 observations)
+#&gt; performing eigen decomposition......done. Time: 0.05s</div><div class='output co'>#&gt; DiffusionMap (20 Diffusion components and 428 observations)
 #&gt; eigenvalues:    Named num [1:20] 0.586 0.303 0.261 0.201 0.191 ...
 #&gt;  - attr(*, "names")= chr [1:20] "DC1" "DC2" "DC3" "DC4" ...
 #&gt; eigenvectors:   num [1:428, 1:20] -0.0491 -0.0512 -0.0422 -0.0403 -0.0462 ...
