@@ -6,6 +6,6 @@
 ((* endblock packages *))
 
 ((* block bibliography *))
-	\bibliographystyle{humannat}
+	\bibliographystyle{plainnat}
 	\bibliography{bibliography}
 ((* endblock bibliography *))
