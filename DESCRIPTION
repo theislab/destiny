@@ -1,7 +1,7 @@
 Package: destiny
 Type: Package
 Title: Creates diffusion maps
-Version: 3.7.0
+Version: 3.7.1
 Date: 2014-12-19
 Authors@R: c(
 	person('Philipp', 'Angerer', NULL, 'philipp.angerer@helmholtz-muenchen.de', c('cre', 'aut'), comment = c(ORCID = '0000-0002-0369-2888')),
@@ -110,4 +110,6 @@ Collate:
     'projection-dist.r'
     'rankcor.r'
     'sigmas-plotting.r'
+    'zzz.R'
 RoxygenNote: 7.0.0
+PackageStatus: Deprecated
