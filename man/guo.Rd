@@ -7,7 +7,9 @@
 \alias{data:guo_norm}
 \alias{guo_norm}
 \title{Guo at al. mouse embryonic stem cell qPCR data}
-\format{An \link[Biobase:class.ExpressionSet]{ExpressionSet} with 48 features, 428 observations and 2 \link[Biobase]{phenoData} annotations.}
+\format{
+An \link[Biobase:class.ExpressionSet]{ExpressionSet} with 48 features, 428 observations and 2 \link[Biobase]{phenoData} annotations.
+}
 \usage{
 data(guo)
 data(guo_norm)

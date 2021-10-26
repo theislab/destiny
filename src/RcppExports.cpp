@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // censoring_impl
 Eigen::SparseMatrix<double> censoring_impl(const NumericMatrix data, const NumericVector sigmas, const Eigen::SparseMatrix<double> dists, const SEXP thr_or_null, const SEXP uncertain_or_null, const SEXP missing_or_null, const Function callback);
 RcppExport SEXP _destiny_censoring_impl(SEXP dataSEXP, SEXP sigmasSEXP, SEXP distsSEXP, SEXP thr_or_nullSEXP, SEXP uncertain_or_nullSEXP, SEXP missing_or_nullSEXP, SEXP callbackSEXP) {
