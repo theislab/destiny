@@ -1,45 +1,29 @@
 % !TEX TS-program = xelatex
-((* extends 'article.tplx' -*))
+((* extends 'latex/index.tex.j2' -*))
 
 ((* block packages *))
 	\PassOptionsToPackage{svgnames}{xcolor}
-	\PassOptionsToPackage{inline,shortlabels}{enumitem}
+	%\PassOptionsToPackage{inline,shortlabels}{enumitem}
 	((( super() )))
 	% load inputenc if not already loaded
 	% LaTeX 2018+ should have loaded this by default
 	% nbconvert <5.6 should have loaded utf8x
-	\makeatletter
-	\@ifpackageloaded{inputenc}{}{
-		\usepackage[utf8]{inputenc}
-	}
-	\makeatother
+	%\makeatletter
+	%\usepackage[utf8]{inputenc}
+	%\makeatother
 	\usepackage{authblk}
-	\usepackage{csquotes}
-	\usepackage{textcomp}
-	\usepackage{etoolbox}
-	\usepackage{parskip}
+	%\usepackage{csquotes}
+	%\usepackage{textcomp}
+	%\usepackage{etoolbox}
+	%\usepackage{parskip}
 	\usepackage{newunicodechar}
 	\newunicodechar{σ}{\ensuremath{\sigma}}
 	\newunicodechar{⋮}{\vdots}
-	\usepackage{upquote}
-	\AtBeginDocument{%
-		\def\PYZsq{\textquotesingle}%
-	}
 
 	\usepackage[default]{sourcesanspro}
 	\usepackage{sourcecodepro}
 	
-	\newtoggle{txsf}
-	\IfFileExists{newtxsf.sty}{\toggletrue{txsf}}{\togglefalse{txsf}}
-	\iftoggle{txsf}{ %work around broken MikTeX installation on Bioconductor
-		\IfFileExists{zsfmi-reg.tfm}{}{\togglefalse{txsf}}
-	}{}
-	
-	\iftoggle{txsf}{
-		\usepackage{newtxsf}
-	}{
-		\IfFileExists{sfmath.sty}{\usepackage{sfmath}}{}
-	}
+	\usepackage{sfmath}
 ((* endblock packages *))
 
 ((* block definitions *))

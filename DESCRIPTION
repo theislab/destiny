@@ -111,5 +111,4 @@ Collate:
     'rankcor.r'
     'sigmas-plotting.r'
     'zzz.R'
-RoxygenNote: 7.0.0
-PackageStatus: Deprecated
+RoxygenNote: 7.1.2

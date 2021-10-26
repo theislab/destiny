@@ -7,6 +7,7 @@
 .ipynb_checkpoints
 .Rproj.user
 *.Rcheck
+__pycache__/
 /.Rhistory
 /.RData
 /*.kdev4
@@ -30,5 +31,7 @@
 /vignettes/*.tex
 /inst/doc/*.toc
 /vignettes/*.toc
+/inst/doc/*.fls
+/vignettes/*.fls
 /inst/doc/*_files/
 /vignettes/*_files/
