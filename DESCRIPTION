@@ -110,5 +110,4 @@ Collate:
     'projection-dist.r'
     'rankcor.r'
     'sigmas-plotting.r'
-    'zzz.R'
 RoxygenNote: 7.1.2
