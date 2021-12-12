@@ -83,6 +83,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      ## Setup Python and nbconvert
+      - name: Setup Python for nbconvertR
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: pip install nbconvert
+
       ## R is already included in the Bioconductor docker images
       - name: Setup R from r-lib
         if: runner.os != 'Linux'
@@ -201,7 +208,7 @@ jobs:
           ## This pass does not use AnVIL and will thus update any packages
           ## that have seen been updated in Bioconductor
           message(paste('****', Sys.time(), 'pass number 2 at installing dependencies: any remaining dependencies ****'))
-          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
+          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = FALSE, upgrade = TRUE, force = TRUE)
         shell: Rscript {0}
 
       - name: Install BiocGenerics

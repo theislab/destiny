@@ -9,6 +9,8 @@
 #'                  or \link[SingleCellExperiment]{SingleCellExperiment}.
 #' @param verbose   If \code{\link{TRUE}}, log additional info to the console.
 #' 
+#' @return A vector of distances each new data point has to the existing data.
+#' 
 #' @examples
 #' data(guo_norm)
 #' g2_32 <- guo_norm[, guo_norm$num_cells < 64]

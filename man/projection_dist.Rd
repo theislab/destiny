@@ -20,6 +20,9 @@ or \link[SingleCellExperiment]{SingleCellExperiment}.}
 
 \item{verbose}{If \code{\link{TRUE}}, log additional info to the console.}
 }
+\value{
+A vector of distances each new data point has to the existing data.
+}
 \description{
 Projection distance
 }

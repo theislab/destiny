@@ -41,6 +41,15 @@
 
 \item{drop}{If \code{\link{TRUE}}, coerce result to a vector if it would otherwise have \code{1 \%in\% dim(result)}.}
 }
+\value{
+\code{[} returns a dense matrix or (if applicable and \code{isTRUE(drop)}) a vector.
+
+\code{[[} returns single distance value
+
+\code{nrow} and \code{ncol} return the number of cells
+
+\code{dim} returns \code{c(n_cells, n_cells)}
+}
 \description{
 Treat DPT object as a matrix of cell-by-cell DPT distances.
 }

@@ -12,6 +12,6 @@ An R package for diffusion maps, with additional features for large-scale and si
 builds
 ------
 
-- [![Travis](https://travis-ci.org/theislab/destiny.svg?branch=master)](https://travis-ci.org/theislab/destiny) – Travis
+- [![R-CMD-check-bioc](https://github.com/theislab/destiny/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/theislab/destiny/actions/workflows/check-bioc.yml)
 - [![Bioconductor stable](https://bioconductor.org/shields/build/release/bioc/destiny.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/destiny/) – Bioconductor stable
 - [![Bioconductor devel](https://bioconductor.org/shields/build/devel/bioc/destiny.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/destiny/) – Bioconductor devel
