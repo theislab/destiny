@@ -4,7 +4,7 @@ Title: Creates diffusion maps
 Version: 3.8.0
 Date: 2014-12-19
 Authors@R: c(
-	person('Philipp', 'Angerer', NULL, 'philipp.angerer@helmholtz-muenchen.de', c('cre', 'aut'), comment = c(ORCID = '0000-0002-0369-2888')),
+	person('Philipp', 'Angerer', NULL, 'phil.angerer@gmail.com', c('cre', 'aut'), comment = c(ORCID = '0000-0002-0369-2888')),
 	person('Laleh', 'Haghverdi', NULL, 'laleh.haghverdi@helmholtz-muenchen.de', 'ctb'),
 	person('Maren', 'Büttner', NULL, 'maren.buettner@helmholtz-muenchen.de', 'ctb', comment = c(ORCID = '0000-0002-6189-3792')),
 	person('Fabian', 'Theis', NULL, 'fabian.theis@helmholtz-muenchen.de', 'ctb', comment = c(ORCID = '0000-0002-2419-1943')),
