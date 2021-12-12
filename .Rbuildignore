@@ -6,9 +6,9 @@
 ^License\.md$
 ^update_remotes\.sh$
 ^CMakeLists\.txt$
-^\.travis\.yml$
+^\.github/.*$
 ^build/.*$
 ^docs/.*$
 ^playground/.*$
 ^.*\.kdev4$
-^\.kdev4/*$
+^\.kdev4/.*$
