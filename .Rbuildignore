@@ -3,10 +3,12 @@
 ^\.Rproj\.user$
 ^ROADMAP$
 ^README\.md$
+^License\.md$
 ^update_remotes\.sh$
 ^CMakeLists\.txt$
 ^\.travis\.yml$
 ^build/.*$
+^docs/.*$
 ^playground/.*$
 ^.*\.kdev4$
 ^\.kdev4/*$

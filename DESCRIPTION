@@ -72,7 +72,6 @@ Collate:
     'accessor-generics.r'
     'censoring.r'
     'colorlegend.r'
-    'compat.r'
     'cube_helix.r'
     'dataset-helpers.r'
     'destiny-package.r'

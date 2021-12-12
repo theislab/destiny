@@ -347,7 +347,6 @@ get_pca <- function(data_mat, data_raw, n_pcs, verbose = FALSE) {
 			return(existing_pca[, seq_len(n_pcs), drop = FALSE])
 		} else {# n_pcs > ncol(pcs)
 			warning('Specified n_pcs > ncol(reducedDim(data, "pca")), recalculating PCA')
-			rm(pcs)
 		}
 	} else if (is.null(n_pcs)) {
 		# If n_pcs is NULL, data would need to have a PCA

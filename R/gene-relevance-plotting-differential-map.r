@@ -1,3 +1,4 @@
+#' @importFrom grDevices palette hcl.colors
 #' @rdname Gene-Relevance-plotting
 #' @export
 setGeneric('plot_differential_map', function(coords, exprs, ..., genes, dims = 1:2, pal = hcl.colors, faceter = facet_wrap(~ Gene)) {
