@@ -1,0 +1,33 @@
+name: R check
+on:
+  push:
+    branches: [master, 'RELEASE_**']
+  pull_request:
+    branches: [master, 'RELEASE_**']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        R: ['oldrel-1', 'release']
+    name: R ${{ matrix.R }} sample
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.R }}
+			- uses: r-lib/actions/setup-r-dependencies@v1
+			  with:
+			    cache-version: 2
+      - uses: r-lib/actions/check-r-package@v1
+      - name: Show testthat output
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: r${{ matrix.R }}-results
+          path: check
