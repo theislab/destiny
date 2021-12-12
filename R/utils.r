@@ -156,18 +156,3 @@ setMethod('duplicated', 'dgCMatrix', function(x, incomparables = FALSE, MARGIN =
 	out
 })
 
-if (!exists('hcl.colors', 'package:grDevices'))
-	hcl.colors <- function(
-		n,
-		palette = 'viridis',
-		alpha = NULL,
-		rev = FALSE,
-		fixup = TRUE
-	) {
-		option <- switch(
-			palette,
-			magma = 'A', inferno = 'B', plasma = 'C', viridis = 'D',
-			stop('You are using an old R version and the hcl.colors replacement will not work'))
-		viridisLite::viridis(n, alpha, direction = if (rev) -1 else 1, option = option)
-	}
-
