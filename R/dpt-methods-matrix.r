@@ -24,6 +24,7 @@ NULL
 #' @rdname DPT-matrix-methods
 NULL
 
+#' @return \code{[} returns a dense matrix or (if applicable and \code{isTRUE(drop)}) a vector.
 #' @rdname DPT-matrix-methods
 #' @export
 setMethod('[', c('DPT', 'index', 'index', 'logicalOrMissing'), function(x, i, j, ..., drop = TRUE) {
@@ -68,6 +69,7 @@ setMethod('[', c('DPT', 'missing', 'missing', 'logicalOrMissing'), function(x, i
 	x[seq_len(nrow(x)), seq_len(nrow(x)), ..., drop = drop]
 })
 
+#' @return \code{[[} returns single distance value
 #' @rdname DPT-matrix-methods
 #' @export
 setMethod('[[', c('DPT', 'index', 'index'), function(x, i, j, ...) {
@@ -76,6 +78,7 @@ setMethod('[[', c('DPT', 'index', 'index'), function(x, i, j, ...) {
 	x[i, j, ...]
 })
 
+#' @return \code{nrow} and \code{ncol} return the number of cells
 #' @importFrom BiocGenerics nrow
 #' @rdname DPT-matrix-methods
 #' @export
@@ -86,6 +89,7 @@ setMethod('nrow', 'DPT', function(x) length(x@dm@d))
 #' @export
 setMethod('ncol', 'DPT', function(x) length(x@dm@d))
 
+#' @return \code{dim} returns \code{c(n_cells, n_cells)}
 #' @rdname DPT-matrix-methods
 #' @export
 setMethod('dim', 'DPT', function(x) c(nrow(x), ncol(x)))
