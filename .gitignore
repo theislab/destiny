@@ -33,5 +33,7 @@ __pycache__/
 /vignettes/*.toc
 /inst/doc/*.fls
 /vignettes/*.fls
+/inst/doc/*.html
+/vignettes/*.html
 /inst/doc/*_files/
 /vignettes/*_files/
