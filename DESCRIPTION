@@ -61,7 +61,9 @@ Suggests:
     igraph,
     testthat,
     FNN,
-    tidyr
+    tidyverse,
+    gridExtra,
+    conflicted
 VignetteBuilder: knitr
 biocViews: CellBiology,
     CellBasedAssays,
