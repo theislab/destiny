@@ -41,7 +41,7 @@ help('scRNAseq-package', package = 'scRNAseq') %>% repr::repr_html() %>%
 379 cells seems sufficient to see something!
 
 ```{r}
-allen <- scRNAseq::TasicBrainData()
+allen <- scRNAseq::ReprocessedAllenData()
 ```
 
 Preprocessing
@@ -49,7 +49,8 @@ Preprocessing
 
 We’ll mostly stick to the [scran vignette][] here. Let’s add basic information to the data and choose what to work with.
 
-`scran` expects the raw counts in the `counts` assay, and our data has ERCC spike-ins inan `altExp` slot:
+As `scran` expects the raw counts in the `counts` assay, we rename the more accurate RSEM counts to `counts`.
+Our data has ERCC spike-ins in an `altExp` slot:
 
 [scran vignette]: https://bioconductor.org/packages/devel/bioc/vignettes/scran/inst/doc/scran.html
 
@@ -57,6 +58,8 @@ We’ll mostly stick to the [scran vignette][] here. Let’s add basic informati
 rowData(allen)$Symbol <- rownames(allen)
 rowData(allen)$EntrezID <- AnnotationDbi::mapIds(org.Mm.eg.db::org.Mm.eg.db, rownames(allen), 'ENTREZID', 'ALIAS')
 rowData(allen)$Uniprot <- AnnotationDbi::mapIds(org.Mm.eg.db::org.Mm.eg.db, rownames(allen), 'UNIPROT', 'ALIAS', multiVals = 'list')
+assayNames(allen)[assayNames(allen) == 'rsem_counts'] <- 'counts'
+assayNames(altExp(allen, 'ERCC'))[assayNames(altExp(allen, 'ERCC')) == 'rsem_counts'] <- 'counts'
 allen
 ```
 
@@ -71,14 +74,14 @@ allen
 We also use the spike-ins to detect highly variable genes more accurately:
 
 ```{r}
-decomp <- decomposeVar(allen, trendVar(allen, parametric = TRUE))
+decomp <- modelGeneVarWithSpikes(allen, 'ERCC')
 rowData(allen)$hvg_order <- order(decomp$bio, decreasing = TRUE)
 ```
 
-We create a subset of the data containing only rasonably highly variable genes and no spike-ins:
+We create a subset of the data containing only rasonably highly variable genes:
 
 ```{r}
-allen_hvg <- subset(allen, hvg_order <= 5000L & !isSpike(allen))
+allen_hvg <- subset(allen, hvg_order <= 5000L)
 ```
 
 Let’s create a Diffusion map. For rapid results, people often create a PCA first, which can be stored in your `SingleCellExperiment` before creating the Diffusion map or simply created implicitly using `DiffusionMap(..., n_pcs = <number>)`.
