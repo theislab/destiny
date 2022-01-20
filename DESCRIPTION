@@ -63,6 +63,7 @@ Suggests:
     FNN,
     tidyverse,
     gridExtra,
+    cowplot,
     conflicted,
     viridis,
     rgl,
