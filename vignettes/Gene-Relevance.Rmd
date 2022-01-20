@@ -34,7 +34,7 @@ Let’s use data from the `scRNAseq`[1] package. If necessary, install it via `B
 # The parts of the help we’re interested in
 help('scRNAseq-package', package = 'scRNAseq') %>% repr::repr_html() %>%
     stringr::str_extract_all(stringr::regex('<p>The dataset.*?</p>', dotall = TRUE)) %>% unlist() %>%
-    paste(collapse = '') %>% IRdisplay::display_html()
+    paste(collapse = '') %>% knitr::raw_html()
 ```
 
 379 cells seems sufficient to see something!

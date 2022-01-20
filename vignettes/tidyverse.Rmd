@@ -98,4 +98,3 @@ fortify(dm) %>%
     ggplot(aes(DC1, DC2, colour = factor(num_cells))) +
         geom_point(alpha = .3)
 ```
-
