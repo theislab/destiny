@@ -50,11 +50,15 @@ dpt_random <- DPT(dm, tips = sample(ncol(guo), 3L))
 
 Plotting without parameters results in the DPT of the first root cell:
 
+TODO: wide plot
+
 ```{r}
 grid.arrange(plot(dpt), plot(dpt_random), ncol = 2)
 ```
 
 Other possibilities include the DPT from the other tips or everything supported by `plot.DiffusionMap`:
+
+TODO: wide plot
 
 ```{r}
 grid.arrange(

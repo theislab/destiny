@@ -56,7 +56,7 @@ SystemRequirements: C++11
 NeedsCompilation: yes
 Enhances: rgl, SingleCellExperiment
 Suggests:
-		knitr,
+    knitr,
     rmarkdown,
     igraph,
     testthat,
