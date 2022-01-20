@@ -9,8 +9,19 @@ test_nfeat <- 3L
 test_obss <- paste0('c', seq_len(test_nobss))
 test_feat <- paste0('g', seq_len(test_nfeat))
 
-test_matrix <- matrix(runif(test_nobss * test_nfeat), test_nobss, test_nfeat, dimnames = list(test_obss, test_feat))
-test_matrix[test_matrix < mean(test_matrix)] <- 0
+mk_test_matrix <- function() {
+	m <- matrix(runif(test_nobss * test_nfeat), test_nobss, test_nfeat, dimnames = list(test_obss, test_feat))
+	m[m < mean(m)] <- 0
+	m
+}
+
+test_matrix <- mk_test_matrix()
+for (attempt in seq_len(100L)) {
+	if (!any(duplicated(test_matrix))) break
+	test_matrix <- mk_test_matrix()
+}
+if (any(duplicated(test_matrix))) stop('Could not create sensible test matrix after 100 attempts')
+
 test_df     <- data.frame(test_matrix, cm1 = LETTERS[seq_len(test_nobss)], stringsAsFactors = FALSE)
 test_es     <- ExpressionSet(
 	t(test_matrix),
