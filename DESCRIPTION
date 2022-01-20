@@ -66,6 +66,7 @@ Suggests:
     conflicted,
     viridis,
     rgl,
+    scRNAseq,
     scran,
     repr
 VignetteBuilder: knitr
