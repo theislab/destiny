@@ -63,7 +63,10 @@ Suggests:
     FNN,
     tidyverse,
     gridExtra,
-    conflicted
+    conflicted,
+    viridis,
+    rgl,
+    scran
 VignetteBuilder: knitr
 biocViews: CellBiology,
     CellBasedAssays,

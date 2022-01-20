@@ -59,7 +59,8 @@ setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optiona
 #' @importFrom BiocGenerics as.data.frame
 #' @importFrom Biobase as.data.frame.ExpressionSet
 #' @rdname coercions
-#' @export fortify.DiffusionMap
+#' @rawNamespace S3method(fortify,DiffusionMap)
+#' export(fortify.DiffusionMap)
 fortify.DiffusionMap <- function(model, data, ...) as.data.frame(model, ...)
 setAs('DiffusionMap', 'data.frame', function(from) as.data.frame(from))
 
@@ -80,7 +81,8 @@ setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE
 #' @importFrom BiocGenerics as.data.frame
 #' @importFrom Biobase as.data.frame.ExpressionSet
 #' @rdname coercions
-#' @export fortify.DPT
+#' @rawNamespace S3method(fortify,DPT)
+#' export(fortify.DPT)
 fortify.DPT <- function(model, data, ...) as.data.frame(model, ...)
 setAs('DPT', 'data.frame', function(from) as.data.frame(from))
 
