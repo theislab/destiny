@@ -1,0 +1,97 @@
+---
+title: An R Markdown document converted from "./vignettes/tidyverse.ipynb"
+output: rmarkdown::html_vignette
+---
+
+Interaction with the tidyverse and ggplot2
+==========================================
+
+The [tidyverse](https://www.tidyverse.org/), [ggplot2](http://ggplot2.tidyverse.org/), and destiny are a great fit!
+
+```{r}
+suppressPackageStartupMessages({
+    library(destiny)
+    library(tidyverse)
+    library(forcats)  # not in the default tidyverse loadout
+})
+```
+
+ggplot has a peculiar method to set default scales: You just have to define certain variables.
+
+```{r}
+scale_colour_continuous <- scale_color_viridis_c
+```
+
+When working mainly with dimension reductions, I suggest to hide the (useless) ticks:
+
+```{r}
+theme_set(theme_gray() + theme(
+    axis.ticks = element_blank(),
+    axis.text  = element_blank()))
+```
+
+Let’s load our dataset
+
+```{r}
+data(guo_norm)
+```
+
+Of course you could use <code>[tidyr](http://tidyr.tidyverse.org/)::[gather()](https://rdrr.io/cran/tidyr/man/gather.html)</code> to tidy or transform the data now, but the data is already in the right form for destiny, and [R for Data Science](http://r4ds.had.co.nz/tidy-data.html) is a better resource for it than this vignette. The long form of a single cell `ExpressionSet` would look like:
+
+```{r}
+guo_norm %>%
+    as('data.frame') %>%
+    gather(Gene, Expression, one_of(featureNames(guo_norm)))
+```
+
+But destiny doesn’t use long form data as input, since all single cell data has always a more compact structure of genes×cells, with a certain number of per-sample covariates (The structure of `ExpressionSet`).
+
+```{r}
+dm <- DiffusionMap(guo_norm)
+```
+
+`names(dm)` shows what names can be used in `dm$<name>`, `as.data.frame(dm)$<name>`, or `ggplot(dm, aes(<name>))`:
+
+```{r}
+names(dm)  # namely: Diffusion Components, Genes, and Covariates
+```
+
+Due to the `fortify` method (which here just means `as.data.frame`) being defined on `DiffusionMap` objects, `ggplot` directly accepts `DiffusionMap` objects:
+
+```{r}
+ggplot(dm, aes(DC1, DC2, colour = Klf2)) +
+    geom_point()
+```
+
+When you want to use a Diffusion Map in a dplyr pipeline, you need to call `fortify`/`as.data.frame` directly:
+
+```{r}
+fortify(dm) %>%
+    mutate(
+        EmbryoState = factor(num_cells) %>%
+            lvls_revalue(paste(levels(.), 'cell state'))
+    ) %>% ggplot(aes(DC1, DC2, colour = EmbryoState)) +
+        geom_point()
+```
+
+The Diffusion Components of a converted Diffusion Map, similar to the genes in the input `ExpressionSet`, are individual variables instead of two columns in a long-form data frame, but sometimes it can be useful to “tidy” them:
+
+```{r}
+fortify(dm) %>%
+    gather(DC, OtherDC, num_range('DC', 2:5)) %>%
+    ggplot(aes(DC1, OtherDC, colour = factor(num_cells))) +
+        geom_point() +
+        facet_wrap(~ DC)
+```
+
+Another tip: To reduce overplotting, use `sample_frac(., 1.0, replace = FALSE)` (the default) in a pipeline.
+
+Adding a constant `alpha` improves this even more, and also helps you see density:
+
+```{r}
+fortify(dm) %>%
+    sample_frac() %>%
+    ggplot(aes(DC1, DC2, colour = factor(num_cells))) +
+        geom_point(alpha = .3)
+```
+

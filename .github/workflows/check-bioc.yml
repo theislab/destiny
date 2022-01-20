@@ -83,13 +83,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      ## Setup Python and nbconvert
-      - name: Setup Python for nbconvertR
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - run: pip install nbconvert
-
       ## R is already included in the Bioconductor docker images
       - name: Setup R from r-lib
         if: runner.os != 'Linux'
