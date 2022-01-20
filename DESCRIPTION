@@ -67,6 +67,7 @@ Suggests:
     viridis,
     rgl,
     scRNAseq,
+    org.Mm.eg.db,
     scran,
     repr
 VignetteBuilder: knitr
