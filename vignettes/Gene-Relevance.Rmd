@@ -21,6 +21,7 @@ library(destiny)
 suppressPackageStartupMessages(library(scran))
 library(purrr)
 library(ggplot2)
+library(SingleCellExperiment)
 ```
 
 Data
@@ -40,7 +41,7 @@ help('scRNAseq-package', package = 'scRNAseq') %>% repr::repr_html() %>%
 379 cells seems sufficient to see something!
 
 ```{r}
-data('allen', package = 'scRNAseq')
+allen <- scRNAseq::TasicBrainData()
 ```
 
 Preprocessing
@@ -48,25 +49,23 @@ Preprocessing
 
 We’ll mostly stick to the [scran vignette][] here. Let’s add basic information to the data and choose what to work with.
 
-As `scran` expects the raw counts in the `counts` assay, we rename the more accurate RSEM counts to `counts`:
+`scran` expects the raw counts in the `counts` assay, and our data has ERCC spike-ins inan `altExp` slot:
 
 [scran vignette]: https://bioconductor.org/packages/devel/bioc/vignettes/scran/inst/doc/scran.html
 
 ```{r}
-allen <- as(allen, 'SingleCellExperiment')
 rowData(allen)$Symbol <- rownames(allen)
 rowData(allen)$EntrezID <- AnnotationDbi::mapIds(org.Mm.eg.db::org.Mm.eg.db, rownames(allen), 'ENTREZID', 'ALIAS')
 rowData(allen)$Uniprot <- AnnotationDbi::mapIds(org.Mm.eg.db::org.Mm.eg.db, rownames(allen), 'UNIPROT', 'ALIAS', multiVals = 'list')
-assayNames(allen)[assayNames(allen) == 'rsem_counts'] <- 'counts'
-isSpike(allen, 'ERCC') <- grepl('^ERCC-', rownames(allen))
 allen
 ```
 
 Now we can use it to renormalize the data. We normalize the `counts` using the spike-in size factors and logarithmize them into `logcounts`.
 
 ```{r}
-allen <- computeSpikeFactors(allen)
-allen <- normalize(allen)
+allen <- computeSpikeFactors(allen, 'ERCC')
+allen <- logNormCounts(allen)
+allen
 ```
 
 We also use the spike-ins to detect highly variable genes more accurately:
