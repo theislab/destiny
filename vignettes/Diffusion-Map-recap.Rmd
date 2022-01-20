@@ -1,6 +1,10 @@
 ---
-title: An R Markdown document converted from "./vignettes/Diffusion-Map-recap.ipynb"
+title: Reproduce the Diffusion Map vignette with the supplied data()
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reproduce the Diffusion Map vignette with the supplied data()}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 Quickstart

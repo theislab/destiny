@@ -1,7 +1,11 @@
 ---
-title: An R Markdown document converted from "./vignettes/DPT.ipynb"
+title: destiny 2.0 brought the Diffusion Pseudo Time (DPT) class
 output: rmarkdown::html_vignette
 bibliography: bibliography.bib
+vignette: >
+  %\VignetteIndexEntry{destiny 2.0 brought the Diffusion Pseudo Time (DPT) class}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r}
@@ -80,3 +84,7 @@ You can further divide branches. First simply plot branch colors like we did abo
 plot(dpt, col_by = 'branch', divide = 3, dcs = c(-1,-3,2), pch = 20)
 ```
 
+References
+==========
+
+<div id="refs"></div>

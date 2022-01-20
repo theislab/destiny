@@ -1,7 +1,11 @@
 ---
-title: An R Markdown document converted from "./vignettes/Diffusion-Maps.ipynb"
+title: 'destiny main vignette: Start here!'
 output: rmarkdown::html_vignette
 bibliography: bibliography.bib
+vignette: >
+  %\VignetteIndexEntry{destiny main vignette: Start here!}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r}

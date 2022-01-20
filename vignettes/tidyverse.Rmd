@@ -1,6 +1,10 @@
 ---
-title: An R Markdown document converted from "./vignettes/tidyverse.ipynb"
+title: tidyverse and ggplot integration with destiny
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tidyverse and ggplot integration with destiny}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 Interaction with the tidyverse and ggplot2

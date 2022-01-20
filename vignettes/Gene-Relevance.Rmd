@@ -1,6 +1,10 @@
 ---
-title: An R Markdown document converted from "./vignettes/Gene-Relevance.ipynb"
+title: detecting relevant genes with destiny 3
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{detecting relevant genes with destiny 3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 Single Cell RNA-Sequencing data and gene relevance
