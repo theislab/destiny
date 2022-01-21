@@ -55,8 +55,8 @@ jobs:
       matrix:
         config:
           - { os: ubuntu-latest, r: 'release', bioc: '3.14', cont: "bioconductor/bioconductor_docker:RELEASE_3_14", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
-          - { os: macOS-latest, r: 'release', bioc: '3.14'}
-          - { os: windows-latest, r: 'release', bioc: '3.14'}
+          - { os: macOS-latest, r: 'release', bioc: '3.14' }
+          - { os: windows-latest, r: 'release', bioc: '3.14' }
           ## Check https://github.com/r-lib/actions/tree/master/examples
           ## for examples using the http-user-agent
     env:
@@ -82,11 +82,6 @@ jobs:
       ## If they update their steps, we will also need to update ours.
       - name: Checkout Repository
         uses: actions/checkout@v2
-
-      ## Necessary to do plotting with the default quartz device on macOS
-      - name: Install XQuartz
-        if: runner.os == 'macOS'
-        run: brew install --cask xquartz
 
       ## R is already included in the Bioconductor docker images
       - name: Setup R from r-lib
