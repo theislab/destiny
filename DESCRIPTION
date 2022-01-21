@@ -52,16 +52,26 @@ Imports:
     scales,
     scatterplot3d
 LinkingTo: Rcpp, RcppEigen, grDevices
-SystemRequirements: C++11, jupyter nbconvert (see nbconvertR’s INSTALL file)
+SystemRequirements: C++11
 NeedsCompilation: yes
 Enhances: rgl, SingleCellExperiment
 Suggests:
-    nbconvertR (>= 1.3.2),
+    knitr,
+    rmarkdown,
     igraph,
     testthat,
     FNN,
-    tidyr
-VignetteBuilder: nbconvertR
+    tidyverse,
+    gridExtra,
+    cowplot,
+    conflicted,
+    viridis,
+    rgl,
+    scRNAseq,
+    org.Mm.eg.db,
+    scran,
+    repr
+VignetteBuilder: knitr
 biocViews: CellBiology,
     CellBasedAssays,
     Clustering,

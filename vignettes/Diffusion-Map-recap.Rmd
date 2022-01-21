@@ -1,0 +1,43 @@
+---
+title: Reproduce the Diffusion Map vignette with the supplied data()
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reproduce the Diffusion Map vignette with the supplied data()}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Quickstart
+==========
+
+A short version to achive the above is by using the preprocessed version of the dataset provided with this package. `data(guo)` is already preprocessed (using the method first mentioned), has its threshold set to a constant 15 and is ready to use. Since the platform’s maximum amplification cycles are 40, that number can be used as upper border of the uncertainty range.
+
+```{r}
+library(destiny)
+data(guo)
+```
+
+It can be used directly for diffusion map creation:
+
+```{r}
+dm_guo <- DiffusionMap(guo, verbose = FALSE,
+                       censor_val = 15, censor_range = c(15, 40))
+dm_guo
+```
+
+```{r}
+plot(dm_guo)
+```
+
+using the annotation shows that the approximation worked
+
+```{r}
+palette(cube_helix(6))
+plot(dm_guo, col_by = 'num_cells',
+     legend_main = 'Cell stage')
+```
+
+References
+==========
+
+<div id="refs"></div>
