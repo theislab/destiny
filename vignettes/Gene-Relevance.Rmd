@@ -1,0 +1,135 @@
+---
+title: detecting relevant genes with destiny 3
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{detecting relevant genes with destiny 3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Single Cell RNA-Sequencing data and gene relevance
+==================================================
+
+Libraries
+---------
+
+We need of course destiny, scran for preprocessing, and some tidyverse niceties.
+
+```{r}
+library(conflicted)
+library(destiny)
+suppressPackageStartupMessages(library(scran))
+library(purrr)
+library(ggplot2)
+library(SingleCellExperiment)
+```
+
+Data
+----
+
+Let’s use data from the `scRNAseq`[1] package. If necessary, install it via `BiocManager::install('scRNAseq')`.
+
+[1] Risso D, Cole M (2019). [scRNAseq: A Collection of Public Single-Cell RNA-Seq Datasets](https://bioconductor.org/packages/scRNAseq/).
+
+```{r}
+# The parts of the help we’re interested in
+help('scRNAseq-package', package = 'scRNAseq') %>% repr::repr_html() %>%
+    stringr::str_extract_all(stringr::regex('<p>The dataset.*?</p>', dotall = TRUE)) %>% unlist() %>%
+    paste(collapse = '') %>% knitr::raw_html()
+```
+
+379 cells seems sufficient to see something!
+
+```{r}
+allen <- scRNAseq::ReprocessedAllenData()
+```
+
+Preprocessing
+-------------
+
+We’ll mostly stick to the [scran vignette][] here. Let’s add basic information to the data and choose what to work with.
+
+As `scran` expects the raw counts in the `counts` assay, we rename the more accurate RSEM counts to `counts`.
+Our data has ERCC spike-ins in an `altExp` slot:
+
+[scran vignette]: https://bioconductor.org/packages/devel/bioc/vignettes/scran/inst/doc/scran.html
+
+```{r}
+rowData(allen)$Symbol <- rownames(allen)
+rowData(allen)$EntrezID <- AnnotationDbi::mapIds(org.Mm.eg.db::org.Mm.eg.db, rownames(allen), 'ENTREZID', 'ALIAS')
+rowData(allen)$Uniprot <- AnnotationDbi::mapIds(org.Mm.eg.db::org.Mm.eg.db, rownames(allen), 'UNIPROT', 'ALIAS', multiVals = 'list')
+assayNames(allen)[assayNames(allen) == 'rsem_counts'] <- 'counts'
+assayNames(altExp(allen, 'ERCC'))[assayNames(altExp(allen, 'ERCC')) == 'rsem_counts'] <- 'counts'
+allen
+```
+
+Now we can use it to renormalize the data. We normalize the `counts` using the spike-in size factors and logarithmize them into `logcounts`.
+
+```{r}
+allen <- computeSpikeFactors(allen, 'ERCC')
+allen <- logNormCounts(allen)
+allen
+```
+
+We also use the spike-ins to detect highly variable genes more accurately:
+
+```{r}
+decomp <- modelGeneVarWithSpikes(allen, 'ERCC')
+rowData(allen)$hvg_order <- order(decomp$bio, decreasing = TRUE)
+```
+
+We create a subset of the data containing only rasonably highly variable genes:
+
+```{r}
+allen_hvg <- subset(allen, hvg_order <= 5000L)
+```
+
+Let’s create a Diffusion map. For rapid results, people often create a PCA first, which can be stored in your `SingleCellExperiment` before creating the Diffusion map or simply created implicitly using `DiffusionMap(..., n_pcs = <number>)`.
+
+However, even with many more principal components than necessary to get a nicely resolved Diffusion Map, the close spatial correspondence between diffusion components and genes are lost.
+
+```{r}
+#reducedDim(allen_hvg, 'pca') <- irlba::prcomp_irlba(t(assay(allen, 'logcounts')), 50)$x
+```
+
+The chosen distance metric has big implications on your results, you should try at least cosine and rankcor.
+
+```{r}
+set.seed(1)
+dms <- c('euclidean', 'cosine', 'rankcor') %>% #, 'l2'
+    set_names() %>%
+    map(~ DiffusionMap(allen_hvg, distance = ., knn_params = list(method = 'covertree')))
+```
+
+TODO: wide plot
+
+```{r}
+dms %>%
+    imap(function(dm, dist) plot(dm, 1:2, col_by = 'driver_1_s') + ggtitle(dist)) %>%
+    cowplot::plot_grid(plotlist = ., nrow = 1)
+```
+
+```{r}
+grs <- map(dms, gene_relevance)
+```
+
+TODO: wide plot
+
+```{r}
+gms <- imap(grs, function(gr, dist) plot(gr, iter_smooth = 0) + ggtitle(dist))
+cowplot::plot_grid(plotlist = gms, nrow = 1)
+```
+
+As you can see, despite the quite different embedding, the rankcor and Cosine diffusion Maps display a number of the same driving genes.
+
+```{r}
+gms[-1] %>% map(~ .$ids[1:10]) %>% purrr::reduce(intersect) %>% cat(sep = ' ')
+```
+
+```{r}
+httr::GET('https://www.uniprot.org/uniprot/', query = list(
+    columns = 'id,genes,comment(TISSUE SPECIFICITY)',
+    format = 'tab',
+    query = rowData(allen)$Uniprot[gms$cosine$ids[1:6]] %>% unlist() %>% paste(collapse = ' or ')
+)) %>% httr::content(type = 'text/tab-separated-values', encoding = 'utf-8', )
+```

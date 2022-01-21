@@ -109,7 +109,7 @@ plot.DPT <- function(
 		dpt@dm, dcs,
 		plot_more = plot_paths,
 		legend_main = legend_main,
-		col = col, legend_name = col_by,
+		col = col,
 		...)
 	
 	if (!identical(Sys.getenv('LOG_LEVEL'), '')) message('Args:\n', paste(capture.output(print(args)), collapse = '\n'))
