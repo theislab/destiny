@@ -22,7 +22,8 @@ setMethod('plot_gene_relevance', c('GeneRelevance', 'missing'), function(coords,
 	plot_gene_relevance_impl(coords, iter_smooth = iter_smooth, n_top = n_top, genes = genes, dims = dims, pal = pal, col_na = col_na, limit = limit, ...)
 })
 
-#' @importFrom ggplot2 ggplot aes_string
+#' @importFrom rlang .data
+#' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_point
 #' @importFrom ggplot2 scale_color_manual
 #' @importFrom ggplot2 ggtitle
@@ -109,7 +110,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
-	rel_map <- ggplot(rel_map_data, aes_string(x = d1, y = d2, colour = 'Gene', text = 'TopN')) +
+	rel_map <- ggplot(rel_map_data, aes(x = .data[[d1]], y = .data[[d2]], colour = .data$Gene, text = .data$TopN)) +
 		geom_point(alpha = .8) +
 		geom_rangeframe(colour = par('col')) +
 		scale_color_manual(values = pal, na.value = col_na) +

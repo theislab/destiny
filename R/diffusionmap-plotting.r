@@ -47,7 +47,8 @@ NULL
 #' @importFrom stats setNames
 #' @importFrom grDevices palette hcl.colors
 #' @importFrom scatterplot3d scatterplot3d
-#' @importFrom ggplot2 ggplot aes aes_string
+#' @importFrom rlang .data
+#' @importFrom ggplot2 ggplot aes
 #' @importFrom ggplot2 geom_point
 #' @importFrom ggplot2 theme theme_minimal element_blank element_line element_text element_rect
 #' @importFrom ggplot2 scale_fill_identity scale_fill_manual scale_fill_gradientn scale_fill_identity
@@ -142,10 +143,10 @@ plot.DiffusionMap <- function(
 		
 		use_mapping <- continuous || is_projection || !is.null(col_by)
 		p <-
-			ggplot(point_data, aes_string(d1, d2)) +
+			ggplot(point_data, aes(.data[[d1]], .data[[d2]])) +
 			theme_really_minimal() +
 			geom_point(
-				aes_string(fill = if (use_mapping) 'Colour' else 'ColourExpl'),
+				aes(fill = if (use_mapping) .data$Colour else .data$ColourExpl),
 				colour = I('#00000000'),
 				shape  = I(21))
 		
