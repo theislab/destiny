@@ -41,6 +41,7 @@ Imports:
     SingleCellExperiment,
     ggplot2,
     ggplot.multistats,
+    rlang,
     tidyr,
     tidyselect,
     ggthemes,
