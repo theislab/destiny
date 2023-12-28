@@ -25,7 +25,8 @@ setMethod('plot_gene_relevance_rank', c('GeneRelevance', 'missing'), function(co
 #' @importFrom tidyr gather
 #' @importFrom tidyselect one_of
 #' @importFrom scales percent
-#' @importFrom ggplot2 ggplot aes_string stat
+#' @importFrom rlang .data
+#' @importFrom ggplot2 ggplot after_stat
 #' @importFrom ggplot2 scale_fill_gradientn scale_alpha_continuous
 #' @importFrom ggplot.multistats stat_summaries_hex
 plot_gene_relevance_rank_impl <- function(relevance_map, ..., genes, dims, n_top, pal, bins, faceter) {
@@ -49,9 +50,9 @@ plot_gene_relevance_rank_impl <- function(relevance_map, ..., genes, dims, n_top
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
-	gg <- ggplot(d, aes_string(d1, d2, z = 'Rank')) +
+	gg <- ggplot(d, aes(.data[[d1]], .data[[d2]], z = .data$Rank)) +
 		stat_summaries_hex(
-			aes_string(fill = 'stat(top10)', alpha  = 'stat(size)'),
+			aes(fill = after_stat(.data$top10), alpha = after_stat(.data$size)),
 			funs = list(top10 = top10, size = 'length', 'median'),
 			bins = bins
 		) +

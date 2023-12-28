@@ -66,7 +66,8 @@ differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALS
 	}))
 }
 
-#' @importFrom ggplot2 ggplot aes aes_string
+#' @importFrom rlang .data
+#' @importFrom ggplot2 ggplot aes
 #' @importFrom ggplot2 geom_point geom_spoke
 #' @importFrom ggplot2 scale_colour_gradientn
 #' @importFrom ggplot2 ggtitle facet_wrap
@@ -80,12 +81,12 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 	
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
-	gg <- ggplot(dtm, aes_string(d1, d2)) +
+	gg <- ggplot(dtm, aes(.data[[d1]], .data[[d2]])) +
 		geom_spoke(
-			aes_string(
-				angle = 'Angle', radius = 'Magnitude',
-				alpha = 'PartialsNorm',
-				colour = 'Expression'
+			aes(
+				angle = .data$Angle, radius = .data$Magnitude,
+				alpha = .data$PartialsNorm,
+				colour = .data$Expression
 			),
 			arrow = arrow(length = unit(.01, 'npc'))
 		) +

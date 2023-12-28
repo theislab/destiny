@@ -36,7 +36,8 @@ NULL
 #' @importFrom methods is setMethod
 #' @importFrom scales colour_ramp rescale
 #' @importFrom utils capture.output
-#' @importFrom ggplot2 aes_string geom_path geom_point scale_colour_identity
+#' @importFrom rlang .data
+#' @importFrom ggplot2 geom_path geom_point scale_colour_identity
 #' @export
 plot.DPT <- function(
 	x, root = NULL,
@@ -144,7 +145,7 @@ get_plot_fn <- function(p) {
 		function(p2, dat, type = 'p', col, ...) {
 			xy <- colnames(dat)
 			geom <- switch(type, p = geom_point, l = geom_path, stop)
-			p2 + geom(aes_string(xy[[1L]], xy[[2L]], colour = 'Path'), data.frame(dat, Path = col))
+			p2 + geom(aes(.data[[xy[[1L]]]], .data[[xy[[2L]]]], colour = .data$Path), data.frame(dat, Path = col))
 		}
 	} else if (is.list(p) && 'points3d' %in% names(p)) {# scatterplot3d
 		function(p2, ...) {

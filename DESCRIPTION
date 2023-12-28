@@ -41,6 +41,7 @@ Imports:
     SingleCellExperiment,
     ggplot2,
     ggplot.multistats,
+    rlang,
     tidyr,
     tidyselect,
     ggthemes,
@@ -120,4 +121,4 @@ Collate:
     'projection-dist.r'
     'rankcor.r'
     'sigmas-plotting.r'
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
