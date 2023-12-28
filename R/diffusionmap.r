@@ -412,7 +412,7 @@ no_censoring <- function(dists, sigma, cb = invisible) {
 		exp(-d2@x / (2 * sigma ^ 2))
 	} else {
 		stopifnot(d2@uplo == 'U')
-		coords <- as(d2, 'dsTMatrix')
+		coords <- as(d2, 'TsparseMatrix')
 		i <- coords@i + 1L
 		j <- coords@j + 1L
 		sig2 <- sigma^2
