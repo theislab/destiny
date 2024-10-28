@@ -25,7 +25,7 @@ predict_censoring <- function(data, data2, censor_val = NULL, censor_range = NUL
 }
 
 #' @importFrom Matrix sparseMatrix
-validate_censoring <- function(data, sigma, dists, censor_val, censor_range, missing_range) { # nolint
+validate_censoring <- function(data, sigma, dists, censor_val, censor_range, missing_range) { # nolint: cyclocomp_linter.
 	g <- ncol(data)
 	n <- nrow(data)
 

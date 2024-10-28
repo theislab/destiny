@@ -52,7 +52,7 @@ dataset_n_features <- function(data, distances = NULL, vars = NULL) {
 
 #' @importFrom methods canCoerce
 #' @importFrom utils getS3method
-dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) { # nolint
+dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) { # nolint: object_name_linter.
 	# The ExpressionSet as.data.frame sucks
 	if (is(dta, 'ExpressionSet')) {
 		cbind(as.data.frame(t(exprs(dta)), row.names, optional, ...), pData(dta))

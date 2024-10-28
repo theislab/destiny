@@ -32,7 +32,7 @@
 #' @importFrom graphics par rect segments text
 #' @importFrom grDevices colorRampPalette palette
 #' @export
-colorlegend <- function( # nolint
+colorlegend <- function( # nolint: cyclocomp_linter.
 	col, pal = palette(), log = FALSE,
 	posx = c(.9, .93), posy = c(.05, .9),
 	main = NULL, cex_main = par('cex.sub'),
@@ -41,10 +41,10 @@ colorlegend <- function( # nolint
 	steps = 5, steps_color = 100,
 	digit = 2, left = FALSE,
 	...,
-	cex.main = NULL, # nolint
-	cex.axis = NULL, # nolint
-	col.main = NULL, # nolint
-	col.lab = NULL) { # nolint
+	cex.main = NULL, # nolint: object_name_linter.
+	cex.axis = NULL, # nolint: object_name_linter.
+	col.main = NULL, # nolint: object_name_linter.
+	col.lab = NULL) { # nolint: object_name_linter.
 	draw_ticks <- as.logical(steps)
 	if (!draw_ticks) steps <- 2L
 	if (!is.null(cex.main)) cex_main <- cex.main
