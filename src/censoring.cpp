@@ -66,7 +66,7 @@ inline double censor_pair(
 			const double v = use_d ? d : c;
 			
 			return
-					pow(M_PI*kt/2, -1./4)
+				pow(M_PI*kt/2, -1./4)
 				* sqrt(M_PI*kt/4)
 				* ( std::erfc((m0-v) / sigma) - std::erfc((m1-v) / sigma) )
 				/ sqrt(m1-m0);
