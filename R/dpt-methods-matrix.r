@@ -2,21 +2,21 @@
 NULL
 
 #' DPT Matrix methods
-#' 
+#'
 #' Treat DPT object as a matrix of cell-by-cell DPT distances.
-#' 
+#'
 #' @param x     \code{\link{DPT}} object.
 #' @param i,j   \link[=numeric]{Numeric} or \link{logical} index.
 #' @param ...   ignored
 #' @param drop  If \code{\link{TRUE}}, coerce result to a vector if it would otherwise have \code{1 \%in\% dim(result)}.
-#' 
+#'
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
 #' dpt <- DPT(dm)
 #' set.seed(1)
 #' plot(dpt[random_root(dpt), ], Biobase::exprs(guo_norm)['DppaI', ])
-#' 
+#'
 #' @seealso \code{\link{as.matrix.DPT}}
 ## Not [[.DPT, that is in the extraction methods
 #' @aliases [.DPT nrow.DPT ncol.DPT dim.DPT
@@ -31,21 +31,21 @@ setMethod('[', c('DPT', 'index', 'index', 'logicalOrMissing'), function(x, i, j,
 	stopifnot(length(list(...)) == 0L)
 	evas <- eigenvalues(x@dm)
 	eves <- eigenvectors(x@dm)
-	
+
 	# get numeric from negative or logical indices
 	i <- seq_len(nrow(x))[i]
 	j <- seq_len(nrow(x))[j]
-	
+
 	norm <- array(NA, c(length(i), length(j), length(evas)))
 	ev_dist <- norm
-	
+
 	for (e in seq_along(evas)) norm[, , e] <- evas[[e]]
-	norm <- norm / (1-norm)
-	
+	norm <- norm / (1 - norm)
+
 	do.call(mapply, c(list(function(ii, jj) {
 		ev_dist[ii, jj, ] <<- eves[i[[ii]], ] - eves[j[[jj]], ]
 	}), expand.grid(ii = seq_along(i), jj = seq_along(j))))
-	
+
 	r <- sqrt(apply(norm^2 * ev_dist^2, 1:2, sum))
 	if (drop && 1L %in% dim(r)) dim(r) <- NULL
 	r

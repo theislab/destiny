@@ -2,11 +2,11 @@
 NULL
 
 #' Plot gene relevance or differential map
-#' 
+#'
 #' \code{plot(gene_relevance, 'Gene')} plots the differential map of this/these gene(s),
 #' \code{plot(gene_relevance)} a relevance map of a selection of genes.
 #' Alternatively, you can use \code{plot_differential_map} or \code{plot_gene_relevance} on a \code{\link[=gene_relevance]{GeneRelevance}} or \code{\link{DiffusionMap}} object, or with two matrices.
-#' 
+#'
 #' @param x            \code{\link[=gene_relevance]{GeneRelevance}} object.
 #' @param y            Gene name(s) or index/indices to create differential map for. (integer or character)
 #' @param coords       A \code{\link{DiffusionMap}}/\code{\link[=gene_relevance]{GeneRelevance}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
@@ -24,23 +24,23 @@ NULL
 #' @param bins         Number of hexagonal bins for \code{plot_gene_relevance_rank}.
 #' @param limit        Limit the amount of displayed gene labels to the amount of available colors in \code{pal}?
 #' @param faceter      A ggplot faceter like \code{\link[ggplot2]{facet_wrap}(~ Gene)}.
-#' 
+#'
 #' @return ggplot2 plot, when plotting a relevance map with a list member \code{$ids} containing the gene IDs used.
-#' 
+#'
 #' @seealso \code{\link{gene_relevance}}, \link{Gene Relevance methods}
-#' 
+#'
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
 #' gr <- gene_relevance(dm)
 #' plot(gr)          # or plot_gene_relevance(dm)
 #' plot(gr, 'Fgf4')  # or plot_differential_map(dm, 'Fgf4')
-#' 
+#'
 #' guo_norm_mat <- t(Biobase::exprs(guo_norm))
 #' pca <- prcomp(guo_norm_mat)$x
 #' plot_gene_relevance(pca, guo_norm_mat, dims = 2:3)
 #' plot_differential_map(pca, guo_norm_mat, genes = c('Fgf4', 'Nanog'))
-#' 
+#'
 #' @name Gene Relevance plotting
 #' @rdname Gene-Relevance-plotting
 NULL

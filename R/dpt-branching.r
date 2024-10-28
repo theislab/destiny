@@ -38,7 +38,7 @@ auto_branch <- function(dpt, cells, stats, w_width, nmin = 10L, gmin = 1.1) {
 
 			branch_offset <- max(branch, na.rm = TRUE)
 			branch[match(idx_sub, cells), idx_newcol] <- sub$branch + branch_offset
-			tips[  match(idx_sub, cells), idx_newcol] <- sub$tips
+			tips[match(idx_sub, cells), idx_newcol] <- sub$tips
 		}
 	}
 
@@ -73,7 +73,7 @@ branchcut <- function(dpt_mat, bid, b, w_width) {
 	stopifnot(nrow(dpt_mat) == n)
 	stopifnot(is.double(dpt_mat), is.integer(bid))
 
-	# find cell indexes per branch 
+	# find cell indexes per branch
 	other <- all_branches[all_branches != b]
 	b1 <- other[[1L]]
 	b2 <- other[[2L]]

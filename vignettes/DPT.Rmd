@@ -27,8 +27,8 @@ library(gridExtra)  # Also we need grid.arrange
 ```{r}
 par(mar = rep(0, 4))
 graph <- igraph::graph_from_literal(
-    data -+ 'transition probabilities' -+ DiffusionMap,
-    'transition probabilities' -+ DPT)
+    data - + 'transition probabilities' - + DiffusionMap,
+    'transition probabilities' - + DPT)
 plot(
     graph, layout = igraph::layout_as_tree,
     vertex.size = 50,

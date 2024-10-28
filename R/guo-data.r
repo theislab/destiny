@@ -1,10 +1,10 @@
 #' Guo at al. mouse embryonic stem cell qPCR data
-#' 
+#'
 #' Gene expression data of 48 genes and an annotation column \code{$num_cells} containing the cell stage at which the embryos were harvested.
-#' 
+#'
 #' The data is normalized using the mean of two housekeeping genes.
 #' The difference between \code{guo} and \code{guo_norm} is the LoD being set to 10 in the former, making it usable with the \code{censor_val} parameter of \link{DiffusionMap}.
-#' 
+#'
 #' @return an \link[Biobase:class.ExpressionSet]{ExpressionSet} with 48 features and 428 observations containing qPCR Ct values and a "num.cells" observation annotation.
 #'
 #' @aliases data:guo data:guo_norm guo guo_norm

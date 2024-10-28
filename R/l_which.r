@@ -17,7 +17,7 @@
 #' all(l_which(c('a', 'c'), letters[1:3]) == c(TRUE, FALSE, TRUE))
 #'
 #' @export
-l_which <- function(idx, nms = seq_len(len), len = length(nms), useNames = TRUE) {
+l_which <- function(idx, nms = seq_len(len), len = length(nms), useNames = TRUE) { # nolint: object_name_linter.
 	rv <- logical(len)
 	if (is.character(nms)) # we need names here so that rv[idx] works
 		names(rv) <- nms

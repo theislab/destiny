@@ -5,7 +5,7 @@ NULL
 #'
 #' Convert a \code{\link{DiffusionMap}} or \code{\link{DPT}} object to other classes
 #'
-#' \link[ggplot2]{fortify} is a ggplot2 generic allowing a diffusion map to be used as \code{data} parameter in \link[ggplot2]{ggplot} or \link[ggplot2]{qplot}. 
+#' \link[ggplot2]{fortify} is a ggplot2 generic allowing a diffusion map to be used as \code{data} parameter in \link[ggplot2]{ggplot} or \link[ggplot2]{qplot}.
 #'
 #' @param x,model  A \code{\link{DiffusionMap}} or \code{\link{DPT}} object
 #' @param row.names  NULL or a character vector giving the row names for the data frame. Missing values are not allowed.
@@ -43,9 +43,9 @@ NULL
 #' @importFrom Biobase pData
 #' @rdname coercions
 #' @export
-setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optional = FALSE, ...) {
+setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optional = FALSE, ...) { # nolint: object_name_linter.
 	df_evec <- as.data.frame(eigenvectors(x), row.names, optional, ...)
-	df_data <- dataset_to_df(     dataset(x), row.names, optional, ...)
+	df_data <- dataset_to_df(dataset(x), row.names, optional, ...)
 
 	if (is.null(df_data))
 		df_evec
@@ -55,7 +55,7 @@ setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optiona
 
 
 #' @usage fortify.DiffusionMap(model, data, ...)
-#' 
+#'
 #' @importFrom BiocGenerics as.data.frame
 #' @importFrom Biobase as.data.frame.ExpressionSet
 #' @importFrom ggplot2 fortify
@@ -68,7 +68,7 @@ setAs('DiffusionMap', 'data.frame', function(from) as.data.frame(from))
 
 #' @rdname coercions
 #' @export
-setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE, ...) {
+setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE, ...) { # nolint: object_name_linter.
 	dpt <- as.matrix(x)
 	colnames(dpt) <- paste0('DPT', seq_len(ncol(dpt)))
 	cbind(

@@ -52,7 +52,7 @@ setClass('GeneRelevance', slots = c(
 	exprs = 'dMatrixOrMatrix',
 	partials = 'array',
 	partials_norm = 'matrix',
-	nn_index = 'matrix',  # Derived: k = ncol(nn_index)
+	nn_index = 'matrix',  # Derived `k = ncol(nn_index)`
 	dims = 'ColIndex',
 	distance = 'character',
 	smooth_window = 'numeric',
@@ -60,7 +60,7 @@ setClass('GeneRelevance', slots = c(
 
 #' @rdname Gene-Relevance
 #' @export
-setGeneric('gene_relevance', function(
+setGeneric('gene_relevance', function( # nolint: brace_linter.
 	coords, exprs, ...,
 	k = 20L, dims = 1:2, distance = NULL, smooth = TRUE, remove_outliers = FALSE, verbose = FALSE
 ) standardGeneric('gene_relevance'))
@@ -87,7 +87,7 @@ setMethod('gene_relevance', c('DiffusionMap', 'missing'), function( # nolint: cy
 		pcs <- get_pca(exprs, dataset(dm), dm@n_pcs, verbose)
 		weights <- eigenvalues(dm)[dims]
 		if (is.null(distance)) distance <- dm@distance
-		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance,' is not the same as the one used for the diffusion map: ', dm@distance)
+		else if (!identical(distance, dm@distance)) stop('the specified distance ', distance, ' is not the same as the one used for the diffusion map: ', dm@distance)
 		relevance_map <- gene_relevance(
 			coords, exprs, ...,
 			k = k, dims = dims, distance = distance, smooth = smooth, remove_outliers = remove_outliers, verbose = verbose,
@@ -141,7 +141,7 @@ setMethod('gene_relevance', c('matrix', 'dMatrixOrMatrix'), function(
 		expr_masked[expr_masked == 0] <- small
 		differential_expr <- apply(nn_index, 2, function(nn) expr_gene[nn] - expr_masked)
 		differential_expr[differential_expr == 0] <- NA  # Cannot evaluate partial
-		#stopifnot(identical(dim(differential_expr), c(n_cells, k)))
+		#assert stopifnot(identical(dim(differential_expr), c(n_cells, k)))
 		differential_expr
 	}
 	differential_exprs <- apply(exprs, 2L, gene_differential)

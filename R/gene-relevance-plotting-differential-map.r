@@ -32,8 +32,9 @@ differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALS
 		', not ', paste(setdiff(dims, all_dims), collapse = ', '))
 
 	genes_existing <- colnames(relevance_map@partials_norm)
-	if (is.null(genes)) genes <- genes_existing
-	else {
+	if (is.null(genes)) {
+		genes <- genes_existing
+	} else {
 		genes_missing <- is.na(match(genes, genes_existing))
 		if (any(genes_missing)) stop(
 			'The dataset used for the relevance map does not contain gene(s) ', paste(genes[genes_missing], collapse = ', '),
@@ -90,7 +91,7 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 			),
 			arrow = arrow(length = unit(.01, 'npc'))
 		) +
-		scale_colour_gradientn(colours = pal) + 
+		scale_colour_gradientn(colours = pal) +
 		geom_rangeframe(colour = par('col')) +
 		theme_really_minimal()
 

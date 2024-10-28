@@ -30,7 +30,9 @@ verbose_timing <- function(verbose, msg, expr) {
 		cat(sprintf('...done. Time: %.2fs\n', dif[['elapsed']]))
 		flush.console()
 		r
-	} else expr
+	} else {
+		expr
+	}
 }
 
 
@@ -41,18 +43,18 @@ accumulated_transitions <- function(dm) {
 		dm@data_env$accumulated_transitions <- dm@data_env$propagations
 		rm('propagations', envir = dm@data_env)
 	}
-	
+
 	if (is.null(dm@data_env$accumulated_transitions)) {
 		if (is.null(dm@transitions))
 			stop('DiffusionMap was created with suppress_dpt = TRUE')
-		
+
 		n <- length(dm@d_norm)
-		
+
 		phi0 <- dm@d_norm / sqrt(sum(dm@d_norm ^ 2))
 		inv <- solve(Diagonal(n) - dm@transitions + phi0 %*% t(phi0))
 		dm@data_env$accumulated_transitions <- inv - Diagonal(n)
 	}
-	
+
 	dm@data_env$accumulated_transitions
 }
 
@@ -62,7 +64,7 @@ hasattr <- function(x, which) !is.null(attr(x, which, exact = TRUE))
 
 flipped_dcs <- function(d, dcs) {
 	if (is(d, 'DiffusionMap')) d <- eigenvectors(d)
-	
+
 	evs <- as.matrix(d[, abs(dcs)])
 	evs[, dcs < 0] <- -evs[, dcs < 0]
 	evs
@@ -78,7 +80,7 @@ rescale_mat <- function(mat, rescale) {
 		stopifnot(ncol(mat) == ncol(rescale))
 		stopifnot(dim(rescale)[[1L]] == 2L)
 		stopifnot(dim(rescale)[[3L]] == 2L)
-		
+
 		col_type <- get(typeof(mat))
 		rv <- vapply(seq_len(ncol(mat)), function(d) {
 			scales::rescale(mat[, d], rescale['to', d, ], rescale['from', d, ])
@@ -113,14 +115,6 @@ runs <- function(vec) {
 }
 
 
-upper.tri.sparse <- function(x, diag = FALSE) {
-	# Works just like upper.tri() but doesn't forcibly coerce large 'sparseMatrix' back to 'matrix'
-	if (diag)
-		row(x) <= col(x)
-	else row(x) < col(x)
-}
-
-
 get_louvain_clusters <- function(transitions) {
 	graph <- igraph::graph_from_adjacency_matrix(transitions, 'undirected', weighted = TRUE)
 	as.integer(unclass(igraph::membership(igraph::cluster_louvain(graph))))
@@ -128,14 +122,14 @@ get_louvain_clusters <- function(transitions) {
 
 
 #' @importFrom BiocGenerics duplicated
-setMethod('duplicated', 'dgCMatrix', function(x, incomparables = FALSE, MARGIN = 1L, ...) {
-	MARGIN <- as.integer(MARGIN)
+setMethod('duplicated', 'dgCMatrix', function(x, incomparables = FALSE, MARGIN = 1L, ...) { # nolint: object_name_linter.
+	MARGIN <- as.integer(MARGIN) # nolint: object_name_linter.
 	n <- nrow(x)
 	p <- ncol(x)
 	j <- rep(seq_len(p), diff(x@p))
 	i <- x@i + 1
 	v <- x@x
-	
+
 	if (MARGIN == 1L) {  # rows
 		names(v) <- j
 		splits <- split(v, i)
@@ -144,15 +138,16 @@ setMethod('duplicated', 'dgCMatrix', function(x, incomparables = FALSE, MARGIN =
 		names(v) <- i
 		splits <- split(v, j)
 		is_empty <- setdiff(seq_len(p), j)
-	} else stop('Invalid MARGIN ', MARGIN, ', matrices only have rows (1) and columns (2).')
-	
+	} else {
+		stop('Invalid MARGIN ', MARGIN, ', matrices only have rows (1) and columns (2).')
+	}
+
 	result <- duplicated.default(splits)
 	if (!any(is_empty)) return(result)
-	
+
 	out <- logical(if (MARGIN == 1L) n else p)
 	out[-is_empty] <- result
 	if (length(is_empty) > 1)
 		out[is_empty[-1]] <- TRUE
 	out
 })
-

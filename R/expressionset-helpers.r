@@ -40,10 +40,10 @@ setMethod('as.ExpressionSet', 'data.frame', function(x, annotation_cols = !sappl
 	if (!is.logical(annotation_cols))
 		annotation_cols <- l_which(annotation_cols, names(x))
 
-	assayData <- t(as.matrix(x[!annotation_cols]))
-	phenoData <- AnnotatedDataFrame(x[annotation_cols])
+	assay_data <- t(as.matrix(x[!annotation_cols]))
+	pheno_data <- AnnotatedDataFrame(x[annotation_cols])
 
-	ExpressionSet(assayData, phenoData)
+	ExpressionSet(assay_data, pheno_data)
 })
 
 #' @param file    File path to read ASCII data from

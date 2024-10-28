@@ -44,7 +44,7 @@ setMethod('print', 'GeneRelevance', function(x) {
 	cat('is:      ')
 	if (is(d, 'Matrix')) cat(sprintf('%s%s%s %s (%s)\n', nrow(d), sym_times, ncol(d), class(d)[[1L]], mode(d@x)))
 	else str(structure(d, dimnames = NULL))
-	cat('featureNames: '); str(featureNames(x))
+	cat('featureNames: '); str(featureNames(x)) # nolint: semicolon_linter.
 	invisible(x)
 })
 
