@@ -75,13 +75,13 @@ grid.arrange(
 The `DPT` object also contains a clustering based on the tip cells and DPT, and you can specify where to draw paths from and to:
 
 ```{r}
-plot(dpt, root = 2, paths_to = c(1,3), col_by = 'branch')
+plot(dpt, root = 2, paths_to = c(1, 3), col_by = 'branch')
 ```
 
 You can further divide branches. First simply plot branch colors like we did above, then identify the number of the branch you intend to plot, and then specify it in a subsequent `plot` call. In order to see the new branches best, we specify a `dcs` argument that visually spreads out out all four branches.
 
 ```{r}
-plot(dpt, col_by = 'branch', divide = 3, dcs = c(-1,-3,2), pch = 20)
+plot(dpt, col_by = 'branch', divide = 3, dcs = c(-1, -3, 2), pch = 20)
 ```
 
 References

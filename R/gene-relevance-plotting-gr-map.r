@@ -35,8 +35,8 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	partials_norm <- relevance_map@partials_norm
 	coords <- get_coords(relevance_map, dims)
 	if (!is.numeric(iter_smooth) || length(iter_smooth) != 1L) stop('iter_smooth needs to be an integer(1)')
-	if (!is.numeric(n_top)       || length(n_top) != 1L      ) stop(      'n_top needs to be an integer(1)')
-	
+	if (!is.numeric(n_top) || length(n_top) != 1L) stop('n_top needs to be an integer(1)')
+
 	all_genes <- featureNames(relevance_map)
 	if (is.null(genes)) {
 		genes <- all_genes
@@ -63,7 +63,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	gene_ids <- counts_valid$genes_max
 	scores <- counts_valid$Freq / sum(counts_valid$Freq)
 	names(scores) <- gene_ids
-	
+
 	num_top <- min(5L, length(gene_ids))
 	top_n_cell_text <- apply(partials_norm, 1L, function(cell) {
 		idxs <- head(order(cell, decreasing = TRUE), num_top)
@@ -71,10 +71,10 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 		txt <- sprintf('%s. %s (%.3f)', seq_len(num_top), names, cell[idxs])
 		paste(txt, collapse = '\n')
 	})
-	
-	# Plot a single map with cells coloured by gene which has 
+
+	# Plot a single map with cells coloured by gene which has
 	# the highest differential norm of all genes considered.
-	
+
 	# matrix cells by n_top. might contain NAs later
 	max_genes <-
 		if (n_top > 1L) genes_ord
@@ -107,7 +107,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	# Add more than two DC and return data frame so that user
 	# can easily rebuild relevance map on other DC combination than 1 and 2.
 	rel_map_data <- cbind(as.data.frame(coords), Gene = gene_labels, TopN = top_n_cell_text)
-	
+
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
 	rel_map <- ggplot(rel_map_data, aes(x = .data[[d1]], y = .data[[d2]], colour = .data$Gene, text = .data$TopN)) +
@@ -116,10 +116,10 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 		scale_color_manual(values = pal, na.value = col_na) +
 		ggtitle(sprintf('Gene relevance map')) +
 		theme_really_minimal()
-	
+
 	rel_map$ids <- gene_ids
 	rel_map$scores <- scores
-	
+
 	rel_map
 }
 

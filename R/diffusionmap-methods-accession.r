@@ -2,16 +2,16 @@
 NULL
 
 #' DiffusionMap accession methods
-#' 
+#'
 #' Get and set eigenvalues, eigenvectors, and sigma(s) of a \link{DiffusionMap} object.
-#' 
+#'
 #' @param object  A DiffusionMap
 #' @param value   Vector of eigenvalues or matrix of eigenvectors to get/set
-#' 
+#'
 #' @return The assigned or retrieved value
-#' 
+#'
 #' @seealso \link{Extraction methods}, \link{DiffusionMap methods}, \link{Coercion methods} for more
-#' 
+#'
 #' @examples
 #' data(guo)
 #' dm <- DiffusionMap(guo)
@@ -20,7 +20,7 @@ NULL
 #' sigmas(dm)
 #' dataset(dm)
 #' optimal_sigma(dm)
-#' 
+#'
 #' @importFrom methods is setGeneric
 #' @name DiffusionMap accession methods
 #' @rdname DiffusionMap-accessors

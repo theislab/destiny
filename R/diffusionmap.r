@@ -3,15 +3,17 @@
 #' @useDynLib destiny
 NULL
 
-sigma_msg <- function(sigma) sprintf(
-	"The sigma parameter needs to be NULL, 'local', 'global', numeric or a %s object, not a %s.",
-	sQuote('Sigmas'), sQuote(class(sigma)))
+sigma_msg <- function(sigma) {
+	sprintf(
+		"The sigma parameter needs to be NULL, 'local', 'global', numeric or a %s object, not a %s.",
+		sQuote('Sigmas'), sQuote(class(sigma)))
+}
 
 #' Create a diffusion map of cells
-#' 
+#'
 #' The provided data can be a double \link[base]{matrix} of expression data or a \link[base]{data.frame} with all non-integer (double) columns
 #' being treated as expression data features (and the others ignored), an \link[Biobase:class.ExpressionSet]{ExpressionSet}, or a \link[SingleCellExperiment]{SingleCellExperiment}.
-#' 
+#'
 #' @param data           Expression data to be analyzed and covariates. Provide \code{vars} to select specific columns other than the default: all double value columns.
 #'                       If \code{distance} is a distance matrix, \code{data} has to be a \code{\link{data.frame}} with covariates only.
 #' @param sigma          Diffusion scale parameter of the Gaussian kernel. One of \code{'local'}, \code{'global'}, a (\link[base]{numeric}) global sigma or a \link{Sigmas} object.
@@ -35,9 +37,9 @@ sigma_msg <- function(sigma) sprintf(
 #' @param knn_params     Parameters passed to \code{\link{find_knn}}
 #' @param verbose        Show a progressbar and other progress information (default: do it if censoring is enabled)
 #' @param suppress_dpt   Specify TRUE to skip calculation of necessary (but spacious) information for \code{\link{DPT}} in the returned object (default: FALSE)
-#' 
+#'
 #' @return A DiffusionMap object:
-#' 
+#'
 #' @slot eigenvalues    Eigenvalues ranking the eigenvectors
 #' @slot eigenvectors   Eigenvectors mapping the datapoints to \code{n_eigs} dimensions
 #' @slot sigmas         \link{Sigmas} object with either information about the \link{find_sigmas} heuristic run or just local or \link{optimal_sigma}.
@@ -57,22 +59,22 @@ sigma_msg <- function(sigma) sprintf(
 #' @slot missing_range  Whole data range for missing value model
 #' @slot vars           Vars parameter used to extract the part of the data used for diffusion map creation
 #' @slot knn_params     Parameters passed to \code{\link{find_knn}}
-#' 
+#'
 #' @seealso \link{DiffusionMap methods} to get and set the slots. \code{\link{find_sigmas}} to pre-calculate a fitting global \code{sigma} parameter
-#' 
+#'
 #' @examples
 #' data(guo)
 #' DiffusionMap(guo)
 #' DiffusionMap(guo, 13, censor_val = 15, censor_range = c(15, 40), verbose = TRUE)
-#' 
+#'
 #' covars <- data.frame(covar1 = letters[1:100])
 #' dists <- dist(matrix(rnorm(100*10), 100))
 #' DiffusionMap(covars, distance = dists)
-#' 
+#'
 #' @importFrom methods setClass validObject
 #' @rdname DiffusionMap-class
 #' @export
-setClass(
+setClass( # nolint: cyclocomp_linter.
 	'DiffusionMap',
 	slots = c(
 		eigenvalues   = 'numeric',
@@ -133,7 +135,7 @@ setClass(
 #' @importFrom SingleCellExperiment reducedDimNames reducedDim<-
 #' @rdname DiffusionMap-class
 #' @export
-DiffusionMap <- function(
+DiffusionMap <- function( # nolint: object_name_linter, cyclocomp_linter.
 	data = stopifnot_distmatrix(distance),
 	sigma = 'local',
 	k = find_dm_k(dataset_n_observations(data, distance) - 1L),
@@ -154,24 +156,24 @@ DiffusionMap <- function(
 	# make sure those promises are resolved before we mess with `data`
 	force(k)
 	force(n_eigs)
-	
+
 	chkDots(...)
-	
+
 	if (is.null(sigma) || !is(sigma, 'Sigmas') && isTRUE(is.na(sigma)))
 		sigma <- 'local'
 	if (!is(sigma, 'Sigmas') && !(length(sigma) == 1L && sigma %in% c('local', 'global')) && !is.numeric(sigma))
 		stop(sigma_msg(sigma))
-	
+
 	if (identical(sigma, 'local') && any(n_local > k))
 		stop('For local sigma, All entries of n_local (', paste(n_local, collapse = ','), ') have to be \u2264 k (', k, ')')
-	
+
 	# store away data and continue using imputed, unified version
 	data_env <- new.env(parent = .GlobalEnv)
-	
+
 	if (is_distmatrix(distance)) {
 		if (!(is.data.frame(data) || is.null(data))) stop('If you provide a matrix for `distance`, `data` has to be NULL or a covariate `data.frame` is of class', class(data))
 		if (!is.null(n_pcs)) stop('If you provide a matrix for `distance`, `n_pcs` has to be NULL')
-		
+
 		data_env$data <- if (is.null(data)) distance else data  # put covariates or distance
 		dists <- as(distance, 'symmetricMatrix')
 		if (!is.null(rownames(data_env$data))) rownames(dists) <- colnames(dists) <- rownames(data)
@@ -181,14 +183,14 @@ DiffusionMap <- function(
 	} else {
 		dists <- NULL
 		distance <- match.arg(distance)
-		
+
 		data_env$data <- data
 		data <- dataset_extract_doublematrix(data, vars)
 		imputed_data <- data
 		if (anyNA(imputed_data))
 			imputed_data <- as.matrix(hotdeck(data, imp_var = FALSE))
 		n <- nrow(imputed_data)
-		
+
 		# PCA
 		pca <- get_pca(imputed_data, data_env$data, n_pcs, verbose)
 		if (is.null(pca) && ncol(imputed_data) > 500L) {
@@ -205,44 +207,43 @@ DiffusionMap <- function(
 				reducedDim(data_env$data, 'pca') <- pca
 		}
 	}
-	
+
 	# arg validation
-	
-	if (n <= n_eigs + 1L) stop('Eigen decomposition not possible if n \u2264 n_eigs+1 (And ', n,' \u2264 ', n_eigs + 1L, ')')
+
+	if (n <= n_eigs + 1L) stop('Eigen decomposition not possible if n \u2264 n_eigs+1 (And ', n, ' \u2264 ', n_eigs + 1L, ')')
 
 	if (is.null(k) || is.na(k)) k <- n - 1L
-	#TODO: optimize case
-	#dense <- k == n - 1L
-	
+	#TODO: optimize case `dense <- k == n - 1L`
+
 	if (k >= n) stop(sprintf('k has to be < nrow(data) (And %s \u2265 nrow(data))', k))
-	
+
 	censor <- test_censoring(censor_val, censor_range, imputed_data, missing_range)
-	
+
 	if (censor && !identical(distance, 'euclidean')) stop('censoring model only valid with euclidean distance')
-	
+
 	knn <- get_knn(data_or_pca, dists, k, distance, knn_params, verbose)  # use dists if given, else compute from pca if available, else from data
-	
+
 	sigmas <- get_sigmas(imputed_data, knn$dist, sigma, n_local, distance, censor_val, censor_range, missing_range, vars, verbose)
 	sigma <- optimal_sigma(sigmas)  # single number = global, multiple = local
-	
+
 	trans_p <- transition_probabilities(imputed_data, sigma, knn$dist_mat, censor, censor_val, censor_range, missing_range, verbose)
 	rm(knn)  # free memory
-	
+
 	d <- rowSums(trans_p, na.rm = TRUE) + 1 # diagonal set to 1
-	
+
 	# normalize by density if requested
 	norm_p <- get_norm_p(trans_p, d, d, density_norm)
 	rm(trans_p)  # free memory
-	
+
 	d_norm <- rowSums(norm_p)
-	
+
 	# calculate the inverse of a diagonal matrix by inverting the diagonal
 	d_rot <- Diagonal(x = d_norm ^ -.5)
 	transitions <- as(d_rot %*% norm_p %*% d_rot, 'symmetricMatrix')
 	rm(norm_p)  # free memory
-	
+
 	eig_transitions <- decomp_transitions(transitions, n_eigs + 1L, verbose)
-	
+
 	eig_vec <- eig_transitions$vectors
 	eig_val <- eig_transitions$values
 	if (rotate) eig_vec <- as.matrix(t(t(eig_vec) %*% d_rot))
@@ -253,7 +254,7 @@ DiffusionMap <- function(
 	colnames(eig_vec) <-
 		names(eig_val) <-
 		paste0('DC', seq(0, n_eigs))
-	
+
 	new(
 		'DiffusionMap',
 		eigenvalues   = eig_val[-1],
@@ -303,7 +304,7 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 			sig_mat <- nn_dists[, n_local, drop = FALSE]
 			sigma <- rowSums(sig_mat) / length(n_local) / 2
 		}
-		new('Sigmas', 
+		new('Sigmas',
 			log_sigmas    = NULL,
 			dim_norms     = NULL,
 			optimal_sigma = sigma,
@@ -312,7 +313,7 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 	} else if (identical(sigma, 'global')) {
 		if (!identical(distance, 'euclidean'))
 			stop(sprintf('You have to use euclidean distances with sigma estimation, not %s.', sQuote(distance)))
-		
+
 		find_sigmas(
 			imputed_data,
 			distance = distance,
@@ -331,11 +332,11 @@ get_sigmas <- function(imputed_data, nn_dists, sigma, n_local, distance = 'eucli
 
 #' @importFrom methods hasMethod
 #' @importFrom SingleCellExperiment reducedDimNames reducedDim
-get_pca <- function(data_mat, data_raw, n_pcs, verbose = FALSE) {
+get_pca <- function(data_mat, data_raw, n_pcs, verbose = FALSE) { # nolint: cyclocomp_linter.
 	stopifnot(is.null(n_pcs) || length(n_pcs) == 1L)
 	# If we suppress PCA computation, return NULL
 	if (isTRUE(is.na(n_pcs))) return(NULL)
-	
+
 	# get PCs from SingleCellExperiment if possible
 	existing_pca <- if (hasMethod('reducedDim', class(data_raw))) reducedDim(data_raw, 'pca')
 	if (!is.null(existing_pca)) {
@@ -345,7 +346,7 @@ get_pca <- function(data_mat, data_raw, n_pcs, verbose = FALSE) {
 		} else if (n_pcs < ncol(existing_pca)) {
 			warning('Specified n_pcs < ncol(reducedDim(data, "pca")), using subset')
 			return(existing_pca[, seq_len(n_pcs), drop = FALSE])
-		} else {# n_pcs > ncol(pcs)
+		} else { #: n_pcs > ncol(pcs)
 			warning('Specified n_pcs > ncol(reducedDim(data, "pca")), recalculating PCA')
 		}
 	} else if (is.null(n_pcs)) {
@@ -361,13 +362,15 @@ get_pca <- function(data_mat, data_raw, n_pcs, verbose = FALSE) {
 
 get_knn <- function(imputed_data, dists, k, distance = 'euclidean', knn_params = list(), verbose = FALSE) {
 	stopifnot(is.null(imputed_data) != is.null(dists))
-	
+
 	if (!is.null(dists)) {
 		nn_dist <- t(apply(dists, 1, function(row) sort(row)[2:k]))
 		list(dist = nn_dist, dist_mat = dists)
-	} else tryCatch({
-		verbose_timing(verbose, 'finding knns', do.call(find_knn, c(list(imputed_data, k, distance = distance), knn_params)))
-	}, error = function(e) stop('Could not call find_knn. Consider specifying `knn_params = list(M = <larger number>)`. Original error:\n', e$message, call. = FALSE))
+	} else {
+		tryCatch({
+			verbose_timing(verbose, 'finding knns', do.call(find_knn, c(list(imputed_data, k, distance = distance), knn_params)))
+		}, error = function(e) stop('Could not call find_knn. Consider specifying `knn_params = list(M = <larger number>)`. Original error:\n', e$message, call. = FALSE))
+	}
 }
 
 
@@ -375,14 +378,16 @@ get_knn <- function(imputed_data, dists, k, distance = 'euclidean', knn_params =
 #' @importFrom utils txtProgressBar setTxtProgressBar
 transition_probabilities <- function(imputed_data, sigma, dists, censor, censor_val, censor_range, missing_range, verbose) {
 	n <- nrow(dists)
-	
+
 	# create markovian transition probability matrix (trans_p)
-	
+
 	cb <- if (verbose) {
 		pb <- txtProgressBar(1, n, style = 3)
 		function(i) setTxtProgressBar(pb, i)
-	} else invisible
-	
+	} else {
+		invisible
+	}
+
 	# initialize trans_p
 	trans_p <- verbose_timing(verbose, 'Calculating transition probabilities', {
 		if (censor)
@@ -390,15 +395,15 @@ transition_probabilities <- function(imputed_data, sigma, dists, censor, censor_
 		else
 			no_censoring(dists, sigma, cb)
 	})
-	
+
 	if (verbose) close(pb)
-	
+
 	#nnzero
-	
+
 	# normalize trans_p and only retain intra-cell transitions
 	diag(trans_p) <- 0
 	trans_p <- drop0(trans_p)
-	
+
 	stopifnot(is(trans_p, 'symmetricMatrix'))
 	trans_p
 }
@@ -407,7 +412,7 @@ transition_probabilities <- function(imputed_data, sigma, dists, censor, censor_
 no_censoring <- function(dists, sigma, cb = invisible) {
 	d2 <- dists ^ 2
 	stopifnot(isSymmetric(d2))
-	
+
 	t_p <- if (length(sigma) == 1L) {
 		exp(-d2@x / (2 * sigma ^ 2))
 	} else {
@@ -416,12 +421,12 @@ no_censoring <- function(dists, sigma, cb = invisible) {
 		i <- coords@i + 1L
 		j <- coords@j + 1L
 		sig2 <- sigma^2
-		
-		S1 <- sigma[i] * sigma[j]
-		S2 <- sig2[i] + sig2[j]
-		sqrt(2 * S1 / S2) * exp(-d2@x / S2)
+
+		s1 <- sigma[i] * sigma[j]
+		s2 <- sig2[i] + sig2[j]
+		sqrt(2 * s1 / s2) * exp(-d2@x / s2)
 	}
-	
+
 	sparseMatrix(d2@i, p = d2@p, x = t_p, dims = dim(d2), symmetric = TRUE, index1 = FALSE)
 }
 
@@ -432,7 +437,7 @@ get_norm_p <- function(trans_p, d, d_new, density_norm) {
 	if (density_norm) {
 		trans_p <- as(trans_p, 'dgTMatrix') # use non-symmetric triples to operate on all values
 		stopifsmall(max(trans_p@x, na.rm = TRUE))
-		
+
 		#creates a dgCMatrix
 		sparseMatrix(trans_p@i, trans_p@j, x = trans_p@x / (d_new[trans_p@i + 1] * d[trans_p@j + 1]), dims = dim(trans_p), index1 = FALSE)
 	} else {
@@ -441,5 +446,6 @@ get_norm_p <- function(trans_p, d, d_new, density_norm) {
 }
 
 
-decomp_transitions <- function(transitions, n_eigs, verbose)
+decomp_transitions <- function(transitions, n_eigs, verbose) {
 	verbose_timing(verbose, 'performing eigen decomposition', eig_decomp(transitions, n_eigs))
+}

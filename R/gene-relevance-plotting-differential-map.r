@@ -25,12 +25,12 @@ setMethod('plot_differential_map', c('GeneRelevance', 'missing'), function(coord
 
 differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALSE) {
 	relevance_map <- updateObject(relevance_map)
-	
+
 	all_dims <- get_dim_range(relevance_map@partials, 3L, dims)
 	if (!all(dims %in% all_dims)) stop(
 		'The relevance map contains only the dimensions ', paste(all_dims, collapse = ', '),
 		', not ', paste(setdiff(dims, all_dims), collapse = ', '))
-	
+
 	genes_existing <- colnames(relevance_map@partials_norm)
 	if (is.null(genes)) genes <- genes_existing
 	else {
@@ -39,10 +39,10 @@ differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALS
 			'The dataset used for the relevance map does not contain gene(s) ', paste(genes[genes_missing], collapse = ', '),
 			'. Did you mean ', paste(agrep(genes[genes_missing], genes_existing, value = TRUE), collapse = ', '), '?')
 	}
-	
+
 	exprs <- relevance_map@exprs
 	coords <- get_coords(relevance_map, dims)
-	
+
 	partials_norms <- relevance_map@partials_norm[, genes, drop = FALSE]
 
 	do.call(rbind, lapply(genes, function(g) {
@@ -54,14 +54,14 @@ differential_map <- function(relevance_map, genes = NULL, dims = 1:2, all = FALS
 			delta <- diff(rev(range(dc, na.rm = TRUE)))
 			partials / max(abs(partials), na.rm = TRUE) * d_var * delta
 		})
-		
+
 		cbind(
 			as.data.frame(coords),
 			Expression = exprs[, g],
 			PartialsNorm = partials_norms[, g],
 			Cell = if (!is.null(rownames(exprs))) rownames(exprs) else seq_len(nrow(exprs)),
 			Gene = factor(g, levels = genes),
-			Angle     = atan(partials[[2]]   / partials[[1]]  ),
+			Angle = atan(partials[[2]] / partials[[1]]),
 			Magnitude = sqrt(partials[[1]]^2 + partials[[2]]^2))
 	}))
 }
@@ -78,7 +78,7 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 	dtm <- differential_map(relevance_map, genes, dims)
 	coords <- get_coords(relevance_map, dims)
 	gene_names <- if (is.character(genes)) genes else colnames(relevance_map@exprs)[genes]
-	
+
 	d1 <- colnames(coords)[[1]]
 	d2 <- colnames(coords)[[2]]
 	gg <- ggplot(dtm, aes(.data[[d1]], .data[[d2]])) +
@@ -93,6 +93,6 @@ plot_differential_map_impl <- function(relevance_map, ..., genes, dims, pal, fac
 		scale_colour_gradientn(colours = pal) + 
 		geom_rangeframe(colour = par('col')) +
 		theme_really_minimal()
-	
+
 	if (length(genes) > 1) gg + faceter else gg + ggtitle(gene_names)
 }

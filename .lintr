@@ -1,0 +1,7 @@
+linters: linters_with_defaults( # see vignette("lintr")
+    whitespace_linter = NULL,
+    indentation_linter = NULL,
+    line_length_linter = NULL,
+    quotes_linter = quotes_linter("'")
+  )
+encoding: "UTF-8"

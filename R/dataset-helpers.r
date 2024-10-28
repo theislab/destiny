@@ -23,7 +23,7 @@ dataset_extract_doublematrix <- function(data, vars = NULL) {
 		data <- data[!dupes, ]
 		warning('Duplicate rows removed from data. Consider explicitly using `df[!duplicated(df), ]`')
 	}
-	
+
 	if (!is.null(vars))
 		data <- data[, vars]
 	data
@@ -52,13 +52,13 @@ dataset_n_features <- function(data, distances = NULL, vars = NULL) {
 
 #' @importFrom methods canCoerce
 #' @importFrom utils getS3method
-dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) {
+dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) { # nolint
 	# The ExpressionSet as.data.frame sucks
 	if (is(dta, 'ExpressionSet')) {
 		cbind(as.data.frame(t(exprs(dta)), row.names, optional, ...), pData(dta))
 	} else if (is(dta, 'SingleCellExperiment')) {
 		smp_meta <- as.data.frame(colData(dta), row.names, optional, ...)
-		
+
 		#TODO: allow other name?
 		mat <- assay(dta, 'logcounts')
 		if (is(mat, 'sparseMatrix')) {
@@ -73,11 +73,11 @@ dataset_to_df <- function(dta, row.names = NULL, optional = FALSE, ...) {
 				mat <- as.matrix(mat)
 			}
 		}
-		
+
 		cbind(as.data.frame(t(mat), row.names, optional, ...), smp_meta)
 	} else if (canCoerce(dta, 'data.frame')) {
 		as(dta, 'data.frame')
-	} else if (!is.null(getS3method('as.data.frame', class(dta)[[1L]], optional = TRUE))) {
+	} else if (!is.null(getS3method('as.data.frame', class(dta)[[1L]], optional = TRUE))) { # nolint: brace_linter.
 		as.data.frame(dta, row.names, optional, ...)
 	} else NULL
 }

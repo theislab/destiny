@@ -2,7 +2,7 @@
 setOldClass('dist')
 
 #' @importFrom Matrix sparseMatrix
-as.Matrix.dist <- function(from) {
+as.Matrix.dist <- function(from) { # nolint: object_name_linter.
 	s <- attr(from, 'Size')
 	i <- rep.int(seq_len(s - 1L), rev(seq_len(s - 1L)))
 	j <- rev(abs(sequence(seq.int(s - 1L)) - s) + 1L)

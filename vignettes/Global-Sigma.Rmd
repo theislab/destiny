@@ -38,11 +38,14 @@ The resulting diffusion map’s approximation depends on the chosen sigma. Note 
 palette(cube_helix(6))
 
 plots <- lapply(
-    list('local', 5, round(optimal_sigma(sigmas), 2), 100),
-    function(sigma) plot(
-        DiffusionMap(guo_norm, sigma), 1:2,
-        main = paste('σ =', sigma),
-        col_by = 'num_cells', draw_legend = FALSE))
+  list('local', 5, round(optimal_sigma(sigmas), 2), 100),
+  function(sigma) {
+    plot(
+      DiffusionMap(guo_norm, sigma), 1:2,
+      main = paste('σ =', sigma),
+      col_by = 'num_cells', draw_legend = FALSE)
+  }
+)
 
 do.call(gridExtra::grid.arrange, c(plots, ncol = 2))
 ```

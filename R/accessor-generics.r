@@ -1,10 +1,10 @@
 #' destiny generics
-#' 
+#'
 #' destiny provides several generic methods and implements them for the \code{\link{DiffusionMap}} and \code{\link{Sigmas}} classes.
-#' 
+#'
 #' @param object  Object from which to extract or to which to assign a value
 #' @param value   Value to assign within an object
-#' 
+#'
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
@@ -14,9 +14,9 @@
 #' optimal_sigma(dm)
 #' dataset(dm)
 #' distance(dm)
-#' 
+#'
 #' @seealso \link{DiffusionMap methods} and \link{Sigmas} class for implementations
-#' 
+#'
 #' @importFrom methods setGeneric
 #' @name destiny generics
 #' @rdname destiny-generics
@@ -77,4 +77,3 @@ setGeneric('distance<-', function(object, value) standardGeneric('distance<-'))
 #' @rdname destiny-generics
 #' @export
 setGeneric('optimal_sigma', function(object) standardGeneric('optimal_sigma'))
-

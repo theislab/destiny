@@ -74,7 +74,8 @@ fortify(dm) %>%
     mutate(
         EmbryoState = factor(num_cells) %>%
             lvls_revalue(paste(levels(.), 'cell state'))
-    ) %>% ggplot(aes(DC1, DC2, colour = EmbryoState)) +
+    ) %>%
+    ggplot(aes(DC1, DC2, colour = EmbryoState)) +
         geom_point()
 ```
 

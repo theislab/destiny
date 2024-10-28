@@ -1,47 +1,47 @@
 auto_branch <- function(dpt, cells, stats, w_width, nmin = 10L, gmin = 1.1) {
 	n <- length(cells)
-	
+
 	stopifnot(n >= nmin)
 	stopifnot(stats$g >= gmin)
-	
+
 	# initialize one level (branch, tips) and three branches (dpt)
 	branches <- cut_branches(dpt[cells, stats$tips], cells, w_width)  # list of vectors of numeric indices
 	branch <- matrix(idx_list_to_vec(branches, cells, n), n, 1L)
 	tips <- matrix(logical(n), n, 1L)
 	tips[match(stats$tips, cells), 1L] <- TRUE
-	
+
 	subs <- mapply(function(idx_sub, i) {
 		if (length(idx_sub) < nmin || !i %in% idx_sub)  # Tip cells can end up undecided!
 			return(NULL)
-		
+
 		sub_stats <- tipstats(dpt, idx_sub, i)
 		if (sub_stats$g < gmin)
 			return(NULL)
-		
+
 		auto_branch(dpt, idx_sub, sub_stats, w_width, nmin, gmin)
 	}, branches, stats$tips, SIMPLIFY = FALSE)
-	
+
 	# add dpt columns to dpt and a level column to branch/tips if any branch was subdivided
 	nonnull_subs <- vapply(subs, Negate(is.null), logical(1L))
 	if (any(nonnull_subs)) {
 		n_sublevels <- do.call(max, lapply(subs[nonnull_subs], function(s) ncol(s$branch)))
-		
+
 		branch <- cbind(branch, matrix(NA_integer_, n, n_sublevels))
 		tips   <- cbind(tips,   matrix(NA,          n, n_sublevels))
-		
+
 		for (s in which(nonnull_subs)) {
 			sub <- subs[[s]]
 			idx_sub <- branches[[s]]
-			
+
 			idx_newcol <- seq.int(ncol(branch) - n_sublevels + 1L, length.out = ncol(sub$branch))
 			stopifnot(ncol(sub$branch) == ncol(sub$tips))
-			
+
 			branch_offset <- max(branch, na.rm = TRUE)
 			branch[match(idx_sub, cells), idx_newcol] <- sub$branch + branch_offset
 			tips[  match(idx_sub, cells), idx_newcol] <- sub$tips
 		}
 	}
-	
+
 	stopifnot(ncol(branch) == ncol(tips))
 	list(branch = branch, tips = tips)
 }
@@ -66,37 +66,37 @@ cut_branches <- function(dpt_mat, cells, w_width) {
 branchcut <- function(dpt_mat, bid, b, w_width) {
 	n <- nrow(bid)
 	all_branches <- seq_len(3L)
-	
+
 	# sanity checks
 	stopifnot(b %in% all_branches)
 	stopifnot(ncol(dpt_mat) == 3L, ncol(bid) == 3L)
 	stopifnot(nrow(dpt_mat) == n)
 	stopifnot(is.double(dpt_mat), is.integer(bid))
-	
+
 	# find cell indexes per branch 
 	other <- all_branches[all_branches != b]
 	b1 <- other[[1L]]
 	b2 <- other[[2L]]
-	
+
 	# DPT for other branches, sorted by b3
 	b3_idxs <- bid[, b]
 	dpt1 <- dpt_mat[b3_idxs, b1]
 	dpt2 <- dpt_mat[b3_idxs, b2]
-	
+
 	kcor <- vapply(seq_len(n - 1L), function(s1) {
 		s2 <- s1 + 1L
 		l <- seq_len(s1)
 		r <- seq(s2, n)
-		
+
 		k_l <- kendall_finite_cor(dpt1[l], dpt2[l], dpt1[[s2]], dpt2[[s2]])
 		k_r <- kendall_finite_cor(dpt1[r], dpt2[r], dpt1[[s1]], dpt2[[s1]])
-		
-		k_l/s1 - k_r/(n - s1)
+
+		k_l / s1 - k_r / (n - s1)
 	}, double(1L))
-	
+
 	kcor <- smth.gaussian(kcor, w_width)
 	cut <- which.max(kcor)
-	
+
 	b3_idxs[seq_len(cut)]
 }
 
@@ -110,7 +110,7 @@ organize_branches <- function(branches) {
 	intersect_branches <- function(bs) intersect(branches[[bs[[1L]]]], branches[[bs[[2L]]]])
 	branch_intersections <- lapply(combn(3L, 2L, simplify = FALSE), intersect_branches)
 	inters <- Reduce(union, branch_intersections, integer())
-	
+
 	lapply(branches, function(b) union(setdiff(b, inters), b[[1]]))
 }
 
@@ -121,10 +121,10 @@ kendall_finite_cor <- function(b1, b2, new1, new2) {
 	b11 <- numeric(length(b1))
 	b11[b1 >= new1] <- 1
 	b11[b1 <  new1] <- -1
-	
+
 	b22 <- numeric(length(b2))
 	b22[b2 >= new2] <- 1
 	b22[b2 <  new2] <- -1
-	
+
 	as.double(b11 %*% b22)  # strip dims
 }

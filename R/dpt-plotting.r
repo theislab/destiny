@@ -2,9 +2,9 @@
 NULL
 
 #' Plot DPT
-#' 
+#'
 #' Plots diffusion components from a Diffusion Map and the accompanying Diffusion Pseudo Time (\code{\link{DPT}})
-#' 
+#'
 #' @param x           A \code{\link{DPT}} object.
 #' @param y,root      Root branch ID. Will be used as the start of the DPT. (default: lowest branch ID)
 #'                    (If longer than size 1, will be interpreted as \code{c(root, branches)})
@@ -18,11 +18,11 @@ NULL
 #' @param ...         Graphical parameters supplied to \code{\link{plot.DiffusionMap}}
 #' @param col         See \code{\link{plot.DiffusionMap}}. This overrides \code{col_by}
 #' @param legend_main See \code{\link{plot.DiffusionMap}}.
-#' 
+#'
 #' @return The return value of the underlying call is returned, i.e. a scatterplot3d or rgl object for 3D plots.
-#' 
+#'
 #' @aliases plot.DPT
-#' 
+#'
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
@@ -31,7 +31,7 @@ NULL
 #' plot(dpt, 2L,      col_by = 'branch')
 #' plot(dpt, 1L, 2:3, col_by = 'num_cells')
 #' plot(dpt, col_by = 'DPT3')
-#' 
+#'
 #' @importFrom graphics plot points
 #' @importFrom methods is setMethod
 #' @importFrom scales colour_ramp rescale
@@ -39,7 +39,7 @@ NULL
 #' @importFrom rlang .data
 #' @importFrom ggplot2 geom_path geom_point scale_colour_identity
 #' @export
-plot.DPT <- function(
+plot.DPT <- function( # nolint: cyclocomp_linter.
 	x, root = NULL,
 	paths_to = integer(0L),
 	dcs = 1:2,
@@ -54,48 +54,48 @@ plot.DPT <- function(
 ) {
 	dpt <- x
 	dpt_flat <- branch_divide(dpt, divide)
-	
+
 	if (!is.null(root) && length(root) < 1L) stop('root needs to be specified')
 	root <-
 		if (is.null(root)) min(dpt_flat@branch[, 1], na.rm = TRUE)
 		else as.integer(root)
 	paths_to <- as.integer(paths_to)
-	
+
 	if (length(root) > 1L && length(paths_to) > 0L)
 		stop('(length(root), length(paths_to)) needs to be (1, 0-n) or (2-n, 0), but is (', length(root), ', ', length(paths_to), ')')
 	stopifnot(length(dcs) %in% 2:3)
-	
+
 	if (length(root) > 1L && length(paths_to) == 0L) {
 		paths_to <- root[-1]
 		root <- root[[1]]
 	}
-	
+
 	pt_vec <- dpt_for_branch(dpt_flat, root)
-	
+
 	evs <- flipped_dcs(dpt@dm, dcs)
-	
+
 	plot_paths <- function(p, ..., rescale) {
 		plot_points <- get_plot_fn(p)
 		rescale_fun <-
 			if (is.null(rescale)) identity
 			else function(x) rescale_mat(x, rescale)
-		
+
 		for (b in seq_along(paths_to)) {
 			idx <- dpt@branch[, 1] %in% c(root, paths_to[[b]])
 			path <- average_path(pt_vec[idx], evs[idx, ], w_width)
 			p <- plot_points(p, rescale_fun(path), type = 'l', col = col_path[[b]], ...)
 		}
-		
+
 		tips <- evs[dpt_flat@tips[, 1], ]
 		p <- plot_points(p, rescale_fun(tips), col = col_tip, ...)
-		
+
 		if (!is(p, 'ggplot')) p
 		else p + scale_colour_identity(
 			name = 'Path and Tips', guide = 'legend',
 			breaks = c(col_path[seq_along(paths_to)], col_tip),
 			labels = c(sprintf('Path to %s', paths_to), 'Tips'))
 	}
-	
+
 	col <-
 		if (!is.null(col)) col
 		else switch(col_by,
@@ -103,16 +103,16 @@ plot.DPT <- function(
 			branch = ,
 			Branch = dpt_flat@branch[, 1],
 			dpt[[col_by]])
-	
+
 	legend_main <- switch(legend_main, dpt = 'DPT', branch = 'Branch', legend_main)
-	
+
 	args <- list(
 		dpt@dm, dcs,
 		plot_more = plot_paths,
 		legend_main = legend_main,
 		col = col,
 		...)
-	
+
 	if (!identical(Sys.getenv('LOG_LEVEL'), '')) message('Args:\n', paste(capture.output(print(args)), collapse = '\n'))
 	do.call(plot, args)
 }
@@ -127,7 +127,7 @@ setMethod('plot', c('DPT', 'missing'), function(x, y, ...) {
 	args <- list(...)
 	root <- args$root  # may be NULL
 	args$root <- NULL
-	
+
 	do.call(plot.DPT, c(list(x, root), args))
 })
 
@@ -157,5 +157,7 @@ get_plot_fn <- function(p) {
 			switch(type, p = rgl::points3d, l = rgl::lines3d, stop)(x, y, z, ...)
 			p2
 		}
-	} else stop('unknown p passed to plot_more (class(es): ', paste(class(p), collapse = ', '), ')')
+	} else {
+		stop('unknown p passed to plot_more (class(es): ', paste(class(p), collapse = ', '), ')')
+	}
 }

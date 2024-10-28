@@ -1,7 +1,7 @@
 #' kNN search
-#' 
+#'
 #' Approximate k nearest neighbor search with flexible distance function.
-#' 
+#'
 #' @param data      Data matrix
 #' @param query     Query matrix. Leave it out to use \code{data} as query
 #' @param k         Number of nearest neighbors
@@ -10,7 +10,7 @@
 #' @param method    Method to use. \code{'hnsw'} is tunable with \code{...} but generally less exact than \code{'covertree'} (default: 'covertree')
 #' @param sym       Return a symmetric matrix (as long as query is NULL)?
 #' @param verbose   Show a progressbar? (default: FALSE)
-#' 
+#'
 #' @return A \code{\link{list}} with the entries:
 #' \describe{
 #'   \item{\code{index}}{A \eqn{nrow(data) \times k} \link{integer} \link{matrix} containing the indices of the k nearest neighbors for each cell.}
@@ -21,7 +21,7 @@
 #'     Any zero in the matrix (except for the diagonal) indicates that the cells in the corresponding pair are close neighbors.
 #'   }
 #' }
-#' 
+#'
 #' @rdname knn
 #' @importFrom RcppHNSW hnsw_build hnsw_knn hnsw_search
 #' @export
@@ -44,14 +44,14 @@ find_knn <- function(
 	if (method == 'covertree') {
 		return(knn.covertree::find_knn(data, k, query = query, distance = distance, sym = sym))
 	}
-	
+
 	if (distance == 'rankcor') {
 		# TODO: rank_mat only works on dense matrices
 		distance <- 'cosine'
 		data <- rank_mat(data)
 		if (!is.null(query)) query <- rank_mat(query)
 	}
-	
+
 	if (is.null(query)) {
 		knn <- hnsw_knn(data, k + 1L, distance, M = p$M, ef_construction = p$ef_construction, ef = p$ef, verbose = verbose)
 		knn$idx  <- knn$idx[ , -1, drop = FALSE]

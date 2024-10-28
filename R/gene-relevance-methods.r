@@ -3,22 +3,22 @@
 NULL
 
 #' Gene Relevance methods
-#' 
+#'
 #' \code{featureNames <- ...} can be used to set the gene names used for plotting
 #' (e.g. if the data contains hardly readably gene or transcript IDs).
 #' \code{dataset} gets the expressions used for the gene relevance calculations,
 #' and \code{distance} the distance measure.
-#' 
+#'
 #' @param x,object  \code{GeneRelevance} object
 #' @param value     A text vector (\code{\link{character}} or \code{\link{factor}})
-#' 
+#'
 #' @return
 #' \code{dataset}, \code{distance}, and \code{featureNames} return the stored properties.
 #' The other methods return a \code{GeneRelevance} object (\code{print}, \code{... <- ...}),
 #' or NULL (\code{show}), invisibly
-#' 
+#'
 #' @seealso \code{\link{gene_relevance}}, \link{Gene Relevance plotting}
-#' 
+#'
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
@@ -26,7 +26,7 @@ NULL
 #' stopifnot(distance(gr) == distance(dm))
 #' featureNames(gr)[[37]] <- 'Id2 (suppresses differentiation)'
 #' # now plot it with the changed gene name(s)
-#' 
+#'
 #' @aliases featureNames.GeneRelevance dataset.GeneRelevance
 #' @name Gene Relevance methods
 #' @rdname Gene-Relevance-methods
@@ -35,7 +35,7 @@ NULL
 
 #' @importFrom methods is
 #' @importFrom utils str
-#' 
+#'
 #' @rdname Gene-Relevance-methods
 #' @export
 setMethod('print', 'GeneRelevance', function(x) {
@@ -49,7 +49,7 @@ setMethod('print', 'GeneRelevance', function(x) {
 })
 
 #' @importFrom methods show
-#' 
+#'
 #' @rdname Gene-Relevance-methods
 #' @export
 setMethod('show', 'GeneRelevance', function(object) {

@@ -17,20 +17,6 @@ suppressPackageStartupMessages({
     library(destiny)
     library(Biobase)
 })
-
-#setHook('on.rgl.close', function(...) {
-#    name <- tempfile()
-#    par3d(windowRect = c(0, 0, 1200, 1200))
-#    Sys.sleep(1)
-#    
-#    rgl.snapshot(  filename = paste0(name, '.png'))
-#   #rgl.postscript(filename = paste0(name, '.pdf'), fmt='pdf')  # doesn’t work with spheres
-#    
-#    publish_mimebundle(list(
-#        'image/png'       = base64encode(paste0(name, '.png'))
-#     #, 'application/pdf' = base64encode(paste0(name, '.pdf'))
-#    ))
-#}, 'replace')
 ```
 
 Diffusion maps are spectral method for non-linear dimension reduction introduced by @coifman_geometric_2005. Diffusion maps are based on a distance metric (diffusion distance) which is conceptually relevant to how differentiating cells follow noisy diffusion-like dynamics, moving from a pluripotent state towards more differentiated states.
@@ -134,7 +120,7 @@ If you started reading here, execute `data(guo.norm)` to load the dataset that w
 
 ```{r}
 library(destiny)
-#data(guo_norm)
+#If you start here, run: data(guo_norm)
 dm <- DiffusionMap(guo_norm)
 ```
 
@@ -191,8 +177,7 @@ For the popular `ggplot2` package, there is built in support in the form of a `f
 library(ggplot2)
 qplot(DC1, DC2, data = dm, colour = factor(num_cells)) +
     scale_color_cube_helix()
-# or alternatively:
-#ggplot(dif, aes(DC1, DC2, colour = factor(num.cells))) + ...
+# or alternatively: ggplot(dif, aes(DC1, DC2, colour = factor(num.cells))) + ...
 ```
 
 As aesthetics, all diffusion components, gene expressions, and annotations are available. If you plan to make many plots, create a `data.frame` first by using `as.data.frame(dif)` or `fortify(dif)`, assign it to a variable name, and use it for plotting.

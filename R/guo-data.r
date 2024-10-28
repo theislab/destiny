@@ -6,7 +6,7 @@
 #' The difference between \code{guo} and \code{guo_norm} is the LoD being set to 10 in the former, making it usable with the \code{censor_val} parameter of \link{DiffusionMap}.
 #' 
 #' @return an \link[Biobase:class.ExpressionSet]{ExpressionSet} with 48 features and 428 observations containing qPCR Ct values and a "num.cells" observation annotation.
-#' 
+#'
 #' @aliases data:guo data:guo_norm guo guo_norm
 #' @name guo
 #' @docType data

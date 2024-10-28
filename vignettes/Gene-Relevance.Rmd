@@ -33,9 +33,12 @@ Let’s use data from the `scRNAseq`[1] package. If necessary, install it via `B
 
 ```{r}
 # The parts of the help we’re interested in
-help('scRNAseq-package', package = 'scRNAseq') %>% repr::repr_html() %>%
-    stringr::str_extract_all(stringr::regex('<p>The dataset.*?</p>', dotall = TRUE)) %>% unlist() %>%
-    paste(collapse = '') %>% knitr::raw_html()
+help('scRNAseq-package', package = 'scRNAseq') %>%
+    repr::repr_html() %>%
+    stringr::str_extract_all(stringr::regex('<p>The dataset.*?</p>', dotall = TRUE)) %>%
+    unlist() %>%
+    paste(collapse = '') %>%
+    knitr::raw_html()
 ```
 
 379 cells seems sufficient to see something!
@@ -89,7 +92,7 @@ Let’s create a Diffusion map. For rapid results, people often create a PCA fir
 However, even with many more principal components than necessary to get a nicely resolved Diffusion Map, the close spatial correspondence between diffusion components and genes are lost.
 
 ```{r}
-#reducedDim(allen_hvg, 'pca') <- irlba::prcomp_irlba(t(assay(allen, 'logcounts')), 50)$x
+#To go from PCA: reducedDim(allen_hvg, 'pca') <- irlba::prcomp_irlba(t(assay(allen, 'logcounts')), 50)$x
 ```
 
 The chosen distance metric has big implications on your results, you should try at least cosine and rankcor.
@@ -101,9 +104,7 @@ dms <- c('euclidean', 'cosine', 'rankcor') %>% #, 'l2'
     map(~ DiffusionMap(allen_hvg, distance = ., knn_params = list(method = 'covertree')))
 ```
 
-TODO: wide plot
-
-```{r}
+```{r, fig.asp = 1/4, fig.width = 10}
 dms %>%
     imap(function(dm, dist) plot(dm, 1:2, col_by = 'driver_1_s') + ggtitle(dist)) %>%
     cowplot::plot_grid(plotlist = ., nrow = 1)
@@ -113,9 +114,7 @@ dms %>%
 grs <- map(dms, gene_relevance)
 ```
 
-TODO: wide plot
-
-```{r}
+```{r, fig.asp = 1/4, fig.width = 10}
 gms <- imap(grs, function(gr, dist) plot(gr, iter_smooth = 0) + ggtitle(dist))
 cowplot::plot_grid(plotlist = gms, nrow = 1)
 ```
@@ -128,8 +127,9 @@ gms[-1] %>% map(~ .$ids[1:10]) %>% purrr::reduce(intersect) %>% cat(sep = ' ')
 
 ```{r}
 httr::GET('https://rest.uniprot.org/uniprotkb/search', query = list(
-    columns = 'id,genes,comment(TISSUE SPECIFICITY)',
+    fields = 'accession,gene_names,cc_tissue_specificity',
     format = 'tsv',
     query = rowData(allen)$Uniprot[gms$cosine$ids[1:6]] %>% unlist() %>% paste(collapse = ' OR ')
-)) %>% httr::content(type = 'text/tab-separated-values', encoding = 'utf-8')
+)) %>%
+    httr::content(type = 'text/tab-separated-values', encoding = 'utf-8')
 ```

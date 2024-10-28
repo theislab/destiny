@@ -1,26 +1,26 @@
 #' Diffusion Pseudo Time
 #'
 #' Create pseudotime ordering and assigns cell to one of three branches
-#' 
+#'
 #' Treat it as a matrix of pseudotime by subsetting (\code{\link[=dim.DPT]{[ dim nrow ncol}} \code{\link[=as.matrix.DPT]{as.matrix}}), and as a list of pseudodime, and expression vectors (\code{\link[=names.DPT]{$ [[ names}} \code{\link[=as.data.frame.DPT]{as.data.frame}}).
-#' 
+#'
 #' @param dm       A \code{\link{DiffusionMap}} object. Its transition probabilities will be used to calculate the DPT
 #' @param tips     The cell index/indices from which to calculate the DPT(s) (integer of length 1-3)
 #' @param ...      Unused. All parameters to the right of the \code{...} have to be specified by name (e.g. \code{DPT(dm, w_width = 0.2)})
 #' @param w_width  Window width to use for deciding the branch cutoff
-#' 
+#'
 #' @return A \code{DPT} object:
-#' 
+#'
 #' @slot branch  \code{\link[base]{matrix}} (of \code{\link[base]{integer}}) recursive branch labels for each cell (row); \code{NA} for undeceided. Use \code{\link{branch_divide}} to modify this.
 #' @slot tips    \code{\link[base]{matrix}} (of \code{\link[base]{logical}}) indicating if a cell (row) is a tip of the corresponding banch level (col)
 #' @slot dm      \code{\link{DiffusionMap}} used to create this DPT object
-#' 
+#'
 #' @examples
 #' data(guo_norm)
 #' dm <- DiffusionMap(guo_norm)
 #' dpt <- DPT(dm)
 #' str(dpt)
-#' 
+#'
 #' @importFrom methods setClass
 #' @rdname DPT
 #' @export
@@ -36,20 +36,20 @@ setClass(
 
 #' @rdname DPT
 #' @export
-DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) {
+DPT <- function(dm, tips = random_root(dm), ..., w_width = .1) { # nolint: object_name_linter.
 	chkDots(...)
 	if (!is(dm, 'DiffusionMap')) stop('dm needs to be of class DiffusionMap, not ', class(dm))
 	if (!length(tips) %in% 1:3) stop('you need to specify 1-3 tips, got ', length(tips))
-	
+
 	dpt <- dummy_dpt(dm)
 	all_cells <- seq_len(nrow(dpt))
-	
+
 	stats <- tipstats(dpt, all_cells, tips)
 	branches <- auto_branch(dpt, all_cells, stats, w_width)
-	
+
 	colnames(branches$branch) <- paste0('Branch', seq_len(ncol(branches$branch)))
 	colnames(branches$tips)   <- paste0('Tips',   seq_len(ncol(branches$tips)))
-	
+
 	rownames(branches$branch) <- rownames(branches$tips) <- rownames(dm@eigenvectors)
 	dpt@branch <- branches$branch
 	dpt@tips   <- branches$tips
