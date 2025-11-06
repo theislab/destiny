@@ -32,12 +32,16 @@ test_that('PCA works sparse and dense data', {
 })
 
 
-test_that('PCA with sparse data does not densify', with_mock(
+test_that('PCA with sparse data does not densify', with_mocked_bindings(
 	prcomp   = function(...) stop('prcomp should not be called'),
 	princomp = function(...) stop('princomp should not be called'),
-	as.matrix = function(...) stop('as.matrix should not be called'),
-	{
-		pca_scores(test_matrix_sparse, test_n_pcs)
-		succeed('The matrix was not densified')
-	}
+	.package = "stats",
+  with_mocked_bindings(
+	  as.matrix = function(...) stop('as.matrix should not be called'),
+		.package = "base",
+		{
+			pca_scores(test_matrix_sparse, test_n_pcs)
+			succeed('The matrix was not densified')
+		}
+	)
 ))

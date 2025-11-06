@@ -161,14 +161,15 @@ Diffusion maps consist of eigenvectors called Diffusion Components (DCs) and cor
 You are also able to use packages for interative plots like `rgl` in a similar fashion, by directly subsetting the DCs using `eigenvectors(dif)`:
 
 ```{r}
-library(rgl)
-plot3d(
-    eigenvectors(dm)[, 1:3],
-    col = log2(guo_norm$num_cells),
-    type = 's', radius = .01)
-view3d(theta = 10, phi = 30, zoom = .8)
-# now use your mouse to rotate the plot in the window
-close3d()
+if (require(rgl)) {
+	plot3d(
+	    eigenvectors(dm)[, 1:3],
+	    col = log2(guo_norm$num_cells),
+	    type = 's', radius = .01)
+	view3d(theta = 10, phi = 30, zoom = .8)
+	# now use your mouse to rotate the plot in the window
+	close3d()
+}
 ```
 
 For the popular `ggplot2` package, there is built in support in the form of a `fortify.DiffusionMap` method, which allows to use DiffusionMap objects as `data` parameter in the `ggplot` and `qplot` functions. But the regular `plot` function already returns a `ggplot` object anyway.

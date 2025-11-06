@@ -28,14 +28,14 @@ test_that('ggplot plots have the ticks/boxes they should have', {
 	expect_identical(length(p4$layers), 2L)
 
 	# check ticks
-	expect_identical(class(p1$theme$axis.ticks)[[1L]], 'element_blank')
-	expect_identical(class(p2$theme$axis.ticks)[[1L]], 'element_line')
-	expect_identical(class(p3$theme$axis.ticks)[[1L]], 'element_blank')
-	expect_identical(class(p4$theme$axis.ticks)[[1L]], 'element_blank')
+	expect_match(class(p1$theme$axis.ticks)[[1L]], 'element_blank$')
+	expect_match(class(p2$theme$axis.ticks)[[1L]], 'element_line$')
+	expect_match(class(p3$theme$axis.ticks)[[1L]], 'element_blank$')
+	expect_match(class(p4$theme$axis.ticks)[[1L]], 'element_blank$')
 
 	# check box
-	expect_identical(class(p1$theme$panel.border)[[1L]], 'element_blank')
-	expect_identical(class(p2$theme$panel.border)[[1L]], 'element_blank')
-	expect_identical(class(p3$theme$panel.border)[[1L]], 'element_blank')
-	expect_identical(class(p4$theme$panel.border)[[1L]], 'element_rect')
+	expect_match(class(p1$theme$panel.border)[[1L]], 'element_blank$')
+	expect_match(class(p2$theme$panel.border)[[1L]], 'element_blank$')
+	expect_match(class(p3$theme$panel.border)[[1L]], 'element_blank$')
+	expect_match(class(p4$theme$panel.border)[[1L]], 'element_rect$')
 })
