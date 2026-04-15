@@ -60,8 +60,8 @@ gene_relevance(
 
 \item{distance}{Distance measure to use for the nearest neighbor search.}
 
-\item{smooth}{Smoothing parameters \code{c(window, alpha)} (see \code{\link[smoother]{smth.gaussian}}).
-Alternatively \code{\link{TRUE}} to use the \link[smoother]{smoother} \link[smoother:smth.options]{defaults}
+\item{smooth}{Smoothing parameters \code{c(window, alpha)}.
+Alternatively \code{\link{TRUE}} to use the defaults
 or \code{\link{FALSE}} to skip smoothing,}
 
 \item{remove_outliers}{Remove cells that are only within one other cell's nearest neighbor, as they tend to get large norms.}
@@ -78,7 +78,7 @@ or \code{\link{FALSE}} to skip smoothing,}
 A \code{GeneRelevance} object:
 }
 \description{
-The relevance map is cached insided of the \code{\link{DiffusionMap}}.
+The relevance map is cached inside of the \code{\link{DiffusionMap}}.
 }
 \section{Slots}{
 
@@ -99,9 +99,9 @@ of coordinates (e.g. diffusion components), reduced to the dimensions passed as 
 
 \item{\code{distance}}{Distance measure used in the nearest neighbor search. See \code{\link{find_knn}}}
 
-\item{\code{smooth_window}}{Smoothing window used (see \code{\link[smoother]{smth.gaussian}})}
+\item{\code{smooth_window}}{Smoothing window used}
 
-\item{\code{smooth_alpha}}{Smoothing kernel width used (see \code{\link[smoother]{smth.gaussian}})}
+\item{\code{smooth_alpha}}{Smoothing kernel width used}
 }}
 
 \examples{

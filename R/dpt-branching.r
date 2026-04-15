@@ -62,7 +62,6 @@ cut_branches <- function(dpt_mat, cells, w_width) {
 }
 
 
-#' @importFrom smoother smth.gaussian
 branchcut <- function(dpt_mat, bid, b, w_width) {
 	n <- nrow(bid)
 	all_branches <- seq_len(3L)
