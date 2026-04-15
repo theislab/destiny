@@ -49,7 +49,6 @@ Imports:
     knn.covertree,
     proxy,
     RcppHNSW,
-    smoother,
     scales,
     scatterplot3d
 LinkingTo: Rcpp, RcppEigen, grDevices
@@ -121,4 +120,5 @@ Collate:
     'projection-dist.r'
     'rankcor.r'
     'sigmas-plotting.r'
+    'smth-gaussian.r'
 RoxygenNote: 7.3.3
