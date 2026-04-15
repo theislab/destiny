@@ -8,6 +8,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=6, fig.asp=0.7)
+```
+
 Gaussian kernel width `sigma`
 =============================
 
@@ -34,7 +38,7 @@ optimal_sigma(sigmas)
 
 The resulting diffusion map’s approximation depends on the chosen sigma. Note that the sigma estimation heuristic only finds local optima and even the global optimum of the heuristic might not be ideal for your data.
 
-```{r}
+```{r, fig.width=10}
 palette(cube_helix(6))
 
 plots <- lapply(

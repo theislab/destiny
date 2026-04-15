@@ -8,6 +8,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=6, fig.asp=0.7)
+```
+
 ```{r}
 set.seed(1)
 ```
@@ -54,17 +58,13 @@ dpt_random <- DPT(dm, tips = sample(ncol(guo), 3L))
 
 Plotting without parameters results in the DPT of the first root cell:
 
-TODO: wide plot
-
-```{r}
+```{r, fig.asp=0.4}
 grid.arrange(plot(dpt), plot(dpt_random), ncol = 2)
 ```
 
 Other possibilities include the DPT from the other tips or everything supported by `plot.DiffusionMap`:
 
-TODO: wide plot
-
-```{r}
+```{r, fig.asp=0.4}
 grid.arrange(
     plot(dpt, col_by = 'DPT3'),
     plot(dpt, col_by = 'Gata4', pal = viridis::magma),
