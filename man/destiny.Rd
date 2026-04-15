@@ -15,9 +15,7 @@ demo(destiny, ask = FALSE)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://theislab.github.io/destiny/}
   \item \url{https://github.com/theislab/destiny/}
-  \item \url{https://www.helmholtz-muenchen.de/icb/destiny}
   \item \url{https://bioconductor.org/packages/destiny}
   \item \doi{10.1093/bioinformatics/btv715}
   \item Report bugs at \url{https://github.com/theislab/destiny/issues}

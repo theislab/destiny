@@ -8,9 +8,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=6, fig.asp=0.7)
+```
+
 ```{r}
 library(base64enc)
 library(ggplot2)  # would shadow Biobase::exprs
+library(gridExtra)  # For grid.arrange
 
 suppressPackageStartupMessages({
     library(readxl)
@@ -201,11 +206,11 @@ ggplot(NULL, aes(x = seq_along(eigenvalues(dm)), y = eigenvalues(dm))) + theme_m
 
 The later DCs often become noisy and less useful:
 
-TODO: wide plot
-
-```{r}
-plot(dm, 3:4,   col_by = 'num_cells', draw_legend = FALSE)
-plot(dm, 19:20, col_by = 'num_cells', draw_legend = FALSE)
+```{r, fig.asp=0.4}
+grid.arrange(
+	plot(dm, 3:4,   col_by = 'num_cells', draw_legend = FALSE),
+	plot(dm, 19:20, col_by = 'num_cells', draw_legend = FALSE),
+	ncol = 2)
 ```
 
 Other parameters

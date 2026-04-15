@@ -61,7 +61,7 @@ plot_gene_relevance_impl <- function(relevance_map, ..., iter_smooth, n_top, gen
 	counts <- counts[order(counts$Freq, decreasing = TRUE), ]
 	counts_valid <- counts[counts$genes_max %in% genes, ]
 	gene_ids <- counts_valid$genes_max
-	scores <- counts_valid$Freq / sum(counts_valid$Freq)
+	scores <- counts_valid$Freq / (sum(counts_valid$Freq) / n_top)
 	names(scores) <- gene_ids
 
 	num_top <- min(5L, length(gene_ids))

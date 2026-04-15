@@ -13,9 +13,7 @@ Authors@R: c(
 Description: Create and plot diffusion maps.
 License: GPL-3
 URL:
-	https://theislab.github.io/destiny/,
 	https://github.com/theislab/destiny/,
-	https://www.helmholtz-muenchen.de/icb/destiny,
 	https://bioconductor.org/packages/destiny,
 	https://doi.org/10.1093/bioinformatics/btv715
 BugReports: https://github.com/theislab/destiny/issues

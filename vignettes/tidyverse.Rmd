@@ -7,6 +7,20 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=6, fig.asp=0.7)
+```
+
+```{r, include=FALSE}
+library(repr)
+library(knitr)
+registerS3method("knit_print", "data.frame", function(df, ...) {
+  if (is_latex_output()) asis_output(repr::repr_latex(df))
+  else if (is_html_output()) asis_output(repr::repr_html(df))
+  else repr::repr_text(df)
+})
+```
+
 Interaction with the tidyverse and ggplot2
 ==========================================
 
