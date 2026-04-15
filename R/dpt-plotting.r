@@ -11,7 +11,7 @@ NULL
 #' @param paths_to    Numeric Branch IDs. Are used as target(s) for the path(s) to draw.
 #' @param dcs         The dimensions to use from the DiffusionMap
 #' @param divide      If \code{col_by = 'branch'}, this specifies which branches to divide. (see \code{\link{branch_divide}})
-#' @param w_width     Window width for smoothing the path (see \code{\link[smoother]{smth.gaussian}})
+#' @param w_width     Window width for smoothing the path
 #' @param col_by      Color by 'dpt' (DPT starting at \code{branches[[1]]}), 'branch', or a veriable of the data.
 #' @param col_path    Colors for the path or a function creating n colors
 #' @param col_tip     Color for branch tips
@@ -133,7 +133,6 @@ setMethod('plot', c('DPT', 'missing'), function(x, y, ...) {
 
 
 #' @importFrom graphics plot
-#' @importFrom smoother smth.gaussian
 average_path <- function(pt, x, w_width = .1) {
 	stopifnot(identical(nrow(x), length(pt)))
 	as.data.frame(apply(x[order(pt), ], 2, function(col) smth.gaussian(col, w_width, tails = TRUE)))

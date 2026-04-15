@@ -34,7 +34,7 @@ plot.DPT(
 
 \item{divide}{If \code{col_by = 'branch'}, this specifies which branches to divide. (see \code{\link{branch_divide}})}
 
-\item{w_width}{Window width for smoothing the path (see \code{\link[smoother]{smth.gaussian}})}
+\item{w_width}{Window width for smoothing the path}
 
 \item{col_by}{Color by 'dpt' (DPT starting at \code{branches[[1]]}), 'branch', or a veriable of the data.}
 

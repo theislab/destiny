@@ -3,7 +3,7 @@ NULL
 
 #' Gene relevances for entire data set
 #'
-#' The relevance map is cached insided of the \code{\link{DiffusionMap}}.
+#' The relevance map is cached inside of the \code{\link{DiffusionMap}}.
 #'
 #' @param coords           A \code{\link{DiffusionMap}} object or a cells \eqn{\times} dims \code{\link{matrix}}.
 #' @param exprs            An cells \eqn{\times} genes \code{\link{matrix}}. Only provide if \code{coords} is no \code{\link{DiffusionMap}}.
@@ -11,8 +11,8 @@ NULL
 #' @param k                Number of nearest neighbors to use
 #' @param dims             Index into columns of \code{coord}
 #' @param distance         Distance measure to use for the nearest neighbor search.
-#' @param smooth           Smoothing parameters \code{c(window, alpha)} (see \code{\link[smoother]{smth.gaussian}}).
-#'                         Alternatively \code{\link{TRUE}} to use the \link[smoother]{smoother} \link[smoother:smth.options]{defaults}
+#' @param smooth           Smoothing parameters \code{c(window, alpha)}.
+#'                         Alternatively \code{\link{TRUE}} to use the defaults
 #'                         or \code{\link{FALSE}} to skip smoothing,
 #' @param remove_outliers  Remove cells that are only within one other cell's nearest neighbor, as they tend to get large norms.
 #' @param pcs              A cell \eqn{\times} \code{n_pcs} matrix of principal components to use for the distances.
@@ -31,8 +31,8 @@ NULL
 #' @slot nn_index       Matrix of k nearest neighbor indices. (cells \eqn{\times} k)
 #' @slot dims           Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}
 #' @slot distance       Distance measure used in the nearest neighbor search. See \code{\link{find_knn}}
-#' @slot smooth_window  Smoothing window used (see \code{\link[smoother]{smth.gaussian}})
-#' @slot smooth_alpha   Smoothing kernel width used (see \code{\link[smoother]{smth.gaussian}})
+#' @slot smooth_window  Smoothing window used
+#' @slot smooth_alpha   Smoothing kernel width used
 #'
 #' @seealso \link{Gene Relevance methods}, \link{Gene Relevance plotting}: \code{plot_differential_map}/\code{plot_gene_relevance}
 #'
@@ -209,7 +209,7 @@ setMethod('gene_relevance', c('matrix', 'dMatrixOrMatrix'), function(
 })
 
 get_smoothing <- function(smooth) {
-	if (isTRUE(smooth)) c(getOption('smoother.window'), getOption('smoother.gaussianwindow.alpha'))
+	if (isTRUE(smooth)) c(getOption('smoother.window', 0.1), getOption('smoother.gaussianwindow.alpha', 2.5))
 	else if (identical(smooth, FALSE)) c(NA_real_, NA_real_)
 	else if (!is.numeric(smooth) || length(smooth) != 2L)
 		stop('`smooth` needs to be TRUE, FALSE or a numeric c(window, alpha), not', capture.output(str(smooth)))
