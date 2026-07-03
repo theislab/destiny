@@ -8,7 +8,8 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width=6, fig.asp=0.7)
+knitr::opts_chunk$set(fig.width = 6, fig.asp = 0.7)
+conflicted::conflict_prefer(BiocGenerics::data)
 ```
 
 Single Cell RNA-Sequencing data and gene relevance
@@ -37,11 +38,11 @@ Let’s use data from the `scRNAseq`[1] package. If necessary, install it via `B
 
 ```{r}
 # The parts of the help we’re interested in
-help('scRNAseq-package', package = 'scRNAseq') %>%
-    repr::repr_html() %>%
-    stringr::str_extract_all(stringr::regex('<p>The dataset.*?</p>', dotall = TRUE)) %>%
-    unlist() %>%
-    paste(collapse = '') %>%
+help('scRNAseq-package', package = 'scRNAseq') |>
+    repr::repr_html() |>
+    stringr::str_extract_all(stringr::regex('<p>The dataset.*?</p>', dotall = TRUE)) |>
+    unlist() |>
+    paste(collapse = '') |>
     knitr::raw_html()
 ```
 
@@ -103,15 +104,15 @@ The chosen distance metric has big implications on your results, you should try 
 
 ```{r}
 set.seed(1)
-dms <- c('euclidean', 'cosine', 'rankcor') %>% #, 'l2'
-    set_names() %>%
-    map(~ DiffusionMap(allen_hvg, distance = ., knn_params = list(method = 'covertree')))
+dms <- c('euclidean', 'cosine', 'rankcor') |> #, 'l2'
+    set_names() |>
+    map(\(d) DiffusionMap(allen_hvg, distance = d, knn_params = list(method = 'covertree')))
 ```
 
 ```{r, fig.asp = 1/4, fig.width = 10}
-dms %>%
-    imap(function(dm, dist) plot(dm, 1:2, col_by = 'driver_1_s') + ggtitle(dist)) %>%
-    cowplot::plot_grid(plotlist = ., nrow = 1)
+dms |>
+    imap(function(dm, dist) plot(dm, 1:2, col_by = 'driver_1_s') + ggtitle(dist)) |>
+    cowplot::plot_grid(plotlist = _, nrow = 1)
 ```
 
 ```{r}
@@ -126,7 +127,7 @@ cowplot::plot_grid(plotlist = gms, nrow = 1)
 As you can see, despite the quite different embedding, the rankcor and Cosine diffusion Maps display a number of the same driving genes.
 
 ```{r}
-gms[-1] %>% map(~ .$ids[1:10]) %>% purrr::reduce(base::intersect) %>% cat(sep = ' ')
+gms[-1] |> map(\(gm) gm$ids[1:10]) |> purrr::reduce(base::intersect) |> cat(sep = ' ')
 ```
 
 ```{r}
@@ -135,8 +136,8 @@ tryCatch({
     httr::GET('https://rest.uniprot.org/uniprotkb/search', query = list(
         fields = 'accession,gene_names,cc_tissue_specificity',
         format = 'tsv',
-        query = rowData(allen)$Uniprot[gms$cosine$ids[1:6]] %>% unlist() %>% paste(collapse = ' OR ')
-    )) %>%
+        query = rowData(allen)$Uniprot[gms$cosine$ids[1:6]] |> unlist() |> paste(collapse = ' OR ')
+    )) |>
         httr::content(type = 'text/tab-separated-values', encoding = 'utf-8')
 }, error = function(e) e)
 ```

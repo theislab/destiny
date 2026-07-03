@@ -8,13 +8,14 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width=6, fig.asp=0.7)
+knitr::opts_chunk$set(fig.width = 6, fig.asp = 0.7)
+conflicted::conflict_prefer(BiocGenerics::data)
 ```
 
 ```{r, include=FALSE}
 library(repr)
 library(knitr)
-registerS3method("knit_print", "data.frame", function(df, ...) {
+registerS3method('knit_print', 'data.frame', function(df, ...) {
   if (is_latex_output()) asis_output(repr::repr_latex(df))
   else if (is_html_output()) asis_output(repr::repr_html(df))
   else repr::repr_text(df)
@@ -57,8 +58,8 @@ data(guo_norm)
 Of course you could use <code>[tidyr](http://tidyr.tidyverse.org/)::[gather()](https://rdrr.io/cran/tidyr/man/gather.html)</code> to tidy or transform the data now, but the data is already in the right form for destiny, and [R for Data Science](http://r4ds.had.co.nz/tidy-data.html) is a better resource for it than this vignette. The long form of a single cell `ExpressionSet` would look like:
 
 ```{r}
-guo_norm %>%
-    as('data.frame') %>%
+guo_norm |>
+    as('data.frame') |>
     gather(Gene, Expression, one_of(featureNames(guo_norm)))
 ```
 
@@ -84,11 +85,10 @@ ggplot(dm, aes(DC1, DC2, colour = Klf2)) +
 When you want to use a Diffusion Map in a dplyr pipeline, you need to call `fortify`/`as.data.frame` directly:
 
 ```{r}
-fortify(dm) %>%
+fortify(dm) |>
     mutate(
-        EmbryoState = factor(num_cells) %>%
-            lvls_revalue(paste(levels(.), 'cell state'))
-    ) %>%
+        EmbryoState = factor(num_cells) |> levels() |> paste('cell state') |> lvls_revalue()
+    ) |>
     ggplot(aes(DC1, DC2, colour = EmbryoState)) +
         geom_point()
 ```
@@ -96,8 +96,8 @@ fortify(dm) %>%
 The Diffusion Components of a converted Diffusion Map, similar to the genes in the input `ExpressionSet`, are individual variables instead of two columns in a long-form data frame, but sometimes it can be useful to “tidy” them:
 
 ```{r}
-fortify(dm) %>%
-    gather(DC, OtherDC, num_range('DC', 2:5)) %>%
+fortify(dm) |>
+    gather(DC, OtherDC, num_range('DC', 2:5)) |>
     ggplot(aes(DC1, OtherDC, colour = factor(num_cells))) +
         geom_point() +
         facet_wrap(~ DC)
@@ -108,8 +108,8 @@ Another tip: To reduce overplotting, use `sample_frac(., 1.0, replace = FALSE)` 
 Adding a constant `alpha` improves this even more, and also helps you see density:
 
 ```{r}
-fortify(dm) %>%
-    sample_frac() %>%
+fortify(dm) |>
+    sample_frac() |>
     ggplot(aes(DC1, DC2, colour = factor(num_cells))) +
         geom_point(alpha = .3)
 ```

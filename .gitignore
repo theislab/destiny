@@ -20,3 +20,6 @@ __pycache__/
 /vignettes/.build.timestamp
 /doc/
 /Meta/
+/pixi.lock
+/.pixi/*
+!/.pixi/config.toml
