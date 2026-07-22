@@ -87,7 +87,7 @@ When you want to use a Diffusion Map in a dplyr pipeline, you need to call `fort
 ```{r}
 fortify(dm) |>
     mutate(
-        EmbryoState = factor(num_cells) |> levels() |> paste('cell state') |> lvls_revalue()
+        EmbryoState = factor(num_cells) |> (\(nc) lvls_revalue(nc, paste(levels(nc), 'cell state')))()
     ) |>
     ggplot(aes(DC1, DC2, colour = EmbryoState)) +
         geom_point()

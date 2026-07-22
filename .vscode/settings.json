@@ -47,6 +47,6 @@
         "cmath": "cpp",
         "cstddef": "cpp"
     },
-    "r.rpath.linux": ".pixi/envs/default/bin/R",
-    "r.rterm.linux": ".pixi/envs/default/bin/R",
+    "r.rpath.linux": "${workspaceFolder}/.pixi/envs/default/bin/R",
+    "r.rterm.linux": "${workspaceFolder}/.pixi/envs/default/bin/R",
 }

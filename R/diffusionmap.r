@@ -435,7 +435,7 @@ no_censoring <- function(dists, sigma, cb = invisible) {
 #' @importFrom Matrix sparseMatrix
 get_norm_p <- function(trans_p, d, d_new, density_norm) {
 	if (density_norm) {
-		trans_p <- as(trans_p, 'dgTMatrix') # use non-symmetric triples to operate on all values
+		trans_p <- as(as(trans_p, 'generalMatrix'), 'TsparseMatrix') # use non-symmetric triples to operate on all values
 		stopifsmall(max(trans_p@x, na.rm = TRUE))
 
 		#creates a dgCMatrix
