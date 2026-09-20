@@ -1,0 +1,1 @@
+run-post-link-scripts = "insecure"  # required for bioconductor-org.mm.eg.db

@@ -25,6 +25,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Philipp Angerer \email{phil.angerer@gmail.com} (\href{https://orcid.org/0000-0002-0369-2888}{ORCID})
 
+Authors:
+\itemize{
+  \item Philipp Angerer \email{phil.angerer@gmail.com} (\href{https://orcid.org/0000-0002-0369-2888}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Laleh Haghverdi \email{laleh.haghverdi@helmholtz-muenchen.de} [contributor]

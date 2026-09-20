@@ -27,10 +27,7 @@ NULL
 #' stopifnot(all(classes[featureNames(guo) ] == 'numeric'))
 #' stopifnot(all(classes[   varLabels(guo) ] == c('factor', 'integer')))
 #'
-#' @aliases
-#' as.data.frame.DiffusionMap fortify.DiffusionMap
-#' as.data.frame.DPT          fortify.DPT
-#'     as.matrix.DPT
+#' @aliases as.data.frame.DiffusionMap fortify.DiffusionMap as.data.frame.DPT fortify.DPT as.matrix.DPT
 #'
 #' @importFrom methods setAs
 #' @importFrom BiocGenerics as.data.frame

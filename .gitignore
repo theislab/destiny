@@ -21,5 +21,3 @@ __pycache__/
 /doc/
 /Meta/
 /pixi.lock
-/.pixi/*
-!/.pixi/config.toml

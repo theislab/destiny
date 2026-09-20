@@ -50,7 +50,6 @@ Imports:
     scales,
     scatterplot3d
 LinkingTo: Rcpp, RcppEigen, grDevices
-SystemRequirements: C++11
 NeedsCompilation: yes
 Enhances: rgl, SingleCellExperiment
 Suggests:
@@ -119,4 +118,4 @@ Collate:
     'rankcor.r'
     'sigmas-plotting.r'
     'smth-gaussian.r'
-RoxygenNote: 7.3.3
+Config/roxygen2/version: 8.0.0
