@@ -134,7 +134,12 @@ jobs:
         run: |
           ## Enable installing XML from source if needed
           brew install libxml2
-          echo "XML_CONFIG=/usr/local/opt/libxml2/bin/xml2-config" >> $GITHUB_ENV
+          echo "XML_CONFIG=$(brew --prefix libxml2)/bin/xml2-config" >> $GITHUB_ENV
+
+          ## openssl is keg-only, so -lssl/-lcrypto (e.g. from alabaster.base)
+          ## don't resolve unless we put it on the linker search path
+          brew install openssl
+          echo "LIBRARY_PATH=$(brew --prefix openssl)/lib" >> $GITHUB_ENV
 
           ## Required to install magick as noted at
           ## https://github.com/r-lib/usethis/commit/f1f1e0d10c1ebc75fd4c18fa7e2de4551fd9978f#diff-9bfee71065492f63457918efcd912cf2
