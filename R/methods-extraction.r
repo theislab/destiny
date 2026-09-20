@@ -28,10 +28,7 @@
 #'
 #' @name Extraction methods
 #' @rdname extractions
-#' @aliases
-#'   names.DPT names.DiffusionMap
-#'      [[.DPT    [[.DiffusionMap
-#'       $.DPT     $.DiffusionMap
+#' @aliases names.DPT names.DiffusionMap  [[.DPT [[.DiffusionMap $.DPT $.DiffusionMap
 NULL
 
 
