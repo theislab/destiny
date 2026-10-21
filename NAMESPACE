@@ -93,138 +93,174 @@ importClassesFrom(Matrix,dtpMatrix)
 importClassesFrom(Matrix,dtrMatrix)
 importClassesFrom(Matrix,pBunchKaufman)
 importClassesFrom(Matrix,pCholesky)
-importFrom(Biobase,"featureNames<-")
-importFrom(Biobase,AnnotatedDataFrame)
-importFrom(Biobase,ExpressionSet)
-importFrom(Biobase,as.data.frame.ExpressionSet)
-importFrom(Biobase,exprs)
-importFrom(Biobase,featureNames)
-importFrom(Biobase,pData)
-importFrom(Biobase,phenoData)
-importFrom(Biobase,rowMedians)
-importFrom(Biobase,sampleNames)
-importFrom(Biobase,updateObject)
-importFrom(Biobase,varLabels)
-importFrom(BiocGenerics,as.data.frame)
-importFrom(BiocGenerics,duplicated)
-importFrom(BiocGenerics,ncol)
-importFrom(BiocGenerics,nrow)
-importFrom(BiocGenerics,updateObject)
-importFrom(Matrix,"diag<-")
-importFrom(Matrix,Diagonal)
-importFrom(Matrix,Matrix)
-importFrom(Matrix,colSums)
-importFrom(Matrix,drop0)
-importFrom(Matrix,forceSymmetric)
-importFrom(Matrix,isSymmetric)
-importFrom(Matrix,nnzero)
-importFrom(Matrix,rowSums)
-importFrom(Matrix,skewpart)
-importFrom(Matrix,sparseMatrix)
-importFrom(Matrix,symmpart)
-importFrom(Matrix,t)
-importFrom(Matrix,tcrossprod)
-importFrom(Matrix,which)
-importFrom(RSpectra,eigs)
-importFrom(RSpectra,eigs_sym)
+importFrom(Biobase,
+  "featureNames<-",
+  AnnotatedDataFrame,
+  ExpressionSet,
+  as.data.frame.ExpressionSet,
+  exprs,
+  featureNames,
+  pData,
+  phenoData,
+  rowMedians,
+  sampleNames,
+  updateObject,
+  varLabels
+)
+importFrom(BiocGenerics,
+  as.data.frame,
+  duplicated,
+  ncol,
+  nrow,
+  updateObject
+)
+importFrom(Matrix,
+  "diag<-",
+  Diagonal,
+  Matrix,
+  colSums,
+  drop0,
+  forceSymmetric,
+  isSymmetric,
+  nnzero,
+  rowSums,
+  skewpart,
+  sparseMatrix,
+  symmpart,
+  t,
+  tcrossprod,
+  which
+)
+importFrom(RSpectra,
+  eigs,
+  eigs_sym
+)
 importFrom(Rcpp,evalCpp)
 importFrom(RcppEigen,RcppEigen.package.skeleton)
-importFrom(RcppHNSW,hnsw_build)
-importFrom(RcppHNSW,hnsw_knn)
-importFrom(RcppHNSW,hnsw_search)
-importFrom(SingleCellExperiment,"reducedDim<-")
-importFrom(SingleCellExperiment,reducedDim)
-importFrom(SingleCellExperiment,reducedDimNames)
-importFrom(SummarizedExperiment,assay)
-importFrom(SummarizedExperiment,colData)
+importFrom(RcppHNSW,
+  hnsw_build,
+  hnsw_knn,
+  hnsw_search
+)
+importFrom(SingleCellExperiment,
+  "reducedDim<-",
+  reducedDim,
+  reducedDimNames
+)
+importFrom(SummarizedExperiment,
+  assay,
+  colData
+)
 importFrom(VIM,hotdeck)
 importFrom(ggplot.multistats,stat_summaries_hex)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,after_stat)
-importFrom(ggplot2,element_blank)
-importFrom(ggplot2,element_line)
-importFrom(ggplot2,element_rect)
-importFrom(ggplot2,element_text)
-importFrom(ggplot2,facet_wrap)
-importFrom(ggplot2,fortify)
-importFrom(ggplot2,geom_path)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,geom_spoke)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,ggtitle)
-importFrom(ggplot2,guide_colourbar)
-importFrom(ggplot2,guide_legend)
-importFrom(ggplot2,scale_alpha_continuous)
-importFrom(ggplot2,scale_color_manual)
-importFrom(ggplot2,scale_colour_gradientn)
-importFrom(ggplot2,scale_colour_identity)
-importFrom(ggplot2,scale_fill_gradientn)
-importFrom(ggplot2,scale_fill_identity)
-importFrom(ggplot2,scale_fill_manual)
-importFrom(ggplot2,scale_x_continuous)
-importFrom(ggplot2,scale_y_continuous)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,theme_minimal)
-importFrom(ggthemes,extended_range_breaks)
-importFrom(ggthemes,geom_rangeframe)
-importFrom(grDevices,colorRampPalette)
-importFrom(grDevices,hcl.colors)
-importFrom(grDevices,palette)
-importFrom(grDevices,rgb)
-importFrom(graphics,axis)
-importFrom(graphics,dotchart)
-importFrom(graphics,layout)
-importFrom(graphics,par)
-importFrom(graphics,plot)
-importFrom(graphics,plot.new)
-importFrom(graphics,plot.window)
-importFrom(graphics,points)
-importFrom(graphics,rect)
-importFrom(graphics,segments)
-importFrom(graphics,text)
-importFrom(grid,arrow)
-importFrom(grid,unit)
+importFrom(ggplot2,
+  aes,
+  after_stat,
+  element_blank,
+  element_line,
+  element_rect,
+  element_text,
+  facet_wrap,
+  fortify,
+  geom_path,
+  geom_point,
+  geom_spoke,
+  ggplot,
+  ggtitle,
+  guide_colourbar,
+  guide_legend,
+  scale_alpha_continuous,
+  scale_color_manual,
+  scale_colour_gradientn,
+  scale_colour_identity,
+  scale_fill_gradientn,
+  scale_fill_identity,
+  scale_fill_manual,
+  scale_x_continuous,
+  scale_y_continuous,
+  theme,
+  theme_minimal
+)
+importFrom(ggthemes,
+  extended_range_breaks,
+  geom_rangeframe
+)
+importFrom(grDevices,
+  colorRampPalette,
+  hcl.colors,
+  palette,
+  rgb
+)
+importFrom(graphics,
+  axis,
+  dotchart,
+  layout,
+  par,
+  plot,
+  plot.new,
+  plot.window,
+  points,
+  rect,
+  segments,
+  text
+)
+importFrom(grid,
+  arrow,
+  unit
+)
 importFrom(irlba,prcomp_irlba)
-importFrom(methods,"slot<-")
-importFrom(methods,.hasSlot)
-importFrom(methods,.valueClassTest)
-importFrom(methods,as)
-importFrom(methods,canCoerce)
-importFrom(methods,hasMethod)
-importFrom(methods,is)
-importFrom(methods,new)
-importFrom(methods,setAs)
-importFrom(methods,setClass)
-importFrom(methods,setClassUnion)
-importFrom(methods,setGeneric)
-importFrom(methods,setMethod)
-importFrom(methods,setOldClass)
-importFrom(methods,show)
-importFrom(methods,slot)
-importFrom(methods,validObject)
-importFrom(pcaMethods,pca)
-importFrom(pcaMethods,scores)
-importFrom(proxy,dist)
-importFrom(proxy,pr_DB)
+importFrom(methods,
+  "slot<-",
+  .hasSlot,
+  .valueClassTest,
+  as,
+  canCoerce,
+  hasMethod,
+  is,
+  new,
+  setAs,
+  setClass,
+  setClassUnion,
+  setGeneric,
+  setMethod,
+  setOldClass,
+  show,
+  slot,
+  validObject
+)
+importFrom(pcaMethods,
+  pca,
+  scores
+)
+importFrom(proxy,
+  dist,
+  pr_DB
+)
 importFrom(rlang,.data)
-importFrom(scales,colour_ramp)
-importFrom(scales,percent)
-importFrom(scales,rescale)
+importFrom(scales,
+  colour_ramp,
+  percent,
+  rescale
+)
 importFrom(scatterplot3d,scatterplot3d)
-importFrom(stats,na.omit)
-importFrom(stats,runif)
-importFrom(stats,setNames)
+importFrom(stats,
+  na.omit,
+  runif,
+  setNames
+)
 importFrom(tidyr,gather)
 importFrom(tidyselect,one_of)
-importFrom(utils,capture.output)
-importFrom(utils,combn)
-importFrom(utils,flush.console)
-importFrom(utils,getFromNamespace)
-importFrom(utils,getS3method)
-importFrom(utils,head)
-importFrom(utils,read.table)
-importFrom(utils,setTxtProgressBar)
-importFrom(utils,str)
-importFrom(utils,txtProgressBar)
+importFrom(utils,
+  capture.output,
+  combn,
+  flush.console,
+  getFromNamespace,
+  getS3method,
+  head,
+  read.table,
+  setTxtProgressBar,
+  str,
+  txtProgressBar
+)
 importMethodsFrom(Matrix,solve)
 useDynLib(destiny)

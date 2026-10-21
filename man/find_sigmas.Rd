@@ -21,7 +21,7 @@ find_sigmas(
 }
 \arguments{
 \item{data}{Data set with \eqn{n} observations. Can be a \link[base]{data.frame},
-\link[base]{matrix}, \link[Biobase:class.ExpressionSet]{ExpressionSet}
+\link[base]{matrix}, \link[Biobase]{ExpressionSet}
 or \link[SingleCellExperiment]{SingleCellExperiment}.}
 
 \item{step_size}{Size of log-sigma steps}

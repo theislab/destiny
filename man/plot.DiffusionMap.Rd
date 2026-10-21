@@ -6,7 +6,7 @@
 \alias{plot,DiffusionMap,missing-method}
 \title{3D or 2D plot of diffusion map}
 \usage{
-plot.DiffusionMap(
+\method{plot}{DiffusionMap}(
   x,
   dims = 1:3,
   new_dcs = if (!is.null(new_data)) dm_predict(x, new_data),

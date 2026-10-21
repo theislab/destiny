@@ -5,7 +5,7 @@
 #' @param ...       Passed to \code{\link[proxy:dist]{proxy::dist}} if \code{new_data} was passed.
 #' @param new_data  New data points to project into the diffusion map.
 #'                  Can be a \link[base]{matrix}, \link[base]{data.frame},
-#'                  \link[Biobase:class.ExpressionSet]{ExpressionSet},
+#'                  \link[Biobase]{ExpressionSet},
 #'                  or \link[SingleCellExperiment]{SingleCellExperiment}.
 #' @param verbose   If \code{\link{TRUE}}, log additional info to the console.
 #'

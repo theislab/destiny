@@ -49,9 +49,8 @@ Imports:
     RcppHNSW,
     scales,
     scatterplot3d
-LinkingTo: Rcpp, RcppEigen, grDevices
+LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
-Enhances: rgl, SingleCellExperiment
 Suggests:
     knitr,
     rmarkdown,
@@ -118,4 +117,4 @@ Collate:
     'rankcor.r'
     'sigmas-plotting.r'
     'smth-gaussian.r'
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

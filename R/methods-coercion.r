@@ -51,7 +51,7 @@ setMethod('as.data.frame', 'DiffusionMap', function(x, row.names = NULL, optiona
 })
 
 
-#' @usage fortify.DiffusionMap(model, data, ...)
+#' @usage \method{fortify}{DiffusionMap}(model, data, ...)
 #'
 #' @importFrom BiocGenerics as.data.frame
 #' @importFrom Biobase as.data.frame.ExpressionSet
@@ -74,7 +74,7 @@ setMethod('as.data.frame', 'DPT', function(x, row.names = NULL, optional = FALSE
 })
 
 
-#' @usage fortify.DPT(model, data, ...)
+#' @usage \method{fortify}{DPT}(model, data, ...)
 #'
 #' @importFrom BiocGenerics as.data.frame
 #' @importFrom Biobase as.data.frame.ExpressionSet

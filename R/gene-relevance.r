@@ -27,7 +27,7 @@ NULL
 #' @slot exprs          A cells \eqn{\times} genes matrix of expressions
 #' @slot partials       Array of partial derivatives wrt to considered dimensions in reduced space
 #'                      (genes \eqn{\times} cells \eqn{\times} dimensions)
-#' @slot partials_norm  Matrix with norm of aforementioned derivatives. (n\_genes \eqn{\times} cells)
+#' @slot partials_norm  Matrix with norm of aforementioned derivatives. (n_genes \eqn{\times} cells)
 #' @slot nn_index       Matrix of k nearest neighbor indices. (cells \eqn{\times} k)
 #' @slot dims           Column index for plotted dimensions. Can \code{\link{character}}, \code{\link{numeric}} or \code{\link{logical}}
 #' @slot distance       Distance measure used in the nearest neighbor search. See \code{\link{find_knn}}

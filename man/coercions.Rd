@@ -14,11 +14,11 @@
 \usage{
 \S4method{as.data.frame}{DiffusionMap}(x, row.names = NULL, optional = FALSE, ...)
 
-fortify.DiffusionMap(model, data, ...)
+\method{fortify}{DiffusionMap}(model, data, ...)
 
 \S4method{as.data.frame}{DPT}(x, row.names = NULL, optional = FALSE, ...)
 
-fortify.DPT(model, data, ...)
+\method{fortify}{DPT}(model, data, ...)
 
 \S4method{as.matrix}{DPT}(x, ...)
 }

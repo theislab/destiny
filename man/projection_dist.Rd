@@ -15,7 +15,7 @@ projection_dist(dm, new_dcs = NULL, ..., new_data, verbose = FALSE)
 
 \item{new_data}{New data points to project into the diffusion map.
 Can be a \link[base]{matrix}, \link[base]{data.frame},
-\link[Biobase:class.ExpressionSet]{ExpressionSet},
+\link[Biobase]{ExpressionSet},
 or \link[SingleCellExperiment]{SingleCellExperiment}.}
 
 \item{verbose}{If \code{\link{TRUE}}, log additional info to the console.}

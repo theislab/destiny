@@ -38,7 +38,8 @@ NULL
 #' @importFrom utils capture.output
 #' @importFrom rlang .data
 #' @importFrom ggplot2 geom_path geom_point scale_colour_identity
-#' @export
+#' @method plot DPT
+#' @export plot.DPT
 plot.DPT <- function( # nolint: cyclocomp_linter.
 	x, root = NULL,
 	paths_to = integer(0L),

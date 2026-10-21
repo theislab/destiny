@@ -6,7 +6,7 @@
 \alias{plot,DPT,missing-method}
 \title{Plot DPT}
 \usage{
-plot.DPT(
+\method{plot}{DPT}(
   x,
   root = NULL,
   paths_to = integer(0L),

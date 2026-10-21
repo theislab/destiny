@@ -57,7 +57,8 @@ NULL
 #' @importFrom ggthemes geom_rangeframe extended_range_breaks
 #'
 #' @rdname plot.DiffusionMap
-#' @export
+#' @method plot DiffusionMap
+#' @export plot.DiffusionMap
 plot.DiffusionMap <- function( # nolint: cyclocomp_linter.
 	x, dims = 1:3,
 	new_dcs = if (!is.null(new_data)) dm_predict(x, new_data),

@@ -91,7 +91,7 @@ of coordinates (e.g. diffusion components), reduced to the dimensions passed as 
 \item{\code{partials}}{Array of partial derivatives wrt to considered dimensions in reduced space
 (genes \eqn{\times} cells \eqn{\times} dimensions)}
 
-\item{\code{partials_norm}}{Matrix with norm of aforementioned derivatives. (n\_genes \eqn{\times} cells)}
+\item{\code{partials_norm}}{Matrix with norm of aforementioned derivatives. (n_genes \eqn{\times} cells)}
 
 \item{\code{nn_index}}{Matrix of k nearest neighbor indices. (cells \eqn{\times} k)}
 
