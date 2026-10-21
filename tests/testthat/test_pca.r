@@ -32,12 +32,17 @@ test_that('PCA works sparse and dense data', {
 })
 
 
+base_as_matrix <- base::as.matrix
 test_that('PCA with sparse data does not densify', with_mocked_bindings(
 	prcomp   = function(...) stop('prcomp should not be called'),
 	princomp = function(...) stop('princomp should not be called'),
 	.package = "stats",
-  with_mocked_bindings(
-	  as.matrix = function(...) stop('as.matrix should not be called'),
+	with_mocked_bindings(
+		# irlba calls svd() (thus as.matrix) on small dense internal matrices
+		as.matrix = function(x, ...) {
+			if (is(x, 'sparseMatrix')) stop('as.matrix should not be called on sparse data')
+			base_as_matrix(x, ...)
+		},
 		.package = "base",
 		{
 			pca_scores(test_matrix_sparse, test_n_pcs)
